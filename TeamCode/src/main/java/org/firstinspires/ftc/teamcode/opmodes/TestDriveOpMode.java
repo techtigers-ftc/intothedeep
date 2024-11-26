@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.PedroManualDriveCommand;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 @TeleOp
 @SuppressWarnings("unused")

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.commands.PedroPathFollowCommand;
 import org.firstinspires.ftc.teamcode.opmodes.configurators.TestConfigurator;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 @Autonomous(name = "Testing Pedro Pathing", group = "Autonomous")
 public class TestPedroDriveOpMode extends ConfigOpModeAuto {
