@@ -1,26 +1,26 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-
-import team.techtigers.base.BaseOpMode;
+import org.firstinspires.ftc.teamcode.commands.PedroManualDriveCommand;
 
 @TeleOp
 @SuppressWarnings("unused")
-public class TestDriveOpMode extends BaseOpMode {
-    private DriveSubsystem drive;
+public class TestDriveOpMode extends ConfigOpModeTele {
 
     @Override
     public void initialize() {
-        drive = new DriveSubsystem(hardwareMap);
+        GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
         registerSubsystems(drive);
+
+        PedroManualDriveCommand manualDriveCommand = new PedroManualDriveCommand(drive, robotState, follower, driverGamepad);
     }
 
     @Override
     public void update() {
-        // Drive the robot with tele-op controls
-        drive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x,
-                gamepad1.right_stick_x);
+
     }
 }

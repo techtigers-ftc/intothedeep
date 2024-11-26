@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+
+import java.util.Arrays;
+import java.util.List;
 
 import team.techtigers.base.CloseableSubsytem;
 
@@ -11,8 +17,8 @@ import team.techtigers.base.CloseableSubsytem;
  * A subsystem that controls the drivebase.
  */
 public class DriveSubsystem extends CloseableSubsytem {
-    private final MecanumDrive drive;
-    private final MotorEx frontLeft, frontRight, backLeft, backRight;
+    private final DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    private final List<DcMotorEx> motors;
 
     /**
      * Constructs a new DriveSubsystem.
@@ -20,23 +26,23 @@ public class DriveSubsystem extends CloseableSubsytem {
      * @param hardwareMap The hardware map, used to get hardware references
      */
     public DriveSubsystem(HardwareMap hardwareMap) {
-        frontLeft = new MotorEx(hardwareMap, "left_front");
-        frontRight = new MotorEx(hardwareMap, "right_front");
-        backLeft = new MotorEx(hardwareMap, "left_back");
-        backRight = new MotorEx(hardwareMap, "right_back");
+        frontLeft = hardwareMap.get(DcMotorEx.class, "left_front");
+        frontRight = hardwareMap.get(DcMotorEx.class, "right_front");
+        backLeft = hardwareMap.get(DcMotorEx.class, "left_back");
+        backRight = hardwareMap.get(DcMotorEx.class, "right_back");
 
-        frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        motors = Arrays.asList(frontLeft, backLeft, frontRight, backRight);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        frontLeft.setInverted(true);
-        frontRight.setInverted(true);
-        backLeft.setInverted(true);
-        backRight.setInverted(true);
-
-        drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
+        for (DcMotorEx motor : motors) {
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
     }
+
 
     /**
      * Private method to set the motor powers.
@@ -46,33 +52,20 @@ public class DriveSubsystem extends CloseableSubsytem {
      * @param bl The back left motor power
      * @param br The back right motor power
      */
-    public void setMotorPowers(double fl, double fr, double bl, double br) {
-        frontLeft.set(fl);
-        frontRight.set(fr);
-        backLeft.set(bl);
-        backRight.set(br);
+    public void setMotorPowers(double fl, double bl, double fr, double br) {
+        frontLeft.setPower(fl);
+        frontRight.setPower(fr);
+        backLeft.setPower(bl);
+        backRight.setPower(br);
     }
 
     /**
-     * Drives the robot with tele-op controls.
+     * Drives the robot based on the values for the motors from the follower in pedro pathing
      *
-     * @param forward  Forward power
-     * @param strafe   Strafe power
-     * @param rotation Rotation power
+     * @param follower the follower to get values from
      */
-    public void drive(double forward, double strafe, double rotation) {
-        drive.driveRobotCentric(strafe, forward, rotation);
-    }
-
-    /**
-     * Drives the robot with field centric controls.
-     *
-     * @param forward  Forward power
-     * @param strafe   Strafe power
-     * @param rotation Rotation power
-     * @param heading  The heading of the robot
-     */
-    public void driveFieldCentric(double forward, double strafe, double rotation, double heading) {
-        drive.driveFieldCentric(strafe, forward, rotation, heading);
+    public void driveFollower(Follower follower) {
+        double[] drivePowers = follower.getDrivePowers();
+        setMotorPowers(drivePowers[0], drivePowers[1], drivePowers[2], drivePowers[3]);
     }
 }
