@@ -54,7 +54,6 @@ import java.util.ArrayList;
  */
 @Config
 public class Follower {
-    private final HardwareMap hardwareMap;
     private final RobotState robotState;
 
     private DriveVectorScaler driveVectorScaler;
@@ -128,10 +127,9 @@ public class Follower {
     /**
      * This creates a new Follower given a HardwareMap.
      *
-     * @param hardwareMap HardwareMap required
+     * @param robotState robot state to get poses and velocities
      */
-    public Follower(HardwareMap hardwareMap, RobotState robotState) {
-        this.hardwareMap = hardwareMap;
+    public Follower(RobotState robotState) {
         this.robotState = robotState;
         secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
         secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
