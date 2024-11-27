@@ -20,6 +20,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierPoint;
@@ -89,7 +90,6 @@ public class Follower {
 
     private long reachedParametricPathEndTime;
 
-    private double[] drivePowers;
     private double[] teleopDriveValues;
 
     private ArrayList<Vector> velocities = new ArrayList<>();
@@ -107,6 +107,8 @@ public class Follower {
     public Vector translationalVector;
     public Vector centripetalVector;
     public Vector correctiveVector;
+
+    public DriveVectors currentDriveVectors;
 
     private PIDFController secondaryTranslationalPIDF, secondaryTranslationalIntegral, translationalPIDF, translationalIntegral, secondaryHeadingPIDF, headingPIDF;
     private FilteredPIDFController secondaryDrivePIDF, drivePIDF;
@@ -182,61 +184,10 @@ public class Follower {
         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
         poseUpdater = new PoseUpdater(hardwareMap);
 
-//        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
-//        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
-//        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
-//        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
-//
-//        // TODO: Make sure that this is the direction your motors need to be reversed in.
-//        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-//        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-//
-//        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
-//
-//        secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
-//        secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-//        translationalPIDF = new PIDFController(FollowerConstants.translationalPIDFCoefficients);
-//        translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-//        secondaryHeadingPIDF = new PIDFController(FollowerConstants.secondaryHeadingPIDFCoefficients);
-//        headingPIDF = new PIDFController(FollowerConstants.headingPIDFCoefficients);
-//        secondaryDrivePIDF = new FilteredPIDFController(FollowerConstants.secondaryDrivePIDFCoefficients);
-//        drivePIDF = new FilteredPIDFController(FollowerConstants.drivePIDFCoefficients);
-//
-//        for (DcMotorEx motor : motors) {
-//            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-//            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-//            motor.setMotorType(motorConfigurationType);
-//        }
-//
-//        for (DcMotorEx motor : motors) {
-//            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-//        }
-
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
         breakFollowing();
     }
-
-//    /**
-//     * This sets the maximum power the motors are allowed to use.
-//     *
-//     * @param set This caps the motor power from [0, 1].
-//     */
-//    public void setMaxPower(double set) {
-//        maxPower = MathFunctions.clamp(set, 0, 1);
-//    }
-//
-//    /**
-//     * This handles the limiting of the drive powers array to the max power.
-//     */
-//    public void limitDrivePowers() {
-//        for (int i = 0; i < drivePowers.length; i++) {
-//            if (Math.abs(drivePowers[i]) > maxPower) {
-//                drivePowers[i] = maxPower * MathFunctions.getSign(drivePowers[i]);
-//            }
-//        }
-//    }
-
 
     /**
      * This gets a Point from the current Path from a specified t-value.
@@ -497,14 +448,14 @@ public class Follower {
                 if (holdingPosition) {
                     closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), 1);
 
-                    drivePowers = driveVectorScaler.getDrivePowers(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), poseUpdater.getPose().getHeading());
+                    currentDriveVectors = new DriveVectors(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), poseUpdater.getPose().getHeading());
                 } else {
                     if (isBusy) {
                         closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_BINARY_STEP_LIMIT);
 
                         if (followingPathChain) updateCallbacks();
 
-                        drivePowers = driveVectorScaler.getDrivePowers(getCorrectiveVector(), getHeadingVector(), getDriveVector(), poseUpdater.getPose().getHeading());
+                        currentDriveVectors = new DriveVectors(getCorrectiveVector(), getHeadingVector(), getDriveVector(), poseUpdater.getPose().getHeading());
                     }
                     if (currentPath.isAtParametricEnd()) {
                         if (followingPathChain && chainIndex < currentPathChain.size() - 1) {
@@ -542,15 +493,15 @@ public class Follower {
 
             calculateAveragedVelocityAndAcceleration();
 
-            drivePowers = driveVectorScaler.getDrivePowers(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, poseUpdater.getPose().getHeading());
+            currentDriveVectors = new DriveVectors(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, poseUpdater.getPose().getHeading());
         }
     }
 
     /**
      * @return The powers to set all the motors to
      */
-    public double[] getDrivePowers() {
-        return drivePowers;
+    public DriveVectors getCurrentDriveVectors() {
+        return currentDriveVectors;
     }
 
     /**
@@ -687,18 +638,7 @@ public class Follower {
         teleopDriveVector = new Vector();
         teleopHeadingVector = new Vector();
 
-        drivePowers = new double[]{0, 0, 0, 0};
-    }
-
-    public void resetPIDFToConstantDefault() {
-        secondaryTranslationalPIDF.setCoefficients(FollowerConstants.secondaryTranslationalPIDFCoefficients);
-        secondaryTranslationalIntegral.setCoefficients(FollowerConstants.secondaryTranslationalIntegral);
-        translationalPIDF.setCoefficients(FollowerConstants.translationalPIDFCoefficients);
-        translationalIntegral.setCoefficients(FollowerConstants.translationalIntegral);
-        secondaryHeadingPIDF.setCoefficients(FollowerConstants.secondaryHeadingPIDFCoefficients);
-        headingPIDF.setCoefficients(FollowerConstants.headingPIDFCoefficients);
-        secondaryDrivePIDF.setCoefficients(FollowerConstants.secondaryDrivePIDFCoefficients);
-        drivePIDF.setCoefficients(FollowerConstants.drivePIDFCoefficients);
+        currentDriveVectors = new DriveVectors(new Vector(), new Vector(), new Vector(), 0);
     }
 
     /**
