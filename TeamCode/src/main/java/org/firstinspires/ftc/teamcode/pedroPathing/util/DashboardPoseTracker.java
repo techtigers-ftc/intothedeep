@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.util;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * This is the DashboardPoseTracker class. This tracks the pose history of the robot through a
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
 public class DashboardPoseTracker {
     private double[] xPositions;
     private double[] yPositions;
-    private PoseUpdater poseUpdater;
+    private final RobotState robotState;
     private long lastUpdateTime;
     private final int TRACKING_LENGTH = 1500;
     private final long UPDATE_TIME = 50;
@@ -22,16 +23,16 @@ public class DashboardPoseTracker {
     /**
      * This creates a new DashboardPoseTracker from a PoseUpdater.
      *
-     * @param poseUpdater the PoseUpdater
+     * @param robotState the robotState to get the pose from
      */
-    public DashboardPoseTracker(PoseUpdater poseUpdater) {
-        this.poseUpdater = poseUpdater;
+    public DashboardPoseTracker(RobotState robotState) {
+        this.robotState = robotState;
         xPositions = new double[TRACKING_SIZE];
         yPositions = new double[TRACKING_SIZE];
 
         for (int i = 0; i < TRACKING_SIZE; i++) {
-            xPositions[i] = poseUpdater.getPose().getX();
-            yPositions[i] = poseUpdater.getPose().getY();
+            xPositions[i] = robotState.getRobotCurrentPose().getX();
+            yPositions[i] = robotState.getRobotCurrentPose().getY();
         }
 
         lastUpdateTime = System.currentTimeMillis() - UPDATE_TIME;
@@ -48,8 +49,8 @@ public class DashboardPoseTracker {
                 xPositions[i] = xPositions[i - 1];
                 yPositions[i] = yPositions[i - 1];
             }
-            xPositions[0] = poseUpdater.getPose().getX();
-            yPositions[0] = poseUpdater.getPose().getY();
+            xPositions[0] = robotState.getRobotCurrentPose().getX();
+            yPositions[0] = robotState.getRobotCurrentPose().getY();
         }
     }
 

@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * This is the Circle autonomous OpMode. It runs the robot in a PathChain that's actually not quite
@@ -33,6 +35,7 @@ public class Circle extends OpMode {
     private Follower follower;
 
     private PathChain circle;
+    private GoBodometrySubsystem odometrySubsystem;
 
     /**
      * This initializes the Follower and creates the PathChain for the "circle". Additionally, this
@@ -40,7 +43,10 @@ public class Circle extends OpMode {
      */
     @Override
     public void init() {
-        follower = new Follower(hardwareMap);
+        RobotState robotState = new RobotState();
+        odometrySubsystem = new GoBodometrySubsystem(hardwareMap, robotState);
+
+        follower = new Follower(hardwareMap, robotState);
 
         circle = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(0,0, Point.CARTESIAN), new Point(RADIUS,0, Point.CARTESIAN), new Point(RADIUS, RADIUS, Point.CARTESIAN)))
@@ -64,6 +70,7 @@ public class Circle extends OpMode {
      */
     @Override
     public void loop() {
+        odometrySubsystem.periodic();
         follower.update();
         if (follower.atParametricEnd()) {
             follower.followPath(circle);
