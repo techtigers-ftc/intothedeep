@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration;
 
 
-import org.firstinspires.ftc.teamcode.pedroPathing.tuning.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants;
 
 import java.util.ArrayList;
 
@@ -219,7 +219,7 @@ public class BezierCurve {
         }
 
         // calculates the y coordinate of the point requested
-        for (int i = 0; i < controlPoints.size()-1; i++) {;
+        for (int i = 0; i < controlPoints.size()-1; i++) {
             yCoordinate += pointCoefficients.get(i).getDerivativeValue(t) * (MathFunctions.subtractPoints(controlPoints.get(i+1), controlPoints.get(i)).getY());
         }
 

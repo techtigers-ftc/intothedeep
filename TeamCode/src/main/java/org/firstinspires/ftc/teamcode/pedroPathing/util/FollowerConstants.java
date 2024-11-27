@@ -1,13 +1,10 @@
-package org.firstinspires.ftc.teamcode.pedroPathing.tuning;
+package org.firstinspires.ftc.teamcode.pedroPathing.util;
 
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomFilteredPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.KalmanFilterParameters;
 
 /**
  * This is the FollowerConstants class. It holds many constants and parameters for various parts of

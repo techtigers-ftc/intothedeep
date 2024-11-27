@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 
 import team.techtigers.core.paths.Waypoint;
