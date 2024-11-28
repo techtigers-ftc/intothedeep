@@ -11,12 +11,13 @@ import org.firstinspires.ftc.teamcode.utils.SlideController;
 import team.techtigers.base.CloseableSubsytem;
 
 public class DropperSubsystem extends CloseableSubsytem {
-    private DcMotor rightSlideMotor;
-    private DcMotor leftSlideMotor;
-    private Servo pitchServo1;
-    private Servo pitchServo2;
-    private Servo rotationServo;
-    private Servo grabServo;
+    private final DcMotor rightSlideMotor;
+    private final DcMotor leftSlideMotor;
+    private final DcMotor encoderMotor;
+    private final Servo rightPitchServo;
+    private final Servo leftPitchServo;
+    private final Servo rotationServo;
+    private final Servo grabServo;
     private final RobotState robotState;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
@@ -35,66 +36,75 @@ public class DropperSubsystem extends CloseableSubsytem {
     private static final double REVERSE_KD = 0.1;
     private static final double REVERSE_KF = 0.1;
 
+    private final SlideController slideController;
 
     /**
+     * Initializes dropper subsystem
+     *
      * @param hardwareMap: is a variable where you configure all the devices in the specific subsystem
      */
-
     public DropperSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        super();
+        this.robotState = robotState;
         rightSlideMotor = hardwareMap.get(DcMotor.class, "placeholder_name");
         leftSlideMotor = hardwareMap.get(DcMotor.class, "placeholder_name");
-        pitchServo1 = hardwareMap.get(Servo.class, "placeholder_name");
-        pitchServo2 = hardwareMap.get(Servo.class, "placeholder_name");
+        rightPitchServo = hardwareMap.get(Servo.class, "placeholder_name");
+        leftPitchServo = hardwareMap.get(Servo.class, "placeholder_name");
         rotationServo = hardwareMap.get(Servo.class, "placeholder_name");
         grabServo = hardwareMap.get(Servo.class, "placeholder_name");
-        this.robotState = robotState;
+
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF);
         PIDFCoefficients reversePIDF = new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF);
-        new SlideController(TICKS_PER_INCHES, forwardPIDF, reversePIDF);
+        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF, reversePIDF);
+
+        encoderMotor = leftSlideMotor; // Assuming you are using leftSlideMotor to use as the encoder motor
     }
 
     /**
-     *  Resets encoder values of each of the slide motors
+     * Resets encoder values of each of the slide motors
      */
-
     public void resetSlides() {
         rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
-     Method that moves servo to make the claw open
+     * Method that moves servo to make the claw open
      */
     public void openClaw() {
         grabServo.setPosition(0);
     }
 
     /**
-     Method that moves servo to make the claw close
+     * Method that moves servo to make the claw close
      */
     public void closeClaw() {
         grabServo.setPosition(1);
     }
 
     /**
-    Stops the slides wherever it's currently at
+     * Stops the slides wherever it's currently at
      */
     public void stopSlides() {
-        rightSlideMotor.setPower(0);
-        leftSlideMotor.setPower(0);
+        slideController.moveTo();
     }
 
     /**
-     Increments slides from wherever it is currently
-     @param position: Amount you are incrementing by in encoder ticks*/
+     * Increments slides from wherever it is currently
+     *
+     * @param position: Amount you are incrementing by in encoder ticks
+     */
     public void moveSlidesRelative(double position) {
         rightSlideMotor.setTargetPosition((int) (rightSlideMotor.getCurrentPosition() + position));
     }
 
     /**
-     Moves slides to that position for wherever it is
-     @param position: Position where you want to set the slides to*/
+     * Moves slides to that position for wherever it is
+     *
+     * @param position: Position where you want to set the slides to
+     */
     public void moveSlidesAbsolute(int position) {
         rightSlideMotor.setTargetPosition(position);
         leftSlideMotor.setTargetPosition(position);
@@ -107,14 +117,18 @@ public class DropperSubsystem extends CloseableSubsytem {
      * @param pitch: Amount you want to increment by in degrees
      */
     public void setWristRelative(double pitch, double rotation) {
-        double pitchServoCurrentPosition  = pitchServo1.getPosition();
-        double pitchServo2CurrentPosition = pitchServo2.getPosition();
+        double pitchServoCurrentPosition = rightPitchServo.getPosition();
+        double pitchServo2CurrentPosition = leftPitchServo.getPosition();
         double rotationServoCurrentPosition = rotationServo.getPosition();
 
-        pitchServo1.setPosition(pitchServoCurrentPosition + pitch);
-        pitchServo2.setPosition(pitchServo2CurrentPosition + pitch);
+        rightPitchServo.setPosition(pitchServoCurrentPosition + pitch);
+        leftPitchServo.setPosition(pitchServo2CurrentPosition + pitch);
 
         rotationServo.setPosition(rotationServoCurrentPosition + rotation);
+    }
+
+    public void setWristAbsolute(double pitch, double rotation) {
+
     }
 
 //    public void setWristRelativeRotation(double rotation) {
@@ -122,7 +136,10 @@ public class DropperSubsystem extends CloseableSubsytem {
 //        rotationServo.setPosition(rotationServoCurrentPosition + rotation);
 //    }
 
+    @Override
     public void periodic() {
-
+        double power = slideController.calculateMotorPowers(leftSlideMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
     }
 }
