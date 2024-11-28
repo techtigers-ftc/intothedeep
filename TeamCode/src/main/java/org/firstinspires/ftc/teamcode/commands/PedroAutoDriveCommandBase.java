@@ -38,7 +38,6 @@ public class PedroAutoDriveCommandBase extends CommandBase {
 
     @Override
     public void execute() {
-        follower.update();
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 
