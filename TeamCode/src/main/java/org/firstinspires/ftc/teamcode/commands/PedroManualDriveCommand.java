@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -19,7 +18,8 @@ public class PedroManualDriveCommand extends CommandBase {
 
     /**
      * Constructs a new PedroManualDriveCommand
-     * @param drive the drive subsystem
+     *
+     * @param drive      the drive subsystem
      * @param robotState the robot state
      */
     public PedroManualDriveCommand(DriveSubsystem drive, RobotState robotState, GamepadEx driverGamepad) {
@@ -38,7 +38,6 @@ public class PedroManualDriveCommand extends CommandBase {
     @Override
     public void execute() {
         follower.setTeleOpMovementVectors(-driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
-        follower.update();
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 }

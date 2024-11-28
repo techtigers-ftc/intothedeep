@@ -17,11 +17,9 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.DriveVectors;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierPoint;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
@@ -30,14 +28,15 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathCallback;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Drawing;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.KalmanFilter;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Pose;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -54,47 +53,44 @@ import java.util.ArrayList;
  */
 @Config
 public class Follower {
+    public static boolean drawOnDashboard = true;
+    public static boolean useTranslational = true;
+    public static boolean useCentripetal = true;
+    public static boolean useHeading = true;
+    public static boolean useDrive = true;
     private final RobotState robotState;
-
-    private DriveVectorScaler driveVectorScaler;
-
-    private DashboardPoseTracker dashboardPoseTracker;
-
-    private Pose closestPose;
-
-    private Path currentPath;
-
-    private PathChain currentPathChain;
-
     private final int BEZIER_CURVE_BINARY_STEP_LIMIT = FollowerConstants.BEZIER_CURVE_BINARY_STEP_LIMIT;
     private final int AVERAGED_VELOCITY_SAMPLE_NUMBER = FollowerConstants.AVERAGED_VELOCITY_SAMPLE_NUMBER;
-
+    public double driveError;
+    public double headingError;
+    public Vector driveVector;
+    public Vector headingVector;
+    public Vector translationalVector;
+    public Vector centripetalVector;
+    public Vector correctiveVector;
+    public DriveVectors currentDriveVectors;
+    private DriveVectorScaler driveVectorScaler;
+    private DashboardPoseTracker dashboardPoseTracker;
+    private Pose closestPose;
+    private Path currentPath;
+    private PathChain currentPathChain;
     private int chainIndex;
-
     private long[] pathStartTimes;
-
     private boolean followingPathChain;
     private boolean holdingPosition;
     private boolean isBusy;
     private boolean reachedParametricPathEnd;
     private boolean holdPositionAtEnd;
     private boolean teleopDrive;
-
-//    private final double maxPower = 1;
+    //    private final double maxPower = 1;
     private double previousSecondaryTranslationalIntegral;
     private double previousTranslationalIntegral;
     private double holdPointTranslationalScaling = FollowerConstants.holdPointTranslationalScaling;
     private double holdPointHeadingScaling = FollowerConstants.holdPointHeadingScaling;
-    public double driveError;
-    public double headingError;
-
     private long reachedParametricPathEndTime;
-
     private double[] teleopDriveValues;
-
     private ArrayList<Vector> velocities = new ArrayList<>();
     private ArrayList<Vector> accelerations = new ArrayList<>();
-
     private Vector averageVelocity;
     private Vector averagePreviousVelocity;
     private Vector averageAcceleration;
@@ -102,27 +98,12 @@ public class Follower {
     private Vector translationalIntegralVector;
     private Vector teleopDriveVector;
     private Vector teleopHeadingVector;
-    public Vector driveVector;
-    public Vector headingVector;
-    public Vector translationalVector;
-    public Vector centripetalVector;
-    public Vector correctiveVector;
-
-    public DriveVectors currentDriveVectors;
-
     private PIDFController secondaryTranslationalPIDF, secondaryTranslationalIntegral, translationalPIDF, translationalIntegral, secondaryHeadingPIDF, headingPIDF;
     private FilteredPIDFController secondaryDrivePIDF, drivePIDF;
-
     private KalmanFilter driveKalmanFilter = new KalmanFilter(FollowerConstants.driveKalmanFilterParameters);
     private double[] driveErrors;
     private double rawDriveError;
     private double previousRawDriveError;
-
-    public static boolean drawOnDashboard = true;
-    public static boolean useTranslational = true;
-    public static boolean useCentripetal = true;
-    public static boolean useHeading = true;
-    public static boolean useDrive = true;
 
     /**
      * This creates a new Follower given a HardwareMap.
@@ -143,35 +124,35 @@ public class Follower {
     }
 
     public void setSecondaryTranslationalPIDF(double p, double i, double d, double f) {
-        secondaryTranslationalPIDF.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        secondaryTranslationalPIDF.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setSecondaryTranslationalIntegral(double p, double i, double d, double f) {
-        secondaryTranslationalIntegral.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        secondaryTranslationalIntegral.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setTranslationalPIDF(double p, double i, double d, double f) {
-        translationalPIDF.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        translationalPIDF.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setTranslationalIntegral(double p, double i, double d, double f) {
-        translationalIntegral.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        translationalIntegral.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
-        secondaryHeadingPIDF.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        secondaryHeadingPIDF.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setHeadingPIDF(double p, double i, double d, double f) {
-        headingPIDF.setCoefficients(new CustomPIDFCoefficients(p,i,d,f));
+        headingPIDF.setCoefficients(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     public void setSecondaryDrivePIDF(double p, double i, double d, double t, double f) {
-        secondaryDrivePIDF.setCoefficients(new CustomFilteredPIDFCoefficients(p,i,d, t,f));
+        secondaryDrivePIDF.setCoefficients(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
     }
 
     public void setDrivePIDF(double p, double i, double d, double t, double f) {
-        drivePIDF.setCoefficients(new CustomFilteredPIDFCoefficients(p,i,d,t,f));
+        drivePIDF.setCoefficients(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
     }
 
     /**
@@ -396,6 +377,7 @@ public class Follower {
      * @return The powers to set all the motors to
      */
     public DriveVectors getCurrentDriveVectors() {
+        update();
         return currentDriveVectors;
     }
 
