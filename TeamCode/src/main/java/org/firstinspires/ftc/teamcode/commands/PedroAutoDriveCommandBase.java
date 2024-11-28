@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.FilteredPIDFController;
@@ -43,23 +42,23 @@ public class PedroAutoDriveCommandBase extends CommandBase {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 
-    protected void setPathChain(PathChain pathChain) {
-        this.pathChain = pathChain;
-    }
-
     protected PathChain getPathChain() {
         return pathChain;
     }
 
+    protected void setPathChain(PathChain pathChain) {
+        this.pathChain = pathChain;
+    }
+
     protected void setTranslationalPIDF(double p, double i, double d, double f) {
-        translationalPIDF = new PIDFController(new CustomPIDFCoefficients(p,i,d,f));
+        translationalPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     protected void setHeadingPIDF(double p, double i, double d, double f) {
-        headingPIDF = new PIDFController(new CustomPIDFCoefficients(p,i,d,f));
+        headingPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     protected void setDrivePIDF(double p, double i, double d, double t, double f) {
-        drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(p,i,d,t,f));
+        drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
     }
 }
