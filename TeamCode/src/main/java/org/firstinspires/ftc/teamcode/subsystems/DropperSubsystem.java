@@ -88,7 +88,7 @@ public class DropperSubsystem extends CloseableSubsytem {
      * Stops the slides wherever it's currently at
      */
     public void stopSlides() {
-        slideController.moveTo();
+        slideController.moveTo(0);
     }
 
     /**
