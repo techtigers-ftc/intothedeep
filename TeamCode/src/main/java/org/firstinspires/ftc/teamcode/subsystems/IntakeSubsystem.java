@@ -24,6 +24,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
 
+
     public static final double FORWARD_KP = 0.1;
     public static final double FORWARD_KI = 0.1;
     public static final double FORWARD_KD = 0.1;
@@ -32,6 +33,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
     public static final double REVERSE_KI = 0.1;
     public static final double REVERSE_KD = 0.1;
     public static final double REVERSE_KF = 0.1;
+
+
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -41,6 +44,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
     private final Servo leftClaw;
     private final Servo rightClaw;
     private SlideController slideController;
+
+
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -56,6 +61,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
         leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+
         slideController = new SlideController(MOTOR_TICKS_PER_INCH,
                 new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF),
                 new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF)
@@ -70,28 +76,50 @@ public class IntakeSubsystem extends CloseableSubsytem {
         leftSlideMotor.setDirection(DcMotor.Direction.REVERSE); //TODO: Check if this is the correct motor directions
         rightSlideMotor.setDirection(DcMotor.Direction.FORWARD);
     }
+
+    /**
+     * Private method that Returns Current Position in inches
+     */
     private double getCurrentPositionInches() {
         return encoderMotor.getCurrentPosition() * DIST_PER_MOTOR_TICK;
     }
 
+    /**
+     * Moves the Slides in Absolute units
+     * @param distance The distance you want to move in absolute units
+     */
     public void moveSlidesAbsolute(double distance){
         slideController.moveTo(distance);
     }
+
+    /**
+     * Moves slides in inches
+     * @param distance The distance you want to move in inches
+     */
     public void moveSlidesRelative(double distance){
         slideController.moveTo(getCurrentPositionInches() + distance);
     }
 
+    /**
+     * Moves Slides back to zero position
+     */
     public void resetSlides(){
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    /**
+     * Stops slides
+     */
     public void stopSlides(){
         slideController.moveTo(getCurrentPositionInches());
         leftSlideMotor.setPower(0);
         rightSlideMotor.setPower(0);
     }
 
-
+    /**
+     * Updates and powers motors every cycle
+     */
     @Override
     public void periodic(){
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
