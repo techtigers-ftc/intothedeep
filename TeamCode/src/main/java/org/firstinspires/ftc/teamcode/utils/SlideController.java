@@ -16,7 +16,7 @@ public class SlideController {
     private PIDFController reversePIDFController;
 
     /**
-     * Initializes the SlideController
+     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
      *
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
      * @param forwardPIDF the initial PIDF coefficients for forward movement of the slide
@@ -26,6 +26,18 @@ public class SlideController {
         this.ticksPerInch = ticksPerInch;
         this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, forwardPIDF.f);
         this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, reversePIDF.f);
+    }
+
+    /**
+     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
+     *
+     * @param ticksPerInch the number of encoder ticks per inch of slide travel
+     * @param pidf the initial PIDF coefficients for movement of the slides
+     */
+    public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
+        this.ticksPerInch = ticksPerInch;
+        this.forwardPIDFController = new PIDFController(pidf.p, pidf.i, pidf.d, pidf.f);
+        this.reversePIDFController = new PIDFController(pidf.p, pidf.i, pidf.d, pidf.f);
     }
 
     /**
@@ -53,15 +65,6 @@ public class SlideController {
      */
     public void moveTo(double targetDistance) {
         this.targetTicks = targetDistance * ticksPerInch;
-    }
-
-    /**
-     * Moves the slides to a relative position based on their current position
-     *
-     * @param relativeDistance the relative distance in inches to move the slides
-     */
-    public void moveToRelative(double relativeDistance) {
-        this.targetTicks += relativeDistance * ticksPerInch;
     }
 
     /**
