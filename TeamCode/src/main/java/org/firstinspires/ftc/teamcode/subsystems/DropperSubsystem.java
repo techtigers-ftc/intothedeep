@@ -92,16 +92,21 @@ public class DropperSubsystem extends CloseableSubsytem {
        leftSlideMotor.setPower(0);
     }
 
+    public void getCurrentPositionInInches(double ticks) {
+        ticks *= INCHES_PER_MOTOR_TICK;
+    }
+
     /**
      * Increments slides from wherever it is currently
      *
-     * @param position: Amount you are incrementing by in encoder ticks
+     * @param position: Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
 //        rightSlideMotor.setTargetPosition((int) (rightSlideMotor.getCurrentPosition() + position));
 //        rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        slideController.moveTo(rightSlideMotor.getCurrentPosition() + position);
+        double currentPositionInInches = rightSlideMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
+        slideController.moveTo(currentPositionInInches + position);
     }
 
     /**
