@@ -85,15 +85,15 @@ public class IntakeSubsystem extends CloseableSubsytem {
     }
 
     /**
-     * Moves the Slides in Absolute units
-     * @param distance The distance you want to move in absolute units
+     * Moves the Slides to an exact position
+     * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance){
         slideController.moveTo(distance);
     }
 
     /**
-     * Moves slides in inches
+     * Moves slides in to a position relative to where it already is
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance){
@@ -101,7 +101,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     }
 
     /**
-     * Moves Slides back to zero position
+     * Sets the current position to 0 encoder ticks on the motors
      */
     public void resetSlides(){
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
