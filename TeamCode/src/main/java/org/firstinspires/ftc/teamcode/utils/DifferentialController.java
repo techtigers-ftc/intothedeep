@@ -124,7 +124,7 @@ public class DifferentialController {
         rightServoPosition *= maxServoAngle;
 
         double[] positions = new double[2];
-        positions[0] = (leftServoPosition + rightServoPosition) / gearRatio;
+        positions[0] = (leftServoPosition + rightServoPosition) / 2;
         positions[1] = (gearRatio * (leftServoPosition - rightServoPosition)) / 2.0;
 
         positions[0] /= servoGearRatio;
