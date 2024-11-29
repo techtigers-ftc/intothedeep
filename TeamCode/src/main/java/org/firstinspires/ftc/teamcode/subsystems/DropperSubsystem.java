@@ -138,7 +138,7 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(leftSlideMotor.getCurrentPosition());
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
