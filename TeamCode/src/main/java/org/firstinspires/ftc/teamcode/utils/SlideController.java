@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /**
@@ -71,8 +70,8 @@ public class SlideController {
      *
      * @param targetDistance the target distance in inches to move the slides to
      */
-    public void moveTo(double targetDistance) {
-        this.targetTicks *= ticksPerInch;
+    public void moveToInches(double targetDistance) {
+        this.targetTicks = targetDistance * ticksPerInch;
     }
 
     /**

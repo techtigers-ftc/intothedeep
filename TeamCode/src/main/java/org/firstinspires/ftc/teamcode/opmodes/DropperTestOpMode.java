@@ -29,5 +29,20 @@ public class DropperTestOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.moveSlidesRelative(-1);
         }));
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.stopSlides();
+        }));
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.moveSlidesAbsoluteInches(0.0);
+        }));
+    }
+
+    @Override
+    public void update() {
+        telemetry.addData("CurrentPosInches", dropperSubsystem.getCurrentPositionInInches());
+
+        dropperSubsystem.manualControl(-gamepad1.left_trigger + gamepad1.right_trigger);
     }
 }
