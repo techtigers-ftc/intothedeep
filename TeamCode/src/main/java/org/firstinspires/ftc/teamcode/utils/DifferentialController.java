@@ -29,7 +29,7 @@ public class DifferentialController {
      * @param rotationAngle the target rotation for the differential claw
      * @return positions of the servos, first is left servo second is the right servo
      */
-    public double[] GeneratePositions(double pitchAngle, double rotationAngle){
+    public double[] generatePositions(double pitchAngle, double rotationAngle){
         double[] positions = new double[2];
         positions[0] = pitchAngle - rotationAngle / gearRatio;
         positions[1] = pitchAngle + rotationAngle / gearRatio;
@@ -42,5 +42,14 @@ public class DifferentialController {
         positions[1] = Range.clip(positions[1], 0, 1);
 
         return positions;
+    }
+    public double[] GetPitchAndRotation(double leftServoPosition, double rightServoPosition){
+        leftServoPosition *= maxServoAngle;
+        rightServoPosition *= maxServoAngle;
+
+        double[] positions = new double[2];
+        positions [0] = (leftServoPosition+rightServoPosition) / gearRatio;
+        positions [1] = (gearRatio * (leftServoPosition-rightServoPosition)) / 2;
+        return  positions;
     }
 }
