@@ -114,7 +114,7 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     /**
      * Method that increments the wrist from where it is currently at
-     * @param pitch: Amount you want to increment by in degrees
+     * @param pitch: Amount you want to increment by for the dropper in degrees
      */
     public void setWristRelative(double pitch, double rotation) {
         double pitchServoCurrentPosition = rightPitchServo.getPosition();
