@@ -45,12 +45,12 @@ public class DropperSubsystem extends CloseableSubsytem {
      */
     public DropperSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
-        rightSlideMotor = hardwareMap.get(DcMotor.class, "placeholder_name");
-        leftSlideMotor = hardwareMap.get(DcMotor.class, "placeholder_name");
-        rightPitchServo = hardwareMap.get(Servo.class, "placeholder_name");
-        leftPitchServo = hardwareMap.get(Servo.class, "placeholder_name");
-        rotationServo = hardwareMap.get(Servo.class, "placeholder_name");
-        grabServo = hardwareMap.get(Servo.class, "placeholder_name");
+        rightSlideMotor = hardwareMap.get(DcMotor.class, "right_slide_motor");
+        leftSlideMotor = hardwareMap.get(DcMotor.class, "left_slide_motor");
+        rightPitchServo = hardwareMap.get(Servo.class, "right_pitch_servo");
+        leftPitchServo = hardwareMap.get(Servo.class, "left_pitch_servo");
+        rotationServo = hardwareMap.get(Servo.class, "rotation_servo");
+        grabServo = hardwareMap.get(Servo.class, "grab_servo");
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF);
         PIDFCoefficients reversePIDF = new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF);
@@ -88,7 +88,8 @@ public class DropperSubsystem extends CloseableSubsytem {
      * Stops the slides wherever it's currently at
      */
     public void stopSlides() {
-        slideController.moveTo(0);
+       rightSlideMotor.setPower(0);
+       leftSlideMotor.setPower(0);
     }
 
     /**
@@ -97,19 +98,24 @@ public class DropperSubsystem extends CloseableSubsytem {
      * @param position: Amount you are incrementing by in encoder ticks
      */
     public void moveSlidesRelative(double position) {
-        rightSlideMotor.setTargetPosition((int) (rightSlideMotor.getCurrentPosition() + position));
+//        rightSlideMotor.setTargetPosition((int) (rightSlideMotor.getCurrentPosition() + position));
+//        rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slideController.moveTo(rightSlideMotor.getCurrentPosition() + position);
     }
 
     /**
-     * Moves slides to that position for wherever it is
+     * Moves slides to that position from wherever it is
      *
      * @param position: Position where you want to set the slides to
      */
     public void moveSlidesAbsolute(int position) {
-        rightSlideMotor.setTargetPosition(position);
-        leftSlideMotor.setTargetPosition(position);
-        rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightSlideMotor.setTargetPosition(position);
+//        leftSlideMotor.setTargetPosition(position);
+//        rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slideController.moveTo(position);
     }
 
     /**
@@ -128,7 +134,9 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     public void setWristAbsolute(double pitch, double rotation) {
-
+        rightPitchServo.setPosition(pitch);
+        leftPitchServo.setPosition(pitch);
+        rotationServo.setPosition(rotation);
     }
 
 //    public void setWristRelativeRotation(double rotation) {
