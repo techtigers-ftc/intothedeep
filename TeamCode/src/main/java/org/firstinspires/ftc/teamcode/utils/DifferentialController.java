@@ -117,7 +117,7 @@ public class DifferentialController {
      *
      * @param leftServoPosition  the left servos position from 0 to 1
      * @param rightServoPosition the right servos position from 0 to 1
-     * @return the pitch and rotation angles in degrees first is pitch second is rotation
+     * @return the pitch and rotation angles in degrees; first is pitch, second is rotation
      */
     public double[] getPitchAndRotation(double leftServoPosition, double rightServoPosition) {
         leftServoPosition *= maxServoAngle;
