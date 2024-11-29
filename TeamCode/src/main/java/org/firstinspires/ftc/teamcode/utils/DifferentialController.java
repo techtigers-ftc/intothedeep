@@ -73,18 +73,28 @@ public class DifferentialController {
         }
     }
 
+    public double getMaxPitchAngle() {
+        return maxPitchAngle;
+    }
+
+    public double getMaxRotationAngle() {
+        return maxRotationAngle;
+    }
+
     /**
      * Generates the servo positions for the two servos on the differential claw based on the pitch
      * and rotation angles
      * From the perspective of the robot down pitch and left rotation are positive
      *
-     * @param pitchAngleDegrees    the target pitch for the differential claw in degrees
-     * @param rotationAngleDegrees the target rotation for the differential claw in degrees
+     * @param pitchAngleDegrees    the target pitch for the differential claw in degrees from 0 to
+     *                             max
+     * @param rotationAngleDegrees the target rotation for the differential claw in degrees from 0
+     *                             to max
      * @return positions of the servos, first is left servo second is the right servo
      */
     public double[] calculateServoPositions(double pitchAngleDegrees, double rotationAngleDegrees) {
-        pitchAngleDegrees = Math.max(pitchAngleDegrees, maxPitchAngle);
-        rotationAngleDegrees = Math.max(rotationAngleDegrees, maxRotationAngle);
+        pitchAngleDegrees = Range.clip(pitchAngleDegrees, 0, maxPitchAngle);
+        rotationAngleDegrees = Range.clip(rotationAngleDegrees, 0, maxRotationAngle);
 
         double leftServoPosition = pitchAngleDegrees - rotationAngleDegrees / gearRatio;
         double rightServoPosition = pitchAngleDegrees + rotationAngleDegrees / gearRatio;
