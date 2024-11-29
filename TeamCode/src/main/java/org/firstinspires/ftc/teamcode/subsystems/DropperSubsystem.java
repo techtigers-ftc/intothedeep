@@ -96,8 +96,8 @@ public class DropperSubsystem extends CloseableSubsytem {
      *
      * @param position: Amount you are incrementing by in encoder ticks
      */
-    public void moveSlidesRelative(double position) {
-        rightSlideMotor.setTargetPosition((int) (rightSlideMotor.getCurrentPosition() + position));
+    public void moveSlidesRelative(int position) {
+        rightSlideMotor.setTargetPosition((rightSlideMotor.getCurrentPosition() + position));
     }
 
     /**
