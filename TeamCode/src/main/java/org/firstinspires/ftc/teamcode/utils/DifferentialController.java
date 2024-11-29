@@ -10,7 +10,7 @@ public class DifferentialController {
     private final double gearRatio;
     private final double maxServoAngle;
 
-    private final double maxClawAngle;
+    private final double maxDriverRange;
 
     private final double servoGearRatio;
 
@@ -22,14 +22,17 @@ public class DifferentialController {
      *
      * @param gearRatio ratio between follower gear and driver gear as driver gear / follower gear
      * @param maxServoAngle the maximum range of both servos
+     * @param servoGearRatio the ration between the gear on the servo and the driver gear of the
+     *                       differential claw (servo gear / driver gear)
      */
     public DifferentialController(double gearRatio, double maxServoAngle, double servoGearRatio) {
         this.gearRatio = gearRatio;
         this.maxServoAngle = maxServoAngle;
-        maxClawAngle = servoGearRatio * maxServoAngle;
-        maxPitchAngle = maxClawAngle / 2;
-        maxRotationAngle = maxClawAngle / 2;
         this.servoGearRatio = servoGearRatio;
+
+        maxDriverRange = servoGearRatio * maxServoAngle;
+        maxPitchAngle = maxDriverRange / 2;
+        maxRotationAngle = maxDriverRange / 2;
     }
 
     /**
@@ -37,8 +40,8 @@ public class DifferentialController {
      * @param maxPitchAngle the maximum pitch angle in degrees
      * @param maxRotationAngle the maximum rotation angle in degrees
      */
-    public void maxRange(double maxPitchAngle, double maxRotationAngle){
-        if(maxPitchAngle + maxRotationAngle > maxClawAngle){
+    public void setMaxRange(double maxPitchAngle, double maxRotationAngle){
+        if(maxPitchAngle + maxRotationAngle > maxDriverRange){
             throw new IllegalArgumentException("The sum of the maxPitchAngle and maxRotationAngle must be less than or equal to the maxClawAngle");
         }
         this.maxPitchAngle = maxPitchAngle;
@@ -49,51 +52,52 @@ public class DifferentialController {
      * Sets the maximum pitch angle lowering the maximum rotation angle if necessary
      * @param maxPitchAngle the maximum pitch angle in degrees
      */
-    public void maxPitch(double maxPitchAngle){
+    public void setMaxPitch(double maxPitchAngle){
         this.maxPitchAngle = maxPitchAngle;
-        if(maxPitchAngle + maxRotationAngle > maxClawAngle){
-            maxRotationAngle = maxClawAngle - maxPitchAngle;
+        if(maxPitchAngle + maxRotationAngle > maxDriverRange){
+            maxRotationAngle = maxDriverRange - maxPitchAngle;
         }
     }
+
     /**
      * Sets the maximum rotation angle lowering the maximum pitch angle if necessary
      * @param maxRotationAngle the maximum rotation angle in degrees
      */
-    public void maxRotation(double maxRotationAngle){
+    public void setMaxRotation(double maxRotationAngle){
         this.maxRotationAngle = maxRotationAngle;
-        if(maxPitchAngle + maxRotationAngle > maxClawAngle){
-            maxPitchAngle = maxClawAngle - maxRotationAngle;
+        if(maxPitchAngle + maxRotationAngle > maxDriverRange){
+            maxPitchAngle = maxDriverRange - maxRotationAngle;
         }
     }
 
     /**
      * Generates the servo positions for the two servos on the differential claw based on the pitch
      * and rotation angles
+     * From the perspective of the robot down pitch and left rotation are positive
      *
-     * @param pitchAngle the target pitch for the differential claw
-     * @param rotationAngle the target rotation for the differential claw
+     * @param pitchAngleDegrees the target pitch for the differential claw in degrees
+     * @param rotationAngleDegrees the target rotation for the differential claw in degrees
      * @return positions of the servos, first is left servo second is the right servo
      */
-    public double[] generatePositions(double pitchAngle, double rotationAngle){
-        if(pitchAngle > maxPitchAngle || rotationAngle > maxRotationAngle){
-            throw new IllegalArgumentException("The pitch and rotation angles must be less than the max");
-        }
+    public double[] calculateServoPositions(double pitchAngleDegrees, double rotationAngleDegrees){
+        pitchAngleDegrees = Math.max(pitchAngleDegrees, maxPitchAngle);
+        rotationAngleDegrees = Math.max(rotationAngleDegrees, maxRotationAngle);
 
-        double[] positions = new double[2];
-        positions[0] = pitchAngle - rotationAngle / gearRatio;
-        positions[1] = pitchAngle + rotationAngle / gearRatio;
 
-        positions[0] /= servoGearRatio;
-        positions[1] /= servoGearRatio;
+        double leftServoPosition = pitchAngleDegrees - rotationAngleDegrees / gearRatio;
+        double rightServoPosition = pitchAngleDegrees + rotationAngleDegrees / gearRatio;
+
+        leftServoPosition /= servoGearRatio;
+        rightServoPosition /= servoGearRatio;
 
         //Normalize both positions so they are between 0 and 1;
-        positions[0] /= maxServoAngle;
-        positions[1] /= maxServoAngle;
+        leftServoPosition /= maxServoAngle;
+        rightServoPosition /= maxServoAngle;
 
-        positions[0] = Range.clip(positions[0], 0, 1);
-        positions[1] = Range.clip(positions[1], 0, 1);
+        leftServoPosition = Range.clip(leftServoPosition, 0.0, 1.0);
+        rightServoPosition = Range.clip(rightServoPosition, 0.0, 1.0);
 
-        return positions;
+        return new double[] {leftServoPosition, rightServoPosition};
     }
 
     /** Returns the pitch and rotation angles based on the servo positions
