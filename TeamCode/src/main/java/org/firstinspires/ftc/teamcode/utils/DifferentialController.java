@@ -96,8 +96,8 @@ public class DifferentialController {
         pitchAngleDegrees = Range.clip(pitchAngleDegrees, 0, maxPitchAngle);
         rotationAngleDegrees = Range.clip(rotationAngleDegrees, 0, maxRotationAngle);
 
-        double leftServoPosition = pitchAngleDegrees - rotationAngleDegrees / gearRatio;
-        double rightServoPosition = pitchAngleDegrees + rotationAngleDegrees / gearRatio;
+        double leftServoPosition = pitchAngleDegrees - (rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio;
+        double rightServoPosition = pitchAngleDegrees + (rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio;
 
         leftServoPosition /= servoGearRatio;
         rightServoPosition /= servoGearRatio;
@@ -117,7 +117,7 @@ public class DifferentialController {
      *
      * @param leftServoPosition  the left servos position from 0 to 1
      * @param rightServoPosition the right servos position from 0 to 1
-     * @return the pitch and rotation angles in degrees; first is pitch, second is rotation
+     * @return the pitch and rotation angles in degrees, 0 to max; first is pitch, second is rotation
      */
     public double[] getPitchAndRotation(double leftServoPosition, double rightServoPosition) {
         leftServoPosition *= maxServoAngle;
@@ -125,7 +125,7 @@ public class DifferentialController {
 
         double[] positions = new double[2];
         positions[0] = (leftServoPosition + rightServoPosition) / 2;
-        positions[1] = (gearRatio * (leftServoPosition - rightServoPosition)) / 2.0;
+        positions[1] = ((gearRatio * (rightServoPosition - leftServoPosition)) / 2.0) + (maxRotationAngle / 2.0);
 
         positions[0] /= servoGearRatio;
         positions[1] /= servoGearRatio;
