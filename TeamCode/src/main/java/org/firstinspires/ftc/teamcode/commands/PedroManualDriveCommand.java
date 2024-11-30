@@ -37,7 +37,8 @@ public class PedroManualDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        follower.setTeleOpMovementVectors(-driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX());
+        follower.setTeleOpMovementVectors(driverGamepad.getLeftY(),
+                driverGamepad.getLeftX(), -driverGamepad.getRightX());
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 }

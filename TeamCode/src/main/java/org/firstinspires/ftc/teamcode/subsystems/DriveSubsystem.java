@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.DriveVectorScaler;
@@ -22,8 +24,7 @@ import team.techtigers.base.CloseableSubsytem;
 public class DriveSubsystem extends CloseableSubsytem {
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
     private final List<DcMotor> motors;
-    DriveVectorScaler driveVectorScaler;
-
+    private DriveVectorScaler driveVectorScaler;
 
     /**
      * Constructs a new DriveSubsystem.
@@ -41,11 +42,13 @@ public class DriveSubsystem extends CloseableSubsytem {
         motors = Arrays.asList(frontLeft, backLeft, frontRight, backRight);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (DcMotor motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
+//            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+//            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+//            motor.setMotorType(motorConfigurationType);
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
@@ -62,12 +65,22 @@ public class DriveSubsystem extends CloseableSubsytem {
         for (int i = 0; i < wheelSpeeds.length; i++) {
             wheelSpeeds[i] = (wheelSpeeds[i] / maxMagnitude) * magnitude;
         }
-
     }
 
     //From FTC Lib RobotDrive
     private void normalize(double[] wheelSpeeds) {
-        normalize(wheelSpeeds, 1.0);
+        double maxMagnitude = Math.abs(wheelSpeeds[0]);
+        for (int i = 1; i < wheelSpeeds.length; i++) {
+            double temp = Math.abs(wheelSpeeds[i]);
+            if (maxMagnitude < temp) {
+                maxMagnitude = temp;
+            }
+        }
+        if (maxMagnitude > 1) {
+            for (int i = 0; i < wheelSpeeds.length; i++) {
+                wheelSpeeds[i] = (wheelSpeeds[i] / maxMagnitude);
+            }
+        }
     }
 
     public void driveRobotCentric(double forward, double strafe, double rotation) {
@@ -75,9 +88,15 @@ public class DriveSubsystem extends CloseableSubsytem {
     }
 
     public void driveFieldCentric(double forward, double strafe, double rotation, double heading) {
+
+        RobotLog.dd("DriveSubsystem", "----------------------------------");
+        RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
+                forward, strafe, rotation);
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
         double turnSpeed = Range.clip(rotation, -1, 1);
+        RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
+                forwardSpeed, strafeSpeed, turnSpeed);
 
         Vector2d input = new Vector2d(strafeSpeed, forwardSpeed);
         input = input.rotateBy(-heading);
@@ -93,15 +112,23 @@ public class DriveSubsystem extends CloseableSubsytem {
         wheelSpeeds[1] = Math.sin(theta - Math.PI / 4);
         //Back Right
         wheelSpeeds[3] = Math.sin(theta + Math.PI / 4);
+        RobotLog.dd("DriveSubsystem", "FL: %f, BL: %f, FR: %f, BR: %f",
+                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         normalize(wheelSpeeds, input.magnitude());
+        RobotLog.dd("DriveSubsystem", "FL: %f, BL: %f, FR: %f, BR: %f",
+                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         wheelSpeeds[0] += turnSpeed;
         wheelSpeeds[2] -= turnSpeed;
         wheelSpeeds[1] += turnSpeed;
         wheelSpeeds[3] -= turnSpeed;
+        RobotLog.dd("DriveSubsystem", "FL: %f, BL: %f, FR: %f, BR: %f",
+                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         normalize(wheelSpeeds);
+        RobotLog.dd("DriveSubsystem", "FL: %f, BL: %f, FR: %f, BR: %f",
+                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         setMotorPowers(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
     }
