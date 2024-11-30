@@ -44,8 +44,8 @@ public class DropperSubsystem extends CloseableSubsytem {
     public static double REVERSE_KI = 0;
     public static double REVERSE_KD = 0;
     public static double REVERSE_KF = 0;
-    public static double HOLD_KF = 0;
-    public static double SLIDES_TOLERANCE = 0.05;
+    public static double HOLD_KF = 0.2;
+    public static double SLIDES_TOLERANCE = 1;
 
 
     private final SlideController slideController;
@@ -193,8 +193,16 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
+        double currentPos = getCurrentPositionInInches();
+
+        if (Math.abs(targetPos - currentPos) < SLIDES_TOLERANCE) {
+            leftSlideMotor.setPower(HOLD_KF);
+            rightSlideMotor.setPower(HOLD_KF);
+            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(HOLD_KF));
+        } else {
+            double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
     }
 }

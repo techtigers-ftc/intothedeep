@@ -129,10 +129,10 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
-        if ((useForwardPIDs && forwardPIDFController.atSetPoint()) || (!useForwardPIDs && reversePIDFController.atSetPoint())){
-            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(holdKf));
-            return holdKf;
-        }
+//        if ((useForwardPIDs && forwardPIDFController.atSetPoint()) || (!useForwardPIDs && reversePIDFController.atSetPoint())){
+//            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(holdKf));
+//            return holdKf;
+//        }
         if (useForwardPIDs) {
             double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
             RobotLog.dd("tt-ss", "Forward PID Power: [%s]", String.valueOf(currentPower + forwardKf));
