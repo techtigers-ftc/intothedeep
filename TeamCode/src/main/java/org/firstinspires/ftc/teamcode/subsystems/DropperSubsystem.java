@@ -27,7 +27,7 @@ public class DropperSubsystem extends CloseableSubsytem {
     private final RobotState robotState;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 16.0 / 24.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
     private static final double ERROR_FACTOR = 1.0;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
