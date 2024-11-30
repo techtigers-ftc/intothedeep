@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -18,9 +19,13 @@ public class DropperTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = dashboard.getTelemetry();
+
         driverGamepad = new GamepadEx(gamepad1);
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);
         registerSubsystems(dropperSubsystem);
+        dropperSubsystem.resetSlides();
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.moveSlidesRelative(1);
@@ -35,14 +40,25 @@ public class DropperTestOpMode extends BaseOpMode {
         }));
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.moveSlidesAbsoluteInches(0.0);
+            dropperSubsystem.moveSlidesRelative(-5);
+        }));
+
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.moveSlidesRelative(5);
         }));
     }
 
     @Override
     public void update() {
-        telemetry.addData("CurrentPosInches", dropperSubsystem.getCurrentPositionInInches());
+        double currentPos = dropperSubsystem.getCurrentPositionInInches();
+        double expectedPos = dropperSubsystem.getTargetPositionInches();
+        double error = expectedPos - currentPos;
 
-        dropperSubsystem.manualControl(-gamepad1.left_trigger + gamepad1.right_trigger);
+        telemetry.addData("CurrentPosInches", currentPos);
+        telemetry.addData("ExpectedPosInches", expectedPos);
+        telemetry.addData("Error", error);
+
+        dropperSubsystem.manualControlSlides(-gamepad1.left_trigger + gamepad1.right_trigger);
     }
 }

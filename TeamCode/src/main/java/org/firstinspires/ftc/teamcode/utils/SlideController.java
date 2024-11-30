@@ -13,6 +13,9 @@ public class SlideController {
     private double ticksPerInch;
     private PIDFController forwardPIDFController;
     private PIDFController reversePIDFController;
+    private final double forwardKf;
+    private final double reverseKf;
+    private boolean useForwardPIDs;
 
     /**
      * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
@@ -23,8 +26,13 @@ public class SlideController {
      */
     public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF) {
         this.ticksPerInch = ticksPerInch;
-        this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, forwardPIDF.f);
-        this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, reversePIDF.f);
+        this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, 0);
+        this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, 0);
+        forwardKf = forwardPIDF.f;
+        reverseKf = reversePIDF.f;
+
+        useForwardPIDs = true;
+        targetTicks = 0;
     }
 
     /**
@@ -66,12 +74,48 @@ public class SlideController {
     }
 
     /**
+     * Sets the tolerance for both PID controllers
+     *
+     * @param tolerance the tolerance (position) for the controllers
+     */
+    public void setTolerance(double tolerance) {
+        forwardPIDFController.setTolerance(tolerance);
+        reversePIDFController.setTolerance(tolerance);
+    }
+
+    /**
+     * Sets the tolerance for the forward PID controller
+     *
+     * @param tolerance the tolerance (position) for the controller
+     */
+    public void setForwardTolerance(double tolerance) {
+        forwardPIDFController.setTolerance(tolerance);
+    }
+
+    /**
+     * Sets the tolerance for the reverse PID controller
+     *
+     * @param tolerance the tolerance (position) for the controller
+     */
+    public void setReverseTolerance(double tolerance) {
+        reversePIDFController.setTolerance(tolerance);
+    }
+
+    /**
      * Moves the slides to a specific, absolute position
      *
      * @param targetDistance the target distance in inches to move the slides to
      */
     public void moveToInches(double targetDistance) {
-        this.targetTicks = targetDistance * ticksPerInch;
+        double newTargetTicks = targetDistance * ticksPerInch;
+        useForwardPIDs = newTargetTicks > targetTicks;
+        targetTicks = newTargetTicks;
+
+        if (useForwardPIDs) {
+            forwardPIDFController.setSetPoint(targetTicks);
+        } else {
+            reversePIDFController.setSetPoint(targetTicks);
+        }
     }
 
     /**
@@ -81,9 +125,18 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
-        if (currentTicks > targetTicks) {
-            return reversePIDFController.calculate(currentTicks, targetTicks);
+        if (useForwardPIDs) {
+            double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
+            if (forwardPIDFController.atSetPoint()) {
+                return forwardKf;
+            }
+            return currentPower + forwardKf;
         }
-        return forwardPIDFController.calculate(currentTicks, targetTicks);
+
+        double currentPower = reversePIDFController.calculate(currentTicks, targetTicks);
+        if (reversePIDFController.atSetPoint()) {
+            return reverseKf;
+        }
+        return currentPower + reverseKf;
     }
 }

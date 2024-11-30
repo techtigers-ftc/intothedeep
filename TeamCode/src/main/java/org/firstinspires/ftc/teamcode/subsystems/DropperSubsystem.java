@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import android.sax.StartElementListener;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,25 +23,27 @@ public class DropperSubsystem extends CloseableSubsytem {
     private final Servo rotationServo;
     private final Servo grabServo;
     private final RobotState robotState;
+    private double targetPos;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 16.0 / 24.0; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 1.0;
+    private static final double ERROR_FACTOR = 29.0 / 25.2;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
 
     private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
 
-    public static double FORWARD_KP = 1;
+    public static double FORWARD_KP = 0.15;
     public static double FORWARD_KI = 0;
     public static double FORWARD_KD = 0;
-    public static double FORWARD_KF = 0;
-    public static double REVERSE_KP = 1;
+    public static double FORWARD_KF = 0.18;
+    public static double REVERSE_KP = 0.01;
     public static double REVERSE_KI = 0;
     public static double REVERSE_KD = 0;
     public static double REVERSE_KF = 0;
+    public static double SLIDES_TOLERANCE = 0.05;
 
     private final SlideController slideController;
 
@@ -73,7 +73,12 @@ public class DropperSubsystem extends CloseableSubsytem {
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        encoderMotor = leftSlideMotor; // Assuming you are using leftSlideMotor to use as the encoder motor
+        encoderMotor = rightSlideMotor; // Assuming you are using leftSlideMotor to use as the encoder motor
+
+        slideController.setTolerance(SLIDES_TOLERANCE);
+
+        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
@@ -85,6 +90,8 @@ public class DropperSubsystem extends CloseableSubsytem {
 
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        targetPos = 0;
     }
 
     /**
@@ -118,6 +125,10 @@ public class DropperSubsystem extends CloseableSubsytem {
         return encoderMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
     }
 
+    public double getTargetPositionInches() {
+        return targetPos;
+    }
+
     /**
      * Increments slides from wherever it is currently
      *
@@ -125,6 +136,7 @@ public class DropperSubsystem extends CloseableSubsytem {
      */
     public void moveSlidesRelative(double position) {
         slideController.moveToInches(getCurrentPositionInInches() + position);
+        targetPos += position;
     }
 
     /**
@@ -134,6 +146,7 @@ public class DropperSubsystem extends CloseableSubsytem {
      */
     public void moveSlidesAbsoluteInches(double position) {
         slideController.moveToInches(position);
+        targetPos = position;
     }
 
     /**
@@ -164,7 +177,7 @@ public class DropperSubsystem extends CloseableSubsytem {
         rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
     }
 
-    public void manualControl(double power) {
+    public void manualControlSlides(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
