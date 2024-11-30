@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
@@ -43,9 +44,17 @@ public class DropperSubsystem extends CloseableSubsytem {
     public static double REVERSE_KI = 0;
     public static double REVERSE_KD = 0;
     public static double REVERSE_KF = 0;
+    public static double HOLD_KF = 0;
     public static double SLIDES_TOLERANCE = 0.05;
 
+
     private final SlideController slideController;
+
+//    private enum SlideState {
+//        MOVING_UP,
+//        MOVING_DOWN,
+//        STEADY
+//    }
 
     /**
      * Initializes dropper subsystem
@@ -65,7 +74,7 @@ public class DropperSubsystem extends CloseableSubsytem {
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF);
         PIDFCoefficients reversePIDF = new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF);
-        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF, reversePIDF);
+        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF, reversePIDF, HOLD_KF);
 
         leftPitchServo.setDirection(Servo.Direction.REVERSE);
         rightPitchServo.setDirection(Servo.Direction.FORWARD);

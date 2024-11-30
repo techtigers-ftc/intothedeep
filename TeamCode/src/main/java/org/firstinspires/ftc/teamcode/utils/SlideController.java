@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.robot.Robot;
+import com.qualcomm.robotcore.util.RobotLog;
 
 /**
  * This class encapsulates the logic for setting slides to a given position into one class so that
@@ -15,6 +17,7 @@ public class SlideController {
     private PIDFController reversePIDFController;
     private final double forwardKf;
     private final double reverseKf;
+    private final double holdKf;
     private boolean useForwardPIDs;
 
     /**
@@ -24,12 +27,13 @@ public class SlideController {
      * @param forwardPIDF  the initial PIDF coefficients for forward movement of the slide
      * @param reversePIDF  the initial PIDF coefficients for reverse movement of the slide
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF) {
+    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF, double holdKf) {
         this.ticksPerInch = ticksPerInch;
         this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, 0);
         this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, 0);
         forwardKf = forwardPIDF.f;
         reverseKf = reversePIDF.f;
+        this.holdKf = holdKf;
 
         useForwardPIDs = true;
         targetTicks = 0;
@@ -41,8 +45,8 @@ public class SlideController {
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
      * @param pidf         the initial PIDF coefficients for movement of the slides
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
-        this(ticksPerInch, pidf, pidf);
+    public SlideController(double ticksPerInch, PIDFCoefficients pidf, double holdKf) {
+        this(ticksPerInch, pidf, pidf, holdKf);
     }
 
     /**
@@ -125,18 +129,18 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
+        if ((useForwardPIDs && forwardPIDFController.atSetPoint()) || (!useForwardPIDs && reversePIDFController.atSetPoint())){
+            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(holdKf));
+            return holdKf;
+        }
         if (useForwardPIDs) {
             double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
-            if (forwardPIDFController.atSetPoint()) {
-                return forwardKf;
-            }
+            RobotLog.dd("tt-ss", "Forward PID Power: [%s]", String.valueOf(currentPower + forwardKf));
             return currentPower + forwardKf;
+        } else {
+            double currentPower = reversePIDFController.calculate(currentTicks, targetTicks);
+            RobotLog.dd("tt-ss", "Reverse PID Power: [%s]", String.valueOf(currentPower + reverseKf));
+            return currentPower + reverseKf;
         }
-
-        double currentPower = reversePIDFController.calculate(currentTicks, targetTicks);
-        if (reversePIDFController.atSetPoint()) {
-            return reverseKf;
-        }
-        return currentPower + reverseKf;
     }
 }
