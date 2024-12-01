@@ -102,6 +102,8 @@ public class LimelightSubsystem extends CloseableSubsytem {
      * @param pythonOutput The array of python pipeline outputs to check
      */
     private void setPythonOutput(double[] pythonOutput) {
+        // Checks if the python outputs are valid
+        if (pythonOutput[0] != -1) {
             //Sets the python outputs in the robot state
             robotState.setSampleX(pythonOutput[0]);
             robotState.setSampleY(pythonOutput[1]);
@@ -109,6 +111,11 @@ public class LimelightSubsystem extends CloseableSubsytem {
             robotState.setSampleHeight(pythonOutput[3]);
             robotState.setSampleOrientation(pythonOutput[4]);
             robotState.setSampleDetected(true);
+        } else {
+            // Returns to the neural detector pipeline if the python outputs are invalid
+            setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
+            pipelineSwitchTimer.reset();
+        }
     }
 
     /**
