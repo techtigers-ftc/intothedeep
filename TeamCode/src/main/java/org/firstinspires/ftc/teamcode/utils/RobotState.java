@@ -1,5 +1,13 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -8,30 +16,354 @@ import team.techtigers.core.utils.GlobalState;
  */
 public class RobotState extends GlobalState {
     private Waypoint robotCurrentPose;
-    private Waypoint robotCurrentVelocity;
-    private double sampleX;
-    private double sampleY;
-    private double sampleWidth;
-    private double sampleHeight;
-    private double sampleOrientation;
-    private boolean sampleDetected;
-    private boolean isPickupComplete;
+    private Waypoint robotVelocity;
+    private BlockColorPreference blockColorPreference;
+    private BlockDetectionState blockDetectionState;
+    private double blockLateralCoarse;
+    private double blockOrientation;
+    private double blockForwardCoarse;
+    private BlockColor blockColor;
+    private double blockForwardFine;
+    private double blockLateralFine;
+    private boolean isHorizontalExtended;
+    private ClawState intakeClawState;
+    private double intakeClawOrientation;
+    private double intakeClawPitch;
+    private IntakeState intakeState;
+    private RobotBlockPosition hasBlock;
+    private boolean isAscending;
+    private boolean isVerticalExtended;
+    private double dropperClawPitch;
+    private double dropperClawOrientation;
+    private ClawState dropperClawState;
+    private DropperState dropperState;
 
     /**
      * Initializes a new RobotState
      */
     public RobotState() {
         robotCurrentPose = new Waypoint(0, 0, 0);
-        robotCurrentVelocity = new Waypoint(0, 0, 0);
+        robotVelocity = new Waypoint(0, 0, 0);
+        blockColorPreference = BlockColorPreference.ANY;
+        blockDetectionState = BlockDetectionState.NOT_DETECTED;
+        blockLateralCoarse = 0;
+        blockOrientation = 0;
+        blockForwardCoarse = 0;
+        blockColor = BlockColor.NONE;
+        blockForwardFine = 0;
+        blockLateralFine = 0;
+        isHorizontalExtended = false;
+        intakeClawState = ClawState.OPEN;
+        intakeClawOrientation = 0;
+        intakeClawPitch = 0;
+        intakeState = IntakeState.STANDBY;
+        hasBlock = RobotBlockPosition.NONE;
+        isAscending = false;
+        isVerticalExtended = false;
+        dropperClawPitch = 0;
+        dropperClawOrientation = 0;
+        dropperClawState = ClawState.OPEN;
+        dropperState = DropperState.TRANSFER;
+    }
 
-        sampleX = 0;
-        sampleY = 0;
-        sampleWidth = 0;
-        sampleHeight = 0;
-        sampleOrientation = 0;
-        sampleDetected = false;
+    /**
+     * @return the current state of the dropper
+     */
+    public DropperState getDropperState() {
+        return dropperState;
+    }
 
-        isPickupComplete = false;
+    /**
+     * Sets the current state of the dropper
+     * @param dropperState the state of the dropper
+     */
+    public void setDropperState(DropperState dropperState) {
+        this.dropperState = dropperState;
+    }
+
+    /**
+     * @return the current state of the dropper claw
+     */
+    public ClawState getDropperClawState() {
+        return dropperClawState;
+    }
+
+    /**
+     * Sets the current state of the dropper claw
+     * @param dropperClawState the state of the dropper claw
+     */
+    public void setDropperClawState(ClawState dropperClawState) {
+        this.dropperClawState = dropperClawState;
+    }
+
+    /**
+     * @return the current pitch of the dropper claw in degrees
+     */
+    public double getDropperClawOrientation() {
+        return dropperClawOrientation;
+    }
+
+    /**
+     * Sets the current pitch of the dropper claw
+     * @param dropperClawOrientation the pitch of the dropper claw in degrees
+     */
+    public void setDropperClawOrientation(double dropperClawOrientation) {
+        this.dropperClawOrientation = dropperClawOrientation;
+    }
+
+    /**
+     * @return the current orientation of the dropper claw in degrees
+     */
+    public double getDropperClawPitch() {
+        return dropperClawPitch;
+    }
+
+    /**
+     * Sets the current orientation of the dropper claw
+     * @param dropperClawPitch the orientation of the dropper claw in degrees
+     */
+    public void setDropperClawPitch(double dropperClawPitch) {
+        this.dropperClawPitch = dropperClawPitch;
+    }
+
+    /**
+     * @return true if the vertical extension is extended, false otherwise
+     */
+    public boolean isVerticalExtended() {
+        return isVerticalExtended;
+    }
+
+    /**
+     * Sets the current state of the vertical extension
+     * @param verticalExtended is the vertical extension extended
+     */
+    public void setVerticalExtended(boolean verticalExtended) {
+        isVerticalExtended = verticalExtended;
+    }
+
+    /**
+     * @return true if the robot is ascending, false otherwise
+     */
+    public boolean getIsAscending() {
+        return isAscending;
+    }
+
+    /**
+     * Sets the current state of the robot's ascending
+     * @param isAscending is the robot ascending
+     */
+    public void setIsAscending(boolean isAscending) {
+        this.isAscending = isAscending;
+    }
+
+    /**
+     * @return the current position of the block the robot is holding
+     */
+    public RobotBlockPosition getHasBlock() {
+        return hasBlock;
+    }
+
+    /**
+     * Sets the current position of the robot's block
+     * @param hasBlock the position of the robot's block
+     */
+    public void setHasBlock(RobotBlockPosition hasBlock) {
+        this.hasBlock = hasBlock;
+    }
+
+    /**
+     * @return the current state of the robot's intake
+     */
+    public IntakeState getIntakeState() {
+        return intakeState;
+    }
+
+    /**
+     * Sets the current state of the robot's intake
+     * @param intakeState the state of the robot's intake
+     */
+    public void setIntakeState(IntakeState intakeState) {
+        this.intakeState = intakeState;
+    }
+
+    /**
+     * @return the current pitch of the robot's intake claw in degrees
+     */
+    public double getIntakeClawPitch() {
+        return intakeClawPitch;
+    }
+
+    /**
+     * Sets the current pitch of the robot's intake claw
+     * @param intakeClawPitch the pitch of the robot's intake claw in degrees
+     */
+    public void setIntakeClawPitch(double intakeClawPitch) {
+        this.intakeClawPitch = intakeClawPitch;
+    }
+
+    /**
+     * @return the current orientation of the robot's intake claw in degrees
+     */
+    public double getIntakeClawOrientation() {
+        return intakeClawOrientation;
+    }
+
+    /**
+     * Sets the current orientation of the robot's intake claw
+     * @param intakeClawOrientation the orientation of the robot's intake claw in degrees
+     */
+    public void setIntakeClawOrientation(double intakeClawOrientation) {
+        this.intakeClawOrientation = intakeClawOrientation;
+    }
+
+    /**
+     * @return the current state of the robot's intake claw
+     */
+    public ClawState getIntakeClawState() {
+        return intakeClawState;
+    }
+
+    /**
+     * Sets the current state of the robot's intake claw
+     * @param intakeClawState the state of the robot's intake claw
+     */
+    public void setIntakeClawState(ClawState intakeClawState) {
+        this.intakeClawState = intakeClawState;
+    }
+
+    /**
+     * @return true if the robot's horizontal extension is extended, false otherwise
+     */
+    public boolean isHorizontalExtended() {
+        return isHorizontalExtended;
+    }
+
+    /**
+     * Sets the current state of the robot's horizontal extension
+     * @param horizontalExtended is the horizontal extension extended
+     */
+    public void setHorizontalExtended(boolean horizontalExtended) {
+        this.isHorizontalExtended = horizontalExtended;
+    }
+
+    /**
+     * @return the current fine lateral position of the block from the robot
+     */
+    public double getBlockLateralFine() {
+        return blockLateralFine;
+    }
+
+    /**
+     * @return the current fine forward position of the block from the robot
+     */
+    public double getBlockForwardFine() {
+        return blockForwardFine;
+    }
+
+    /**
+     * Sets the current fine forward position of the block
+     * @param blockLateralFine the fine forward position of the block from the robot
+     */
+    public void setBlockLateralFine(double blockLateralFine) {
+        this.blockLateralFine = blockLateralFine;
+    }
+
+    /**
+     * Sets the current fine lateral position of the block
+     * @param blockForwardFine the fine lateral position of the block from the robot
+     */
+    public void setBlockForwardFine(double blockForwardFine) {
+        this.blockForwardFine = blockForwardFine;
+    }
+
+    /**
+     * @return the current color of the block in the robot
+     */
+    public BlockColor getBlockColor() {
+        return blockColor;
+    }
+
+    /**
+     * Sets the current color of the block in the robot
+     * @param blockColor the color of the block
+     */
+    public void setBlockColor(BlockColor blockColor) {
+        this.blockColor = blockColor;
+    }
+
+    /**
+     * @return the current coarse lateral position of the block from the robot
+     */
+    public double getBlockForwardCoarse() {
+        return blockForwardCoarse;
+    }
+
+    /**
+     * Sets the current coarse lateral position of the block
+     * @param blockForwardCoarse the coarse lateral position of the block from the robot
+     */
+    public void setBlockForwardCoarse(double blockForwardCoarse) {
+        this.blockForwardCoarse = blockForwardCoarse;
+    }
+
+    /**
+     * @return the current orientation of the block in degrees
+     */
+    public double getBlockOrientation() {
+        return blockOrientation;
+    }
+
+    /**
+     * Sets the current orientation of the block
+     * @param blockOrientation the orientation of the block in degrees
+     */
+    public void setBlockOrientation(double blockOrientation) {
+        this.blockOrientation = blockOrientation;
+    }
+
+    /**
+     * @return the current coarse lateral position of the block from the robot
+     */
+    public double getBlockLateralCoarse() {
+        return blockLateralCoarse;
+    }
+
+    /**
+     * Sets the current coarse lateral position of the block
+     * @param blockLateralCoarse the coarse lateral position of the block from the robot
+     */
+    public void setBlockLateralCoarse(double blockLateralCoarse) {
+        this.blockLateralCoarse = blockLateralCoarse;
+    }
+
+    /**
+     * @return the current state of block detection
+     */
+    public BlockDetectionState getBlockDetectionState() {
+        return blockDetectionState;
+    }
+
+    /**
+     * Sets the current state of block detection
+     * @param blockDetectionState the state of block detection
+     */
+    public void setBlockDetectionState(BlockDetectionState blockDetectionState) {
+        this.blockDetectionState = blockDetectionState;
+    }
+
+    /**
+     * @return the current color preference of the block
+     */
+    public BlockColorPreference getBlockColorPreference() {
+        return blockColorPreference;
+    }
+
+    /**
+     * Sets the current color preference of the block
+     * @param blockColorPreference the color preference of the block
+     */
+    public void setBlockColorPreference(BlockColorPreference blockColorPreference) {
+        this.blockColorPreference = blockColorPreference;
     }
 
     /**
@@ -54,7 +386,7 @@ public class RobotState extends GlobalState {
      * @return the current velocity of the robot (Inches and Radians)
      */
     public Waypoint getRobotVelocity() {
-        return robotCurrentVelocity;
+        return robotVelocity;
     }
 
     /**
@@ -63,118 +395,6 @@ public class RobotState extends GlobalState {
      * @param robotVelocity the current velocity of the robot
      */
     public void setRobotVelocity(Waypoint robotVelocity) {
-        robotCurrentVelocity = robotVelocity;
-    }
-
-    /**
-     * @return the x value of the sample
-     */
-    public double getSampleX() {
-        return sampleX;
-    }
-
-    /**
-     * Sets the x value of the sample
-     *
-     * @param sampleX the x value of the sample
-     */
-    public void setSampleX(double sampleX) {
-        this.sampleX = sampleX;
-    }
-
-    /**
-     * @return the y value of the sample
-     */
-    public double getSampleY() {
-        return sampleY;
-    }
-
-    /**
-     * Sets the y value of the sample
-     *
-     * @param sampleY the y value of the sample
-     */
-    public void setSampleY(double sampleY) {
-        this.sampleY = sampleY;
-    }
-
-    /**
-     * @return the orientation of the sample
-     */
-    public double getSampleOrientation() {
-        return sampleOrientation;
-    }
-
-    /**
-     * Sets the orientation of the sample
-     *
-     * @param sampleOrientation the orientation of the sample
-     */
-    public void setSampleOrientation(double sampleOrientation) {
-        this.sampleOrientation = sampleOrientation;
-    }
-
-    /**
-     * @return whether the sample is detected
-     */
-    public boolean isSampleDetected() {
-        return sampleDetected;
-    }
-
-    /**
-     * Sets whether the sample is detected
-     *
-     * @param sampleDetected whether the sample is detected
-     */
-    public void setSampleDetected(boolean sampleDetected) {
-        this.sampleDetected = sampleDetected;
-    }
-
-    /**
-     * @return the width of the sample
-     */
-    public double getSampleWidth() {
-        return sampleWidth;
-    }
-
-    /**
-     * Sets the width of the sample
-     *
-     * @param sampleWidth the width of the sample
-     */
-    public void setSampleWidth(double sampleWidth) {
-        this.sampleWidth = sampleWidth;
-    }
-
-    /**
-     * @return the height of the sample
-     */
-    public double getSampleHeight() {
-        return sampleHeight;
-    }
-
-    /**
-     * Sets the height of the sample
-     *
-     * @param sampleHeight the height of the sample
-     */
-    public void setSampleHeight(double sampleHeight) {
-        this.sampleHeight = sampleHeight;
-    }
-
-    /**
-     * @return whether or not the sample has been picked up
-     */
-    public boolean isPickupComplete() {
-        return isPickupComplete;
-    }
-
-    /**
-     * sets whether or not the sample has been picked up
-     *
-     * @param pickupComplete boolean value to set
-     */
-    public void setPickupComplete(boolean pickupComplete) {
-        isPickupComplete = pickupComplete;
+        this.robotVelocity = robotVelocity;
     }
 }
