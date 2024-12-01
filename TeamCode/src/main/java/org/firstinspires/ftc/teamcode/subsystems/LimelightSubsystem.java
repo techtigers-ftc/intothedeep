@@ -114,7 +114,6 @@ public class LimelightSubsystem extends CloseableSubsytem {
         } else {
             // Returns to the neural detector pipeline if the python outputs are invalid
             setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
-            pipelineSwitchTimer.reset();
         }
     }
 
@@ -188,7 +187,7 @@ public class LimelightSubsystem extends CloseableSubsytem {
                 RobotLog.dd("TT-LLS", Arrays.toString(
                         new double[]{detectorCorners[0], detectorCorners[1], detectorCorners[2],
                                 detectorCorners[3]}));
-              // Switches to the python pipeline and begins tracking
+                // Switches to the python pipeline and begins tracking
                 setPipelineAfterTime(100, PYTHON_PIPELINE);
             } else {
                 setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
