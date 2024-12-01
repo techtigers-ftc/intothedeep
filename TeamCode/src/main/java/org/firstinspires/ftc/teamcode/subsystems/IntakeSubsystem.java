@@ -56,7 +56,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
      * Initializes a new IntakeSubsystem
      *
      * @param hardwareMap the reference to the hardware components of the robot
-     * @param robotState a reference to the state used to store information about the robot
+     * @param robotState  a reference to the state used to store information about the robot
      */
     public IntakeSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         super();
@@ -73,7 +73,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
                 new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF)
         );
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
-        differentialController.setMaxRange(180,180);
+        differentialController.setMaxRange(180, 180);
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = leftSlideMotor;
@@ -81,7 +81,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSlideMotor.setDirection(DcMotor.Direction.FORWARD); //TODO: Check if this is the correct motor directions
+        leftSlideMotor.setDirection(DcMotor.Direction.FORWARD);
         rightSlideMotor.setDirection(DcMotor.Direction.REVERSE);
 
         rightWrist.setDirection(Servo.Direction.FORWARD);
@@ -108,24 +108,26 @@ public class IntakeSubsystem extends CloseableSubsytem {
 
     /**
      * Moves the Slides to an exact position
+     *
      * @param distance The distance you want to move in inches
      */
-    public void moveSlidesAbsolute(double distance){
+    public void moveSlidesAbsolute(double distance) {
         slideController.moveTo(distance);
     }
 
     /**
      * Moves slides in to a position relative to where it already is
+     *
      * @param distance The distance you want to move in inches
      */
-    public void moveSlidesRelative(double distance){
+    public void moveSlidesRelative(double distance) {
         slideController.moveTo(getCurrentPositionInches() + distance);
     }
 
     /**
      * Sets the current position to 0 encoder ticks on the motors
      */
-    public void resetSlides(){
+    public void resetSlides() {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -133,7 +135,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     /**
      * Stops slides
      */
-    public void stopSlides(){
+    public void stopSlides() {
         slideController.moveTo(getCurrentPositionInches());
         leftSlideMotor.setPower(0);
         rightSlideMotor.setPower(0);
@@ -142,7 +144,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     /**
      * Opens The Intake Claw
      */
-    public void openClaw(){
+    public void openClaw() {
         leftClaw.setPosition(0);
         rightClaw.setPosition(0);
     }
@@ -150,38 +152,41 @@ public class IntakeSubsystem extends CloseableSubsytem {
     /**
      * Closes the Intake Claw
      */
-    public void closeClaw(){
+    public void closeClaw() {
         leftClaw.setPosition(1);
         rightClaw.setPosition(1);
     }
 
     /**
      * Sets wrist position in degrees
-     * @param pitchAngle the desired pitch of the differential
+     *
+     * @param pitchAngle    the desired pitch of the differential
      * @param rotationAngle the desired rotation of the differential claw
      */
-    public void setWristAbsolute(double pitchAngle, double rotationAngle ){
-        double [] positions = differentialController.calculateServoPositions(pitchAngle, rotationAngle);
+    public void setWristAbsolute(double pitchAngle, double rotationAngle) {
+        double[] positions = differentialController.calculateServoPositions(pitchAngle, rotationAngle);
         leftWrist.setPosition(positions[0]);
         rightWrist.setPosition(positions[1]);
     }
 
     /**
      * Changes wrist position relative to where it is in degrees
-     * @param pitchAngle the desired change in pitch of the differential
+     *
+     * @param pitchAngle    the desired change in pitch of the differential
      * @param rotationAngle the desired change in rotation of the differential claw
      */
-    public void setWristRelative(double pitchAngle, double rotationAngle){
+    public void setWristRelative(double pitchAngle, double rotationAngle) {
         double[] currentPositions = differentialController.getPitchAndRotation(
                 leftWrist.getPosition(),
                 rightWrist.getPosition());
-        double [] newPositions = differentialController.calculateServoPositions(
+        double[] newPositions = differentialController.calculateServoPositions(
                 currentPositions[0] + pitchAngle,
                 currentPositions[1] + rotationAngle);
         leftWrist.setPosition(newPositions[0]);
         rightWrist.setPosition(newPositions[1]);
     }
-    public void powerSlides(double power){
+
+    public void powerSlides(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
@@ -190,7 +195,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
      * Updates and powers motors every cycle
      */
     @Override
-    public void periodic(){
+    public void periodic() {
 //        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
 //        leftSlideMotor.setPower(power);
 //        rightSlideMotor.setPower(power);
