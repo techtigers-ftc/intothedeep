@@ -17,7 +17,6 @@ public class SlideController {
     private PIDFController reversePIDFController;
     private final double forwardKf;
     private final double reverseKf;
-    private final double holdKf;
     private boolean useForwardPIDs;
 
     /**
@@ -27,13 +26,12 @@ public class SlideController {
      * @param forwardPIDF  the initial PIDF coefficients for forward movement of the slide
      * @param reversePIDF  the initial PIDF coefficients for reverse movement of the slide
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF, double holdKf) {
+    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF) {
         this.ticksPerInch = ticksPerInch;
         this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, 0);
         this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, 0);
         forwardKf = forwardPIDF.f;
         reverseKf = reversePIDF.f;
-        this.holdKf = holdKf;
 
         useForwardPIDs = true;
         targetTicks = 0;
@@ -45,8 +43,8 @@ public class SlideController {
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
      * @param pidf         the initial PIDF coefficients for movement of the slides
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients pidf, double holdKf) {
-        this(ticksPerInch, pidf, pidf, holdKf);
+    public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
+        this(ticksPerInch, pidf, pidf);
     }
 
     /**
