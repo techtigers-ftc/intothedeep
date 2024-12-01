@@ -44,7 +44,7 @@ public class IntakeTestOpmode extends BaseOpMode {
 
     @Override
     public void update(){
-        intakeSubsystem.powerSlides(gamepad1.left_stick_y);
+        intakeSubsystem.powerSlides(-gamepad1.left_stick_y);
         telemetry.addData("Position", intakeSubsystem.getCurrentPositionInches());
     }
 }

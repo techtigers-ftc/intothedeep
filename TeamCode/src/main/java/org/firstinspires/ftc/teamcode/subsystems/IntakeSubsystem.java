@@ -84,8 +84,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
         leftSlideMotor.setDirection(DcMotor.Direction.FORWARD); //TODO: Check if this is the correct motor directions
         rightSlideMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        rightWrist.setDirection(Servo.Direction.REVERSE);
-        leftWrist.setDirection(Servo.Direction.FORWARD);
+        rightWrist.setDirection(Servo.Direction.FORWARD);
+        leftWrist.setDirection(Servo.Direction.REVERSE);
 
         rightClaw.setDirection(Servo.Direction.REVERSE);
         leftClaw.setDirection(Servo.Direction.FORWARD);
