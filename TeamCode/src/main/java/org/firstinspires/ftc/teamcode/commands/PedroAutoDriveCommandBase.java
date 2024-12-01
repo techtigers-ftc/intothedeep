@@ -29,20 +29,22 @@ public class PedroAutoDriveCommandBase extends CommandBase {
 
     @Override
     public void initialize() {
+        if(translationalPIDF == null || headingPIDF == null || drivePIDF == null) {
+            throw new IllegalArgumentException("PIDF coefficients not set");
+        }
         follower.setTranslationalPIDF(translationalPIDF.P(), translationalPIDF.I(), translationalPIDF.D(), translationalPIDF.F());
         follower.setHeadingPIDF(headingPIDF.P(), headingPIDF.I(), headingPIDF.D(), headingPIDF.F());
         follower.setDrivePIDF(drivePIDF.P(), drivePIDF.I(), drivePIDF.D(), drivePIDF.T(), drivePIDF.F());
 
+        if(pathChain == null) {
+            throw new IllegalArgumentException("Path chain not set");
+        }
         follower.followPath(pathChain);
     }
 
     @Override
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
-    }
-
-    protected PathChain getPathChain() {
-        return pathChain;
     }
 
     protected void setPathChain(PathChain pathChain) {
