@@ -112,14 +112,6 @@ public class Follower {
      */
     public Follower(RobotState robotState) {
         this.robotState = robotState;
-        secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
-        secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-        translationalPIDF = new PIDFController(FollowerConstants.translationalPIDFCoefficients);
-        translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-        secondaryHeadingPIDF = new PIDFController(FollowerConstants.secondaryHeadingPIDFCoefficients);
-        headingPIDF = new PIDFController(FollowerConstants.headingPIDFCoefficients);
-        secondaryDrivePIDF = new FilteredPIDFController(FollowerConstants.secondaryDrivePIDFCoefficients);
-        drivePIDF = new FilteredPIDFController(FollowerConstants.drivePIDFCoefficients);
         initialize();
     }
 
