@@ -125,6 +125,7 @@ public class DropperSubsystem extends CloseableSubsytem {
         leftSlideMotor.setPower(0);
     }
 
+
     /**
      * Gets the current position of the slides in inches
      *
@@ -137,6 +138,7 @@ public class DropperSubsystem extends CloseableSubsytem {
     public double getTargetPositionInches() {
         return targetPos;
     }
+
 
     /**
      * Increments slides from wherever it is currently
@@ -159,33 +161,75 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     /**
-     * Method that increments the wrist from where it is currently at
+     * Method that increments the arm from where it is currently at
      *
-     * @param pitch: Amount you want to increment by for the dropper in degrees
+     * @param pitch: Amount you want to increment by for the dropper arm in degrees
      */
-    public void setWristRelativeDegrees(double pitch, double rotation) {
-        double pitchServoCurrentPosition = rightPitchServo.getPosition();
-        double pitchServo2CurrentPosition = leftPitchServo.getPosition();
+    public void setArmRelative(double pitch) {
+        double rightPitchServoCurrentPosition = rightPitchServo.getPosition();
+        double leftPitchServoCurrentPosition = leftPitchServo.getPosition();
+//        double rotationServoCurrentPosition = rotationServo.getPosition();
+
+        rightPitchServo.setPosition(rightPitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
+        leftPitchServo.setPosition(leftPitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
+
+//        rotationServo.setPosition(rotationServoCurrentPosition * ROTATION_GEAR_RATIO + rotation);
+    }
+
+    /**
+     * Method that increments only the wrist from where it currently is
+     *
+     * @param rotation: Amount you want to increment the wrist in degrees
+     * */
+    public void setWristRelative(double rotation) {
         double rotationServoCurrentPosition = rotationServo.getPosition();
-
-        rightPitchServo.setPosition(pitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
-        leftPitchServo.setPosition(pitchServo2CurrentPosition * PITCH_GEAR_RATIO + pitch);
-
         rotationServo.setPosition(rotationServoCurrentPosition * ROTATION_GEAR_RATIO + rotation);
+    }
+
+    /**
+     * Method that increments only the pinch of the claw on the dropper arm from where it currently is
+     *
+     * @param pinch: Amount would want to increment in degrees
+     * */
+    public void setPinchRelative(double pinch) {
+        double grabServoCurrentPosition = grabServo.getPosition();
+        grabServo.setPosition(grabServoCurrentPosition + pinch);
     }
 
     /**
      * Sets the wrist to an absolute position in degrees
      *
-     * @param pitch    The angle to set the pitch to in degrees
-     * @param rotation The angle to set the rotation to in degrees
+     * @param pitch: The angle to set the pitch to in degrees
      */
-    public void setWristAbsoluteDegrees(double pitch, double rotation) {
+    public void setArmAbsolute(double pitch) {
         rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
         leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
-        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
+//        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
     }
 
+    /**
+     * Sets wrist to an absolute position from where it currently is
+     *
+     * @param rotation: Amount you want to rotate claw in degrees
+     * */
+    public void setWristAbsolute(double rotation) {
+        rotationServo.setPosition(rotation);
+    }
+
+    /**
+     * Sets pinch of the claw to an absolute position
+     *
+     * @param pinch: Position where you want to set claw in degrees
+     * */
+    public void setPinchAbsolute(double pinch) {
+        grabServo.setPosition(pinch);
+    }
+
+    /**
+     * Sets given power to both the slide motors
+     *
+     * @param power: Amount of power you want to set the slide motors
+     * */
     public void manualControlSlides(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
