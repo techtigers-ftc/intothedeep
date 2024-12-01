@@ -186,6 +186,10 @@ public class IntakeSubsystem extends CloseableSubsytem {
         rightWrist.setPosition(newPositions[1]);
     }
 
+    /**
+     * Powers the slides
+     * @param power The power Sent to the slides
+     */
     public void powerSlides(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
