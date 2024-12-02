@@ -111,6 +111,14 @@ public class Follower {
      * @param robotState robot state to get poses and velocities
      */
     public Follower(RobotState robotState) {
+        secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryTranslationalIntegral = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        translationalIntegral = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+        drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
         this.robotState = robotState;
         initialize();
     }

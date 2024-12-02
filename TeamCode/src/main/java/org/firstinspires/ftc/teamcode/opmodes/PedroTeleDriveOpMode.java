@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.PedroManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
@@ -18,7 +19,8 @@ public class PedroTeleDriveOpMode extends BaseOpMode {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
 
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-        registerSubsystems(drive);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        registerSubsystems(drive, odometry);
 
         PedroManualDriveCommand command = new PedroManualDriveCommand(drive, robotState, driverGamepad);
         drive.setDefaultCommand(command);
