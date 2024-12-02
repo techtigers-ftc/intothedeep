@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -37,7 +36,7 @@ public class DriveSubsystem extends CloseableSubsytem {
         backLeft = hardwareMap.get(DcMotor.class, "left_back");
         backRight = hardwareMap.get(DcMotor.class, "right_back");
 
-         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
+        driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
 
         motors = Arrays.asList(frontLeft, backLeft, frontRight, backRight);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -46,9 +45,9 @@ public class DriveSubsystem extends CloseableSubsytem {
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (DcMotor motor : motors) {
-//            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-//            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-//            motor.setMotorType(motorConfigurationType);
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
@@ -83,12 +82,26 @@ public class DriveSubsystem extends CloseableSubsytem {
         }
     }
 
+    /**
+     * Drives the robot in robot centric mode, with movement inputs relative to the robot's orientation.
+     *
+     * @param forward  The forward power
+     * @param strafe   The strafe power
+     * @param rotation The rotation power
+     */
     public void driveRobotCentric(double forward, double strafe, double rotation) {
         driveFieldCentric(forward, strafe, rotation, 0.0);
     }
 
+    /**
+     * Drives the robot in field centric mode, with movement inputs relative to the field's orientation.
+     *
+     * @param forward  The forward power
+     * @param strafe   The strafe power
+     * @param rotation The rotation power
+     * @param heading  The robot's heading
+     */
     public void driveFieldCentric(double forward, double strafe, double rotation, double heading) {
-
         RobotLog.dd("DriveSubsystem", "----------------------------------");
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
                 forward, strafe, rotation);
@@ -133,7 +146,6 @@ public class DriveSubsystem extends CloseableSubsytem {
         setMotorPowers(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
     }
 
-
     /**
      * Private method to set the motor powers.
      *
@@ -151,6 +163,8 @@ public class DriveSubsystem extends CloseableSubsytem {
 
     /**
      * Drives the robot given the vectors calculated by the pedro path follower
+     *
+     * @param vectors The vectors to drive with
      */
     public void drivePedroPath(DriveVectors vectors) {
         double[] drivePowers = driveVectorScaler.getDrivePowers(vectors.correctivePower, vectors.headingPower, vectors.pathingPower, vectors.robotHeading);

@@ -11,6 +11,14 @@ public class DriveVectors {
     public final Vector pathingPower;
     public final double robotHeading;
 
+    /**
+     * Constructs a new DriveVectors object
+     *
+     * @param correctivePower the corrective power vector
+     * @param headingPower    the heading power vector
+     * @param pathingPower    the pathing power vector
+     * @param robotHeading    the robot's heading
+     */
     public DriveVectors(Vector correctivePower, Vector headingPower, Vector pathingPower, double robotHeading) {
         this.correctivePower = correctivePower;
         this.headingPower = headingPower;

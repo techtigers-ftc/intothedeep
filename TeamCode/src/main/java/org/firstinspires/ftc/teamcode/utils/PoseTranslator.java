@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
+import org.firstinspires.ftc.teamcode.pedroPathing.util.Pose;
 
 import team.techtigers.core.paths.Waypoint;
 
@@ -11,6 +11,7 @@ import team.techtigers.core.paths.Waypoint;
 public class PoseTranslator {
     /**
      * Converts a waypoint to a pose
+     *
      * @param waypoint the waypoint to convert
      * @return the pedro pathing pose
      */
@@ -20,6 +21,7 @@ public class PoseTranslator {
 
     /**
      * Converts a pose to a waypoint
+     *
      * @param pose the pedro pathing pose to convert
      * @return the waypoint
      */
@@ -29,6 +31,7 @@ public class PoseTranslator {
 
     /**
      * Converts a waypoint to a vector
+     *
      * @param waypoint the waypoint to convert
      * @return the pedro pathing vector
      */
