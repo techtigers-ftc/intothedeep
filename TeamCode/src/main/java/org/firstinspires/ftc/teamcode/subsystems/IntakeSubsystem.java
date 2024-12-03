@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsytem;
 
@@ -145,6 +147,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     public void openClaw(){
         leftClaw.setPosition(0);
         rightClaw.setPosition(0);
+        robotState.setIntakeClawState(ClawState.OPEN);
     }
 
     /**
@@ -153,6 +156,7 @@ public class IntakeSubsystem extends CloseableSubsytem {
     public void closeClaw(){
         leftClaw.setPosition(1);
         rightClaw.setPosition(1);
+        robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
     /**
@@ -164,6 +168,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
         double [] positions = differentialController.calculateServoPositions(pitchAngle, rotationAngle);
         leftWrist.setPosition(positions[0]);
         rightWrist.setPosition(positions[1]);
+        robotState.setIntakeClawPitch(pitchAngle);
+        robotState.setIntakeClawOrientation(rotationAngle);
     }
 
     /**
@@ -180,6 +186,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
                 currentPositions[1] + rotationAngle);
         leftWrist.setPosition(newPositions[0]);
         rightWrist.setPosition(newPositions[1]);
+        robotState.setIntakeClawPitch(currentPositions[0] + pitchAngle);
+        robotState.setIntakeClawOrientation(currentPositions[1] + rotationAngle);
     }
     public void powerSlides(double power){
         leftSlideMotor.setPower(power);
@@ -194,6 +202,11 @@ public class IntakeSubsystem extends CloseableSubsytem {
 //        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
 //        leftSlideMotor.setPower(power);
 //        rightSlideMotor.setPower(power);
+        if(encoderMotor.getCurrentPosition() > 0){
+            robotState.setHorizontalExtended(true);
+        } else {
+            robotState.setHorizontalExtended(false);
+        }
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(),
                 rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
