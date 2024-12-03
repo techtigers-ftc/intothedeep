@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.utils.SlideController;
 
 import team.techtigers.base.CloseableSubsytem;
 
+/**
+ * Encapsulates all hardware, methods, and attributes of the dropper subsystem, including the
+ * vertical slides, arm, and the claw.
+ */
 @Config
 public class DropperSubsystem extends CloseableSubsytem {
     private final DcMotor rightSlideMotor;
@@ -23,7 +27,6 @@ public class DropperSubsystem extends CloseableSubsytem {
     private final Servo rotationServo;
     private final Servo grabServo;
     private final RobotState robotState;
-    private double targetPos;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
@@ -39,12 +42,7 @@ public class DropperSubsystem extends CloseableSubsytem {
     public static double KI = 0;
     public static double KD = 0.000000001;
     public static double KF = 0;
-    public static double HOLD_KF;
     public static double SLIDES_TOLERANCE = 1;
-
-    private double HOLDING_CALC_COEFF = 0.00569536;
-    private double HOLDING_CALC_INTERCEPT = 0.135166;
-
     private final SlideController slideController;
 
     /**
@@ -72,7 +70,7 @@ public class DropperSubsystem extends CloseableSubsytem {
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        encoderMotor = rightSlideMotor; // Assuming you are using leftSlideMotor to use as the encoder motor
+        encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
@@ -89,8 +87,6 @@ public class DropperSubsystem extends CloseableSubsytem {
 
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        targetPos = 0;
     }
 
     /**
@@ -125,7 +121,6 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     public double getTargetPositionInches() {
-//        return targetPos;
         return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
     }
 
@@ -136,7 +131,6 @@ public class DropperSubsystem extends CloseableSubsytem {
      */
     public void moveSlidesRelative(double position) {
         slideController.moveToInches(getCurrentPositionInInches() + position);
-        targetPos += position;
     }
 
     /**
@@ -146,7 +140,6 @@ public class DropperSubsystem extends CloseableSubsytem {
      */
     public void moveSlidesAbsoluteInches(double position) {
         slideController.moveToInches(position);
-        targetPos = position;
     }
 
     /**
@@ -189,13 +182,8 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     @Override
     public void periodic() {
-//        HOLD_KF = getHoldingPower(getCurrentPositionInInches());
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
-    }
-
-    public double getHoldingPower(double heightIn) {
-        return HOLDING_CALC_COEFF * heightIn + HOLDING_CALC_INTERCEPT;
     }
 }

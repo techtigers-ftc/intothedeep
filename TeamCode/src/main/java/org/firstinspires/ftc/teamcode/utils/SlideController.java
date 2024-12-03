@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.RobotLog;
 
 /**
@@ -12,40 +11,40 @@ import com.qualcomm.robotcore.util.RobotLog;
  */
 public class SlideController {
     public double targetTicks;
-    private double ticksPerInch;
-    private PIDFController forwardPIDFController;
-    private final double forwardKf;
+    private final double ticksPerInch;
+    private final PIDFController pidfController;
+    private final double kF;
 
     /**
-     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
+     * Initializes the SlideController and PIDs movement of the slides
      *
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
-     * @param forwardPIDF  the initial PIDF coefficients for forward movement of the slide
+     * @param pidf  the initial PIDF coefficients for movement of the slides
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF) {
+    public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
         this.ticksPerInch = ticksPerInch;
-        this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, 0);
-        forwardKf = forwardPIDF.f;
+        this.pidfController = new PIDFController(pidf.p, pidf.i, pidf.d, 0);
+        kF = pidf.f;
 
         targetTicks = 0;
     }
 
     /**
-     * Allows users to change/set the PID coefficients for the forward controller
+     * Allows users to change/set the PIDF coefficients for the feedback controller
      *
-     * @param coefficients the PID coefficients to set the forward controller to
+     * @param coefficients the new PIDF coefficients
      */
-    public void setForwardPIDFCoefficients(PIDFCoefficients coefficients) {
-        forwardPIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
+    public void setPIDFCoefficients(PIDFCoefficients coefficients) {
+        pidfController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
     }
 
     /**
-     * Sets the tolerance for both PID controllers
+     * Sets the tolerance for the PID controller
      *
-     * @param tolerance the tolerance (position) for the controllers
+     * @param tolerance the tolerance (position) for the controller
      */
     public void setTolerance(double tolerance) {
-        forwardPIDFController.setTolerance(tolerance);
+        pidfController.setTolerance(tolerance);
     }
 
 
@@ -66,8 +65,8 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
-        double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
-        RobotLog.dd("tt-ss", "PID Power: [%s]", String.valueOf(currentPower + forwardKf));
-        return currentPower + forwardKf;
+        double currentPower = pidfController.calculate(currentTicks, targetTicks);
+        RobotLog.dd("tt-ds", "PID Power: [%s]", String.valueOf(currentPower + kF));
+        return currentPower + kF;
     }
 }
