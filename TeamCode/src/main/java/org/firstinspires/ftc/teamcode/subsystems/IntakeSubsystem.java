@@ -22,14 +22,14 @@ import team.techtigers.base.CloseableSubsytem;
  */
 public class IntakeSubsystem extends CloseableSubsytem {
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 1; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
     private static final double ERROR_FACTOR = 1.0 / 1.1565;
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
 
-    private static final double DIFFERENTIAL_GEAR_RATIO = 1.0 / 1.0; //Driver / Follower
+    private static final double DIFFERENTIAL_GEAR_RATIO = 1; //Driver / Follower
 
 
     public static final double FORWARD_KP = 0.025;
@@ -199,14 +199,10 @@ public class IntakeSubsystem extends CloseableSubsytem {
      */
     @Override
     public void periodic(){
-//        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-//        leftSlideMotor.setPower(power);
-//        rightSlideMotor.setPower(power);
-        if(encoderMotor.getCurrentPosition() > 0){
-            robotState.setHorizontalExtended(true);
-        } else {
-            robotState.setHorizontalExtended(false);
-        }
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
+        robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 0);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(),
                 rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
