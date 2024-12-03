@@ -15,6 +15,6 @@ public class TestPedroAutoDriveCommand extends PedroAutoDriveCommandBase {
         setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
         setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
         setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0 ,0);
-        setPathChain(follower.pathBuilder().addBezierLine(new Point(0, 0), new Point(25, 25)).build());
+        setPathChain(follower.pathBuilder().addBezierLine(new Point(0, 0), new Point(30,-40)).setLinearHeadingInterpolation(0,-Math.PI/2).build());
     }
 }
