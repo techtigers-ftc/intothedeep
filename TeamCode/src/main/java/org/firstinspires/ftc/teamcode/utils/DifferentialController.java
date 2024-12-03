@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -73,10 +72,20 @@ public class DifferentialController {
         }
     }
 
+    /**
+     * Returns the max pitch angle
+     *
+     * @return The max pitch angle
+     */
     public double getMaxPitchAngle() {
         return maxPitchAngle;
     }
 
+    /**
+     * Returns the max pitch angle
+     *
+     * @return The max pitch angle
+     */
     public double getMaxRotationAngle() {
         return maxRotationAngle;
     }
@@ -96,15 +105,12 @@ public class DifferentialController {
         pitchAngleDegrees = Range.clip(pitchAngleDegrees, 0, maxPitchAngle);
         rotationAngleDegrees = Range.clip(rotationAngleDegrees, 0, maxRotationAngle);
 
-        double leftServoPosition = pitchAngleDegrees - (rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio;
-        double rightServoPosition = pitchAngleDegrees + (rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio;
-
-        leftServoPosition /= servoGearRatio;
-        rightServoPosition /= servoGearRatio;
+        double leftServoPosition = pitchAngleDegrees + (maxRotationAngle / 2.0) + ((rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio);
+        double rightServoPosition = pitchAngleDegrees + (maxRotationAngle / 2.0) - ((rotationAngleDegrees - maxRotationAngle / 2.0) / gearRatio);
 
         //Normalize both positions so they are between 0 and 1;
-        leftServoPosition /= maxServoAngle;
-        rightServoPosition /= maxServoAngle;
+        leftServoPosition /= maxServoAngle * servoGearRatio;
+        rightServoPosition /= maxServoAngle * servoGearRatio;
 
         leftServoPosition = Range.clip(leftServoPosition, 0.0, 1.0);
         rightServoPosition = Range.clip(rightServoPosition, 0.0, 1.0);
@@ -120,15 +126,12 @@ public class DifferentialController {
      * @return the pitch and rotation angles in degrees, 0 to max; first is pitch, second is rotation
      */
     public double[] getPitchAndRotation(double leftServoPosition, double rightServoPosition) {
-        leftServoPosition *= maxServoAngle;
-        rightServoPosition *= maxServoAngle;
+        leftServoPosition *= maxServoAngle * servoGearRatio;
+        rightServoPosition *= maxServoAngle * servoGearRatio;
 
         double[] positions = new double[2];
-        positions[0] = (leftServoPosition + rightServoPosition) / 2;
-        positions[1] = ((gearRatio * (rightServoPosition - leftServoPosition)) / 2.0) + (maxRotationAngle / 2.0);
-
-        positions[0] /= servoGearRatio;
-        positions[1] /= servoGearRatio;
+        positions[0] = (leftServoPosition + rightServoPosition) / 2.0 - maxRotationAngle / 2.0;
+        positions[1] = ((gearRatio * (leftServoPosition - rightServoPosition)) / 2.0) + (maxRotationAngle / 2.0);
 
         return positions;
     }
