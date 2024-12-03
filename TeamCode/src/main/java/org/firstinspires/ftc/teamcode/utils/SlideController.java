@@ -11,40 +11,23 @@ import com.qualcomm.robotcore.util.RobotLog;
  * duplicating code.
  */
 public class SlideController {
-    private double targetTicks;
+    public double targetTicks;
     private double ticksPerInch;
     private PIDFController forwardPIDFController;
-    private PIDFController reversePIDFController;
     private final double forwardKf;
-    private final double reverseKf;
-    private boolean useForwardPIDs;
 
     /**
      * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
      *
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
      * @param forwardPIDF  the initial PIDF coefficients for forward movement of the slide
-     * @param reversePIDF  the initial PIDF coefficients for reverse movement of the slide
      */
-    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF) {
+    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF) {
         this.ticksPerInch = ticksPerInch;
         this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, 0);
-        this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, 0);
         forwardKf = forwardPIDF.f;
-        reverseKf = reversePIDF.f;
 
-        useForwardPIDs = true;
         targetTicks = 0;
-    }
-
-    /**
-     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
-     *
-     * @param ticksPerInch the number of encoder ticks per inch of slide travel
-     * @param pidf         the initial PIDF coefficients for movement of the slides
-     */
-    public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
-        this(ticksPerInch, pidf, pidf);
     }
 
     /**
@@ -57,51 +40,14 @@ public class SlideController {
     }
 
     /**
-     * Allows users to change/set the PID coefficients for the reverse controller
-     *
-     * @param coefficients the PID coefficients to set the reverse controller to
-     */
-    public void setReversePIDFCoefficients(PIDFCoefficients coefficients) {
-        reversePIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
-    }
-
-    /**
-     * A method that allows users to change/set the PID coefficients for both controllers
-     *
-     * @param coefficients the PID coefficients to set both controllers to
-     */
-    public void setBothPIDFCoefficients(PIDFCoefficients coefficients) {
-        forwardPIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
-        reversePIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
-    }
-
-    /**
      * Sets the tolerance for both PID controllers
      *
      * @param tolerance the tolerance (position) for the controllers
      */
     public void setTolerance(double tolerance) {
         forwardPIDFController.setTolerance(tolerance);
-        reversePIDFController.setTolerance(tolerance);
     }
 
-    /**
-     * Sets the tolerance for the forward PID controller
-     *
-     * @param tolerance the tolerance (position) for the controller
-     */
-    public void setForwardTolerance(double tolerance) {
-        forwardPIDFController.setTolerance(tolerance);
-    }
-
-    /**
-     * Sets the tolerance for the reverse PID controller
-     *
-     * @param tolerance the tolerance (position) for the controller
-     */
-    public void setReverseTolerance(double tolerance) {
-        reversePIDFController.setTolerance(tolerance);
-    }
 
     /**
      * Moves the slides to a specific, absolute position
@@ -109,15 +55,8 @@ public class SlideController {
      * @param targetDistance the target distance in inches to move the slides to
      */
     public void moveToInches(double targetDistance) {
-        double newTargetTicks = targetDistance * ticksPerInch;
-        useForwardPIDs = newTargetTicks > targetTicks;
-        targetTicks = newTargetTicks;
+        targetTicks = targetDistance * ticksPerInch;
 
-        if (useForwardPIDs) {
-            forwardPIDFController.setSetPoint(targetTicks);
-        } else {
-            reversePIDFController.setSetPoint(targetTicks);
-        }
     }
 
     /**
@@ -127,18 +66,8 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
-//        if ((useForwardPIDs && forwardPIDFController.atSetPoint()) || (!useForwardPIDs && reversePIDFController.atSetPoint())){
-//            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(holdKf));
-//            return holdKf;
-//        }
-        if (useForwardPIDs) {
-            double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
-            RobotLog.dd("tt-ss", "Forward PID Power: [%s]", String.valueOf(currentPower + forwardKf));
-            return currentPower + forwardKf;
-        } else {
-            double currentPower = reversePIDFController.calculate(currentTicks, targetTicks);
-            RobotLog.dd("tt-ss", "Reverse PID Power: [%s]", String.valueOf(currentPower + reverseKf));
-            return currentPower + reverseKf;
-        }
+        double currentPower = forwardPIDFController.calculate(currentTicks, targetTicks);
+        RobotLog.dd("tt-ss", "PID Power: [%s]", String.valueOf(currentPower + forwardKf));
+        return currentPower + forwardKf;
     }
 }

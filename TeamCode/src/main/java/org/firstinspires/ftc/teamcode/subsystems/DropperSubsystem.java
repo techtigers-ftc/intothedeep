@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
@@ -36,14 +35,10 @@ public class DropperSubsystem extends CloseableSubsytem {
     private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
 
-    public static double FORWARD_KP = 0.15;
-    public static double FORWARD_KI = 0;
-    public static double FORWARD_KD = 0;
-    public static double FORWARD_KF = 0.18;
-    public static double REVERSE_KP = 0.01;
-    public static double REVERSE_KI = 0;
-    public static double REVERSE_KD = 0;
-    public static double REVERSE_KF = 0;
+    public static double KP = 0.015;
+    public static double KI = 0;
+    public static double KD = 0.000000001;
+    public static double KF = 0;
     public static double HOLD_KF;
     public static double SLIDES_TOLERANCE = 1;
 
@@ -68,9 +63,8 @@ public class DropperSubsystem extends CloseableSubsytem {
         rotationServo = hardwareMap.get(Servo.class, "dropper_rotation");
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
 
-        PIDFCoefficients forwardPIDF = new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF);
-        PIDFCoefficients reversePIDF = new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF);
-        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF, reversePIDF);
+        PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
+        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
 
         leftPitchServo.setDirection(Servo.Direction.REVERSE);
         rightPitchServo.setDirection(Servo.Direction.FORWARD);
@@ -131,7 +125,8 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     public double getTargetPositionInches() {
-        return targetPos;
+//        return targetPos;
+        return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
     }
 
     /**
@@ -194,18 +189,10 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     @Override
     public void periodic() {
-        double currentPos = getCurrentPositionInInches();
-        HOLD_KF = getHoldingPower(currentPos);
-
-        if (Math.abs(targetPos - currentPos) < SLIDES_TOLERANCE) {
-            leftSlideMotor.setPower(HOLD_KF);
-            rightSlideMotor.setPower(HOLD_KF);
-            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(HOLD_KF));
-        } else {
-            double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-            leftSlideMotor.setPower(power);
-            rightSlideMotor.setPower(power);
-        }
+//        HOLD_KF = getHoldingPower(getCurrentPositionInInches());
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
     }
 
     public double getHoldingPower(double heightIn) {
