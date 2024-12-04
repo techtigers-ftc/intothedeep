@@ -71,6 +71,7 @@ public class DropperSubsystem extends CloseableSubsytem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
+        resetEncoder();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
@@ -79,14 +80,10 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     /**
-     * Resets encoder values of each of the slide motors
+     * Resets encoder values of the slide motors
      */
-    public void resetSlides() {
-        rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    public void resetEncoder() {
+        encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -120,6 +117,11 @@ public class DropperSubsystem extends CloseableSubsytem {
         return encoderMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
     }
 
+    /**
+     * Gets the target position of the slides in inches
+     *
+     * @return the target position of the slides in inches
+     */
     public double getTargetPositionInches() {
         return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
     }
@@ -168,16 +170,6 @@ public class DropperSubsystem extends CloseableSubsytem {
         rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
         leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
         rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
-    }
-
-    /**
-     * Manual control of the slides
-     *
-     * @param power the power to set the slides to
-     */
-    public void manualControlSlides(double power) {
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
     }
 
     @Override
