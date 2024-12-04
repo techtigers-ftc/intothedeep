@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.RobotLog;
 
 /**
  * This class encapsulates the logic for setting slides to a given position into one class so that
@@ -10,69 +10,51 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  * duplicating code.
  */
 public class SlideController {
-    private double targetTicks;
-    private double ticksPerInch;
-    private PIDFController forwardPIDFController;
-    private PIDFController reversePIDFController;
+    public double targetTicks;
+    private final double ticksPerInch;
+    private final PIDFController pidfController;
+    private final double kF;
 
     /**
-     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
+     * Initializes the SlideController and PIDs movement of the slides
      *
      * @param ticksPerInch the number of encoder ticks per inch of slide travel
-     * @param forwardPIDF  the initial PIDF coefficients for forward movement of the slide
-     * @param reversePIDF  the initial PIDF coefficients for reverse movement of the slide
-     */
-    public SlideController(double ticksPerInch, PIDFCoefficients forwardPIDF, PIDFCoefficients reversePIDF) {
-        this.ticksPerInch = ticksPerInch;
-        this.forwardPIDFController = new PIDFController(forwardPIDF.p, forwardPIDF.i, forwardPIDF.d, forwardPIDF.f);
-        this.reversePIDFController = new PIDFController(reversePIDF.p, reversePIDF.i, reversePIDF.d, reversePIDF.f);
-    }
-
-    /**
-     * Initializes the SlideController and sets two different PIDs for forward and reverse movement of the slides
-     *
-     * @param ticksPerInch the number of encoder ticks per inch of slide travel
-     * @param pidf         the initial PIDF coefficients for movement of the slides
+     * @param pidf  the initial PIDF coefficients for movement of the slides
      */
     public SlideController(double ticksPerInch, PIDFCoefficients pidf) {
-        this(ticksPerInch, pidf, pidf);
+        this.ticksPerInch = ticksPerInch;
+        this.pidfController = new PIDFController(pidf.p, pidf.i, pidf.d, 0);
+        kF = pidf.f;
+
+        targetTicks = 0;
     }
 
     /**
-     * Allows users to change/set the PID coefficients for the forward controller
+     * Allows users to change/set the PIDF coefficients for the feedback controller
      *
-     * @param coefficients the PID coefficients to set the forward controller to
+     * @param coefficients the new PIDF coefficients
      */
-    public void setForwardPIDFCoefficients(PIDFCoefficients coefficients) {
-        forwardPIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
+    public void setPIDFCoefficients(PIDFCoefficients coefficients) {
+        pidfController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
     }
 
     /**
-     * Allows users to change/set the PID coefficients for the reverse controller
+     * Sets the tolerance for the PID controller
      *
-     * @param coefficients the PID coefficients to set the reverse controller to
+     * @param tolerance the tolerance (position) for the controller
      */
-    public void setReversePIDFCoefficients(PIDFCoefficients coefficients) {
-        reversePIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
+    public void setTolerance(double tolerance) {
+        pidfController.setTolerance(tolerance);
     }
 
-    /**
-     * A method that allows users to change/set the PID coefficients for both controllers
-     *
-     * @param coefficients the PID coefficients to set both controllers to
-     */
-    public void setBothPIDFCoefficients(PIDFCoefficients coefficients) {
-        forwardPIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
-        reversePIDFController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
-    }
 
     /**
      * Moves the slides to a specific, absolute position
      *
      * @param targetDistance the target distance in inches to move the slides to
      */
-    public void moveTo(double targetDistance) {
-        this.targetTicks *= ticksPerInch;
+    public void moveToInches(double targetDistance) {
+        targetTicks = targetDistance * ticksPerInch;
     }
 
     /**
@@ -82,9 +64,7 @@ public class SlideController {
      * @return the motor power needed to move the slides to the target position
      */
     public double calculateMotorPowers(double currentTicks) {
-        if (currentTicks > targetTicks) {
-            return reversePIDFController.calculate(currentTicks, targetTicks);
-        }
-        return forwardPIDFController.calculate(currentTicks, targetTicks);
+        double currentPower = pidfController.calculate(currentTicks, targetTicks);
+        return currentPower + kF;
     }
 }
