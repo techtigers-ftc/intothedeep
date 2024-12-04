@@ -55,7 +55,6 @@ public class SlideController {
      */
     public void moveToInches(double targetDistance) {
         targetTicks = targetDistance * ticksPerInch;
-
     }
 
     /**
@@ -66,7 +65,6 @@ public class SlideController {
      */
     public double calculateMotorPowers(double currentTicks) {
         double currentPower = pidfController.calculate(currentTicks, targetTicks);
-        RobotLog.dd("tt-ds", "PID Power: [%s]", String.valueOf(currentPower + kF));
         return currentPower + kF;
     }
 }
