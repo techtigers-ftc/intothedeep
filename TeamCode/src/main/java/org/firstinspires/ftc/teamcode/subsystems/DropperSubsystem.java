@@ -50,12 +50,6 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     private final SlideController slideController;
 
-//    private enum SlideState {
-//        MOVING_UP,
-//        MOVING_DOWN,
-//        STEADY
-//    }
-
     /**
      * Initializes dropper subsystem
      *
@@ -102,7 +96,7 @@ public class DropperSubsystem extends CloseableSubsytem {
 
         targetPos = 0;
     }
-
+// TODO: Fix all the comments which say input is in degrees (it is in servo position)
     /**
      * Method that moves servo to make the claw open
      */
@@ -161,68 +155,99 @@ public class DropperSubsystem extends CloseableSubsytem {
     }
 
     /**
-     * Method that increments the arm from where it is currently at
+     * Sets a position and rotation for the dropper arm
      *
-     * @param pitch: Amount you want to increment by for the dropper arm in degrees
+     * @param pitch: Angle to set the dropper arm in degrees
+     * @param rotation: Angle to set the dropper claw in degrees
      */
-    public void setArmRelative(double pitch) {
-        double rightPitchServoCurrentPosition = rightPitchServo.getPosition();
-        double leftPitchServoCurrentPosition = leftPitchServo.getPosition();
-//        double rotationServoCurrentPosition = rotationServo.getPosition();
-
-        rightPitchServo.setPosition(rightPitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
-        leftPitchServo.setPosition(leftPitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
-
-//        rotationServo.setPosition(rotationServoCurrentPosition * ROTATION_GEAR_RATIO + rotation);
+    public void setWristAbsolute(double pitch, double rotation) {
+        rightPitchServo.setPosition(rightPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+        leftPitchServo.setPosition(leftPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+        rotationServo.setPosition(rotationServo.getPosition() + ROTATION_GEAR_RATIO * rotation);
     }
 
     /**
-     * Method that increments only the wrist from where it currently is
+     * Adjusts the wrist's position and angle from where it currently is
      *
+     * @param pitch: Amount you want to increment the pitch in degrees
      * @param rotation: Amount you want to increment the wrist in degrees
      * */
-    public void setWristRelative(double rotation) {
-        double rotationServoCurrentPosition = rotationServo.getPosition();
-        rotationServo.setPosition(rotationServoCurrentPosition * ROTATION_GEAR_RATIO + rotation);
+    public void setWristRelative(double pitch, double rotation) {
+        rightPitchServo.setPosition(rightPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+        leftPitchServo.setPosition(leftPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+        rotationServo.setPosition(rotationServo.getPosition() + ROTATION_GEAR_RATIO * rotation);
     }
 
     /**
-     * Method that increments only the pinch of the claw on the dropper arm from where it currently is
+     * Sets angle of arm to an absolute position
      *
-     * @param pinch: Amount would want to increment in degrees
+     * @param pitch: Angle of the dropper arm in degrees
      * */
-    public void setPinchRelative(double pinch) {
-        double grabServoCurrentPosition = grabServo.getPosition();
-        grabServo.setPosition(grabServoCurrentPosition + pinch);
+    // TODO: Fix the degrees thing - right now only using servo position
+    public void setPitchAbsolute(double pitch) {
+//        rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
+//        leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
+        rightPitchServo.setPosition(pitch);
+        leftPitchServo.setPosition(pitch);
     }
 
     /**
-     * Sets the wrist to an absolute position in degrees
+     * Increments the pitch of the arm from where it currently is
      *
-     * @param pitch: The angle to set the pitch to in degrees
-     */
-    public void setArmAbsolute(double pitch) {
-        rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
-        leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
-//        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
-    }
-
-    /**
-     * Sets wrist to an absolute position from where it currently is
-     *
-     * @param rotation: Amount you want to rotate claw in degrees
+     * @param pitch: Amount you want to increment the pitch in degrees
      * */
-    public void setWristAbsolute(double rotation) {
+    public void setPitchRelative(double pitch) {
+//        rightPitchServo.setPosition(rightPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+//        leftPitchServo.setPosition(leftPitchServo.getPosition() + PITCH_GEAR_RATIO * pitch);
+        rightPitchServo.setPosition(rightPitchServo.getPosition() + pitch);
+        leftPitchServo.setPosition(leftPitchServo.getPosition() + pitch);
+    }
+
+    /**
+     * Rotates claw to an absolute position
+     *
+     * @param rotation: Amount you want to set claw rotation to
+     * */
+    public void setRotationAbsolute(double rotation) {
         rotationServo.setPosition(rotation);
     }
 
     /**
-     * Sets pinch of the claw to an absolute position
+     * Rotates the claw so it is facing down
+     */
+    public void rotateClawDown(){
+        rotationServo.setPosition(0.05);
+    }
+
+    /**
+     * Rotates the claw so it is facing up
+     */
+    public void rotateClawUp(){
+        rotationServo.setPosition(0.6);
+    }
+
+    /**
+     * Increments the rotation of the claw from where it currently is
      *
-     * @param pinch: Position where you want to set claw in degrees
-     * */
-    public void setPinchAbsolute(double pinch) {
-        grabServo.setPosition(pinch);
+     * @param rotation: Amount you want to increment the rotation in degrees
+     *
+     */
+    public void setRotationRelative(double rotation) {
+//        rotationServo.setPosition(rotationServo.getPosition() + ROTATION_GEAR_RATIO * rotation);
+        rotationServo.setPosition(rotationServo.getPosition() + rotation);
+
+    }
+
+    public double getPitchPos(){
+        return rightPitchServo.getPosition();
+    }
+
+    public double getRotationPos(){
+        return rotationServo.getPosition();
+    }
+
+    public double getClawPos(){
+        return grabServo.getPosition();
     }
 
     /**
@@ -237,16 +262,16 @@ public class DropperSubsystem extends CloseableSubsytem {
 
     @Override
     public void periodic() {
-        double currentPos = getCurrentPositionInInches();
-
-        if (Math.abs(targetPos - currentPos) < SLIDES_TOLERANCE) {
-            leftSlideMotor.setPower(HOLD_KF);
-            rightSlideMotor.setPower(HOLD_KF);
-            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(HOLD_KF));
-        } else {
-            double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-            leftSlideMotor.setPower(power);
-            rightSlideMotor.setPower(power);
-        }
+//        double currentPos = getCurrentPositionInInches();
+//
+//        if (Math.abs(targetPos - currentPos) < SLIDES_TOLERANCE) {
+//            leftSlideMotor.setPower(HOLD_KF);
+//            rightSlideMotor.setPower(HOLD_KF);
+//            RobotLog.dd("tt-ss", "Holding Power: [%s]", String.valueOf(HOLD_KF));
+//        } else {
+//            double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+//            leftSlideMotor.setPower(power);
+//            rightSlideMotor.setPower(power);
+//        }
     }
 }
