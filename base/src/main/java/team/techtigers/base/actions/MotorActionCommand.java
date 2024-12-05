@@ -1,12 +1,14 @@
 package team.techtigers.base.actions;
 
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Allows a motor to run for a certain amount of time with the action interface
+ * Allows a motor to run for a certain amount of time with the action
+ * command interface
  */
-public class MotorAction implements IAction {
+public class MotorActionCommand extends ActionCommand {
     private final DcMotor motor;
     private final long duration;
     private final ElapsedTime time;
@@ -15,11 +17,14 @@ public class MotorAction implements IAction {
     /**
      * Initializes all values as well as throws exceptions for invalid inputs
      *
-     * @param motor    DcMotor to control
-     * @param speed    speed and direction motor runs
-     * @param duration time for the motor to run, in milliseconds
+     * @param subsystem Subsystem that the motor is a part of
+     * @param motor     DcMotor to control
+     * @param speed     speed and direction motor runs
+     * @param duration  time for the motor to run, in milliseconds
      */
-    public MotorAction(DcMotor motor, double speed, long duration) {
+    public MotorActionCommand(Subsystem subsystem, DcMotor motor, double speed,
+                              long duration) {
+        super(subsystem);
         if (motor == null) {
             throw new IllegalArgumentException("Null motor (arg #1)");
         }
@@ -39,12 +44,12 @@ public class MotorAction implements IAction {
     }
 
     @Override
-    public void start() {
+    public void initialize() {
         time.reset();
     }
 
     @Override
-    public void update() {
+    public void execute() {
         motor.setPower(speed);
     }
 
