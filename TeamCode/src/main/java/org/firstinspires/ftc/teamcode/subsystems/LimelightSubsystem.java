@@ -13,13 +13,13 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import java.util.Arrays;
 import java.util.List;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
  */
 @Config
-public class LimelightSubsystem extends CloseableSubsytem {
+public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LIMELIGHT_HRES = 640;
     private static final double LIMELIGHT_VRES = 480;
     private static final int PYTHON_PIPELINE = 0;

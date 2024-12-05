@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 
 /**
  * A subsystem that controls all the motors for the intake subsystem.
@@ -18,7 +18,7 @@ import team.techtigers.base.CloseableSubsytem;
  * Controls both differential servos for the wrist, the two servos that control the claw, and the
  * two motors that control the horizontal slides.
  */
-public class IntakeSubsystem extends CloseableSubsytem {
+public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;

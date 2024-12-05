@@ -1,5 +1,6 @@
 package team.techtigers.base.actions;
 
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -8,26 +9,29 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * allows for the synchronization of servos to reach a final position at a
  * specified time
  */
-public class ServoAction implements IAction {
+public class ServoActionCommand extends ActionCommand {
     private final Servo servo;
-    private double linkSize;
-    private double initialServoPos;
     private final long duration;
     private final ElapsedTime time;
-    private int currentLink;
     private final double expectedServoPos;
-    private boolean isFinished;
-
     private final double INTERVAL = 30;
+    private double linkSize;
+    private double initialServoPos;
+    private int currentLink;
+    private boolean isFinished;
 
     /**
      * Initializes all values and throws exceptions for invalid inputs
      *
+     * @param subsystem        Subsystem that the servo is a part of
      * @param servo            Servo object
      * @param expectedServoPos servo final position
      * @param duration         time for the servo to reach the final position
      */
-    public ServoAction(Servo servo, double expectedServoPos, long duration) {
+    public ServoActionCommand(Subsystem subsystem, Servo servo,
+                              double expectedServoPos,
+                              long duration) {
+        super(subsystem);
         if (servo == null) {
             throw new IllegalArgumentException("Null servo (arg #1)");
         }
@@ -49,7 +53,7 @@ public class ServoAction implements IAction {
     }
 
     @Override
-    public void start() {
+    public void initialize() {
         time.reset();
         initialServoPos = servo.getPosition();
         double actualDistance = expectedServoPos - initialServoPos;
@@ -58,7 +62,7 @@ public class ServoAction implements IAction {
     }
 
     @Override
-    public void update() {
+    public void execute() {
         currentLink = (int) (time.milliseconds() / INTERVAL);
 
         isFinished = time.milliseconds() >= duration;
