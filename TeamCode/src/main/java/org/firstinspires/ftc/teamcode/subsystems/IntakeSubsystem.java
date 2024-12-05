@@ -226,6 +226,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     /**
      * Gets a set of action commands to open or close the claw
+     *
      * @param openingClaw Whether the claw should be opened or closed
      * @return A parallel command group that opens or closes the claw
      */
