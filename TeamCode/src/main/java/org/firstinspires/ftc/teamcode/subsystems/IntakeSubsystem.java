@@ -205,8 +205,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public CommandBase getWristCommand(double pitch, double rotation, long duration) {
         double[] targetServoPositions = differentialController.calculateServoPositions(pitch, rotation);
         return new ParallelCommandGroup(
-                new ServoActionCommand(this, leftWrist, targetServoPositions[0], duration),
-                new ServoActionCommand(this, rightWrist, targetServoPositions[1], duration)
+                new ServoActionCommand(leftWrist, targetServoPositions[0], duration),
+                new ServoActionCommand(rightWrist, targetServoPositions[1], duration)
         );
     }
 
@@ -231,8 +231,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double targetPosition = openingClaw ? CLAW_OPEN_POSITION : CLAW_CLOSED_POSITION;
         return new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new ServoActionCommand(this, leftClaw, targetPosition, 0),
-                        new ServoActionCommand(this, rightClaw, targetPosition, 0)
+                        new ServoActionCommand(leftClaw, targetPosition, 0),
+                        new ServoActionCommand(rightClaw, targetPosition, 0)
                 ),
                 new WaitCommand(200)
         );

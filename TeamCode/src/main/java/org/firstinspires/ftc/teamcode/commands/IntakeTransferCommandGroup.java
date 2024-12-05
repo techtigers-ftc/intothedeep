@@ -14,6 +14,7 @@ public class IntakeTransferCommandGroup extends SequentialCommandGroup {
      * @param intake the intake subsystem
      */
     public IntakeTransferCommandGroup(IntakeSubsystem intake) {
+        addRequirements(intake);
         addCommands(
                 intake.getClawCommand(false),
                 intake.getWristCommand(180, 90, 500),
