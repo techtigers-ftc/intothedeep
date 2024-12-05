@@ -27,7 +27,9 @@ public class DropperArmTestOpmode extends BaseOpMode {
         registerSubsystems(dropperSubsystem);
         gamepadEx = new GamepadEx(gamepad1);
 
-       dropperSubsystem.setPitchAbsolute(0.5);
+//       dropperSubsystem.setPitchAbsolute(0.5);
+//       dropperSubsystem.setRotationAbsolute(0);
+//       dropperSubsystem.openClaw();
 
        // Claw
        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
@@ -58,13 +60,12 @@ public class DropperArmTestOpmode extends BaseOpMode {
 
         // Rotation
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.rotateClawDown();
-        }));
-
-        gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.rotateClawUp();
-        }));
+//            dropperSubsystem.rotateClawDown();
+//        }));
+//
+//        gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
+//            dropperSubsystem.rotateClawUp();
+//        }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.setRotationRelative(-0.05);
