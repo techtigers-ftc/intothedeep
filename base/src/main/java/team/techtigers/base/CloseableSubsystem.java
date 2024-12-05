@@ -11,19 +11,19 @@ public class CloseableSubsystem extends SubsystemBase {
 
     /**
      * Constructor for CloseableSubsystem
+     *
+     * @param tag The tag for the subsystem, used for logging
      */
-    public CloseableSubsystem() {
-        tag = this.getClass().getSimpleName();
+    public CloseableSubsystem(String tag) {
+        this.tag = tag;
     }
 
     /**
-     * Optionally sets the tag for the subsystem. The tag defaults to the
-     * class name.
-     *
-     * @param tag The tag to set
+     * Overload Constructor for CloseableSubsystem that uses the class name
+     * as the tag
      */
-    protected void setTag(String tag) {
-        this.tag = tag;
+    public CloseableSubsystem() {
+        tag = this.getClass().getSimpleName();
     }
 
     /**
