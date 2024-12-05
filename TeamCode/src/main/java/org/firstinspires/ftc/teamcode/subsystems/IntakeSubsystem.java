@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 
 import team.techtigers.base.CloseableSubsystem;
-import team.techtigers.base.actions.MotorActionCommand;
 import team.techtigers.base.actions.ServoActionCommand;
 
 /**
@@ -98,9 +98,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Private method that Returns Current Position in inches
+     * @return current slide position in inches
      */
-    public double getCurrentPositionInches() {
+    public double getCurrentSlidePositionInches() {
         return encoderMotor.getCurrentPosition() / MOTOR_TICKS_PER_INCH;
     }
 
@@ -119,7 +119,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        slideController.moveToInches(getCurrentPositionInches() + distance);
+        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
     }
 
     /**
@@ -134,7 +134,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Stops slides
      */
     public void stopSlides() {
-        slideController.moveToInches(getCurrentPositionInches());
+        slideController.moveToInches(getCurrentSlidePositionInches());
         leftSlideMotor.setPower(0);
         rightSlideMotor.setPower(0);
     }
@@ -213,15 +213,12 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * Gets a set of action commands to move the slides to a specific position
      *
-     * @param power    The power sent to the slides
-     * @param duration The time it should take to reach the desired position
+     * @param targetPosition The desired position of the slides
+     * @param tolerance      The tolerance for the PID controller
      * @return A parallel command group that moves the slides to the desired position
      */
-    public CommandBase getSlidesCommand(double power, long duration) {
-        return new ParallelCommandGroup(
-                new MotorActionCommand(this, leftSlideMotor, power, duration),
-                new MotorActionCommand(this, rightSlideMotor, power, duration)
-        );
+    public CommandBase getSlidesCommand(double targetPosition, double tolerance) {
+        return new IntakeSlidesActionCommand(this, targetPosition, tolerance);
     }
 
     /**
@@ -246,16 +243,17 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     @Override
     public void periodic() {
-//        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-//        leftSlideMotor.setPower(power);
-//        rightSlideMotor.setPower(power);
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
+
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(),
                 rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
-        RobotLog.dd("IntakeSubsystem", "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
-        RobotLog.dd("IntakeSubsystem", "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(),
+        RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
+        RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(),
                 rightWrist.getPosition());
-        RobotLog.dd("IntakeSubsystem", "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0],
+        RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0],
                 wristPositions[1]);
     }
 }
