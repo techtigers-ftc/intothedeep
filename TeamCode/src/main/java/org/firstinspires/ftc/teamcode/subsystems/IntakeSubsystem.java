@@ -87,8 +87,8 @@ public class IntakeSubsystem extends CloseableSubsytem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.REVERSE);
-        leftClaw.setDirection(Servo.Direction.FORWARD);
+        rightClaw.setDirection(Servo.Direction.FORWARD);
+        leftClaw.setDirection(Servo.Direction.REVERSE);
 
         rightClaw.setPosition(0);
         leftClaw.setPosition(0);
