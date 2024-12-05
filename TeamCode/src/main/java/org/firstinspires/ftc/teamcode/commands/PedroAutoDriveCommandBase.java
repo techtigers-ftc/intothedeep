@@ -32,8 +32,8 @@ public class PedroAutoDriveCommandBase extends CommandBase {
     public PedroAutoDriveCommandBase(DriveSubsystem drive, RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
-        addRequirements(drive);
         follower = new Follower(robotState);
+        addRequirements(drive);
     }
 
     @Override
