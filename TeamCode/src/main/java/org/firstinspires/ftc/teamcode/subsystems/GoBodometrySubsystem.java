@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 import team.techtigers.core.paths.Waypoint;
 
 /**
  * The odometry subsystem, using the localizer from Roadrunner.
  */
-public class GoBodometrySubsystem extends CloseableSubsytem {
+public class GoBodometrySubsystem extends CloseableSubsystem {
     private final GoBildaPinpointDriver odo;
     private final RobotState robotState;
 

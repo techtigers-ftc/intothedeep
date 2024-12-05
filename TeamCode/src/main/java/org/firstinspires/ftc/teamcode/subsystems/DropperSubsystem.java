@@ -11,14 +11,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 
 /**
  * Encapsulates all hardware, methods, and attributes of the dropper subsystem, including the
  * vertical slides, arm, and the claw.
  */
 @Config
-public class DropperSubsystem extends CloseableSubsytem {
+public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;

@@ -15,12 +15,12 @@ import org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants;
 import java.util.Arrays;
 import java.util.List;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 
 /**
  * A subsystem that controls the drivebase.
  */
-public class DriveSubsystem extends CloseableSubsytem {
+public class DriveSubsystem extends CloseableSubsystem {
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
     private final List<DcMotor> motors;
     private DriveVectorScaler driveVectorScaler;
