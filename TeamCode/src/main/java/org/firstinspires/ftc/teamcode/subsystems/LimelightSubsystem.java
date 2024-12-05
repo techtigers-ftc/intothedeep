@@ -105,12 +105,13 @@ public class LimelightSubsystem extends CloseableSubsytem {
         // Checks if the python outputs are valid
         if (pythonOutput[0] != -1) {
             //Sets the python outputs in the robot state
-            robotState.setSampleX(pythonOutput[0]);
-            robotState.setSampleY(pythonOutput[1]);
-            robotState.setSampleWidth(pythonOutput[2]);
-            robotState.setSampleHeight(pythonOutput[3]);
-            robotState.setSampleOrientation(pythonOutput[4]);
-            robotState.setSampleDetected(true);
+            // TODO: Update these values for the new state
+//            robotState.setBlock(pythonOutput[0]);
+//            robotState.setSampleY(pythonOutput[1]);
+//            robotState.setSampleWidth(pythonOutput[2]);
+//            robotState.setSampleHeight(pythonOutput[3]);
+//            robotState.setSampleOrientation(pythonOutput[4]);
+//            robotState.getBlockDetectionState(true);
         } else {
             // Returns to the neural detector pipeline if the python outputs are invalid
             setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
@@ -166,20 +167,15 @@ public class LimelightSubsystem extends CloseableSubsytem {
             // Checks if the active pipeline is the python pipeline
             if (result.getPipelineIndex() == PYTHON_PIPELINE) {
                 // Checks if the pickup is complete
-                if (robotState.isPickupComplete()) {
-                    // Switches to the neural detector pipeline if the pickup is complete
-                    limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
-                } else {
-                    // Gets the python outputs if the pickup is not complete
-                    double[] pythonOutput = result.getPythonOutput();
-                    // Checks if the python outputs are updating and resets the
-                    // pipeline in order to unfreeze if needed
-                    pythonPipelineFreezeCheck(pythonOutput);
-                    // Checks the validity of the python outputs and sets them if valid,
-                    // returns to neural detector if there are no results found
-                    RobotLog.dd("TT-LLS", Arrays.toString(pythonOutput));
-                    setPythonOutput(pythonOutput);
-                }
+                // Gets the python outputs if the pickup is not complete
+                double[] pythonOutput = result.getPythonOutput();
+                // Checks if the python outputs are updating and resets the
+                // pipeline in order to unfreeze if needed
+                pythonPipelineFreezeCheck(pythonOutput);
+                // Checks the validity of the python outputs and sets them if valid,
+                // returns to neural detector if there are no results found
+                RobotLog.dd("TT-LLS", Arrays.toString(pythonOutput));
+                setPythonOutput(pythonOutput);
             } else if (result.getPipelineIndex() == NEURAL_DETECTOR_PIPELINE) {
                 double[] detectorCorners = getNeuralDetectorCorners(result.getDetectorResults(), "yellowsample");
                 limelight.updatePythonInputs(detectorCorners[0], detectorCorners[1],
