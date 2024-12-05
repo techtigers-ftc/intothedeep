@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.pedroPathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ * A base class for autonomous drive commands that use PedroPathing.
+ */
 public class PedroAutoDriveCommandBase extends CommandBase {
     protected final DriveSubsystem drive;
     protected final RobotState robotState;
@@ -20,6 +23,12 @@ public class PedroAutoDriveCommandBase extends CommandBase {
     protected PIDFController headingPIDF;
     protected FilteredPIDFController drivePIDF;
 
+    /**
+     * Constructs a new PedroAutoDriveCommandBase.
+     *
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
+     */
     public PedroAutoDriveCommandBase(DriveSubsystem drive, RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
@@ -29,16 +38,22 @@ public class PedroAutoDriveCommandBase extends CommandBase {
 
     @Override
     public void initialize() {
-        if(translationalPIDF == null || headingPIDF == null || drivePIDF == null) {
-            throw new IllegalArgumentException("PIDF coefficients not set");
+        if (translationalPIDF == null) {
+            throw new IllegalArgumentException("Translational PIDF coefficients not set");
+        }
+        if (headingPIDF == null) {
+            throw new IllegalArgumentException("Heading PIDF coefficients not set");
+        }
+        if (drivePIDF == null) {
+            throw new IllegalArgumentException("Drive PIDF coefficients not set");
+        }
+        if (pathChain == null) {
+            throw new IllegalArgumentException("Path chain not set");
         }
         follower.setTranslationalPIDF(translationalPIDF.P(), translationalPIDF.I(), translationalPIDF.D(), translationalPIDF.F());
         follower.setHeadingPIDF(headingPIDF.P(), headingPIDF.I(), headingPIDF.D(), headingPIDF.F());
         follower.setDrivePIDF(drivePIDF.P(), drivePIDF.I(), drivePIDF.D(), drivePIDF.T(), drivePIDF.F());
 
-        if(pathChain == null) {
-            throw new IllegalArgumentException("Path chain not set");
-        }
         follower.followPath(pathChain);
     }
 

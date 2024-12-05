@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import com.acmerobotics.dashboard.config.Config;
 
-/**€
+/**
  * These constants can be used to tune values using FTC dashboard.
  */
 @Config
