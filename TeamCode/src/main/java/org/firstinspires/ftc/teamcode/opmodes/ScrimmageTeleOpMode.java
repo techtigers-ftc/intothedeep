@@ -3,13 +3,15 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.IntakeTransferCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.IntakeToTransferCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
 
+@TeleOp(name = "Scrimmage TeleOp Mode", group = "Scrimmage")
 public class ScrimmageTeleOpMode extends BaseOpMode {
     @Override
     public void initialize() {
@@ -27,6 +29,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         slidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(gamepadEx.getLeftY() * 2));
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new IntakeTransferCommandGroup(intake));
+        gamepadEx.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new IntakeToTransferCommandGroup(intake));
     }
 }
