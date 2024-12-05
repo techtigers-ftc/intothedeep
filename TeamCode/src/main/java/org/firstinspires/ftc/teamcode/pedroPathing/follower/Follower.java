@@ -111,15 +111,15 @@ public class Follower {
      * @param robotState robot state to get poses and velocities
      */
     public Follower(RobotState robotState) {
+        secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryTranslationalIntegral = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        translationalIntegral = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+        secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+        drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
         this.robotState = robotState;
-        secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
-        secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-        translationalPIDF = new PIDFController(FollowerConstants.translationalPIDFCoefficients);
-        translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-        secondaryHeadingPIDF = new PIDFController(FollowerConstants.secondaryHeadingPIDFCoefficients);
-        headingPIDF = new PIDFController(FollowerConstants.headingPIDFCoefficients);
-        secondaryDrivePIDF = new FilteredPIDFController(FollowerConstants.secondaryDrivePIDFCoefficients);
-        drivePIDF = new FilteredPIDFController(FollowerConstants.drivePIDFCoefficients);
         initialize();
     }
 
