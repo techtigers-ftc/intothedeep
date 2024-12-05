@@ -26,19 +26,12 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
-
     private static final double DIFFERENTIAL_GEAR_RATIO = 1.0 / 1.0; //Driver / Follower
-
 
     public static final double FORWARD_KP = 0.025;
     public static final double FORWARD_KI = 0.0;
     public static final double FORWARD_KD = 0.0;
     public static final double FORWARD_KF = 0.0;
-    public static final double REVERSE_KP = 0.0;
-    public static final double REVERSE_KI = 0.0;
-    public static final double REVERSE_KD = 0.0;
-    public static final double REVERSE_KF = 0.0;
-
 
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
@@ -69,8 +62,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH,
-                new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF),
-                new PIDFCoefficients(REVERSE_KP, REVERSE_KI, REVERSE_KD, REVERSE_KF)
+                new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF)
         );
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
@@ -87,8 +79,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.REVERSE);
-        leftClaw.setDirection(Servo.Direction.FORWARD);
+        rightClaw.setDirection(Servo.Direction.FORWARD);
+        leftClaw.setDirection(Servo.Direction.REVERSE);
 
         rightClaw.setPosition(0);
         leftClaw.setPosition(0);
@@ -112,7 +104,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance) {
-        slideController.moveTo(distance);
+        slideController.moveToInches(distance);
     }
 
     /**
@@ -121,7 +113,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        slideController.moveTo(getCurrentPositionInches() + distance);
+        slideController.moveToInches(getCurrentPositionInches() + distance);
     }
 
     /**
@@ -136,7 +128,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Stops slides
      */
     public void stopSlides() {
-        slideController.moveTo(getCurrentPositionInches());
+        slideController.moveToInches(getCurrentPositionInches());
         leftSlideMotor.setPower(0);
         rightSlideMotor.setPower(0);
     }
