@@ -17,6 +17,9 @@ public class ActionCommand extends CommandBase {
         addRequirements(subsystems);
     }
 
+    /**
+     * Throws an exception for not setting any subsystems
+     */
     public ActionCommand() {
         throw new IllegalArgumentException("ActionCommand requires " +
                 "at least 1 subsystem to be passed in");
