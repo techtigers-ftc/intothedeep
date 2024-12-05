@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.IntakeTransferCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -44,16 +43,12 @@ public class IntakeTestOpmode extends BaseOpMode {
             intakeSubsystem.setWristAbsolute(90, 90);
         });
 
-//        gamepadEx.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(COMMAD);
-//        gamepadEx.getGamepadButton(GamepadKeys.Button.X).whenInactive(OTHER COMMAND)
 
         Trigger slidesTrigger = new Trigger(() ->
                 gamepadEx.getLeftY() != 0
         );
 
         slidesTrigger.whileActiveContinuous(() -> intakeSubsystem.moveSlidesRelative(gamepadEx.getLeftY() * 2));
-
-        gamepadEx.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new IntakeTransferCommandGroup(intakeSubsystem));
     }
 
     @Override
