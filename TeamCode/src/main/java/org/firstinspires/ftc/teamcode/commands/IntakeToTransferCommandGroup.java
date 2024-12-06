@@ -8,16 +8,20 @@ import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchActionC
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationActionCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * A command group that moves the intake system to the transfer position
  */
 public class IntakeToTransferCommandGroup extends SequentialCommandGroup {
+    private final RobotState robotState;
     /**
      * Creates a new IntakeToTransferCommandGroup
      * @param intake the intake subsystem
      */
-    public IntakeToTransferCommandGroup(IntakeSubsystem intake) {
+    public IntakeToTransferCommandGroup(IntakeSubsystem intake, RobotState robotState) {
+        this.robotState = robotState;
         addRequirements(intake);
         addCommands(
                 new IntakeCloseActionCommand(intake),
@@ -30,6 +34,11 @@ public class IntakeToTransferCommandGroup extends SequentialCommandGroup {
                         new IntakeSlidesActionCommand(intake, 1, 0.5)
                 )
         );
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        robotState.setIntakeState(IntakeState.TRANSFER);
     }
 
 }
