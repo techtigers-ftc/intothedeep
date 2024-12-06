@@ -24,10 +24,15 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         IntakeToIntakeCommandGroup intakeToIntake = new IntakeToIntakeCommandGroup(intake);
         IntakeToTransferCommandGroup intakeToTransfer = new IntakeToTransferCommandGroup(intake);
 
+        gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+                () -> intake.moveSlidesRelative(0)
+        );
+
         gamepadEx.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
                 () -> intake.setWristAbsolute(180,90),
                 () -> intake.setWristAbsolute(180,0)
         );
+
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 intake::closeClaw,
@@ -43,5 +48,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);
+
     }
 }
