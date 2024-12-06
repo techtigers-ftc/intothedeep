@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.IntakeCloseActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.IntakePitchActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.IntakeRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.IntakeSlidesActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 /**

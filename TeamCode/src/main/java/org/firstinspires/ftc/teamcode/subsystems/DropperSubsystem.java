@@ -35,6 +35,9 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
 
+    private static final double CLAW_OPENED_POSITION = 0;
+    private static final double CLAW_CLOSED_POSITION = 1;
+
     private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
 
@@ -91,14 +94,14 @@ public class DropperSubsystem extends CloseableSubsystem {
      * Method that moves servo to make the claw open
      */
     public void openClaw() {
-        grabServo.setPosition(0);
+        grabServo.setPosition(1);
     }
 
     /**
      * Method that moves servo to make the claw close
      */
     public void closeClaw() {
-        grabServo.setPosition(1);
+        grabServo.setPosition(0);
     }
 
     /**
@@ -114,7 +117,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      *
      * @return the current position of the slides in inches
      */
-    public double getCurrentPositionInInches() {
+    public double getCurrentSlidePositionInches() {
         return encoderMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
     }
 
@@ -133,7 +136,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position: Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
-        slideController.moveToInches(getCurrentPositionInInches() + position);
+        slideController.moveToInches(getCurrentSlidePositionInches() + position);
     }
 
     /**
@@ -141,7 +144,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      *
      * @param position: Position where you want to set the slides to in inches
      */
-    public void moveSlidesAbsoluteInches(double position) {
+    public void moveSlidesAbsolute(double position) {
         slideController.moveToInches(position);
     }
 
