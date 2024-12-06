@@ -1,16 +1,22 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 
 import team.techtigers.base.CloseableSubsystem;
+import team.techtigers.base.actions.ServoActionCommand;
 
 /**
  * A subsystem that controls all the motors for the intake subsystem.
@@ -19,6 +25,10 @@ import team.techtigers.base.CloseableSubsystem;
  * two motors that control the horizontal slides.
  */
 public class IntakeSubsystem extends CloseableSubsystem {
+    public static final double FORWARD_KP = 0.025;
+    public static final double FORWARD_KI = 0.0;
+    public static final double FORWARD_KD = 0.0;
+    public static final double FORWARD_KF = 0.0;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -27,12 +37,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 1.0 / 1.0; //Driver / Follower
-
-    public static final double FORWARD_KP = 0.025;
-    public static final double FORWARD_KI = 0.0;
-    public static final double FORWARD_KD = 0.0;
-    public static final double FORWARD_KF = 0.0;
-
+    private static final double CLAW_OPEN_POSITION = 0.0;
+    private static final double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -92,9 +98,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Private method that Returns Current Position in inches
+     * @return current slide position in inches
      */
-    public double getCurrentPositionInches() {
+    public double getCurrentSlidePositionInches() {
         return encoderMotor.getCurrentPosition() / MOTOR_TICKS_PER_INCH;
     }
 
@@ -113,7 +119,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        slideController.moveToInches(getCurrentPositionInches() + distance);
+        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
     }
 
     /**
@@ -128,7 +134,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Stops slides
      */
     public void stopSlides() {
-        slideController.moveToInches(getCurrentPositionInches());
+        slideController.moveToInches(getCurrentSlidePositionInches());
         leftSlideMotor.setPower(0);
         rightSlideMotor.setPower(0);
     }
@@ -137,16 +143,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        leftClaw.setPosition(0);
-        rightClaw.setPosition(0);
+        leftClaw.setPosition(CLAW_OPEN_POSITION);
+        rightClaw.setPosition(CLAW_OPEN_POSITION);
     }
 
     /**
      * Closes the Intake Claw
      */
     public void closeClaw() {
-        leftClaw.setPosition(1);
-        rightClaw.setPosition(1);
+        leftClaw.setPosition(CLAW_CLOSED_POSITION);
+        rightClaw.setPosition(CLAW_CLOSED_POSITION);
     }
 
     /**
@@ -180,6 +186,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     /**
      * Powers the slides
+     *
      * @param power The power Sent to the slides
      */
     public void powerSlides(double power) {
@@ -188,20 +195,65 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Gets a set of action commands to move the wrist to a specific position
+     *
+     * @param pitch    The desired pitch of the wrist
+     * @param rotation The desired rotation of the wrist
+     * @param duration The time it should take to reach the desired position
+     * @return A parallel command group that moves the wrist to the desired position
+     */
+    public CommandBase getWristCommand(double pitch, double rotation, long duration) {
+        double[] targetServoPositions = differentialController.calculateServoPositions(pitch, rotation);
+        return new ParallelCommandGroup(
+                new ServoActionCommand(leftWrist, targetServoPositions[0], duration),
+                new ServoActionCommand(rightWrist, targetServoPositions[1], duration)
+        );
+    }
+
+    /**
+     * Gets a set of action commands to move the slides to a specific position
+     *
+     * @param targetPosition The desired position of the slides
+     * @param tolerance      The tolerance for the PID controller
+     * @return A parallel command group that moves the slides to the desired position
+     */
+    public CommandBase getSlidesCommand(double targetPosition, double tolerance) {
+        return new IntakeSlidesActionCommand(this, targetPosition, tolerance);
+    }
+
+    /**
+     * Gets a set of action commands to open or close the claw
+     *
+     * @param openingClaw Whether the claw should be opened or closed
+     * @return A parallel command group that opens or closes the claw
+     */
+    public CommandBase getClawCommand(boolean openingClaw) {
+        double targetPosition = openingClaw ? CLAW_OPEN_POSITION : CLAW_CLOSED_POSITION;
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        new ServoActionCommand(leftClaw, targetPosition, 0),
+                        new ServoActionCommand(rightClaw, targetPosition, 0)
+                ),
+                new WaitCommand(200)
+        );
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
     public void periodic() {
-//        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-//        leftSlideMotor.setPower(power);
-//        rightSlideMotor.setPower(power);
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
+
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(),
                 rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
-        RobotLog.dd("IntakeSubsystem", "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
-        RobotLog.dd("IntakeSubsystem", "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(),
+        RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
+        RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(),
                 rightWrist.getPosition());
-        RobotLog.dd("IntakeSubsystem", "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0],
+        RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0],
                 wristPositions[1]);
     }
 }

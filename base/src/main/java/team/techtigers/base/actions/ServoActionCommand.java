@@ -1,6 +1,6 @@
 package team.techtigers.base.actions;
 
-import com.arcrobotics.ftclib.command.Subsystem;
+import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * allows for the synchronization of servos to reach a final position at a
  * specified time
  */
-public class ServoActionCommand extends ActionCommand {
+public class ServoActionCommand extends CommandBase {
     private final Servo servo;
     private final long duration;
     private final ElapsedTime time;
@@ -23,15 +23,13 @@ public class ServoActionCommand extends ActionCommand {
     /**
      * Initializes all values and throws exceptions for invalid inputs
      *
-     * @param subsystem        Subsystem that the servo is a part of
      * @param servo            Servo object
      * @param expectedServoPos servo final position
      * @param duration         time for the servo to reach the final position
      */
-    public ServoActionCommand(Subsystem subsystem, Servo servo,
+    public ServoActionCommand(Servo servo,
                               double expectedServoPos,
                               long duration) {
-        super(subsystem);
         if (servo == null) {
             throw new IllegalArgumentException("Null servo (arg #1)");
         }
