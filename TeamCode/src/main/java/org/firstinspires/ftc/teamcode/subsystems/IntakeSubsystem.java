@@ -201,6 +201,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     /**
      * Sets the pitch of the wrist, while keeping the rotation the same
+     *
      * @param pitchAngle the desired pitch of the wrist
      */
     public void setPitchAbsolute(double pitchAngle) {
@@ -209,20 +210,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     /**
      * Sets the rotation of the wrist, while keeping the pitch the same
+     *
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
         setWristAbsolute(getPitch(), rotationAngle);
-    }
-
-    /**
-     * Powers the slides
-     *
-     * @param power The power Sent to the slides
-     */
-    public void powerSlides(double power) {
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
     }
 
     /**
