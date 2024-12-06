@@ -7,9 +7,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperCloseActio
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchActionCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationActionCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
@@ -18,24 +16,23 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
  * moves the dropper system to the high chamber drop position, with the specimen
  * upside down, ready to be clipped upwards onto the high chamber
  */
-public class DropperToHighChamberDropCommandGroup extends SequentialCommandGroup {
+public class DropperToHighChamberFromWallDropCommandGroup extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperToHighChamberDropCommandGroup
+     * Creates a new DropperToHighChamberFromWallDropCommandGroup
      *
-     * @param dropper the dropper subsystem
-     * @param intake  the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param robotState the robot state
      */
-    public DropperToHighChamberDropCommandGroup(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DropperToHighChamberFromWallDropCommandGroup(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
                 new DropperCloseActionCommand(dropper, 100),
-                new IntakeOpenActionCommand(intake, 200),
                 new ParallelCommandGroup(
                         new DropperSlidesActionCommand(dropper, 25, 0.5),
-                        new DropperPitchActionCommand(dropper, 70, 300),
+                        new DropperPitchActionCommand(dropper, 300, 300),
                         new DropperRotationActionCommand(dropper, 180, 300)
                         // Drop forward: 1
                         // Pick up from intake: 0.6

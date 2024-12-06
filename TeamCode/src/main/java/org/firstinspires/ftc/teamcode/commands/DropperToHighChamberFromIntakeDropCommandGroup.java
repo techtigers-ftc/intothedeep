@@ -15,29 +15,33 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper system to the high basket drop position
+ * moves the dropper system to the high chamber drop position, with the specimen
+ * upside down, ready to be clipped upwards onto the high chamber
  */
-public class DropperToHighBasketDropCommandGroup extends SequentialCommandGroup {
+public class DropperToHighChamberFromIntakeDropCommandGroup extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperToHighBasketDropCommandGroup
+     * Creates a new DropperToHighChamberFromWallDropCommandGroup
      *
-     * @param dropper the dropper subsystem
-     * @param intake  the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param intake     the intake subsystem
+     * @param robotState the robot state
      */
-    public DropperToHighBasketDropCommandGroup(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DropperToHighChamberFromIntakeDropCommandGroup(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(dropper);
+        addRequirements(dropper, intake);
         addCommands(
                 new DropperCloseActionCommand(dropper, 100),
                 new IntakeOpenActionCommand(intake, 200),
                 new ParallelCommandGroup(
                         new DropperSlidesActionCommand(dropper, 25, 0.5),
-                        new DropperPitchActionCommand(dropper, 0, 300),
+                        new DropperPitchActionCommand(dropper, 300, 300),
                         new DropperRotationActionCommand(dropper, 180, 300)
                         // Drop forward: 1
                         // Pick up from intake: 0.6
+                        //Guessing under 70 degress for pitch to be able to clip onto the high
+                        // chamber upside down
                 )
         );
     }
