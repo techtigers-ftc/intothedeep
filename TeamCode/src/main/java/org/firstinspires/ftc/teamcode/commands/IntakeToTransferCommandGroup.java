@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.IntakeCloseActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.IntakePitchActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.IntakeRotationActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 /**
@@ -16,11 +20,14 @@ public class IntakeToTransferCommandGroup extends SequentialCommandGroup {
     public IntakeToTransferCommandGroup(IntakeSubsystem intake) {
         addRequirements(intake);
         addCommands(
-                intake.getClawCommand(false),
-                intake.getWristCommand(180, 90, 300),
+                new IntakeCloseActionCommand(intake),
                 new ParallelCommandGroup(
-                        intake.getWristCommand(0, 90, 0),
-                        intake.getSlidesCommand(1, 0.5)
+                        new IntakePitchActionCommand(intake, 180, 300),
+                        new IntakeRotationActionCommand(intake, 90, 300)
+                ),
+                new ParallelCommandGroup(
+                        new IntakePitchActionCommand(intake, 0, 300),
+                        new IntakeSlidesActionCommand(intake, 1, 0.5)
                 )
         );
     }

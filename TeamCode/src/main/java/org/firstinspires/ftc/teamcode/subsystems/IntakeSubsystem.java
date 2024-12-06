@@ -1,22 +1,16 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.IntakeSlidesActionCommand;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 
 import team.techtigers.base.CloseableSubsystem;
-import team.techtigers.base.actions.ServoActionCommand;
 
 /**
  * A subsystem that controls all the motors for the intake subsystem.
@@ -105,6 +99,27 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the pitch of the wrist in degrees
+     */
+    public double getPitch() {
+        return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[0];
+    }
+
+    /**
+     * @return the rotation of the wrist in degrees
+     */
+    public double getRotation() {
+        return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[1];
+    }
+
+    /**
+     * @return the position of the claw
+     */
+    public double getClawPosition() {
+        return leftClaw.getPosition();
+    }
+
+    /**
      * Moves the Slides to an exact position
      *
      * @param distance The distance you want to move in inches
@@ -185,6 +200,22 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the pitch of the wrist, while keeping the rotation the same
+     * @param pitchAngle the desired pitch of the wrist
+     */
+    public void setPitchAbsolute(double pitchAngle) {
+        setWristAbsolute(pitchAngle, getRotation());
+    }
+
+    /**
+     * Sets the rotation of the wrist, while keeping the pitch the same
+     * @param rotationAngle the desired rotation of the wrist
+     */
+    public void setRotationAbsolute(double rotationAngle) {
+        setWristAbsolute(getPitch(), rotationAngle);
+    }
+
+    /**
      * Powers the slides
      *
      * @param power The power Sent to the slides
@@ -192,50 +223,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void powerSlides(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
-    }
-
-    /**
-     * Gets a set of action commands to move the wrist to a specific position
-     *
-     * @param pitch    The desired pitch of the wrist
-     * @param rotation The desired rotation of the wrist
-     * @param duration The time it should take to reach the desired position
-     * @return A parallel command group that moves the wrist to the desired position
-     */
-    public CommandBase getWristCommand(double pitch, double rotation, long duration) {
-        double[] targetServoPositions = differentialController.calculateServoPositions(pitch, rotation);
-        return new ParallelCommandGroup(
-                new ServoActionCommand(leftWrist, targetServoPositions[0], duration),
-                new ServoActionCommand(rightWrist, targetServoPositions[1], duration)
-        );
-    }
-
-    /**
-     * Gets a set of action commands to move the slides to a specific position
-     *
-     * @param targetPosition The desired position of the slides
-     * @param tolerance      The tolerance for the PID controller
-     * @return A parallel command group that moves the slides to the desired position
-     */
-    public CommandBase getSlidesCommand(double targetPosition, double tolerance) {
-        return new IntakeSlidesActionCommand(this, targetPosition, tolerance);
-    }
-
-    /**
-     * Gets a set of action commands to open or close the claw
-     *
-     * @param openingClaw Whether the claw should be opened or closed
-     * @return A parallel command group that opens or closes the claw
-     */
-    public CommandBase getClawCommand(boolean openingClaw) {
-        double targetPosition = openingClaw ? CLAW_OPEN_POSITION : CLAW_CLOSED_POSITION;
-        return new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                        new ServoActionCommand(leftClaw, targetPosition, 0),
-                        new ServoActionCommand(rightClaw, targetPosition, 0)
-                ),
-                new WaitCommand(200)
-        );
     }
 
     /**
