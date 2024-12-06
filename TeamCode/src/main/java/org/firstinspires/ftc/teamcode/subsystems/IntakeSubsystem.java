@@ -209,6 +209,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the rotation of the wrist relative to its current position,
+     * while keeping the pitch the same
+     * @param rotationAngle the desired change in rotation of the wrist
+     */
+    public void setRotationRelative(double rotationAngle) {
+        setWristRelative(getPitch(), rotationAngle);
+    }
+
+    /**
      * Sets the rotation of the wrist, while keeping the pitch the same
      *
      * @param rotationAngle the desired rotation of the wrist
