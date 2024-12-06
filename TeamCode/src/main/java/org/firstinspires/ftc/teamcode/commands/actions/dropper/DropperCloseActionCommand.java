@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
+/**
+ * Action Command to close the dropper claw
+ */
 public class DropperCloseActionCommand extends CommandBase {
     private final DropperSubsystem dropper;
     private final long waitTime;

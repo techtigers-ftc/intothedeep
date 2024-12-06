@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
- * Action Command to open the intake claw
+ * Action Command to open the dropper claw
  */
 public class DropperOpenActionCommand extends CommandBase {
     private final DropperSubsystem dropper;

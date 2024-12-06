@@ -19,6 +19,21 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
+    private static final double TICKS_PER_ROTATION = 384.5;
+    private static final double ERROR_FACTOR = 29.0 / 25.2;
+    private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
+    private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
+    private static final double CLAW_OPENED_POSITION = 0;
+    private static final double CLAW_CLOSED_POSITION = 1;
+    private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
+    private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
+    public static double KP = 0.015;
+    public static double KI = 0;
+    public static double KD = 0.000000001;
+    public static double KF = 0;
+    public static double SLIDES_TOLERANCE = 1;
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
@@ -27,25 +42,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final Servo rotationServo;
     private final Servo grabServo;
     private final RobotState robotState;
-
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
-    private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 29.0 / 25.2;
-    private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
-    private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-
-    private static final double CLAW_OPENED_POSITION = 0;
-    private static final double CLAW_CLOSED_POSITION = 1;
-
-    private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
-    private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
-
-    public static double KP = 0.015;
-    public static double KI = 0;
-    public static double KD = 0.000000001;
-    public static double KF = 0;
-    public static double SLIDES_TOLERANCE = 1;
     private final SlideController slideController;
 
     /**
@@ -170,11 +166,45 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param pitch    The angle to set the pitch to in degrees
      * @param rotation The angle to set the rotation to in degrees
      */
-    public void setWristAbsoluteDegrees(double pitch, double rotation) {
+    public void setWristAbsolute(double pitch, double rotation) {
         rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
         leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
         rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
     }
+
+    /**
+     * @return the pitch of the dropper arm in degrees
+     */
+    public double getPitch() {
+        return leftPitchServo.getPosition();
+    }
+
+    /**
+     * @return the rotation of the claw in degrees
+     */
+    public double getRotation() {
+        return rotationServo.getPosition();
+    }
+
+    /**
+     * Sets the pitch of the wrist, while keeping the rotation the same
+     *
+     * @param pitchAngle the desired pitch of the wrist
+     */
+    public void setPitchAbsolute(double pitchAngle) {
+        setWristAbsolute(pitchAngle, getRotation());
+    }
+
+    /**
+     * Sets the rotation of the wrist, while keeping the pitch the same
+     *
+     * @param rotationAngle the desired rotation of the wrist
+     */
+    public void setRotationAbsolute(double rotationAngle) {
+        setWristAbsolute(getPitch(), rotationAngle);
+    }
+
+
 
     @Override
     public void periodic() {

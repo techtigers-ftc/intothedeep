@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
- * Moves the intake slides to a target position
+ * Moves the dropper slides to a target position
  */
 public class DropperSlidesActionCommand extends CommandBase {
     private final DropperSubsystem dropper;
