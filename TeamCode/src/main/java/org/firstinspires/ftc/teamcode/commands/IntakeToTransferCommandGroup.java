@@ -16,9 +16,12 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
  */
 public class IntakeToTransferCommandGroup extends SequentialCommandGroup {
     private final RobotState robotState;
+
     /**
      * Creates a new IntakeToTransferCommandGroup
-     * @param intake the intake subsystem
+     *
+     * @param intake     the intake subsystem
+     * @param robotState the robot state
      */
     public IntakeToTransferCommandGroup(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
@@ -40,5 +43,4 @@ public class IntakeToTransferCommandGroup extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         robotState.setIntakeState(IntakeState.TRANSFER);
     }
-
 }
