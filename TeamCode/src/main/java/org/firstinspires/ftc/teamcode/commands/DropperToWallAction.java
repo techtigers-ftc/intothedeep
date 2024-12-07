@@ -35,7 +35,6 @@ public class DropperToWallAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.TRANSFER);
-        robotState.setIntakeFromWall(true);
+        robotState.setDropperState(DropperState.WALL_INTAKE);
     }
 }

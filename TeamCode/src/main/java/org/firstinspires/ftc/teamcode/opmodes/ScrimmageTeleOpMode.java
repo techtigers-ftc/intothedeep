@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.BaseOpMode;
@@ -62,7 +63,8 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 new DropperToHighBasketAction(dropper, intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
-        Trigger intakeFromWall = new Trigger(robotState::isIntakeFromWall
+        Trigger intakeFromWall = new Trigger(() ->
+                robotState.getDropperState() == DropperState.WALL_INTAKE
         );
 
         DropperToHighChamberTransferAction highChamberDropFromIntake =

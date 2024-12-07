@@ -37,7 +37,6 @@ public class RobotState extends GlobalState {
     private double dropperClawOrientation;
     private ClawState dropperClawState;
     private DropperState dropperState;
-    private boolean isIntakeFromWall;
 
     /**
      * Initializes a new RobotState
@@ -65,7 +64,6 @@ public class RobotState extends GlobalState {
         dropperClawOrientation = 0;
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
-        isIntakeFromWall = false;
     }
 
     /**
@@ -398,20 +396,5 @@ public class RobotState extends GlobalState {
      */
     public void setRobotVelocity(Waypoint robotVelocity) {
         this.robotVelocity = robotVelocity;
-    }
-
-    /**
-     * @return true if the robot is intaking from the wall, false otherwise
-     */
-    public boolean isIntakeFromWall() {
-        return isIntakeFromWall;
-    }
-
-    /**
-     * Sets the current state of the robot's intake from the wall
-     * @param intakeFromWall is the robot intaking from the wall
-     */
-    public void setIntakeFromWall(boolean intakeFromWall) {
-        isIntakeFromWall = intakeFromWall;
     }
 }
