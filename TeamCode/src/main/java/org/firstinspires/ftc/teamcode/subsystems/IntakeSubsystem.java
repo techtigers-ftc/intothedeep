@@ -25,13 +25,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double FORWARD_KD = 0.0;
     public static final double FORWARD_KF = 0.0;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
     private static final double ERROR_FACTOR = 1.0 / 1.1565;
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
-    private static final double DIFFERENTIAL_GEAR_RATIO = 1.0 / 1.0; //Driver / Follower
+    private static final double DIFFERENTIAL_GEAR_RATIO = 1.0; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
@@ -53,7 +53,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param robotState  a reference to the state used to store information about the robot
      */
     public IntakeSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        super("TT-Intake");
+        super();
         this.robotState = robotState;
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_intake_slide");
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_intake_slide");
