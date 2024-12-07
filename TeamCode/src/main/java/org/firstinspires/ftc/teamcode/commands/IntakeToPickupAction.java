@@ -12,7 +12,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * A command group that moves the intake system to the intake position
+ * A command group that moves the intake system to the pickup position, ready to pick up a sample
+ * or specimen
  */
 public class IntakeToPickupAction extends SequentialCommandGroup {
     private final RobotState robotState;
