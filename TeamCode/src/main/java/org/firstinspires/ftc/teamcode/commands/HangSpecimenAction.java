@@ -9,13 +9,13 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 /**
  * A command group that moves the dropper slides in order to hang the specimen on the chamber
  */
-public class HangSpecimenCommandGroup extends SequentialCommandGroup {
+public class HangSpecimenAction extends SequentialCommandGroup {
     /**
-     * Creates a new HangSpecimenCommandGroup
+     * Creates a new HangSpecimenAction
      *
      * @param dropper the dropper subsystem
      */
-    public HangSpecimenCommandGroup(DropperSubsystem dropper) {
+    public HangSpecimenAction(DropperSubsystem dropper) {
         addRequirements(dropper);
         addCommands(
                 new DropperSlidesRelativeActionCommand(dropper, 3, 0.25),

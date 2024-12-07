@@ -5,15 +5,15 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.DropperToHighBasketDropCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberFromIntakeDropCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberFromWallDropCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.DropperToTransferCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.DropperToWallIntakeCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.HangSpecimenCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.DropperHighChamberWallAction;
+import org.firstinspires.ftc.teamcode.commands.DropperToHighBasketAction;
+import org.firstinspires.ftc.teamcode.commands.DropperHighChamberTransferAction;
+import org.firstinspires.ftc.teamcode.commands.DropperToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.DropperToWallAction;
+import org.firstinspires.ftc.teamcode.commands.HangSpecimenAction;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeToIntakeCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.IntakeToTransferCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.IntakeToGrabAction;
+import org.firstinspires.ftc.teamcode.commands.IntakeToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -38,37 +38,37 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
-        IntakeToIntakeCommandGroup intakeToIntake =
-                new IntakeToIntakeCommandGroup(intake, robotState);
+        IntakeToGrabAction intakeToIntake =
+                new IntakeToGrabAction(intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);
 
-        IntakeToTransferCommandGroup intakeToTransfer =
-                new IntakeToTransferCommandGroup(intake, robotState);
+        IntakeToTransferAction intakeToTransfer =
+                new IntakeToTransferAction(intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
 
-        DropperToWallIntakeCommandGroup dropperToWall =
-                new DropperToWallIntakeCommandGroup(dropper, robotState);
+        DropperToWallAction dropperToWall =
+                new DropperToWallAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
 
-        DropperToTransferCommandGroup dropperToTransfer =
-                new DropperToTransferCommandGroup(dropper, robotState);
+        DropperToTransferAction dropperToTransfer =
+                new DropperToTransferAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
 
         Trigger intakeInTransfer = new Trigger(() ->
                 robotState.getIntakeState() == IntakeState.TRANSFER
         );
 
-        DropperToHighBasketDropCommandGroup highBasketDrop =
-                new DropperToHighBasketDropCommandGroup(dropper, intake, robotState);
+        DropperToHighBasketAction highBasketDrop =
+                new DropperToHighBasketAction(dropper, intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
         Trigger intakeFromWall = new Trigger(robotState::isIntakeFromWall
         );
 
-        DropperToHighChamberFromIntakeDropCommandGroup highChamberDropFromIntake =
-                new DropperToHighChamberFromIntakeDropCommandGroup(dropper, intake, robotState);
-        DropperToHighChamberFromWallDropCommandGroup highChamberDropFromWall =
-                new DropperToHighChamberFromWallDropCommandGroup(dropper, robotState);
+        DropperHighChamberTransferAction highChamberDropFromIntake =
+                new DropperHighChamberTransferAction(dropper, intake, robotState);
+        DropperHighChamberWallAction highChamberDropFromWall =
+                new DropperHighChamberWallAction(dropper, robotState);
 
         // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
@@ -95,7 +95,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 dropper::openClaw
         );
 
-        HangSpecimenCommandGroup hangSpecimen = new HangSpecimenCommandGroup(dropper);
+        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
 
