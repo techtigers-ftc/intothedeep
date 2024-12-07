@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 /**
  * Moves the dropper slides to a target position
  */
-public class DropperSlidesAbsoluteActionCommand extends CommandBase {
+public class DropperSlidesAbsoluteAction extends CommandBase {
     private final DropperSubsystem dropper;
     private final double targetPosition;
     private final double tolerance;
@@ -19,7 +19,7 @@ public class DropperSlidesAbsoluteActionCommand extends CommandBase {
      * @param targetPosition the target position in inches
      * @param tolerance      the tolerance for the target position
      */
-    public DropperSlidesAbsoluteActionCommand(DropperSubsystem dropper, double targetPosition, double tolerance) {
+    public DropperSlidesAbsoluteAction(DropperSubsystem dropper, double targetPosition, double tolerance) {
         this.dropper = dropper;
         this.targetPosition = targetPosition;
         this.tolerance = tolerance;

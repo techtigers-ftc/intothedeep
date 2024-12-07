@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
@@ -26,10 +26,10 @@ public class DropperToTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperOpenActionCommand(dropper),
-                new DropperSlidesAbsoluteActionCommand(dropper, 0, 0.5),
-                new DropperPitchActionCommand(dropper, 210, 300),
-                new DropperRotationActionCommand(dropper, 0, 300)
+                new DropperOpenAction(dropper),
+                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
+                new DropperPitchAction(dropper, 210, 300),
+                new DropperRotationAction(dropper, 0, 300)
         );
     }
 

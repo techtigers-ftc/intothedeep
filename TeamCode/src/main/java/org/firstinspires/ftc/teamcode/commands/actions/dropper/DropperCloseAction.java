@@ -1,26 +1,26 @@
-package org.firstinspires.ftc.teamcode.commands.actions.intake;
+package org.firstinspires.ftc.teamcode.commands.actions.dropper;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
- * Action Command to close the intake claw
+ * Action Command to close the dropper claw
  */
-public class IntakeCloseActionCommand extends CommandBase {
-    private final IntakeSubsystem intake;
+public class DropperCloseAction extends CommandBase {
+    private final DropperSubsystem dropper;
     private final long waitTime;
     private final ElapsedTime time;
 
     /**
      * Initializes the command
      *
-     * @param intake the intake subsystem
+     * @param dropper  the dropper subsystem
      * @param waitTime the time to wait before the command is finished in milliseconds
      */
-    public IntakeCloseActionCommand(IntakeSubsystem intake, long waitTime) {
-        this.intake = intake;
+    public DropperCloseAction(DropperSubsystem dropper, long waitTime) {
+        this.dropper = dropper;
         this.waitTime = waitTime;
         time = new ElapsedTime();
     }
@@ -28,15 +28,15 @@ public class IntakeCloseActionCommand extends CommandBase {
     /**
      * Initializes the command with a wait time of 0
      *
-     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
      */
-    public IntakeCloseActionCommand(IntakeSubsystem intake) {
-        this(intake, 0);
+    public DropperCloseAction(DropperSubsystem dropper) {
+        this(dropper, 0);
     }
 
     @Override
     public void initialize() {
-        intake.closeClaw();
+        dropper.closeClaw();
         time.reset();
     }
 

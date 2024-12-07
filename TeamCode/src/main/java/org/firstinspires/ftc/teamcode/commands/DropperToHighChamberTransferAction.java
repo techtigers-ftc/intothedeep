@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperCloseActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -32,12 +32,12 @@ public class DropperToHighChamberTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperCloseActionCommand(dropper, 100),
-                new IntakeOpenActionCommand(intake, 200),
+                new DropperCloseAction(dropper, 100),
+                new IntakeOpenAction(intake, 200),
                 new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteActionCommand(dropper, 25, 0.5),
-                        new DropperPitchActionCommand(dropper, 300, 300),
-                        new DropperRotationActionCommand(dropper, 180, 300)
+                        new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
+                        new DropperPitchAction(dropper, 300, 300),
+                        new DropperRotationAction(dropper, 180, 300)
                 )
         );
     }

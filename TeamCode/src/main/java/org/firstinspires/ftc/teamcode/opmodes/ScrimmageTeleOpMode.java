@@ -31,14 +31,17 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         RobotState robotState = new RobotState();
+
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-        registerSubsystems(intake);
+        registerSubsystems(intake, dropper, drive);
 
+        // DRIVER
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
+        // MANIPULATOR
         IntakeToPickupAction intakeToIntake =
                 new IntakeToPickupAction(intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);

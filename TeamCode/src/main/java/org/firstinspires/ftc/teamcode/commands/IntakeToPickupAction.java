@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -28,12 +28,12 @@ public class IntakeToPickupAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeOpenActionCommand(intake),
+                new IntakeOpenAction(intake),
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteActionCommand(intake, 20, 0.5),
-                        new IntakeRotationActionCommand(intake, 90, 300)
+                        new IntakeSlidesAbsoluteAction(intake, 20, 0.5),
+                        new IntakeRotationAction(intake, 90, 300)
                 ),
-                new IntakePitchActionCommand(intake, 180, 300)
+                new IntakePitchAction(intake, 180, 300)
         );
     }
 

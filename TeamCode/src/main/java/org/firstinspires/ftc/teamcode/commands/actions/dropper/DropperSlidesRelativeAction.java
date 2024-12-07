@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 /**
  * Moves the dropper slides to a target position relative to the current position of the slides
  */
-public class DropperSlidesRelativeActionCommand extends DropperSlidesAbsoluteActionCommand {
+public class DropperSlidesRelativeAction extends DropperSlidesAbsoluteAction {
     /**
      * Initializes the command
      *
@@ -13,7 +13,7 @@ public class DropperSlidesRelativeActionCommand extends DropperSlidesAbsoluteAct
      * @param targetPosition the change in target position in inches
      * @param tolerance      the tolerance for the target position
      */
-    public DropperSlidesRelativeActionCommand(DropperSubsystem dropper, double targetPosition, double tolerance) {
+    public DropperSlidesRelativeAction(DropperSubsystem dropper, double targetPosition, double tolerance) {
         super(dropper, targetPosition + dropper.getCurrentSlidePositionInches(), tolerance);
     }
 }

@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -27,14 +27,14 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeCloseActionCommand(intake),
+                new IntakeCloseAction(intake),
                 new ParallelCommandGroup(
-                        new IntakePitchActionCommand(intake, 180, 300),
-                        new IntakeRotationActionCommand(intake, 90, 300)
+                        new IntakePitchAction(intake, 180, 300),
+                        new IntakeRotationAction(intake, 90, 300)
                 ),
                 new ParallelCommandGroup(
-                        new IntakePitchActionCommand(intake, 0, 300),
-                        new IntakeSlidesAbsoluteActionCommand(intake, 1, 0.5)
+                        new IntakePitchAction(intake, 0, 300),
+                        new IntakeSlidesAbsoluteAction(intake, 1, 0.5)
                 )
         );
     }

@@ -7,7 +7,7 @@ import team.techtigers.base.actions.ServoActionCommand;
 /**
  * Action Command to move the dropper claw rotation to a certain position
  */
-public class DropperRotationActionCommand extends ServoActionCommand {
+public class DropperRotationAction extends ServoActionCommand {
     private final DropperSubsystem dropper;
 
     /**
@@ -17,8 +17,8 @@ public class DropperRotationActionCommand extends ServoActionCommand {
      * @param expectedServoPos the expected servo position
      * @param duration         the duration of the command
      */
-    public DropperRotationActionCommand(DropperSubsystem dropper,
-                                        double expectedServoPos, long duration) {
+    public DropperRotationAction(DropperSubsystem dropper,
+                                 double expectedServoPos, long duration) {
         super(expectedServoPos, duration);
         this.dropper = dropper;
     }

@@ -7,7 +7,7 @@ import team.techtigers.base.actions.ServoActionCommand;
 /**
  * Action Command to move the dropper pitch to a certain position
  */
-public class DropperPitchActionCommand extends ServoActionCommand {
+public class DropperPitchAction extends ServoActionCommand {
     private final DropperSubsystem dropper;
 
     /**
@@ -17,8 +17,8 @@ public class DropperPitchActionCommand extends ServoActionCommand {
      * @param expectedServoPos the expected servo position
      * @param duration         the duration of the command
      */
-    public DropperPitchActionCommand(DropperSubsystem dropper,
-                                     double expectedServoPos, long duration) {
+    public DropperPitchAction(DropperSubsystem dropper,
+                              double expectedServoPos, long duration) {
         super(expectedServoPos, duration);
         this.dropper = dropper;
     }
