@@ -1,13 +1,13 @@
 package team.techtigers.base.actions;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Allows a motor to run for a certain amount of time with the action interface
+ * Allows a motor to run for a certain amount of time with the action
+ * command interface
  */
-public class MotorAction implements IAction {
-    private final DcMotor motor;
+public abstract class MotorActionCommand extends CommandBase {
     private final long duration;
     private final ElapsedTime time;
     private final double speed;
@@ -15,14 +15,10 @@ public class MotorAction implements IAction {
     /**
      * Initializes all values as well as throws exceptions for invalid inputs
      *
-     * @param motor    DcMotor to control
      * @param speed    speed and direction motor runs
      * @param duration time for the motor to run, in milliseconds
      */
-    public MotorAction(DcMotor motor, double speed, long duration) {
-        if (motor == null) {
-            throw new IllegalArgumentException("Null motor (arg #1)");
-        }
+    public MotorActionCommand(double speed, long duration) {
         if (duration < 0) {
             throw new IllegalArgumentException("Duration < 0 (arg #3)");
         }
@@ -31,7 +27,6 @@ public class MotorAction implements IAction {
                     "(arg #2)");
         }
 
-        this.motor = motor;
         this.duration = duration;
         this.speed = speed;
 
@@ -39,17 +34,20 @@ public class MotorAction implements IAction {
     }
 
     @Override
-    public void start() {
+    public void initialize() {
         time.reset();
-    }
-
-    @Override
-    public void update() {
-        motor.setPower(speed);
+        setPower(speed);
     }
 
     @Override
     public boolean isFinished() {
         return time.milliseconds() >= this.duration;
     }
+
+    /**
+     * Sets the motor to run at a certain power
+     *
+     * @param power power to set the motor to
+     */
+    protected abstract void setPower(double power);
 }

@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
-import team.techtigers.base.CloseableSubsytem;
+import team.techtigers.base.CloseableSubsystem;
 import team.techtigers.core.paths.Waypoint;
 
 /**
  * The odometry subsystem, using the localizer from Roadrunner.
  */
-public class GoBodometrySubsystem extends CloseableSubsytem {
+public class GoBodometrySubsystem extends CloseableSubsystem {
     private final GoBildaPinpointDriver odo;
     private final RobotState robotState;
 
@@ -40,7 +40,7 @@ public class GoBodometrySubsystem extends CloseableSubsytem {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        odo.setOffsets(1.0, 2.0);
+        odo.setOffsets(30, 88.9);
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -57,7 +57,7 @@ public class GoBodometrySubsystem extends CloseableSubsytem {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED,
                 GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
         /*

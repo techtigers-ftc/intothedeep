@@ -5,6 +5,6 @@ package org.firstinspires.ftc.teamcode.utils.enums;
  */
 public enum IntakeState {
     TRANSFER,
-    READY_TO_GRAB,
+    READY_TO_PICKUP,
     STANDBY
 }
