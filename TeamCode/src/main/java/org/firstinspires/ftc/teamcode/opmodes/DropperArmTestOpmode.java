@@ -19,6 +19,9 @@ public class DropperArmTestOpmode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = dashboard.getTelemetry();
+
         robotState = new RobotState();
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);
         registerSubsystems(dropperSubsystem);
@@ -26,11 +29,11 @@ public class DropperArmTestOpmode extends BaseOpMode {
 
         // Claw
         gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.openClaw();
+            dropperSubsystem.closeClaw();
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.closeClaw();
+            dropperSubsystem.openClaw();
         }));
 
         // Pitch

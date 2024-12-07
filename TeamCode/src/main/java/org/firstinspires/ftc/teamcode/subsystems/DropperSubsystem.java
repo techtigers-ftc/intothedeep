@@ -27,13 +27,13 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    private static final double CLAW_OPENED_POSITION = 0;
-    private static final double CLAW_CLOSED_POSITION = 1;
+    public static double CLAW_OPENED_POSITION = 0;
+    public static double CLAW_CLOSED_POSITION = 0.85;
     private static final double PITCH_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double DROPPER_PITCH_RANGE = 355;
-    private static final double DROPPER_ROTATION_RANGE = 200;
-    private static final double DROPPER_ROTATION_BUFFER = 10;
+    private static final double DROPPER_ROTATION_RANGE = 180;
+    private static final double DROPPER_ROTATION_BUFFER = 0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -68,6 +68,8 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
+
+        grabServo.setDirection(Servo.Direction.REVERSE);
 
         leftPitchServo.setDirection(Servo.Direction.FORWARD);
         rightPitchServo.setDirection(Servo.Direction.REVERSE);
@@ -175,7 +177,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void setWristAbsolute(double pitch, double rotation) {
         rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
         leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
-        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE + DROPPER_ROTATION_BUFFER);
+        rotationServo.setPosition((rotation + DROPPER_ROTATION_BUFFER) * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE );
         robotState.setDropperClawPitch(getPitch());
         robotState.setDropperClawRotation(getRotation());
     }
@@ -191,7 +193,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @return the rotation of the claw in degrees
      */
     public double getRotation() {
-        return DROPPER_ROTATION_RANGE * rotationServo.getPosition() + DROPPER_ROTATION_BUFFER;
+        return DROPPER_ROTATION_RANGE * rotationServo.getPosition() - DROPPER_ROTATION_BUFFER;
     }
 
     /**
