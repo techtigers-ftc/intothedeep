@@ -57,8 +57,12 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 intake::resetSlides
         );
 
+        Trigger intakeInTransfer = new Trigger(() ->
+                robotState.getIntakeState() == IntakeState.TRANSFER
+        );
+
         // Toggles the rotation on the intake between two perpendicular positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).toggleWhenActive(
                 () -> intake.setWristAbsolute(180, 90),
                 () -> intake.setWristAbsolute(180, 0)
         );
@@ -92,10 +96,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         DropperToTransferAction dropperToTransfer =
                 new DropperToTransferAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
-
-        Trigger intakeInTransfer = new Trigger(() ->
-                robotState.getIntakeState() == IntakeState.TRANSFER
-        );
 
         DropperToHighBasketAction highBasketDrop =
                 new DropperToHighBasketAction(dropper, intake, robotState);
