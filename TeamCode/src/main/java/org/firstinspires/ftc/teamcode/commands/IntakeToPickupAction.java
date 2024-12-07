@@ -14,16 +14,16 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 /**
  * A command group that moves the intake system to the intake position
  */
-public class IntakeToGrabAction extends SequentialCommandGroup {
+public class IntakeToPickupAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeToGrabAction
+     * Creates a new IntakeToPickupAction
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeToGrabAction(IntakeSubsystem intake, RobotState robotState) {
+    public IntakeToPickupAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(

@@ -15,16 +15,16 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
  * moves the dropper to the high chamber drop position, with the specimen
  * upside down, ready to be clipped upwards onto the high chamber
  */
-public class DropperHighChamberWallAction extends SequentialCommandGroup {
+public class DropperToHighChamberWallAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperHighChamberWallAction
+     * Creates a new DropperToHighChamberWallAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperHighChamberWallAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperToHighChamberWallAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
