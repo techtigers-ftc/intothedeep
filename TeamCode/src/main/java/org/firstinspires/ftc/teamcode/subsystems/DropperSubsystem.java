@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -29,6 +30,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double CLAW_CLOSED_POSITION = 1;
     private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
+    private static final double DROPPER_PITCH_RANGE = 355;
+    private static final double DROPPER_ROTATION_RANGE = 180;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -91,6 +94,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      */
     public void openClaw() {
         grabServo.setPosition(CLAW_OPENED_POSITION);
+        robotState.setDropperClawState(ClawState.OPEN);
     }
 
     /**
@@ -98,6 +102,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      */
     public void closeClaw() {
         grabServo.setPosition(CLAW_CLOSED_POSITION);
+        robotState.setDropperClawState(ClawState.CLOSED);
     }
 
     /**
@@ -129,7 +134,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * Increments slides from wherever it is currently
      *
-     * @param position: Amount you are incrementing by inches
+     * @param position Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
         slideController.moveToInches(getCurrentSlidePositionInches() + position);
@@ -138,7 +143,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * Moves slides to that position from wherever it is
      *
-     * @param position: Position where you want to set the slides to in inches
+     * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
         slideController.moveToInches(position);
@@ -147,17 +152,11 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * Method that increments the wrist from where it is currently at
      *
-     * @param pitch: Amount you want to increment by for the dropper in degrees
+     * @param pitch    Amount you want to increment by for the dropper in degrees
+     * @param rotation Amount you want to increment by for the dropper in degrees
      */
     public void setWristRelativeDegrees(double pitch, double rotation) {
-        double pitchServoCurrentPosition = rightPitchServo.getPosition();
-        double pitchServo2CurrentPosition = leftPitchServo.getPosition();
-        double rotationServoCurrentPosition = rotationServo.getPosition();
-
-        rightPitchServo.setPosition(pitchServoCurrentPosition * PITCH_GEAR_RATIO + pitch);
-        leftPitchServo.setPosition(pitchServo2CurrentPosition * PITCH_GEAR_RATIO + pitch);
-
-        rotationServo.setPosition(rotationServoCurrentPosition * ROTATION_GEAR_RATIO + rotation);
+        setWristAbsolute(getPitch() + pitch, getRotation() + rotation);
     }
 
     /**
@@ -167,23 +166,25 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotation The angle to set the rotation to in degrees
      */
     public void setWristAbsolute(double pitch, double rotation) {
-        rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
-        leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO);
-        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO);
+        rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
+        leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
+        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE);
+        robotState.setDropperClawPitch(getPitch());
+        robotState.setDropperClawRotation(getRotation());
     }
 
     /**
      * @return the pitch of the dropper arm in degrees
      */
     public double getPitch() {
-        return leftPitchServo.getPosition();
+        return DROPPER_PITCH_RANGE * leftPitchServo.getPosition();
     }
 
     /**
      * @return the rotation of the claw in degrees
      */
     public double getRotation() {
-        return rotationServo.getPosition();
+        return DROPPER_ROTATION_RANGE * rotationServo.getPosition();
     }
 
     /**
@@ -209,5 +210,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
+        robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
     }
 }
