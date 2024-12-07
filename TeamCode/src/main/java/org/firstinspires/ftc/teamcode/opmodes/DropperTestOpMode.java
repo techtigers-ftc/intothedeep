@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -56,11 +55,11 @@ public class DropperTestOpMode extends BaseOpMode {
 
         // Moves slides to their near-max and near-min height
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.moveSlidesAbsoluteInches(28);
+            dropperSubsystem.moveSlidesAbsolute(28);
         }));
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.moveSlidesAbsoluteInches(1);
+            dropperSubsystem.moveSlidesAbsolute(1);
         }));
 
         // Manual control of the slides
@@ -70,7 +69,7 @@ public class DropperTestOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        double currentPos = dropperSubsystem.getCurrentPositionInInches();
+        double currentPos = dropperSubsystem.getCurrentSlidePositionInches();
         double expectedPos = dropperSubsystem.getTargetPositionInches();
         double error = expectedPos - currentPos;
 

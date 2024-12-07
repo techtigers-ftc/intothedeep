@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions;
+package org.firstinspires.ftc.teamcode.commands.actions.intake;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -7,7 +7,7 @@ import team.techtigers.base.actions.ServoActionCommand;
 /**
  * Action Command to move the intake rotation to a certain position
  */
-public class IntakeRotationActionCommand extends ServoActionCommand {
+public class IntakeRotationAction extends ServoActionCommand {
     private final IntakeSubsystem intake;
 
     /**
@@ -17,8 +17,8 @@ public class IntakeRotationActionCommand extends ServoActionCommand {
      * @param expectedServoPos the expected servo position
      * @param duration         the duration of the command
      */
-    public IntakeRotationActionCommand(IntakeSubsystem intake,
-                                       double expectedServoPos, long duration) {
+    public IntakeRotationAction(IntakeSubsystem intake,
+                                double expectedServoPos, long duration) {
         super(expectedServoPos, duration);
         this.intake = intake;
     }
