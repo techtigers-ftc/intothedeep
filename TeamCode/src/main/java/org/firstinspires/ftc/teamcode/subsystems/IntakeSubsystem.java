@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -54,7 +53,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param robotState  a reference to the state used to store information about the robot
      */
     public IntakeSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        super();
+        super("TT-Intake");
         this.robotState = robotState;
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_intake_slide");
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_intake_slide");
@@ -63,9 +62,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
 
-        slideController = new SlideController(MOTOR_TICKS_PER_INCH,
-                new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF)
-        );
+        slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
 
@@ -162,9 +159,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void openClaw() {
         leftClaw.setPosition(CLAW_OPEN_POSITION);
         rightClaw.setPosition(CLAW_OPEN_POSITION);
-    public void openClaw(){
-        leftClaw.setPosition(0);
-        rightClaw.setPosition(0);
         robotState.setIntakeClawState(ClawState.OPEN);
     }
 
@@ -174,9 +168,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void closeClaw() {
         leftClaw.setPosition(CLAW_CLOSED_POSITION);
         rightClaw.setPosition(CLAW_CLOSED_POSITION);
-    public void closeClaw(){
-        leftClaw.setPosition(1);
-        rightClaw.setPosition(1);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
@@ -201,14 +192,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the differential claw
      */
     public void setWristRelative(double pitchAngle, double rotationAngle) {
-        double[] currentPositions = differentialController.getPitchAndRotation(
-                leftWrist.getPosition(),
-                rightWrist.getPosition());
-        double[] newPositions = differentialController.calculateServoPositions(
-                currentPositions[0] + pitchAngle,
-                currentPositions[1] + rotationAngle);
-        leftWrist.setPosition(newPositions[0]);
-        rightWrist.setPosition(newPositions[1]);
+        setWristAbsolute(getPitch() + pitchAngle, getRotation() + rotationAngle);
     }
 
     /**
@@ -227,7 +211,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the wrist
      */
     public void setRotationRelative(double rotationAngle) {
-        setWristRelative(getPitch(), getRotation() + rotationAngle);
+        setWristRelative(0, rotationAngle);
     }
 
     /**
@@ -243,18 +227,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Updates and powers motors every cycle
      */
     @Override
-    public void periodic(){
+    public void periodic() {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 0);
-        double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(),
-                rightWrist.getPosition());
+        double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
-        RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(),
-                rightWrist.getPosition());
-        RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0],
-                wristPositions[1]);
+        RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
+        RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
     }
 }
