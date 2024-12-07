@@ -70,7 +70,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
-        resetEncoder();
+        resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
@@ -81,7 +81,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * Resets encoder values of the slide motors
      */
-    public void resetEncoder() {
+    public void resetSlides() {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

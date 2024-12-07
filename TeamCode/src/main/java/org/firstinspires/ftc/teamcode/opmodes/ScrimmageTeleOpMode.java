@@ -42,9 +42,9 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         drive.setDefaultCommand(manualDriveCommand);
 
         // MANIPULATOR
-        IntakeToPickupAction intakeToIntake =
+        IntakeToPickupAction intakeToPickup =
                 new IntakeToPickupAction(intake, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
 
         IntakeToTransferAction intakeToTransfer =
                 new IntakeToTransferAction(intake, robotState);
@@ -80,8 +80,14 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
 
+        // Reset the intake slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                () -> intake.moveSlidesRelative(0)
+                intake::resetSlides
+        );
+
+        // Reset the dropper slide encoders
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+                dropper::resetSlides
         );
 
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
