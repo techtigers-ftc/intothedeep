@@ -53,7 +53,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param robotState  a reference to the state used to store information about the robot
      */
     public IntakeSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        super();
         this.robotState = robotState;
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_intake_slide");
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_intake_slide");
