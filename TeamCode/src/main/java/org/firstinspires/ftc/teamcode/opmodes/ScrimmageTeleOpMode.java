@@ -52,13 +52,12 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 robotState.getIntakeState() == IntakeState.TRANSFER
         );
 
-        Trigger intakeFromWall = new Trigger(robotState::isIntakeFromWall
-        );
-
         DropperToHighBasketDropCommandGroup highBasketDrop =
                 new DropperToHighBasketDropCommandGroup(dropper, intake, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(highBasketDrop);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
+        Trigger intakeFromWall = new Trigger(robotState::isIntakeFromWall
+        );
 
         DropperToHighChamberFromIntakeDropCommandGroup highChamberDropFromIntake =
                 new DropperToHighChamberFromIntakeDropCommandGroup(dropper, intake, robotState);
