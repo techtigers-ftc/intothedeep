@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -45,5 +46,6 @@ public class DropperToHighBasketAction extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         robotState.setDropperState(DropperState.DROP);
+        robotState.setBlockPosition(RobotBlockPosition.DROPPER);
     }
 }

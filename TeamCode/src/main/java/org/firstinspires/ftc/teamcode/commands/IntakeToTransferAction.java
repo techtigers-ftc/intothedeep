@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsolu
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * A command group that moves the intake system to the transfer position
@@ -42,5 +43,7 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         robotState.setIntakeState(IntakeState.TRANSFER);
+        robotState.setBlockPosition(RobotBlockPosition.INTAKE);
+
     }
 }

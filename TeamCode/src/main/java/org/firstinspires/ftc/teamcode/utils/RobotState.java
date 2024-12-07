@@ -30,7 +30,7 @@ public class RobotState extends GlobalState {
     private double intakeClawOrientation;
     private double intakeClawPitch;
     private IntakeState intakeState;
-    private RobotBlockPosition hasBlock;
+    private RobotBlockPosition blockPosition;
     private boolean isAscending;
     private boolean isVerticalExtended;
     private double dropperClawPitch;
@@ -57,7 +57,7 @@ public class RobotState extends GlobalState {
         intakeClawOrientation = 0;
         intakeClawPitch = 0;
         intakeState = IntakeState.STANDBY;
-        hasBlock = RobotBlockPosition.NONE;
+        blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
         dropperClawPitch = 0;
@@ -159,16 +159,16 @@ public class RobotState extends GlobalState {
     /**
      * @return the current position of the block the robot is holding
      */
-    public RobotBlockPosition getHasBlock() {
-        return hasBlock;
+    public RobotBlockPosition getBlockPosition() {
+        return blockPosition;
     }
 
     /**
      * Sets the current position of the robot's block
      * @param hasBlock the position of the robot's block
      */
-    public void setHasBlock(RobotBlockPosition hasBlock) {
-        this.hasBlock = hasBlock;
+    public void setBlockPosition(RobotBlockPosition hasBlock) {
+        this.blockPosition = hasBlock;
     }
 
     /**
