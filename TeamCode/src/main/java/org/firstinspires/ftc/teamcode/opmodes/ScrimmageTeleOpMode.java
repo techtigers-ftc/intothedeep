@@ -112,6 +112,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
+
         // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
 
