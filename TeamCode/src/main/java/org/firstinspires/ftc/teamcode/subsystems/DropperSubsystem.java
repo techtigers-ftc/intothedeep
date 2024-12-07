@@ -158,7 +158,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param pitch    Amount you want to increment by for the dropper in degrees
      * @param rotation Amount you want to increment by for the dropper in degrees
      */
-    public void setWristRelativeDegrees(double pitch, double rotation) {
+    public void setWristRelative(double pitch, double rotation) {
         setWristAbsolute(getPitch() + pitch, getRotation() + rotation);
     }
 
@@ -200,12 +200,30 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the pitch angle relative to the current angle
+     *
+     * @param pitchAngle the desired change in pitch in degrees
+     */
+    public void setPitchRelative(double pitchAngle) {
+        setWristRelative(pitchAngle, 0);
+    }
+
+    /**
      * Sets the rotation of the wrist, while keeping the pitch the same
      *
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
         setWristAbsolute(getPitch(), rotationAngle);
+    }
+
+    /**
+     * Sets the rotation of the wrist, while keeping the pitch the same
+     *
+     * @param rotationAngle the desired change in pitch of the wrist
+     */
+    public void setRotationRelative(double rotationAngle) {
+        setWristRelative(0, rotationAngle);
     }
 
     @Override
