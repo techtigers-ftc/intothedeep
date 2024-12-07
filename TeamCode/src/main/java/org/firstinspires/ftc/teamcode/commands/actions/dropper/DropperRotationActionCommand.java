@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import team.techtigers.base.actions.ServoActionCommand;
 
 /**
- * Action Command to move the intake rotation to a certain position
+ * Action Command to move the dropper claw rotation to a certain position
  */
 public class DropperRotationActionCommand extends ServoActionCommand {
     private final DropperSubsystem dropper;
