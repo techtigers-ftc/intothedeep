@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenActionCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchActionCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationActionCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -29,7 +29,7 @@ public class IntakeToIntakeCommandGroup extends SequentialCommandGroup {
         addCommands(
                 new IntakeOpenActionCommand(intake),
                 new ParallelCommandGroup(
-                        new IntakeSlidesActionCommand(intake, 20, 0.5),
+                        new IntakeSlidesAbsoluteActionCommand(intake, 20, 0.5),
                         new IntakeRotationActionCommand(intake, 90, 300)
                 ),
                 new IntakePitchActionCommand(intake, 180, 300)

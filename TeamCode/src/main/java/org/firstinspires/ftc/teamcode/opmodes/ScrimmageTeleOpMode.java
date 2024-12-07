@@ -10,12 +10,14 @@ import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberFromIntakeDro
 import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberFromWallDropCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.DropperToTransferCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.DropperToWallIntakeCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.IntakePitchTriggerRotateCommand;
+import org.firstinspires.ftc.teamcode.commands.HangSpecimenCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeToIntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.IntakeToTransferCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -23,7 +25,8 @@ import team.techtigers.base.BaseOpMode;
 public class ScrimmageTeleOpMode extends BaseOpMode {
     @Override
     public void initialize() {
-        GamepadEx gamepadEx = new GamepadEx(gamepad1);
+        GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         RobotState robotState = new RobotState();
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
@@ -31,79 +34,86 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         IntakeToIntakeCommandGroup intakeToIntake =
                 new IntakeToIntakeCommandGroup(intake, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToIntake);
 
         IntakeToTransferCommandGroup intakeToTransfer =
                 new IntakeToTransferCommandGroup(intake, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
 
         DropperToWallIntakeCommandGroup dropperToWall =
                 new DropperToWallIntakeCommandGroup(dropper, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
 
         DropperToTransferCommandGroup dropperToTransfer =
                 new DropperToTransferCommandGroup(dropper, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
 
+        Trigger intakeInTransfer = new Trigger(() ->
+                robotState.getIntakeState() == IntakeState.TRANSFER
+        );
+
+        Trigger intakeFromWall = new Trigger(robotState::isIntakeFromWall
+        );
 
         DropperToHighBasketDropCommandGroup highBasketDrop =
                 new DropperToHighBasketDropCommandGroup(dropper, intake, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(highBasketDrop);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(highBasketDrop);
 
 
         DropperToHighChamberFromIntakeDropCommandGroup highChamberDropFromIntake =
                 new DropperToHighChamberFromIntakeDropCommandGroup(dropper, intake, robotState);
         DropperToHighChamberFromWallDropCommandGroup highChamberDropFromWall =
                 new DropperToHighChamberFromWallDropCommandGroup(dropper, robotState);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> {
-                    if (robotState.isIntakeFromWall()) {
-                        highChamberDropFromWall.schedule();
-                    } else {
-                        highChamberDropFromIntake.schedule();
-                    }
-                }
-        );
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+        // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
+        // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
                 () -> intake.moveSlidesRelative(0)
         );
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
                 () -> intake.setWristAbsolute(180, 90),
                 () -> intake.setWristAbsolute(180, 0)
         );
 
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 intake::closeClaw,
                 intake::openClaw
         );
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
                 dropper::closeClaw,
                 dropper::openClaw
         );
 
+        HangSpecimenCommandGroup hangSpecimen = new HangSpecimenCommandGroup(dropper);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
+
 
         Trigger intakeSlidesTrigger = new Trigger(() ->
-                gamepadEx.getLeftY() != 0
+                manipulatorGamepad.getLeftY() != 0
         );
         intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
-                gamepadEx.getLeftY() * 2));
+                manipulatorGamepad.getLeftY() * 2));
 
         Trigger dropperSlidesTrigger = new Trigger(() ->
-                gamepadEx.getRightY() != 0
+                manipulatorGamepad.getRightY() != 0
         );
         dropperSlidesTrigger.whileActiveContinuous(() -> dropper.moveSlidesRelative(
-                gamepadEx.getRightY() * 2));
+                manipulatorGamepad.getRightY() * 2));
 
-        IntakePitchTriggerRotateCommand intakePitchTriggerRotateCommand =
-                new IntakePitchTriggerRotateCommand(intake, gamepadEx);
+        IntakeManualRotationCommand intakeManualRotationCommand =
+                new IntakeManualRotationCommand(intake, manipulatorGamepad);
         Trigger intakeRotationTrigger = new Trigger(() ->
-                gamepadEx.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
-                        gamepadEx.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0
+                (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
+                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
+                        && robotState.getIntakeState() != IntakeState.TRANSFER
         );
-        intakeRotationTrigger.whileActiveContinuous(intakePitchTriggerRotateCommand);
+        intakeRotationTrigger.whileActiveContinuous(intakeManualRotationCommand);
 
     }
 }

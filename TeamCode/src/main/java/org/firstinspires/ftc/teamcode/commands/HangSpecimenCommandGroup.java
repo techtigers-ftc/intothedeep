@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenActionCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesRelativeActionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
@@ -17,7 +18,8 @@ public class HangSpecimenCommandGroup extends SequentialCommandGroup {
     public HangSpecimenCommandGroup(DropperSubsystem dropper) {
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesActionCommand(dropper, 28, 0.25)
+                new DropperSlidesRelativeActionCommand(dropper, 3, 0.25),
+                new DropperOpenActionCommand(dropper)
         );
     }
 }
