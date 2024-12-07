@@ -82,11 +82,10 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         IntakeManualRotationCommand intakeManualRotationCommand =
                 new IntakeManualRotationCommand(intake, manipulatorGamepad);
         Trigger intakeRotationTrigger = new Trigger(() ->
-                (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
-                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
-                        && robotState.getIntakeState() != IntakeState.TRANSFER
+                manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
+                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0
         );
-        intakeRotationTrigger.whileActiveContinuous(intakeManualRotationCommand);
+        intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
         DropperToWallAction dropperToWall =
