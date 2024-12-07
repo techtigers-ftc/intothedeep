@@ -231,7 +231,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
-        robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 0);
+        robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
