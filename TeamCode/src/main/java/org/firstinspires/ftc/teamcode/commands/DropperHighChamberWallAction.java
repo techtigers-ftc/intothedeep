@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper system to the high chamber drop position, with the specimen
+ * A command group that grabs the specimen from the wall and
+ * moves the dropper to the high chamber drop position, with the specimen
  * upside down, ready to be clipped upwards onto the high chamber
  */
 public class DropperHighChamberWallAction extends SequentialCommandGroup {

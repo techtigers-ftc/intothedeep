@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper system to the high chamber drop position, with the specimen
+ * moves the dropper to the high chamber drop position, with the specimen
  * upside down, ready to be clipped upwards onto the high chamber
  */
 public class DropperHighChamberTransferAction extends SequentialCommandGroup {
