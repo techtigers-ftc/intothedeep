@@ -181,7 +181,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist.setPosition(positions[0]);
         rightWrist.setPosition(positions[1]);
         robotState.setIntakeClawPitch(pitchAngle);
-        robotState.setIntakeClawOrientation(rotationAngle);
+        robotState.setIntakeClawRotation(rotationAngle);
     }
 
     /**
