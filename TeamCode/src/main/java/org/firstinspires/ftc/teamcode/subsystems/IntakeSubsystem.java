@@ -215,7 +215,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the wrist
      */
     public void setRotationRelative(double rotationAngle) {
-        setWristRelative(getPitch(), rotationAngle);
+        setWristRelative(getPitch(), getRotation() + rotationAngle);
     }
 
     /**
