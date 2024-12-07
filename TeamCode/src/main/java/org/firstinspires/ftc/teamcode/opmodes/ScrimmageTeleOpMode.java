@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.commands.HangSpecimenCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeToIntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.IntakeToTransferCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,7 +32,11 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         RobotState robotState = new RobotState();
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
         registerSubsystems(intake);
+
+        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
+        drive.setDefaultCommand(manualDriveCommand);
 
         IntakeToIntakeCommandGroup intakeToIntake =
                 new IntakeToIntakeCommandGroup(intake, robotState);
