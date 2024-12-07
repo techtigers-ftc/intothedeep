@@ -83,6 +83,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setPosition(0);
         leftClaw.setPosition(0);
 
+        // Pitch zero is pointing directly forward
+        // Rotation zero is pointing parallel to the robot
         rightWrist.setPosition(0.5);
         leftWrist.setPosition(0.5);
 

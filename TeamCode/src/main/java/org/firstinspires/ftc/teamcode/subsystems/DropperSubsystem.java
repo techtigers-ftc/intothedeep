@@ -58,9 +58,12 @@ public class DropperSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_dropper_slide");
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_dropper_slide");
+        // Pitch servo zero is all the way around, up against the bar
         rightPitchServo = hardwareMap.get(Servo.class, "right_dropper_pitch");
         leftPitchServo = hardwareMap.get(Servo.class, "left_dropper_pitch");
+        // Rotation servo zero is directly in the transfer position
         rotationServo = hardwareMap.get(Servo.class, "dropper_rotation");
+        // Grab servo zero is at the open position for the claw
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
