@@ -5,9 +5,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberWallAction;
 import org.firstinspires.ftc.teamcode.commands.DropperToHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberTransferAction;
+import org.firstinspires.ftc.teamcode.commands.DropperToHighChamberWallAction;
 import org.firstinspires.ftc.teamcode.commands.DropperToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.DropperToWallAction;
 import org.firstinspires.ftc.teamcode.commands.HangSpecimenAction;
@@ -42,6 +42,8 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         drive.setDefaultCommand(manualDriveCommand);
 
         // MANIPULATOR
+
+        // Intake
         IntakeToPickupAction intakeToPickup =
                 new IntakeToPickupAction(intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
@@ -50,6 +52,39 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 new IntakeToTransferAction(intake, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
 
+        // Reset the intake slide encoders
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+                intake::resetSlides
+        );
+
+        // Toggles the rotation on the intake between two perpendicular positions
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
+                () -> intake.setWristAbsolute(180, 90),
+                () -> intake.setWristAbsolute(180, 0)
+        );
+
+        // Toggles the intake claw between open and closed positions
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+                intake::closeClaw,
+                intake::openClaw
+        );
+
+        Trigger intakeSlidesTrigger = new Trigger(() ->
+                manipulatorGamepad.getLeftY() != 0
+        );
+        intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
+                manipulatorGamepad.getLeftY() * 2));
+
+        IntakeManualRotationCommand intakeManualRotationCommand =
+                new IntakeManualRotationCommand(intake, manipulatorGamepad);
+        Trigger intakeRotationTrigger = new Trigger(() ->
+                (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
+                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
+                        && robotState.getIntakeState() != IntakeState.TRANSFER
+        );
+        intakeRotationTrigger.whileActiveContinuous(intakeManualRotationCommand);
+
+        // Dropper
         DropperToWallAction dropperToWall =
                 new DropperToWallAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
@@ -80,56 +115,24 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
 
-        // Reset the intake slide encoders
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                intake::resetSlides
-        );
-
         // Reset the dropper slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                 dropper::resetSlides
         );
 
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).toggleWhenPressed(
-                () -> intake.setWristAbsolute(180, 90),
-                () -> intake.setWristAbsolute(180, 0)
-        );
+        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
-
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
-                intake::closeClaw,
-                intake::openClaw
-        );
-
+        // Toggles the dropper claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
                 dropper::closeClaw,
                 dropper::openClaw
         );
-
-        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
-
-
-        Trigger intakeSlidesTrigger = new Trigger(() ->
-                manipulatorGamepad.getLeftY() != 0
-        );
-        intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 2));
 
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getRightY() != 0
         );
         dropperSlidesTrigger.whileActiveContinuous(() -> dropper.moveSlidesRelative(
                 manipulatorGamepad.getRightY() * 2));
-
-        IntakeManualRotationCommand intakeManualRotationCommand =
-                new IntakeManualRotationCommand(intake, manipulatorGamepad);
-        Trigger intakeRotationTrigger = new Trigger(() ->
-                (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
-                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
-                        && robotState.getIntakeState() != IntakeState.TRANSFER
-        );
-        intakeRotationTrigger.whileActiveContinuous(intakeManualRotationCommand);
-
     }
 }
