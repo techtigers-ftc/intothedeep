@@ -90,14 +90,14 @@ public class DropperSubsystem extends CloseableSubsystem {
      * Method that moves servo to make the claw open
      */
     public void openClaw() {
-        grabServo.setPosition(1);
+        grabServo.setPosition(CLAW_OPENED_POSITION);
     }
 
     /**
      * Method that moves servo to make the claw close
      */
     public void closeClaw() {
-        grabServo.setPosition(0);
+        grabServo.setPosition(CLAW_CLOSED_POSITION);
     }
 
     /**
