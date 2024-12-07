@@ -204,8 +204,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristAbsolute(getPitch(), rotationAngle);
     }
 
-
-
     @Override
     public void periodic() {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
