@@ -21,9 +21,9 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 29.0 / 25.2;
+    private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double PITCH_GEAR_RATIO = 1.0; // Driver / Follower
@@ -250,6 +250,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setPower(power);
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
 
-        RobotLog.dd("wassup", "Rotation Servo Pos [%s]", rotationServo.getPosition());
+        RobotLog.dd(tag, "Current: %f Target %f",
+                getCurrentSlidePositionInches(), getTargetPositionInches());
     }
 }
