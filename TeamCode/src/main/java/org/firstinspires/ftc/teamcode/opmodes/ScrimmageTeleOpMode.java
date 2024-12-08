@@ -62,9 +62,8 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         );
 
         // Toggles the rotation on the intake between two perpendicular positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).toggleWhenActive(
-                () -> intake.setWristAbsolute(180, 90),
-                () -> intake.setWristAbsolute(180, 0)
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).whenActive(
+                intake::togglePerpendicularRotation
         );
 
         // Toggles the intake claw between open and closed positions
@@ -121,9 +120,8 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
         // Toggles the dropper claw between open and closed positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
-                dropper::closeClaw,
-                dropper::openClaw
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                dropper::toggleClaw
         );
 
         Trigger dropperSlidesTrigger = new Trigger(() ->

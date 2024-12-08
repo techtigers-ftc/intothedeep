@@ -174,6 +174,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
+    /**
+     * Toggles the claw between open and closed
+     */
     public void toggleClaw() {
         if(robotState.getIntakeClawState() == ClawState.CLOSED) {
             openClaw();
@@ -232,6 +235,17 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void setRotationAbsolute(double rotationAngle) {
         setWristAbsolute(getPitch(), rotationAngle);
+    }
+
+    /**
+     * Toggles the rotation of the wrist between 0 and 90
+     */
+    public void togglePerpendicularRotation() {
+        if (getRotation() == 90) {
+            setRotationAbsolute(0);
+        } else {
+            setRotationAbsolute(90);
+        }
     }
 
     /**

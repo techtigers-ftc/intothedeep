@@ -115,6 +115,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Toggles the claw between open and closed
+     */
+    public void toggleClaw() {
+        if(robotState.getDropperClawState() == ClawState.CLOSED) {
+            openClaw();
+        } else {
+            closeClaw();
+        }
+    }
+
+    /**
      * Stops the slides wherever it's currently at
      */
     public void stopSlides() {
