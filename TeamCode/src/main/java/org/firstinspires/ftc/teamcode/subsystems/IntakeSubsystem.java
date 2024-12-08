@@ -67,6 +67,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = leftSlideMotor;
+        resetSlides();
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -80,8 +81,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setDirection(Servo.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setPosition(0);
-        leftClaw.setPosition(0);
+        rightClaw.setPosition(CLAW_OPEN_POSITION);
+        leftClaw.setPosition(CLAW_OPEN_POSITION);
 
         // Pitch zero is pointing directly forward
         // Rotation zero is pointing parallel to the robot
@@ -232,6 +233,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
+
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
