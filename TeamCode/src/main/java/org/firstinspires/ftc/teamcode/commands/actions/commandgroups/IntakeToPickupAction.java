@@ -30,7 +30,7 @@ public class IntakeToPickupAction extends SequentialCommandGroup {
         addCommands(
                 new IntakeOpenAction(intake),
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, 20, 0.5),
+                        new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
                         new IntakeRotationAction(intake, 90, 300)
                 ),
                 new IntakePitchAction(intake, 180, 300)

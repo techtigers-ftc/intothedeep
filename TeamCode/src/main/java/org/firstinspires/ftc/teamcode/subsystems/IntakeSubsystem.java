@@ -144,6 +144,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void resetSlides() {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        moveSlidesAbsolute(0);
     }
 
     /**
