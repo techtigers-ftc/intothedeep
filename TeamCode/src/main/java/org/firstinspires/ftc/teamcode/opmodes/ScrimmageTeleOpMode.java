@@ -130,6 +130,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 manipulatorGamepad.getRightY() != 0
         );
         dropperSlidesTrigger.whileActiveContinuous(() -> dropper.moveSlidesRelative(
-                manipulatorGamepad.getRightY() * 2));
+                manipulatorGamepad.getRightY() * -2));
     }
 }

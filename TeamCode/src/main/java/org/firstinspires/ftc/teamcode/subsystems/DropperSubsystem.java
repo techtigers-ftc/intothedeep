@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -27,13 +26,13 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static double CLAW_OPENED_POSITION = 0;
-    public static double CLAW_CLOSED_POSITION = 0.85;
     private static final double PITCH_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double ROTATION_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double DROPPER_PITCH_RANGE = 355;
     private static final double DROPPER_ROTATION_RANGE = 180;
     private static final double DROPPER_ROTATION_BUFFER = 0;
+    public static double CLAW_OPENED_POSITION = 0;
+    public static double CLAW_CLOSED_POSITION = 1;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -85,9 +84,9 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftPitchServo.setPosition(0);
-        rightPitchServo.setPosition(0);
+        setPitchAbsolute(195);
         setRotationAbsolute(0);
+        openClaw();
     }
 
     /**
@@ -178,7 +177,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void setWristAbsolute(double pitch, double rotation) {
         rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
         leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
-        rotationServo.setPosition((rotation + DROPPER_ROTATION_BUFFER) * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE );
+        rotationServo.setPosition((rotation + DROPPER_ROTATION_BUFFER) * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE);
         robotState.setDropperClawPitch(getPitch());
         robotState.setDropperClawRotation(getRotation());
     }

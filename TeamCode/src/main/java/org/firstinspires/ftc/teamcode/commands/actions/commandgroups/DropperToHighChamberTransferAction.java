@@ -35,9 +35,9 @@ public class DropperToHighChamberTransferAction extends SequentialCommandGroup {
         addCommands(
                 new DropperCloseAction(dropper, 100),
                 new IntakeOpenAction(intake, 200),
-                new DropperSlidesAbsoluteAction(dropper, 7, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, 17, 0.5),
                 new ParallelCommandGroup(
-                        new DropperPitchAction(dropper, 300, 300),
+                        new DropperPitchAction(dropper, 350, 300),
                         new DropperRotationAction(dropper, 180, 300)
                 )
         );
