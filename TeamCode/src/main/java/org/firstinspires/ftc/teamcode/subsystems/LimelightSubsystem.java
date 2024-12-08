@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,19 +31,28 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final ElapsedTime pipelineSwitchTimer;
     private double limelightPythonUpdating;
     private double limelightPythonFreezing;
+    private double yHeight;
+    private double xOffset;
+    private double downwardAngle;
 
     /**
      * Constructor for the LimelightSubsystem
      *
      * @param hardwareMap Used to get the limelight camera from list of hardware devices
      * @param robotState  Used to set limelight values in robotstate
+     * @param yHeight How high the limelight is off the ground
+     * @param xOffset Lateral distance of limelight from robot's center
+     * @param downwardAngle The angle the limelight is facing, in radians
      */
-    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState) {
+    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double yHeight, double xOffset, double downwardAngle) {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         pipelineSwitchTimer = new ElapsedTime();
         limelightPythonUpdating = -1;
         limelightPythonFreezing = -1;
+        this.yHeight = yHeight;
+        this.xOffset = xOffset;
+        this.downwardAngle = downwardAngle;
     }
 
     @Override
@@ -103,18 +113,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
      */
     private void setPythonOutput(double[] pythonOutput) {
         // Checks if the python outputs are valid
-        if (pythonOutput[0] != -1) {
-            //Sets the python outputs in the robot state
-            // TODO: Update these values for the new state
-//            robotState.setBlock(pythonOutput[0]);
-//            robotState.setSampleY(pythonOutput[1]);
-//            robotState.setSampleWidth(pythonOutput[2]);
-//            robotState.setSampleHeight(pythonOutput[3]);
-//            robotState.setSampleOrientation(pythonOutput[4]);
-//            robotState.getBlockDetectionState(true);
-        } else {
-            // Returns to the neural detector pipeline if the python outputs are invalid
+        if (pythonOutput[5] == 0) {
+            robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
+        } else if (pythonOutput[5] == 1) {
+            robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+        } else if (pythonOutput[5] == 2) {
+            robotState.setBlockDetectionState(BlockDetectionState.TRACKING);
         }
     }
 
@@ -175,6 +180,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Checks the validity of the python outputs and sets them if valid,
                 // returns to neural detector if there are no results found
                 RobotLog.dd("TT-LLS", Arrays.toString(pythonOutput));
+                double tx = result.getTx() - downwardAngle;
+                double ty = result.getTy() - downwardAngle;
+                double yDist = yHeight * Math.tan(ty);
+                double xDist = yDist * Math.tan(tx);
+                robotState.setBlockForwardCoarse(yDist);
+                robotState.setBlockLateralCoarse(xDist);
                 setPythonOutput(pythonOutput);
             } else if (result.getPipelineIndex() == NEURAL_DETECTOR_PIPELINE) {
                 double[] detectorCorners = getNeuralDetectorCorners(result.getDetectorResults(), "yellowsample");
