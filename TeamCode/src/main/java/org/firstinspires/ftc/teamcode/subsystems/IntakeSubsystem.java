@@ -174,6 +174,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
+    public void toggleClaw() {
+        if(robotState.getIntakeClawState() == ClawState.CLOSED) {
+            openClaw();
+        } else {
+            closeClaw();
+        }
+    }
+
     /**
      * Sets wrist position in degrees
      *
@@ -241,5 +249,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
+        RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
     }
 }
