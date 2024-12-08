@@ -18,7 +18,7 @@ public class HangSpecimenAction extends SequentialCommandGroup {
     public HangSpecimenAction(DropperSubsystem dropper) {
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 20, 0.25),
+                new DropperSlidesAbsoluteAction(dropper, 15, 0.25),
                 new DropperOpenAction(dropper)
         );
     }
