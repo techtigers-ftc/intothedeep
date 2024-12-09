@@ -31,7 +31,7 @@ public class DropperToHighChamberWallAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new DropperCloseAction(dropper, 100),
-                new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, 16.67, 0.5),
                 new DropperPitchAction(dropper, 300, 300),
                 new DropperRotationAction(dropper, 0, 300)
         );

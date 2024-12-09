@@ -33,10 +33,10 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
                         new IntakePitchAction(intake, 180, 300),
                         new IntakeRotationAction(intake, 90, 300)
                 ),
-                new ParallelCommandGroup(
+//                new ParallelCommandGroup(
                         new IntakePitchAction(intake, 0, 300),
                         new IntakeSlidesAbsoluteAction(intake, 0, 0.5)
-                )
+//                )
         );
     }
 
