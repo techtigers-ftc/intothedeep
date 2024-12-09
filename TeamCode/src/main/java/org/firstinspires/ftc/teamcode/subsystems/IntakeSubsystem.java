@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -33,6 +34,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 1.0; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
+    private static final double CLAW_MIDDLE_POSITION = 0.5;
     private static final double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
@@ -81,13 +83,12 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setDirection(Servo.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setPosition(CLAW_OPEN_POSITION);
-        leftClaw.setPosition(CLAW_OPEN_POSITION);
+        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
 
         // Pitch zero is pointing directly forward
         // Rotation zero is pointing parallel to the robot
-        rightWrist.setPosition(0.5);
-        leftWrist.setPosition(0.5);
+        setWristAbsolute(90, 90);
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -160,8 +161,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        leftClaw.setPosition(CLAW_OPEN_POSITION);
-        rightClaw.setPosition(CLAW_OPEN_POSITION);
+        if(getPitch() <= 90) {
+            leftClaw.setPosition(CLAW_MIDDLE_POSITION);
+            rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+        } else {
+            leftClaw.setPosition(CLAW_OPEN_POSITION);
+            rightClaw.setPosition(CLAW_OPEN_POSITION);
+        }
         robotState.setIntakeClawState(ClawState.OPEN);
     }
 

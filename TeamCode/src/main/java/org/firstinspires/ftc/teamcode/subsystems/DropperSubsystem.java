@@ -83,7 +83,6 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         setPitchAbsolute(195);
         setRotationAbsolute(0);
         openClaw();
