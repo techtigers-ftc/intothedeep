@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -36,10 +38,14 @@ public class VisionSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         double[] foundSample = processor.getFoundSample();
+        double number = processor.isBlockDetected()? 1: 0;
+        BlockDetectionState blockDetectionState = processor.isBlockDetected()? BlockDetectionState.DETECTED : BlockDetectionState.NOT_DETECTED;
+        RobotLog.dd(tag, "is block detected: %f", number);
         if(foundSample[0] != -1) {
             robotState.setBlockLateralFine(foundSample[0]);
             robotState.setBlockForwardFine(foundSample[1]);
             robotState.setBlockOrientation(foundSample[2]);
+            robotState.setBlockDetectionState(blockDetectionState);
             RobotLog.dd(tag, "Block Lateral: %f, Block Forward: %f, Block Orientation: %f", foundSample[0], foundSample[1], foundSample[2]);
         }
     }
