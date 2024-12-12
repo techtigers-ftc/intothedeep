@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -20,6 +21,7 @@ import team.techtigers.base.CloseableSubsystem;
  * Controls both differential servos for the wrist, the two servos that control the claw, and the
  * two motors that control the horizontal slides.
  */
+@Config
 public class IntakeSubsystem extends CloseableSubsystem {
     public static final double FORWARD_KP = 0.025;
     public static final double FORWARD_KI = 0.0;
@@ -32,10 +34,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
-    private static final double DIFFERENTIAL_GEAR_RATIO = 1.0; //Driver / Follower
+    private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.5;
-    private static final double CLAW_CLOSED_POSITION = 1.0;
+    public static double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;

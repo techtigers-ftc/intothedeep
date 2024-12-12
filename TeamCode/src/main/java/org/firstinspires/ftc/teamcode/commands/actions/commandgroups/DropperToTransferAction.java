@@ -33,7 +33,7 @@ public class DropperToTransferAction extends SequentialCommandGroup {
                         new DropperRotationAction(dropper, 0, 300),
                         new DropperOpenAction(dropper)
                 ),
-                new DropperSlidesAbsoluteAction(dropper, 1.5, 0.5)
+                new DropperSlidesAbsoluteAction(dropper, 1, 0.5)
 
         );
     }
