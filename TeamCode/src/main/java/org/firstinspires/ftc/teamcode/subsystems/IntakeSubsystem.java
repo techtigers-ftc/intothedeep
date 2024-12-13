@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.pedropathing.util.Timer;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
@@ -38,12 +41,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
     private final DcMotor encoderMotor;
+    private final DcMotorEx currentMotor;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo leftClaw;
     private final Servo rightClaw;
     private final SlideController slideController;
     private final DifferentialController differentialController;
+    private Timer slidesTimer;
 
 
     /**
@@ -67,6 +72,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = leftSlideMotor;
+        currentMotor = (DcMotorEx) encoderMotor;
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -85,6 +91,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         rightWrist.setPosition(0.5);
         leftWrist.setPosition(0.5);
+
+        slidesTimer = new Timer();
+
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -124,6 +133,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesAbsolute(double distance) {
         slideController.moveToInches(distance);
+        slidesTimer.resetTimer();
     }
 
     /**
@@ -133,6 +143,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesRelative(double distance) {
         slideController.moveToInches(getCurrentSlidePositionInches() + distance);
+        slidesTimer.resetTimer();
     }
 
     /**
@@ -223,6 +234,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideCurrent() {
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
@@ -233,6 +251,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
+
+        if(getSlideCurrent() > 0){
+            moveSlidesRelative(0);
+        }
+        if(slidesTimer.getElapsedTime() > 5000){
+            moveSlidesRelative(0);
+        }
+
+
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
