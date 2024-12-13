@@ -17,7 +17,7 @@ public class LimelightTestOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         // TODO: input actual values below
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, new RobotState(), 10, 5, 0);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, new RobotState(), 10.5, 5.75, 4.7,25);
         registerSubsystems(limelight);
     }
 }

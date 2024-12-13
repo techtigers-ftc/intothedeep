@@ -33,6 +33,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double limelightPythonFreezing;
     private double yHeight;
     private double xOffset;
+    private double yOffset;
     private double downwardAngle;
 
     /**
@@ -42,9 +43,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @param robotState  Used to set limelight values in robotstate
      * @param yHeight How high the limelight is off the ground
      * @param xOffset Lateral distance of limelight from robot's center
-     * @param downwardAngle The angle the limelight is facing, in radians
+     * @param yOffset Distance from the limelight to the front of the slides
+     * @param downwardAngle The angle the limelight is facing, in degrees
      */
-    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double yHeight, double xOffset, double downwardAngle) {
+    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double yHeight, double xOffset, double yOffset, double downwardAngle) {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         pipelineSwitchTimer = new ElapsedTime();
@@ -52,6 +54,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelightPythonFreezing = -1;
         this.yHeight = yHeight;
         this.xOffset = xOffset;
+        this.yOffset = yOffset;
         this.downwardAngle = downwardAngle;
     }
 
@@ -103,6 +106,40 @@ public class LimelightSubsystem extends CloseableSubsystem {
             }
         }
         return new double[]{topLeftX, topLeftY, bottomRightX, bottomRightY};
+    }
+
+    private double[] getCenterCoordinates(LLResultTypes.DetectorResult detection) {
+        double topLeftX = detection.getTargetCorners().get(0).get(0);
+        double topLeftY = detection.getTargetCorners().get(0).get(1);
+        double bottomRightX = detection.getTargetCorners().get(2).get(0);
+        double bottomRightY = detection.getTargetCorners().get(2).get(1);
+        return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
+    }
+
+    private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections, String sampleType) {
+        // Initializes a few variables to be used for comparison of the different detections
+        double centerX = 0;
+        double centerY = 0;
+        double targetXDegrees = 0;
+        double targetYDegrees = 0;
+        for (LLResultTypes.DetectorResult detection : detections) {
+            // Gets the values for the detection to check
+            double newCenterX = getCenterCoordinates(detection)[0];
+            double newCenterY = getCenterCoordinates(detection)[1];
+            // Determines whether a detection is closer to the center of the limelight
+            // than a detection that has already been made
+            if ((distanceFromExtensionPoint(newCenterX, newCenterY) <
+                    distanceFromExtensionPoint(centerX, centerY)) &&
+                    (detection.getClassName().equals(sampleType))) {
+                // Asserts this new block detection as the one closest to the camera center
+                centerX = newCenterX;
+                centerY = newCenterY;
+                // Sets the values of this specific block detection to be used in the periodic
+                targetXDegrees = detection.getTargetXDegrees();
+                targetYDegrees = detection.getTargetYDegrees();
+            }
+        }
+        return new double[]{targetXDegrees, targetYDegrees};
     }
 
     /**
@@ -166,40 +203,54 @@ public class LimelightSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         LLResult result = limelight.getLatestResult();
-        // Checks if the result is null
-        if (result != null) {
-            RobotLog.dd("TT-LLS", String.valueOf(result.getPipelineIndex()));
-            // Checks if the active pipeline is the python pipeline
-            if (result.getPipelineIndex() == PYTHON_PIPELINE) {
-                // Checks if the pickup is complete
-                // Gets the python outputs if the pickup is not complete
-                double[] pythonOutput = result.getPythonOutput();
-                // Checks if the python outputs are updating and resets the
-                // pipeline in order to unfreeze if needed
-                pythonPipelineFreezeCheck(pythonOutput);
-                // Checks the validity of the python outputs and sets them if valid,
-                // returns to neural detector if there are no results found
-                RobotLog.dd("TT-LLS", Arrays.toString(pythonOutput));
-                double tx = result.getTx() - downwardAngle;
-                double ty = result.getTy() - downwardAngle;
-                double yDist = yHeight * Math.tan(ty);
-                double xDist = yDist * Math.tan(tx);
-                robotState.setBlockForwardCoarse(yDist);
-                robotState.setBlockLateralCoarse(xDist);
-                setPythonOutput(pythonOutput);
-            } else if (result.getPipelineIndex() == NEURAL_DETECTOR_PIPELINE) {
-                double[] detectorCorners = getNeuralDetectorCorners(result.getDetectorResults(), "yellowsample");
-                limelight.updatePythonInputs(detectorCorners[0], detectorCorners[1],
-                        detectorCorners[2], detectorCorners[3], 0, 0, 0, 0);
-                RobotLog.dd("TT-LLS", Arrays.toString(
-                        new double[]{detectorCorners[0], detectorCorners[1], detectorCorners[2],
-                                detectorCorners[3]}));
-                // Switches to the python pipeline and begins tracking
-                setPipelineAfterTime(100, PYTHON_PIPELINE);
-            } else {
-                setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
-            }
+        if(result != null) {
+            double[] targetDegrees = getNeuralDetectorTargetDegrees(result.getDetectorResults(), "yellowsample");
+            double tx = targetDegrees[0];
+            double ty = downwardAngle - targetDegrees[1];
+//            double tx = result.getTx();
+//            double ty = result.getTy();
+            double yDist = yHeight * (1 / Math.tan(Math.toRadians(ty))) - yOffset;
+            double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
+            robotState.setBlockForwardCoarse(yDist);
+            robotState.setBlockLateralCoarse(xDist);
+            RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, yDist);
         }
+
+//        //OLD CODE
+//        // Checks if the result is null
+//        if (result != null) {
+//            RobotLog.dd("TT-LLS", String.valueOf(result.getPipelineIndex()));
+//            // Checks if the active pipeline is the python pipeline
+//            if (result.getPipelineIndex() == PYTHON_PIPELINE) {
+//                // Checks if the pickup is complete
+//                // Gets the python outputs if the pickup is not complete
+//                double[] pythonOutput = result.getPythonOutput();
+//                // Checks if the python outputs are updating and resets the
+//                // pipeline in order to unfreeze if needed
+//                pythonPipelineFreezeCheck(pythonOutput);
+//                // Checks the validity of the python outputs and sets them if valid,
+//                // returns to neural detector if there are no results found
+//                RobotLog.dd("python output", Arrays.toString(pythonOutput));
+//                double tx = result.getTx();
+//                double ty = result.getTy() - downwardAngle;
+//                double yDist = yHeight * (1 / Math.tan(ty));
+//                double xDist = yDist * Math.tan(tx);
+//                robotState.setBlockForwardCoarse(yDist);
+//                robotState.setBlockLateralCoarse(xDist);
+//                RobotLog.dd("tx", "tx:%f, ty:%f", tx, ty);
+//            } else if (result.getPipelineIndex() == NEURAL_DETECTOR_PIPELINE) {
+//                double[] detectorCorners = getNeuralDetectorCorners(result.getDetectorResults(), "yellowsample");
+////                limelight.updatePythonInputs(detectorCorners[0], detectorCorners[1],
+////                        detectorCorners[2], detectorCorners[3], 0, 0, 0, 0);
+//                RobotLog.dd("TT-LLS", Arrays.toString(
+//                        new double[]{detectorCorners[0], detectorCorners[1], detectorCorners[2],
+//                                detectorCorners[3]}));
+//                // Switches to the python pipeline and begins tracking
+//                setPipelineAfterTime(100, PYTHON_PIPELINE);
+//            } else {
+//                setPipelineAfterTime(100, NEURAL_DETECTOR_PIPELINE);
+//            }
+//        }
     }
 
     @Override
