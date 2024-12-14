@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -11,6 +12,8 @@ import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -32,7 +35,12 @@ public class VisionSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         webcam = hardwareMap.get(WebcamName.class, "camera");
         this.processor = new SampleDetectionProcessor();
-        visionPortal = new VisionPortal.Builder().setCamera(webcam).addProcessors(processor).setCameraResolution(new Size(1280, 720)).build();
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(webcam)
+                .addProcessors(processor)
+//                .setCameraResolution(new Size(1280, 720))
+//                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .build();
     }
 
     @Override
