@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
-import team.techtigers.core.paths.Waypoint;
-
 public class CoarseAlignCommand extends CommandBase {
     private final double tolerance;
     private final DriveSubsystem drive;
@@ -34,7 +32,7 @@ public class CoarseAlignCommand extends CommandBase {
         // Set the PIDF coefficients
         follower.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
         follower.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0 ,0);
+        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0, 0);
 
         intake.moveSlidesAbsolute(robotState.getBlockForwardCoarse());
 
