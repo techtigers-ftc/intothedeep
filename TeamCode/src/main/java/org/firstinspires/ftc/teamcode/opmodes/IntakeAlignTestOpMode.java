@@ -24,7 +24,7 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         RobotState robotState = new RobotState();
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         // TODO: input actual values below
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, new RobotState(), 10.5, 5.75, 4.7,25);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 4.9, 5.5,25);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
         registerSubsystems(limelight, intake, drive);
