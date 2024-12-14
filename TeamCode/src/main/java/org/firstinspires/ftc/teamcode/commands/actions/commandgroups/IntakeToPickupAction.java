@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
@@ -28,12 +29,13 @@ public class IntakeToPickupAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeOpenAction(intake),
+                new IntakeCloseAction(intake, 200),
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, 20, 0.5),
+                        new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
                         new IntakeRotationAction(intake, 90, 300)
                 ),
-                new IntakePitchAction(intake, 180, 300)
+                new IntakePitchAction(intake, 180, 300),
+                new IntakeOpenAction(intake)
         );
     }
 
