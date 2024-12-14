@@ -40,6 +40,7 @@ public class CoarseAlignDriveAction extends CommandBase {
     @Override
     public void execute() {
         // TODO: add for the edge case where the block is moved by an outside force
+        //maybe track the difference in the limelight lateral value
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 
