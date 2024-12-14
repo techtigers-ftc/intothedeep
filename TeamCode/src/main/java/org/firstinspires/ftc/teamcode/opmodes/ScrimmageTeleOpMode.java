@@ -26,13 +26,15 @@ import team.techtigers.base.BaseOpMode;
 
 @TeleOp(name = "Scrimmage TeleOp Mode", group = "Scrimmage")
 public class ScrimmageTeleOpMode extends BaseOpMode {
+    IntakeSubsystem intake;
+
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         RobotState robotState = new RobotState();
 
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
         registerSubsystems(intake, dropper, drive);
@@ -62,22 +64,18 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         );
 
         // Toggles the rotation on the intake between two perpendicular positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).toggleWhenActive(
-                () -> intake.setWristAbsolute(180, 90),
-                () -> intake.setWristAbsolute(180, 0)
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).whenActive(
+                intake::togglePerpendicularRotation
         );
 
         // Toggles the intake claw between open and closed positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
-                intake::closeClaw,
-                intake::openClaw
-        );
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
         Trigger intakeSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getLeftY() != 0
         );
         intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 2));
+                manipulatorGamepad.getLeftY()));
 
         IntakeManualRotationCommand intakeManualRotationCommand =
                 new IntakeManualRotationCommand(intake, manipulatorGamepad);
@@ -124,15 +122,24 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
         // Toggles the dropper claw between open and closed positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(
-                dropper::closeClaw,
-                dropper::openClaw
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                dropper::toggleClaw
         );
 
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getRightY() != 0
+//                true
         );
-        dropperSlidesTrigger.whileActiveContinuous(() -> dropper.moveSlidesRelative(
-                manipulatorGamepad.getRightY() * 2));
+        dropperSlidesTrigger.whileActiveContinuous(() ->
+                dropper.moveSlidesRelative(
+                -manipulatorGamepad.getRightY() * 2.5)
+
+//                dropper.setSlidesPower(-manipulatorGamepad.getRightY())
+        );
+    }
+
+    @Override
+    public void update() {
+        telemetry.addData("Intake Claw Pos", intake.getClawPosition());
     }
 }

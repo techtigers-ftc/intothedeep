@@ -42,6 +42,9 @@ public class IntakeTestOpmode extends BaseOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
             intakeSubsystem.setWristAbsolute(90, 90);
         });
+        gamepadEx.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
+            intakeSubsystem.setWristAbsolute(180, 90);
+        });
 
 
         Trigger slidesTrigger = new Trigger(() ->
