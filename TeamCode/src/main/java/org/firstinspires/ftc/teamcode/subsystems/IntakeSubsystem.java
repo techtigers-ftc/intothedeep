@@ -9,12 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Timer;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -40,9 +38,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.5;
-    public static double CLAW_CLOSED_POSITION = 1.0;
-    private static final double CLAW_CLOSED_POSITION = 1.0;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    public static double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -136,10 +133,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     *
      * @return the rotation of the claw in degrees
      */
-    public double getClawRotation(){
+    public double getClawRotation() {
         return clawRotation.getPosition() * INTAKE_CLAW_ROTATION_RANGE;
     }
 
@@ -150,7 +146,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesAbsolute(double distance) {
         slideController.moveToInches(distance);
-        slidesTimer.resetTimer();
     }
 
     /**
@@ -160,7 +155,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesRelative(double distance) {
         slideController.moveToInches(getCurrentSlidePositionInches() + distance);
-        slidesTimer.resetTimer();
     }
 
     /**
@@ -185,7 +179,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        if(getPitch() <= 90) {
+        if (getPitch() <= 90) {
             leftClaw.setPosition(CLAW_MIDDLE_POSITION);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
@@ -208,7 +202,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Toggles the claw between open and closed
      */
     public void toggleClaw() {
-        if(robotState.getIntakeClawState() == ClawState.CLOSED) {
+        if (robotState.getIntakeClawState() == ClawState.CLOSED) {
             openClaw();
         } else {
             closeClaw();
@@ -288,21 +282,24 @@ public class IntakeSubsystem extends CloseableSubsystem {
         }
     }
 
-    /** Sets the rotation of the claw.
+    /**
+     * Sets the rotation of the claw.
      *
      * @param rotationAngle the desired rotation of the claw in degrees
      */
-    public void setClawRotationAbsolute(double rotationAngle){
+    public void setClawRotationAbsolute(double rotationAngle) {
         clawRotation.setPosition(rotationAngle / INTAKE_CLAW_ROTATION_RANGE);
     }
 
-    /** Sets the rotation of the claw relative to its current position.
+    /**
+     * Sets the rotation of the claw relative to its current position.
      *
      * @param rotationAngle the desired change in rotation of the claw in degrees
      */
-    public void setClawRotationRelative(double rotationAngle){
+    public void setClawRotationRelative(double rotationAngle) {
         clawRotation.setPosition((getClawPosition() * INTAKE_CLAW_ROTATION_RANGE + rotationAngle) / 180);
     }
+
     /**
      * @return the current draw of the slide motors
      */
@@ -323,7 +320,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
 
-        if(getSlideCurrent() > 3.5){
+        if (getSlideCurrent() > 3.5) {
             moveSlidesRelative(0);
         }
 
