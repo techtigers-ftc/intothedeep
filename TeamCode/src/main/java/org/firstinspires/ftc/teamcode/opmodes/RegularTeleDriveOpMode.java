@@ -16,8 +16,9 @@ public class RegularTeleDriveOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        RobotState robotState = new RobotState();
 
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(drive);
 
         ManualDriveCommand command = new ManualDriveCommand(drive, driverGamepad);
