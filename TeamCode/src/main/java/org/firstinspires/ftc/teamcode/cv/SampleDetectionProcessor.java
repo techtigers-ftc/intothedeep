@@ -22,8 +22,8 @@ import java.util.List;
 
 @Config
 public class SampleDetectionProcessor implements VisionProcessor {
-    private Scalar UPPER_BOUND = new Scalar(170,255,255);
-    private Scalar LOWER_BOUND = new Scalar(80,50,70);
+    private Scalar UPPER_BOUND = new Scalar(30,255,255);
+    private Scalar LOWER_BOUND = new Scalar(10,50,70);
     public static int ERODE_NUMBER = 10;
     private Sample foundSample;
 

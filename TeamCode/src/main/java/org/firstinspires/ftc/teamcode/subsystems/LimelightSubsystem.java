@@ -31,8 +31,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final ElapsedTime pipelineSwitchTimer;
     private double limelightPythonUpdating;
     private double limelightPythonFreezing;
-    private double yHeight;
+    private double height;
     private double xOffset;
+    private double yOffset;
     private double downwardAngle;
 
     /**
@@ -40,18 +41,20 @@ public class LimelightSubsystem extends CloseableSubsystem {
      *
      * @param hardwareMap Used to get the limelight camera from list of hardware devices
      * @param robotState  Used to set limelight values in robotstate
-     * @param yHeight How high the limelight is off the ground
+     * @param height How high the limelight is off the ground
      * @param xOffset Lateral distance of limelight from robot's center
+     * @param yOffset Lateral distance of limelight from robot's center
      * @param downwardAngle The angle the limelight is facing, in radians
      */
-    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double yHeight, double xOffset, double downwardAngle) {
+    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double height, double xOffset, double yOffset, double downwardAngle) {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         pipelineSwitchTimer = new ElapsedTime();
         limelightPythonUpdating = -1;
         limelightPythonFreezing = -1;
-        this.yHeight = yHeight;
+        this.height = height;
         this.xOffset = xOffset;
+        this.yOffset = yOffset;
         this.downwardAngle = downwardAngle;
     }
 
@@ -180,10 +183,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Checks the validity of the python outputs and sets them if valid,
                 // returns to neural detector if there are no results found
                 RobotLog.dd("TT-LLS", Arrays.toString(pythonOutput));
-                double tx = result.getTx() - downwardAngle;
-                double ty = result.getTy() - downwardAngle;
-                double yDist = yHeight * Math.tan(ty);
+                double tx = Math.toRadians(result.getTx());
+                double ty = Math.toRadians(downwardAngle - result.getTy());
+                double yDist = height / Math.tan(ty);
                 double xDist = yDist * Math.tan(tx);
+                RobotLog.dd("TT-LLS", "Tx, Ty  " + tx + "  " + ty);
                 robotState.setBlockForwardCoarse(yDist);
                 robotState.setBlockLateralCoarse(xDist);
                 setPythonOutput(pythonOutput);
