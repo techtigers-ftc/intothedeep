@@ -12,29 +12,25 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public abstract class ServoActionCommand extends CommandBase {
     private final long duration;
     private final ElapsedTime time;
-    private final double expectedServoPos;
+    private final double expectedPos;
     private final double INTERVAL = 30;
     private double linkSize;
-    private double initialServoPos;
+    private double initialPos;
     private int currentLink;
     private boolean isFinished;
 
     /**
      * Initializes all values and throws exceptions for invalid inputs
      *
-     * @param expectedServoPos servo final position
+     * @param expectedPos servo final position
      * @param duration         time for the servo to reach the final position
      */
-    public ServoActionCommand(double expectedServoPos, long duration) {
+    public ServoActionCommand(double expectedPos, long duration) {
         if (duration < 0) {
             throw new IllegalArgumentException("Duration < 0 (arg #3)");
         }
-        if (expectedServoPos > 1 || expectedServoPos < 0) {
-            throw new IllegalArgumentException("Position not between 0 and 1" +
-                    "(arg #2)");
-        }
 
-        this.expectedServoPos = expectedServoPos;
+        this.expectedPos = expectedPos;
         this.duration = (int) (INTERVAL * (int) (duration / INTERVAL));
 
         time = new ElapsedTime();
@@ -45,10 +41,10 @@ public abstract class ServoActionCommand extends CommandBase {
     @Override
     public void initialize() {
         time.reset();
-        initialServoPos = getPosition();
-        double actualDistance = expectedServoPos - initialServoPos;
+        initialPos = getPosition();
+        double actualDistance = expectedPos - initialPos;
         linkSize = actualDistance / (duration / INTERVAL);
-        isFinished = initialServoPos == expectedServoPos;
+        isFinished = initialPos == expectedPos;
     }
 
     @Override
@@ -56,7 +52,7 @@ public abstract class ServoActionCommand extends CommandBase {
         currentLink = (int) (time.milliseconds() / INTERVAL);
 
         isFinished = time.milliseconds() >= duration;
-        double targetPos = isFinished ? expectedServoPos : initialServoPos + (currentLink * linkSize);
+        double targetPos = isFinished ? expectedPos : initialPos + (currentLink * linkSize);
         setPosition(targetPos);
     }
 

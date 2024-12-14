@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.DriveVectors;
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.DriveVectorScaler;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
 
 import java.util.Arrays;
 import java.util.List;

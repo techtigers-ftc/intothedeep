@@ -27,14 +27,14 @@ public class RobotState extends GlobalState {
     private double blockLateralFine;
     private boolean isHorizontalExtended;
     private ClawState intakeClawState;
-    private double intakeClawOrientation;
+    private double intakeClawRotation;
     private double intakeClawPitch;
     private IntakeState intakeState;
-    private RobotBlockPosition hasBlock;
+    private RobotBlockPosition blockPosition;
     private boolean isAscending;
     private boolean isVerticalExtended;
     private double dropperClawPitch;
-    private double dropperClawOrientation;
+    private double dropperClawRotation;
     private ClawState dropperClawState;
     private DropperState dropperState;
 
@@ -54,14 +54,14 @@ public class RobotState extends GlobalState {
         blockLateralFine = 0;
         isHorizontalExtended = false;
         intakeClawState = ClawState.OPEN;
-        intakeClawOrientation = 0;
+        intakeClawRotation = 0;
         intakeClawPitch = 0;
         intakeState = IntakeState.STANDBY;
-        hasBlock = RobotBlockPosition.NONE;
+        blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
         dropperClawPitch = 0;
-        dropperClawOrientation = 0;
+        dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
     }
@@ -99,16 +99,16 @@ public class RobotState extends GlobalState {
     /**
      * @return the current pitch of the dropper claw in degrees
      */
-    public double getDropperClawOrientation() {
-        return dropperClawOrientation;
+    public double getDropperClawRotation() {
+        return dropperClawRotation;
     }
 
     /**
      * Sets the current pitch of the dropper claw
-     * @param dropperClawOrientation the pitch of the dropper claw in degrees
+     * @param dropperClawRotation the pitch of the dropper claw in degrees
      */
-    public void setDropperClawOrientation(double dropperClawOrientation) {
-        this.dropperClawOrientation = dropperClawOrientation;
+    public void setDropperClawRotation(double dropperClawRotation) {
+        this.dropperClawRotation = dropperClawRotation;
     }
 
     /**
@@ -159,16 +159,16 @@ public class RobotState extends GlobalState {
     /**
      * @return the current position of the block the robot is holding
      */
-    public RobotBlockPosition getHasBlock() {
-        return hasBlock;
+    public RobotBlockPosition getBlockPosition() {
+        return blockPosition;
     }
 
     /**
      * Sets the current position of the robot's block
      * @param hasBlock the position of the robot's block
      */
-    public void setHasBlock(RobotBlockPosition hasBlock) {
-        this.hasBlock = hasBlock;
+    public void setBlockPosition(RobotBlockPosition hasBlock) {
+        this.blockPosition = hasBlock;
     }
 
     /**
@@ -204,16 +204,16 @@ public class RobotState extends GlobalState {
     /**
      * @return the current orientation of the robot's intake claw in degrees
      */
-    public double getIntakeClawOrientation() {
-        return intakeClawOrientation;
+    public double getIntakeClawRotation() {
+        return intakeClawRotation;
     }
 
     /**
      * Sets the current orientation of the robot's intake claw
-     * @param intakeClawOrientation the orientation of the robot's intake claw in degrees
+     * @param intakeClawRotation the orientation of the robot's intake claw in degrees
      */
-    public void setIntakeClawOrientation(double intakeClawOrientation) {
-        this.intakeClawOrientation = intakeClawOrientation;
+    public void setIntakeClawRotation(double intakeClawRotation) {
+        this.intakeClawRotation = intakeClawRotation;
     }
 
     /**
