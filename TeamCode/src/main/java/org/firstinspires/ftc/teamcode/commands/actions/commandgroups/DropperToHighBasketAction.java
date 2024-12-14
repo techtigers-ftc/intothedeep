@@ -35,8 +35,8 @@ public class DropperToHighBasketAction extends SequentialCommandGroup {
                 new IntakeOpenAction(intake, 200),
                 new ParallelCommandGroup(
                         new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
-                        new DropperPitchAction(dropper, 0, 300),
-                        new DropperRotationAction(dropper, 180, 300)
+                        new DropperPitchAction(dropper, 120, 300),
+                        new DropperRotationAction(dropper, 0, 300)
                 )
         );
     }
