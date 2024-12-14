@@ -23,8 +23,7 @@ public class DropperTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = dashboard.getTelemetry();
+        robotState = new RobotState();
 
         driverGamepad = new GamepadEx(gamepad1);
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);

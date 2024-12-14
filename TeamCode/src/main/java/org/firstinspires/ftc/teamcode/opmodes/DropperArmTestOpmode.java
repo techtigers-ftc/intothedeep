@@ -29,37 +29,37 @@ public class DropperArmTestOpmode extends BaseOpMode {
 
         // Claw
         gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.openClaw();
+            dropperSubsystem.closeClaw();
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.closeClaw();
+            dropperSubsystem.openClaw();
         }));
 
         // Pitch
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setPitchRelative(-0.05);
+            dropperSubsystem.setPitchRelative(-5);
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setPitchRelative(0.05);
+            dropperSubsystem.setPitchRelative(5);
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setPitchAbsolute(0.5);
+            dropperSubsystem.setPitchAbsolute(355);
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setPitchAbsolute(1);
+            dropperSubsystem.setPitchAbsolute(0);
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setRotationRelative(-0.05);
+            dropperSubsystem.setRotationRelative(-5);
         }));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> {
-            dropperSubsystem.setRotationRelative(0.05);
+            dropperSubsystem.setRotationRelative(5);
         }));
     }
 
