@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.pedropathing.util.Timer;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
@@ -34,17 +38,20 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 1.0; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_CLOSED_POSITION = 1.0;
+    private static final double MAX_CLAW_ROTATION = 180;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
     private final DcMotor encoderMotor;
+    private final DcMotorEx currentMotor;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo leftClaw;
     private final Servo rightClaw;
+    private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
-
+    private Timer slidesTimer;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -60,6 +67,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
         leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+        clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -67,6 +75,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = leftSlideMotor;
+        currentMotor = (DcMotorEx) encoderMotor;
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -85,6 +94,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         rightWrist.setPosition(0.5);
         leftWrist.setPosition(0.5);
+
+        slidesTimer = new Timer();
+
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -118,12 +130,21 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     *
+     * @return the rotation of the claw in degrees
+     */
+    public double getClawRotation(){
+        return clawRotation.getPosition() * 180;
+    }
+
+    /**
      * Moves the Slides to an exact position
      *
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance) {
         slideController.moveToInches(distance);
+        slidesTimer.resetTimer();
     }
 
     /**
@@ -133,6 +154,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesRelative(double distance) {
         slideController.moveToInches(getCurrentSlidePositionInches() + distance);
+        slidesTimer.resetTimer();
     }
 
     /**
@@ -204,6 +226,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the pitch of the wrist relative to where it is, while keeping the rotation the same
+     *
+     * @param pitchAngle the desired pitch of the wrist
+     */
+    public void setPitchRelative(double pitchAngle) {
+        setWristRelative(pitchAngle, 0);
+    }
+
+
+    /**
      * Sets the rotation of the wrist relative to its current position,
      * while keeping the pitch the same
      *
@@ -222,6 +254,28 @@ public class IntakeSubsystem extends CloseableSubsystem {
         setWristAbsolute(getPitch(), rotationAngle);
     }
 
+    /** Sets the rotation of the claw.
+     *
+     * @param rotationAngle the desired rotation of the claw in degrees
+     */
+    public void setClawRotationAbsolute(double rotationAngle){
+        clawRotation.setPosition(rotationAngle / MAX_CLAW_ROTATION);
+    }
+
+    /** Sets the rotation of the claw relative to its current position.
+     *
+     * @param rotationAngle the desired change in rotation of the claw in degrees
+     */
+    public void setClawRotationRelative(double rotationAngle){
+        clawRotation.setPosition((getClawPosition() * MAX_CLAW_ROTATION + rotationAngle) / 180);
+    }
+    /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideCurrent() {
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    }
+
     /**
      * Updates and powers motors every cycle
      */
@@ -233,6 +287,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
+
+        if(getSlideCurrent() > 3.5){
+            moveSlidesRelative(0);
+        }
+
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
