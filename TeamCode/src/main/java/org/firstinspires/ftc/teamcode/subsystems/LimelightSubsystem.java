@@ -31,7 +31,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final ElapsedTime pipelineSwitchTimer;
     private double limelightPythonUpdating;
     private double limelightPythonFreezing;
-    private double yHeight;
+    private double height;
     private double xOffset;
     private double yOffset;
     private double downwardAngle;
@@ -41,18 +41,18 @@ public class LimelightSubsystem extends CloseableSubsystem {
      *
      * @param hardwareMap Used to get the limelight camera from list of hardware devices
      * @param robotState  Used to set limelight values in robotstate
-     * @param yHeight How high the limelight is off the ground
+     * @param height How high the limelight is off the ground
      * @param xOffset Lateral distance of limelight from robot's center
      * @param yOffset Distance from the limelight to the front of the slides
      * @param downwardAngle The angle the limelight is facing, in degrees
      */
-    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double yHeight, double xOffset, double yOffset, double downwardAngle) {
+    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double height, double xOffset, double yOffset, double downwardAngle) {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         pipelineSwitchTimer = new ElapsedTime();
         limelightPythonUpdating = -1;
         limelightPythonFreezing = -1;
-        this.yHeight = yHeight;
+        this.height = height;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.downwardAngle = downwardAngle;
@@ -202,6 +202,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
+
+//        //NEW CODE
         LLResult result = limelight.getLatestResult();
         if(result != null) {
             double[] targetDegrees = getNeuralDetectorTargetDegrees(result.getDetectorResults(), "yellowsample");
@@ -209,7 +211,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double ty = downwardAngle - targetDegrees[1];
 //            double tx = result.getTx();
 //            double ty = result.getTy();
-            double yDist = yHeight * (1 / Math.tan(Math.toRadians(ty)));
+            double yDist = height * (1 / Math.tan(Math.toRadians(ty)));
             double finalYDist = yDist - yOffset;
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
             robotState.setBlockForwardCoarse(finalYDist);
@@ -225,24 +227,26 @@ public class LimelightSubsystem extends CloseableSubsystem {
 //            if (result.getPipelineIndex() == PYTHON_PIPELINE) {
 //                // Checks if the pickup is complete
 //                // Gets the python outputs if the pickup is not complete
-//                double[] pythonOutput = result.getPythonOutput();
+////                double[] pythonOutput = result.getPythonOutput();
 //                // Checks if the python outputs are updating and resets the
 //                // pipeline in order to unfreeze if needed
-//                pythonPipelineFreezeCheck(pythonOutput);
+////                pythonPipelineFreezeCheck(pythonOutput);
 //                // Checks the validity of the python outputs and sets them if valid,
 //                // returns to neural detector if there are no results found
-//                RobotLog.dd("python output", Arrays.toString(pythonOutput));
+////                RobotLog.dd("python output", Arrays.toString(pythonOutput));
 //                double tx = result.getTx();
-//                double ty = result.getTy() - downwardAngle;
-//                double yDist = yHeight * (1 / Math.tan(ty));
-//                double xDist = yDist * Math.tan(tx);
+//                double ty = downwardAngle - result.getTy();
+//                double yDist = height * (1 / Math.tan(Math.toRadians(ty)));
+//                double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
+//                yDist -= yOffset;
 //                robotState.setBlockForwardCoarse(yDist);
 //                robotState.setBlockLateralCoarse(xDist);
 //                RobotLog.dd("tx", "tx:%f, ty:%f", tx, ty);
+//                RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, yDist);
 //            } else if (result.getPipelineIndex() == NEURAL_DETECTOR_PIPELINE) {
 //                double[] detectorCorners = getNeuralDetectorCorners(result.getDetectorResults(), "yellowsample");
-////                limelight.updatePythonInputs(detectorCorners[0], detectorCorners[1],
-////                        detectorCorners[2], detectorCorners[3], 0, 0, 0, 0);
+//                limelight.updatePythonInputs(detectorCorners[0], detectorCorners[1],
+//                        detectorCorners[2], detectorCorners[3], 0, 0, 0, 0);
 //                RobotLog.dd("TT-LLS", Arrays.toString(
 //                        new double[]{detectorCorners[0], detectorCorners[1], detectorCorners[2],
 //                                detectorCorners[3]}));

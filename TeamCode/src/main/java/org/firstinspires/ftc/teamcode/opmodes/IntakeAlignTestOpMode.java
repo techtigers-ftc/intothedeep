@@ -4,8 +4,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.CoarseAlignCommand;
+import org.firstinspires.ftc.teamcode.commands.CoarseAlignDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -24,12 +25,13 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         RobotState robotState = new RobotState();
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         // TODO: input actual values below
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 4.9, 5.5,25);
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+//        IntakeSubsxystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-        registerSubsystems(limelight, intake, drive);
+        registerSubsystems(limelight, drive, odometry);
 
-        CoarseAlignCommand coarseAlignCommand = new CoarseAlignCommand(drive, intake, robotState, 0.5);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(coarseAlignCommand);
+        CoarseAlignDriveAction coarseAlignDriveAction = new CoarseAlignDriveAction(drive, robotState, 0.75);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(coarseAlignDriveAction);
     }
 }

@@ -6,42 +6,50 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
-public class CoarseAlignCommand extends CommandBase {
+/**
+ * A
+ */
+public class CoarseAlignDriveAction extends CommandBase {
     private final double tolerance;
     private final DriveSubsystem drive;
-    private final IntakeSubsystem intake;
     private final RobotState robotState;
     private final Follower follower;
 
-    public CoarseAlignCommand(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState, double tolerance) {
+    public CoarseAlignDriveAction(DriveSubsystem drive, RobotState robotState, double tolerance) {
         this.drive = drive;
-        this.intake = intake;
         this.robotState = robotState;
         this.tolerance = tolerance;
         follower = new Follower(robotState);
-        addRequirements(drive, intake);
     }
 
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        follower.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0, 0);
-
-        intake.moveSlidesAbsolute(robotState.getBlockForwardCoarse());
+        follower.setTranslationalPIDF(0.5, 0, 0.05, 0);
+        follower.setHeadingPIDF(3, 0, 0.05, 0);
+        follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
-        follower.holdPoint(new Point(currentPose.getX() + robotState.getBlockLateralCoarse(), currentPose.getY()), currentPose.getHeading());
+        follower.holdPoint(new Point(currentPose.getX(), currentPose.getY() - robotState.getBlockLateralCoarse()), currentPose.getHeading());
     }
 
     @Override
     public void execute() {
+        // TODO: add for the edge case where the block is moved by an outside force
         drive.drivePedroPath(follower.getCurrentDriveVectors());
+    }
+
+    @Override
+    public boolean isFinished() {
+        return Math.abs(robotState.getBlockLateralCoarse()) < tolerance;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.driveRobotCentric(0,0,0);
     }
 }
