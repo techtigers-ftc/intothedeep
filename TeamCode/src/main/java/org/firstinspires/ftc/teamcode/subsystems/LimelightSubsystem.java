@@ -212,7 +212,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double yDist = yHeight * (1 / Math.tan(Math.toRadians(ty)));
             double finalYDist = yDist - yOffset;
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
-            robotState.setBlockForwardCoarse(yDist);
+            robotState.setBlockForwardCoarse(finalYDist);
             robotState.setBlockLateralCoarse(xDist);
             RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, finalYDist);
         }
