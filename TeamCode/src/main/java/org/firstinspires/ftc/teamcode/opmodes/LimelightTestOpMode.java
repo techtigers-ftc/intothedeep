@@ -15,12 +15,22 @@ import team.techtigers.base.BaseOpMode;
 @Config
 @SuppressWarnings("unused")
 public class LimelightTestOpMode extends BaseOpMode {
-    public static double yOffset = 4.5;
-    public static double yHeight = 10.75;
+    public static double Y_OFFSET = 5.5;
+    public static double Y_HEIGHT = 10.5;
+    public static double X_OFFSET = 4.9;
+    public static double DOWNWARDS_ANGLE = 25;
+    private RobotState robotState;
     @Override
     public void initialize() {
+        robotState = new RobotState();
         // TODO: input actual values below
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, new RobotState(), yHeight, 4.9, yOffset,25);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
         registerSubsystems(limelight);
+    }
+
+    @Override
+    public void update() {
+        telemetry.addData("Lateral Sample Coarse Distance", robotState.getBlockLateralCoarse());
+        telemetry.addData("Forward Sample Coarse Distance", robotState.getBlockForwardCoarse());
     }
 }
