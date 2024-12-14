@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Timer;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -38,7 +37,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 1.0; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_CLOSED_POSITION = 1.0;
-    private static final double MAX_CLAW_ROTATION = 180;
+    private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -63,10 +62,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_intake_slide");
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_intake_slide");
+        //Zero for wrist is straight forward, with the claw facing downwards
         leftWrist = hardwareMap.get(Servo.class, "left_intake_wrist");
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
+        //Claw zero is the most open position of the claw
         leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+        //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
@@ -134,7 +136,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the rotation of the claw in degrees
      */
     public double getClawRotation(){
-        return clawRotation.getPosition() * 180;
+        return clawRotation.getPosition() * INTAKE_CLAW_ROTATION_RANGE;
     }
 
     /**
@@ -259,7 +261,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the claw in degrees
      */
     public void setClawRotationAbsolute(double rotationAngle){
-        clawRotation.setPosition(rotationAngle / MAX_CLAW_ROTATION);
+        clawRotation.setPosition(rotationAngle / INTAKE_CLAW_ROTATION_RANGE);
     }
 
     /** Sets the rotation of the claw relative to its current position.
@@ -267,7 +269,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the claw in degrees
      */
     public void setClawRotationRelative(double rotationAngle){
-        clawRotation.setPosition((getClawPosition() * MAX_CLAW_ROTATION + rotationAngle) / 180);
+        clawRotation.setPosition((getClawPosition() * INTAKE_CLAW_ROTATION_RANGE + rotationAngle) / 180);
     }
     /**
      * @return the current draw of the slide motors
