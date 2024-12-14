@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Timer;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -49,7 +50,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlideController slideController;
     private final DifferentialController differentialController;
     private Timer slidesTimer;
-
 
     /**
      * Initializes a new IntakeSubsystem
@@ -252,13 +252,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
 
-        if(getSlideCurrent() > 0){
+        if(getSlideCurrent() > 3.5){
             moveSlidesRelative(0);
         }
-        if(slidesTimer.getElapsedTime() > 5000){
-            moveSlidesRelative(0);
-        }
-
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
