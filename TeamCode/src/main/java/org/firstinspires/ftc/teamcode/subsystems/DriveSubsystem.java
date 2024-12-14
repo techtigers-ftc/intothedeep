@@ -143,6 +143,8 @@ public class DriveSubsystem extends CloseableSubsystem {
         RobotLog.dd("DriveSubsystem", "FL: %f, BL: %f, FR: %f, BR: %f",
                 wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
+
+
         setMotorPowers(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
     }
 
