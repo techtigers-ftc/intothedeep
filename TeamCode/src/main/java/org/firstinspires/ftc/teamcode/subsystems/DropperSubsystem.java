@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
@@ -32,6 +33,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
     private static final double DROPPER_PITCH_RANGE = 355;
     private static final double DROPPER_ROTATION_RANGE = 180;
+    private static final double GEAR_RATIO = 1;
+    private static final double SERVO_GEAR_RATIO = 1;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -40,12 +43,12 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
-    private final Servo rightPitchServo;
-    private final Servo leftPitchServo;
-    private final Servo rotationServo;
+    private final Servo leftWrist;
+    private final Servo rightWrist;
     private final Servo grabServo;
     private final RobotState robotState;
     private final SlideController slideController;
+    private final DifferentialController differentialController;
 
     /**
      * Initializes dropper subsystem
@@ -58,16 +61,16 @@ public class DropperSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_dropper_slide");
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_dropper_slide");
-        rightPitchServo = hardwareMap.get(Servo.class, "right_dropper_pitch");
-        leftPitchServo = hardwareMap.get(Servo.class, "left_dropper_pitch");
-        rotationServo = hardwareMap.get(Servo.class, "dropper_rotation");
+        leftWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
+        rightWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
+        differentialController = new DifferentialController(GEAR_RATIO, 270, SERVO_GEAR_RATIO);
 
-        leftPitchServo.setDirection(Servo.Direction.REVERSE);
-        rightPitchServo.setDirection(Servo.Direction.FORWARD);
+        leftWrist.setDirection(Servo.Direction.REVERSE);
+        rightWrist.setDirection(Servo.Direction.FORWARD);
 
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -166,9 +169,9 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotation The angle to set the rotation to in degrees
      */
     public void setWristAbsolute(double pitch, double rotation) {
-        rightPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
-        leftPitchServo.setPosition(pitch * PITCH_GEAR_RATIO / DROPPER_PITCH_RANGE);
-        rotationServo.setPosition(rotation * ROTATION_GEAR_RATIO / DROPPER_ROTATION_RANGE);
+        double[] positions = differentialController.calculateServoPositions(pitch, rotation);
+        leftWrist.setPosition(positions[0]);
+        rightWrist.setPosition(positions[1]);
         robotState.setDropperClawPitch(getPitch());
         robotState.setDropperClawRotation(getRotation());
     }
@@ -177,14 +180,14 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @return the pitch of the dropper arm in degrees
      */
     public double getPitch() {
-        return DROPPER_PITCH_RANGE * leftPitchServo.getPosition();
+        return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[0];
     }
 
     /**
      * @return the rotation of the claw in degrees
      */
     public double getRotation() {
-        return DROPPER_ROTATION_RANGE * rotationServo.getPosition();
+        return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[1];
     }
 
     /**
