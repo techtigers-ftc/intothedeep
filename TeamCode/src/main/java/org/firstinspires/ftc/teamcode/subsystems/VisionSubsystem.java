@@ -38,8 +38,6 @@ public class VisionSubsystem extends CloseableSubsystem {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(webcam)
                 .addProcessors(processor)
-//                .setCameraResolution(new Size(1280, 720))
-//                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
     }
 
@@ -49,7 +47,7 @@ public class VisionSubsystem extends CloseableSubsystem {
         double number = processor.isBlockDetected()? 1: 0;
         BlockDetectionState blockDetectionState = processor.isBlockDetected()? BlockDetectionState.DETECTED : BlockDetectionState.NOT_DETECTED;
         RobotLog.dd(tag, "is block detected: %f", number);
-        if(foundSample[0] != -1) {
+        if(processor.isBlockDetected()) {
             robotState.setBlockLateralFine(foundSample[0]);
             robotState.setBlockForwardFine(foundSample[1]);
             robotState.setBlockOrientation(foundSample[2]);

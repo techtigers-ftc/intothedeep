@@ -27,7 +27,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
     public static double U_v = 255;
     public static double L_h = 10;
     public static double L_s = 50;
-    public static double L_v = 70;
+    public static double L_v = 90;
     private Scalar UPPER_BOUND = new Scalar(U_h,U_s,U_v);
     private Scalar LOWER_BOUND = new Scalar(L_h,L_s,L_v);
     public static int ERODE_NUMBER = 10;
@@ -35,6 +35,9 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
+    }
+
+    public SampleDetectionProcessor(){
         foundSample = new double[]{-1, -1, -1};
     }
 
@@ -66,10 +69,10 @@ public class SampleDetectionProcessor implements VisionProcessor {
     public Object processFrame(Mat frame, long captureTimeNanos) {
         Mat processedMat = new Mat();
 
-//        Mat edges = new Mat(frame.rows(), frame.cols(), frame.type());
+        Mat edges = new Mat(frame.rows(), frame.cols(), frame.type());
 
         Imgproc.cvtColor(frame, processedMat, Imgproc.COLOR_RGB2HSV);
-//
+
         Core.inRange(processedMat, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
 
         List<MatOfPoint> contours = getCanny(processedMat);
@@ -119,23 +122,25 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 //Draw center line
                 Imgproc.line(frame, shortMidpoint1, shortMidpoint2, new Scalar(0, 0, 255), 2);
                 //Adding information from the sample to eventually be added to robotState
-                double orientation = Math.atan(slope);
+                double orientation = Math.toDegrees(Math.atan(slope));
                 foundSample = new double[]{avgX, avgY, orientation};
+//                Imgproc.rectangle(frame, new Point(310, 230), new Point(330, 250), new Scalar(0,255, 0));
+//                double[] values = frame.get(320, 240);
                 break;
             } else{
                 foundSample = new double[]{-1, -1, -1};
             }
-
-            // Approximate the contour to a polygon
-//            MatOfPoint2f approxCurve = new MatOfPoint2f();
-//            double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
-//            Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
 //
-//            // Convert back the polygon approximation to MatOfPoint
-//            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
-
-            // Draw the polygon on the image
-//            Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
+//            // Approximate the contour to a polygon
+////            MatOfPoint2f approxCurve = new MatOfPoint2f();
+////            double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
+////            Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
+////
+////            // Convert back the polygon approximation to MatOfPoint
+////            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
+//
+//            // Draw the polygon on the image
+////            Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
         }
         return processedMat;
     }
