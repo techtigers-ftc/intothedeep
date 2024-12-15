@@ -28,8 +28,8 @@ public class DropperToWallAction extends ParallelCommandGroup {
         addCommands(
                 new DropperOpenAction(dropper),
                 new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
-                new DropperPitchAction(dropper, 230, 300),
-                new DropperRotationAction(dropper, 0, 300)
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_POSITION, 300),
+                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_WALL_POSITION, 300)
         );
     }
 
