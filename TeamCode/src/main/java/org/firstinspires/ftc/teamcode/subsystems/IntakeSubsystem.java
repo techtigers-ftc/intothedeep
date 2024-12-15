@@ -282,13 +282,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * @return the current draw of the slide motors
-     */
-    public double getSlideCurrent() {
-        return currentMotor.getCurrent(CurrentUnit.AMPS);
-    }
-
-    /**
      * Toggles the rotation of the wrist between 0 and 90
      */
     public void togglePerpendicularRotation() {
