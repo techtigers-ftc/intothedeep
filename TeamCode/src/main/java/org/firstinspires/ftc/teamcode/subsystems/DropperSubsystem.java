@@ -35,7 +35,12 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double DROPPER_ROTATION_RANGE = 180;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 1;
-    public static final double ROTATION_
+    public static final double ROTATION_TRANSFER_POSITION = 5;
+    public static final double ROTATION_BASKET_POSITION = 0;
+    public static final double ROTATION_CHAMBER_POSITION = 0;
+    public static final double PITCH_TRANSFER_POSITION = 210;
+    public static final double PITCH_BASKET_POSITION = 0;
+    public static final double PITCH_CHAMBER_POSITION = 0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -83,6 +88,9 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        openClaw();
     }
 
     /**
