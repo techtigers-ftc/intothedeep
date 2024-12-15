@@ -21,11 +21,11 @@ public class IntakeTestOpmode extends BaseOpMode {
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
         registerSubsystems(intakeSubsystem);
 
-        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
-            intakeSubsystem.closeClaw();
-        });
         gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
             intakeSubsystem.openClaw();
+        });
+        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
+            intakeSubsystem.closeClaw();
         });
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
             intakeSubsystem.setWristRelative(-5, 0);
@@ -46,6 +46,14 @@ public class IntakeTestOpmode extends BaseOpMode {
             intakeSubsystem.setWristAbsolute(180, 90);
         });
 
+        gamepadEx.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> {
+            intakeSubsystem.setClawRotationRelative(5);
+        });
+
+        gamepadEx.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() -> {
+            intakeSubsystem.setClawRotationRelative(-5);
+        });
+
 
         Trigger slidesTrigger = new Trigger(() ->
                 gamepadEx.getLeftY() != 0
@@ -56,7 +64,9 @@ public class IntakeTestOpmode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("bababoey", gamepad1.left_stick_y);
-        telemetry.addData("Position", intakeSubsystem.getCurrentSlidePositionInches());
+        telemetry.addData("Claw rotation angle", intakeSubsystem.getClawRotation());
+        telemetry.addData("Claw diff pitch", intakeSubsystem.getPitch());
+        telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
+        telemetry.addData("Slides Position", intakeSubsystem.getCurrentSlidePositionInches());
     }
 }

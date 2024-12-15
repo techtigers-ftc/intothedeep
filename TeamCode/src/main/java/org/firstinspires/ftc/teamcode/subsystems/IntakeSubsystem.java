@@ -2,16 +2,17 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -36,16 +37,26 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
-    private static final double CLAW_MIDDLE_POSITION = 0.5;
-    public static double CLAW_CLOSED_POSITION = 1.0;
+    private static final double CLAW_MIDDLE_POSITION = 0.55;
+    private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    public static final double WRIST_PITCH_PICKUP_POSITION = 65;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 20;
+    public static final double WRIST_PITCH_PECK_POSITION = 120;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 170;
+    public static final double WRIST_ROTATION_PICKUP_POSITION = 5;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+    public static final double CLAW_CLOSED_POSITION = 0.8;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
     private final DcMotor encoderMotor;
+    private final DcMotorEx currentMotor;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo leftClaw;
     private final Servo rightClaw;
+    private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
 
@@ -60,10 +71,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_intake_slide");
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_intake_slide");
+        //Zero for wrist is straight forward, with the claw facing downwards
         leftWrist = hardwareMap.get(Servo.class, "left_intake_wrist");
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
+        //Claw zero is the most open position of the claw
         leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+        //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
+        clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -72,6 +87,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = leftSlideMotor;
         resetSlides();
+        currentMotor = (DcMotorEx) encoderMotor;
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -82,15 +98,18 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.FORWARD);
-        leftClaw.setDirection(Servo.Direction.REVERSE);
+        rightClaw.setDirection(Servo.Direction.REVERSE);
+        leftClaw.setDirection(Servo.Direction.FORWARD);
 
-        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
-        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
+//        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+//        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
 
-        // Pitch zero is pointing directly forward
+        // Pitch init is in the transfer position
+        //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
-        setWristAbsolute(90, 90);
+        setWristAbsolute(WRIST_PITCH_TRANSFER_POSITION, WRIST_ROTATION_TRANSFER_POSITION);
+        setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
+        openClaw();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -124,16 +143,19 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the rotation of the claw in degrees
+     */
+    public double getClawRotation() {
+        return clawRotation.getPosition() * INTAKE_CLAW_ROTATION_RANGE;
+    }
+
+    /**
      * Moves the Slides to an exact position
      *
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance) {
-        if (distance < 0){
-            slideController.moveToInches(0);
-        } else{
-            slideController.moveToInches(distance);
-        }
+        slideController.moveToInches(distance);
     }
 
     /**
@@ -142,11 +164,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        if ((getCurrentSlidePositionInches() + distance) < 0){
-            slideController.moveToInches(0);
-        } else {
-            slideController.moveToInches(getCurrentSlidePositionInches() + distance);
-        }
+        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
     }
 
     /**
@@ -171,7 +189,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        if(getPitch() <= 90) {
+        if (getPitch() <= 90) {
             leftClaw.setPosition(CLAW_MIDDLE_POSITION);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
@@ -194,7 +212,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Toggles the claw between open and closed
      */
     public void toggleClaw() {
-        if(robotState.getIntakeClawState() == ClawState.CLOSED) {
+        if (robotState.getIntakeClawState() == ClawState.CLOSED) {
             openClaw();
         } else {
             closeClaw();
@@ -230,9 +248,19 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param pitchAngle the desired pitch of the wrist
      */
-    public void setPitchAbsolute(double pitchAngle) {
+    public void setWristPitchAbsolute(double pitchAngle) {
         setWristAbsolute(pitchAngle, getRotation());
     }
+
+    /**
+     * Sets the pitch of the wrist relative to where it is, while keeping the rotation the same
+     *
+     * @param pitchAngle the desired pitch of the wrist
+     */
+    public void setWristPitchRelative(double pitchAngle) {
+        setWristRelative(pitchAngle, 0);
+    }
+
 
     /**
      * Sets the rotation of the wrist relative to its current position,
@@ -240,7 +268,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param rotationAngle the desired change in rotation of the wrist
      */
-    public void setRotationRelative(double rotationAngle) {
+    public void setWristRotationRelative(double rotationAngle) {
         setWristRelative(0, rotationAngle);
     }
 
@@ -249,7 +277,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param rotationAngle the desired rotation of the wrist
      */
-    public void setRotationAbsolute(double rotationAngle) {
+    public void setWristRotationAbsolute(double rotationAngle) {
         setWristAbsolute(getPitch(), rotationAngle);
     }
 
@@ -258,10 +286,35 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void togglePerpendicularRotation() {
         if (getRotation() == 90) {
-            setRotationAbsolute(0);
+            setClawRotationAbsolute(0);
         } else {
-            setRotationAbsolute(90);
+            setClawRotationAbsolute(90);
         }
+    }
+
+    /**
+     * Sets the rotation of the claw.
+     *
+     * @param rotationAngle the desired rotation of the claw in degrees
+     */
+    public void setClawRotationAbsolute(double rotationAngle) {
+        clawRotation.setPosition(rotationAngle / INTAKE_CLAW_ROTATION_RANGE);
+    }
+
+    /**
+     * Sets the rotation of the claw relative to its current position.
+     *
+     * @param rotationAngle the desired change in rotation of the claw in degrees
+     */
+    public void setClawRotationRelative(double rotationAngle) {
+        setClawRotationAbsolute(getClawRotation() + rotationAngle);
+    }
+
+    /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideCurrent() {
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
     }
 
     /**
@@ -276,6 +329,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
+
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
