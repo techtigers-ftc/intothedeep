@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberWallAction;
@@ -38,8 +39,11 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         registerSubsystems(intake, dropper, drive);
 
         // DRIVER
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
+        
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 
         // MANIPULATOR
 
