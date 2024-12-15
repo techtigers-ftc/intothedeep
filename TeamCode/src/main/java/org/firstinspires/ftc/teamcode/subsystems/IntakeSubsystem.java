@@ -39,14 +39,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
-    public static final double PITCH_PICKUP_POSITION = 65;
-    public static final double PITCH_TRANSFER_POSITION = 20;
-    public static final double PITCH_PECK_POSITION = 120;
-    public static final double ROTATION_TRANSFER_POSITION = 170;
-    public static final double ROTATION_PICKUP_POSITION = 5;
+    public static final double WRIST_PITCH_PICKUP_POSITION = 65;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 20;
+    public static final double WRIST_PITCH_PECK_POSITION = 120;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 170;
+    public static final double WRIST_ROTATION_PICKUP_POSITION = 5;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double CLAW_CLOSED_POSITION = 1.0;
+    public static final double CLAW_CLOSED_POSITION = 0.8;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -107,7 +107,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         // Pitch init is in the transfer position
         //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
-        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        setWristAbsolute(WRIST_PITCH_TRANSFER_POSITION, WRIST_ROTATION_TRANSFER_POSITION);
         setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
         openClaw();
 
