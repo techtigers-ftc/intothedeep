@@ -37,7 +37,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
-    private static final double CLAW_MIDDLE_POSITION = 0.5;
+    private static final double CLAW_MIDDLE_POSITION = 0.55;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     public static final double PITCH_PICKUP_POSITION = 65;
     public static final double PITCH_TRANSFER_POSITION = 20;
@@ -98,17 +98,18 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.FORWARD);
-        leftClaw.setDirection(Servo.Direction.REVERSE);
+        rightClaw.setDirection(Servo.Direction.REVERSE);
+        leftClaw.setDirection(Servo.Direction.FORWARD);
 
-        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
-        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
+//        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+//        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
 
         // Pitch init is in the transfer position
         //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
         setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
+        openClaw();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }

@@ -22,10 +22,10 @@ public class IntakeTestOpmode extends BaseOpMode {
         registerSubsystems(intakeSubsystem);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
-            intakeSubsystem.closeClaw();
+            intakeSubsystem.openClaw();
         });
         gamepadEx.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
-            intakeSubsystem.openClaw();
+            intakeSubsystem.closeClaw();
         });
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
             intakeSubsystem.setWristRelative(-5, 0);
