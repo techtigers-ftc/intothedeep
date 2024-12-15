@@ -87,6 +87,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist.setPosition(0.5);
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
+        resetSlides();
     }
 
     /**

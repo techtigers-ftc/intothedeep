@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**
  * A
@@ -18,6 +17,7 @@ public class CoarseAlignDriveAction extends CommandBase {
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
+    private double targetPosition;
 
     public CoarseAlignDriveAction(DriveSubsystem drive, RobotState robotState, double tolerance) {
         this.drive = drive;
@@ -34,7 +34,8 @@ public class CoarseAlignDriveAction extends CommandBase {
         follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
-        follower.holdPoint(new Point(currentPose.getX(), currentPose.getY() - robotState.getBlockLateralCoarse()), currentPose.getHeading());
+        targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
+        follower.holdPoint(new Point(currentPose.getX(), targetPosition), currentPose.getHeading());
     }
 
     @Override
@@ -46,7 +47,7 @@ public class CoarseAlignDriveAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(robotState.getBlockLateralCoarse()) < tolerance;
+        return Math.abs(targetPosition - robotState.getRobotCurrentPose().getY()) < tolerance;
     }
 
     @Override
