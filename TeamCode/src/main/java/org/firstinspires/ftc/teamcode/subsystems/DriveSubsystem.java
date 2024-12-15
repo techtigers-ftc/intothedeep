@@ -95,15 +95,6 @@ public class DriveSubsystem extends CloseableSubsystem {
      * @param rotation The rotation power
      */
     public void driveRobotCentric(double forward, double strafe, double rotation) {
-        if(robotState.getCurrentGear() == DriveGears.ENGAGED) {
-            strafe = Range.clip(strafe, -0.5, 0.5);
-            rotation = Range.clip(forward, -0.5, 0.5);
-            forward = Range.clip(rotation, -0.5, 0.5);
-        } else {
-            strafe = Range.clip(strafe, -1, 1);
-            forward = Range.clip(forward, -1, 1);
-            rotation = Range.clip(rotation, -1, 1);
-        }
         driveFieldCentric(forward, strafe, rotation, 0.0);
     }
 
@@ -124,14 +115,14 @@ public class DriveSubsystem extends CloseableSubsystem {
         double forwardSpeed;
         double turnSpeed;
 
+        strafeSpeed = Range.clip(strafe, -1, 1);
+        forwardSpeed = Range.clip(forward, -1, 1);
+        turnSpeed = Range.clip(rotation, -1, 1);
+
         if(robotState.getCurrentGear() == DriveGears.ENGAGED) {
-            strafeSpeed = Range.clip(strafe, -0.5, 0.5);
-            forwardSpeed = Range.clip(forward, -0.5, 0.5);
-            turnSpeed = Range.clip(rotation, -0.5, 0.5);
-        } else {
-            strafeSpeed = Range.clip(strafe, -1, 1);
-            forwardSpeed = Range.clip(forward, -1, 1);
-            turnSpeed = Range.clip(rotation, -1, 1);
+            strafeSpeed = strafeSpeed / 2;
+            forwardSpeed = forwardSpeed / 2;
+            turnSpeed = turnSpeed / 2;
         }
 
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
