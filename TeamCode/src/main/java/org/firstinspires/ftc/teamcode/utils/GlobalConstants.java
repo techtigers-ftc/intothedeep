@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.acmerobotics.dashboard.config.Config;
-
 /**
  * Singelton class for constants for the robot, such as alliance color and game period
  **/
@@ -18,8 +16,9 @@ public class GlobalConstants {
     /**
      * Initializes the GlobalConstants instance
      * This should be run at the beginning of the opmode
+     *
      * @param isAuto whether or not the robot is in autonomous mode
-     * @param isRed whether or not the robot is on the red alliance
+     * @param isRed  whether or not the robot is on the red alliance
      */
     public static void initialize(boolean isAuto, boolean isRed) {
         instance = new GlobalConstants(isAuto, isRed);
@@ -29,7 +28,7 @@ public class GlobalConstants {
      * @return the instance of GlobalConstants
      */
     public static GlobalConstants getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             throw new IllegalStateException("GlobalConstants not initialized");
         }
         return instance;
