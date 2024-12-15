@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import java.util.List;
@@ -83,12 +85,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @param detections The list of neural detections to check
      * @return The top left and bottom right corners of the best neural detection
      */
-    private double[] getNeuralDetectorCorners(List<LLResultTypes.DetectorResult> detections, String sampleType) {
+    private double[] getNeuralDetectorCorners(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
         double topLeftX = 0;
         double topLeftY = 0;
         double bottomRightX = 0;
         double bottomRightY = 0;
+        String sampleType = null;
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newTopLeftX = detection.getTargetCorners().get(0).get(0);
