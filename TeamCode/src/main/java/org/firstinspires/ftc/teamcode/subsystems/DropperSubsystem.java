@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -230,10 +229,5 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
-        if(robotState.isVerticalExtended()){
-            robotState.setCurrentGear(DriveGears.ENGAGED);
-        } else {
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
-        }
     }
 }

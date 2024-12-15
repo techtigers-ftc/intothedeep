@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -237,11 +236,5 @@ public class IntakeSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
-
-        if(robotState.isHorizontalExtended()){
-            robotState.setCurrentGear(DriveGears.ENGAGED);
-        } else {
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
-        }
     }
 }

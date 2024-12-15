@@ -58,7 +58,7 @@ public class RobotState extends GlobalState {
         intakeClawState = ClawState.OPEN;
         intakeClawRotation = 0;
         intakeClawPitch = 0;
-        intakeState = IntakeState.STANDBY;
+        intakeState = IntakeState.TRANSFER;
         blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
