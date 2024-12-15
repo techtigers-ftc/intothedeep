@@ -35,6 +35,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double DROPPER_ROTATION_RANGE = 180;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 1;
+    public static final double ROTATION_
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
