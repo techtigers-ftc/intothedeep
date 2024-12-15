@@ -3,36 +3,31 @@ package org.firstinspires.ftc.teamcode.cv;
 import android.graphics.Canvas;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Config
 public class SampleDetectionProcessor implements VisionProcessor {
     public static double SMALLEST_BLOCK_ALLOWED_AREA = 30000;
-    public static double U_R = 25;
-    public static double U_G = 200;
-    public static double U_B = 255;
-    public static double L_R = 15;
-    public static double L_G = 85;
-    public static double L_B = 210;
+    public static double U_H = 30;
+    public static double U_S = 255;
+    public static double U_V = 255;
+    public static double L_H = 10;
+    public static double L_S = 50;
+    public static double L_V = 70;
 
-    private Scalar UPPER_BOUND = new Scalar(U_R, U_G, U_B);
-    private Scalar LOWER_BOUND = new Scalar(L_R, L_G, L_B);
+    private Scalar UPPER_BOUND = new Scalar(U_H, U_S, U_V);
+    private Scalar LOWER_BOUND = new Scalar(L_H, L_S, L_V);
     private double[] foundSample = new double[]{-1,-1,-1};
     private boolean isBlockDetected;
     public static int ERODE_SIZE = 5;
@@ -98,45 +93,49 @@ public class SampleDetectionProcessor implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 //        RobotLog.dd("pipeline", "Processing frame");
-        Mat processedMat = new Mat();
+//        Mat processedMat = new Mat();
 
 //        Mat edges = new Mat(frame.rows(), frame.cols(), frame.type());
 
-        Imgproc.cvtColor(frame, processedMat, Imgproc.COLOR_RGB2HSV);
+//        Imgproc.cvtColor(frame, processedMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
 
-        Imgproc.rectangle(frame, new Point(310, 230), new Point(330, 250), new Scalar(0, 255, 0));
-        double[] values = processedMat.get(320, 240);
+//        Imgproc.rectangle(frame, new Point(310, 230), new Point(330, 250), new Scalar(0, 255, 0));
+//        double[] values = processedMat.get(320, 240);
+//
+//        if (counter < 500) {
+//            counter++;
+//            valuesH[counter] = values[0];
+//            valuesS[counter] = values[1];
+//            valuesV[counter] = values[2];
+//            RobotLog.dd("pipeline!", "Writing...");
+//        }
+//
+//        if (counter > 500){
+//            double minH = Arrays.stream(valuesH).min().getAsDouble();
+//            double minS = Arrays.stream(valuesS).min().getAsDouble();
+//            double minV = Arrays.stream(valuesV).min().getAsDouble();
+//            double maxH = Arrays.stream(valuesH).max().getAsDouble();
+//            double maxS = Arrays.stream(valuesS).max().getAsDouble();
+//            double maxV = Arrays.stream(valuesV).max().getAsDouble();
+//            RobotLog.dd("pipeline!", "Min H: [%f]  Min S: [%f]  Min V: [%f]", minH, minS, minV);
+//            RobotLog.dd("pipeline!", "Max H: [%f]  Max S: [%f]  Max V: [%f]", maxH, maxS, maxV);
+//        }
 
-        if (counter < 500) {
-            counter++;
-            valuesH[counter] = values[0];
-            valuesS[counter] = values[1];
-            valuesV[counter] = values[2];
-            RobotLog.dd("pipeline!", "Writing...");
-        }
-
-        if (counter > 500){
-            double minH = Arrays.stream(valuesH).min().getAsDouble();
-            double minS = Arrays.stream(valuesS).min().getAsDouble();
-            double minV = Arrays.stream(valuesV).min().getAsDouble();
-            double maxH = Arrays.stream(valuesH).max().getAsDouble();
-            double maxS = Arrays.stream(valuesS).max().getAsDouble();
-            double maxV = Arrays.stream(valuesV).max().getAsDouble();
-            RobotLog.dd("pipeline!", "Min H: [%f]  Min S: [%f]  Min V: [%f]", minH, minS, minV);
-            RobotLog.dd("pipeline!", "Max H: [%f]  Max S: [%f]  Max V: [%f]", maxH, maxS, maxV);
-        }
-
-        RobotLog.dd("pipeline", "Pixel color [%f] [%f] [%f]", values[0], values[1], values[2]);
-
-        Core.inRange(processedMat, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
+//        RobotLog.dd("pipeline", "Pixel color [%f] [%f] [%f]", values[0], values[1], values[2]);
+//
+//        Core.inRange(processedMat, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
+        Core.inRange(frame, this.LOWER_BOUND, this.UPPER_BOUND, frame);
+        return frame;
+//        return processedMat;
         //Core.inRange(frame, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
-        List<MatOfPoint> contours = getCanny(processedMat);
-        for (MatOfPoint contour : contours) {
-            MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
-            RotatedRect rotatedRect = Imgproc.minAreaRect(contour2f);
-            Imgproc.rectangle(frame, rotatedRect.boundingRect().tl(), rotatedRect.boundingRect().br(), new Scalar(0, 0, 255));
-        }
-        return processedMat;
+//        List<MatOfPoint> contours = getCanny(processedMat);
+//        for (MatOfPoint contour : contours) {
+//            MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
+//            RotatedRect rotatedRect = Imgproc.minAreaRect(contour2f);
+//            Imgproc.rectangle(frame, rotatedRect.boundingRect().tl(), rotatedRect.boundingRect().br(), new Scalar(0, 0, 255));
+//        }
+//        return processedMat;
 
 //
 //        for (MatOfPoint contour : contours) {
