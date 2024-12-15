@@ -34,12 +34,14 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, dropper, drive);
 
         // DRIVER
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
+
+        
 
         // MANIPULATOR
 
