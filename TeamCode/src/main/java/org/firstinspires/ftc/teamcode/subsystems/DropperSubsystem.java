@@ -27,13 +27,13 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static final double PITCH_TRANSFER_POSITION = 250;
-    public static final double PITCH_WALL_POSITION = 230;
-    public static final double PITCH_BASKET_POSITION = 120;
-    public static final double PITCH_CHAMBER_POSITION = 70;
+    public static final double PITCH_TRANSFER_POSITION = 335;
+    public static final double PITCH_WALL_POSITION = 310;
+    public static final double PITCH_BASKET_POSITION = 210;
+    public static final double PITCH_CHAMBER_POSITION = 30;
     public static final double ROTATION_TRANSFER_POSITION = 5;
     public static final double ROTATION_WALL_POSITION = 5;
-    public static final double ROTATION_BASKET_POSITION = 0;
+    public static final double ROTATION_BASKET_POSITION = 185;
     public static final double ROTATION_CHAMBER_POSITION = 185;
     public static double CLAW_OPENED_POSITION = 0;
     public static double CLAW_CLOSED_POSITION = 0.75;
@@ -71,23 +71,25 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
-        differentialController = new DifferentialController(GEAR_RATIO, 270, SERVO_GEAR_RATIO);
+        differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
+        differentialController.setMaxRange(355, 0);
 
-        leftWrist.setDirection(Servo.Direction.REVERSE);
-        rightWrist.setDirection(Servo.Direction.FORWARD);
+        leftWrist.setDirection(Servo.Direction.FORWARD);
+        rightWrist.setDirection(Servo.Direction.REVERSE);
 
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
-//        resetSlides();
+        resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(0, ROTATION_TRANSFER_POSITION);
+        setWristAbsolute(PITCH_TRANSFER_POSITION, 0);
+//        setPitchAbsolute(PITCH_TRANSFER_POSITION);
         openClaw();
     }
 
@@ -159,7 +161,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
-        slideController.moveToInches(getCurrentSlidePositionInches() + position);
+//        moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
     }
 
     /**
@@ -168,7 +170,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        slideController.moveToInches(position);
+//        slideController.moveToInches(position);
     }
 
     /**
@@ -233,7 +235,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
-        setWristAbsolute(getPitch(), rotationAngle);
+//        setWristAbsolute(getPitch(), rotationAngle);
     }
 
     /**
@@ -242,19 +244,19 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in pitch of the wrist
      */
     public void setRotationRelative(double rotationAngle) {
-        setWristRelative(0, rotationAngle);
+//        setWristRelative(0, rotationAngle);
     }
 
     public void setSlidesPower(double power) {
-        rightSlideMotor.setPower(power);
-        leftSlideMotor.setPower(power);
+//        rightSlideMotor.setPower(power);
+//        leftSlideMotor.setPower(power);
     }
 
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
+//        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+//        leftSlideMotor.setPower(power);
+//        rightSlideMotor.setPower(power);
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
