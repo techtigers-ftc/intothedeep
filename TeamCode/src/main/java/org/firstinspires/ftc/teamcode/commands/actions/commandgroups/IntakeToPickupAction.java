@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
@@ -29,6 +30,7 @@ public class IntakeToPickupAction extends ParallelCommandGroup {
         addCommands(
                 new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
                 new IntakeRotationAction(intake, 0, 300),
+                new IntakeClawRotationAction(intake, 90, 200),
                 new IntakePitchAction(intake, 100, 300),
                 new IntakeOpenAction(intake)
         );

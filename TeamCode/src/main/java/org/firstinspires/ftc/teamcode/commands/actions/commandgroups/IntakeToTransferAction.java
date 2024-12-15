@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
@@ -33,6 +34,7 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakePitchAction(intake, 160, 300),
                         new IntakeRotationAction(intake, 180, 300),
+                        new IntakeClawRotationAction(intake, 90, 200),
                         new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
             )
         );
