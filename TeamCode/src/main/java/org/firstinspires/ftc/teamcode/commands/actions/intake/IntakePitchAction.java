@@ -30,6 +30,6 @@ public class IntakePitchAction extends ServoActionCommand {
 
     @Override
     protected void setPosition(double position) {
-        intake.setPitchAbsolute(position);
+        intake.setWristPitchAbsolute(position);
     }
 }

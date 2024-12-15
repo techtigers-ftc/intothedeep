@@ -248,7 +248,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param pitchAngle the desired pitch of the wrist
      */
-    public void setPitchAbsolute(double pitchAngle) {
+    public void setWristPitchAbsolute(double pitchAngle) {
         setWristAbsolute(pitchAngle, getRotation());
     }
 
@@ -257,7 +257,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param pitchAngle the desired pitch of the wrist
      */
-    public void setPitchRelative(double pitchAngle) {
+    public void setWristPitchRelative(double pitchAngle) {
         setWristRelative(pitchAngle, 0);
     }
 
@@ -268,7 +268,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param rotationAngle the desired change in rotation of the wrist
      */
-    public void setRotationRelative(double rotationAngle) {
+    public void setWristRotationRelative(double rotationAngle) {
         setWristRelative(0, rotationAngle);
     }
 
@@ -277,7 +277,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      *
      * @param rotationAngle the desired rotation of the wrist
      */
-    public void setRotationAbsolute(double rotationAngle) {
+    public void setWristRotationAbsolute(double rotationAngle) {
         setWristAbsolute(getPitch(), rotationAngle);
     }
 
@@ -286,9 +286,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void togglePerpendicularRotation() {
         if (getRotation() == 90) {
-            setRotationAbsolute(0);
+            setClawRotationAbsolute(0);
         } else {
-            setRotationAbsolute(90);
+            setClawRotationAbsolute(90);
         }
     }
 

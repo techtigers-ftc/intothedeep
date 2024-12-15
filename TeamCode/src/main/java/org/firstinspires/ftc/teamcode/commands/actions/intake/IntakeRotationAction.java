@@ -30,6 +30,6 @@ public class IntakeRotationAction extends ServoActionCommand {
 
     @Override
     protected void setPosition(double position) {
-        intake.setRotationAbsolute(position);
+        intake.setWristRotationAbsolute(position);
     }
 }
