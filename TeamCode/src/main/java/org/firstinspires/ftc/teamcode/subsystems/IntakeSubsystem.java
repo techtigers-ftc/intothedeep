@@ -39,6 +39,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.5;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    public static final double PITCH_PICKUP_POSITION = 65;
+    public static final double PITCH_TRANSFER_POSITION = 20;
+    public static final double PITCH_PECK_POSITION = 120;
+    public static final double ROTATION_TRANSFER_POSITION = 170;
+    public static final double ROTATION_PICKUP_POSITION = 5;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
     public static double CLAW_CLOSED_POSITION = 1.0;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
@@ -97,10 +104,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         leftClaw.setPosition(CLAW_MIDDLE_POSITION);
 
-        // Pitch zero is pointing directly forward
+        // Pitch init is in the transfer position
+        //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
-        setWristAbsolute(90, 90);
-        setClawRotationAbsolute(90);
+        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -298,7 +306,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the claw in degrees
      */
     public void setClawRotationRelative(double rotationAngle) {
-        clawRotation.setPosition((getClawPosition() * INTAKE_CLAW_ROTATION_RANGE + rotationAngle) / 180);
+        setClawRotationAbsolute(getClawRotation() + rotationAngle);
     }
 
     /**

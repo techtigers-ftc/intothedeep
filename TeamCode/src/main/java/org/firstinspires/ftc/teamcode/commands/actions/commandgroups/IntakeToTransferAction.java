@@ -29,12 +29,12 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakePitchAction(intake, 80, 200),
-                new IntakeCloseAction(intake),
+                new IntakePitchAction(intake, IntakeSubsystem.PITCH_PECK_POSITION, 100),
+                new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
-                        new IntakePitchAction(intake, 160, 300),
-                        new IntakeRotationAction(intake, 180, 300),
-                        new IntakeClawRotationAction(intake, 90, 200),
+                        new IntakePitchAction(intake, IntakeSubsystem.PITCH_TRANSFER_POSITION, 300),
+                        new IntakeRotationAction(intake, IntakeSubsystem.ROTATION_TRANSFER_POSITION, 300),
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
             )
         );

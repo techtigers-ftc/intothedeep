@@ -64,7 +64,9 @@ public class IntakeTestOpmode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("bababoey", gamepad1.left_stick_y);
-        telemetry.addData("Position", intakeSubsystem.getCurrentSlidePositionInches());
+        telemetry.addData("Claw rotation angle", intakeSubsystem.getClawRotation());
+        telemetry.addData("Claw diff pitch", intakeSubsystem.getPitch());
+        telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
+        telemetry.addData("Slides Position", intakeSubsystem.getCurrentSlidePositionInches());
     }
 }
