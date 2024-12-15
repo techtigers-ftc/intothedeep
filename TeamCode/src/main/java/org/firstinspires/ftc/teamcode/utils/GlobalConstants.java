@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 /**
  * Singelton class for constants for the robot, such as alliance color and game period
  **/
-@Config
 public class GlobalConstants {
     private static GlobalConstants instance;
     public final boolean isAuto;
