@@ -4,8 +4,8 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -29,9 +29,9 @@ public class IntakeToPickupAction extends ParallelCommandGroup {
         addRequirements(intake);
         addCommands(
                 new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
-                new IntakeRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 1000),
+                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 1000),
                 new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 1000),
-                new IntakePitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 1000),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 1000),
                 new IntakeOpenAction(intake)
         );
     }

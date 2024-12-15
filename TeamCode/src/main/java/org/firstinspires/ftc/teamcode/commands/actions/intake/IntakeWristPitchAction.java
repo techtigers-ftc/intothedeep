@@ -5,9 +5,9 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import team.techtigers.base.actions.ServoActionCommand;
 
 /**
- * Action Command to move the intake rotation to a certain position
+ * Action Command to move the intake pitch to a certain position
  */
-public class IntakeRotationAction extends ServoActionCommand {
+public class IntakeWristPitchAction extends ServoActionCommand {
     private final IntakeSubsystem intake;
 
     /**
@@ -17,19 +17,19 @@ public class IntakeRotationAction extends ServoActionCommand {
      * @param expectedServoPos the expected servo position
      * @param duration         the duration of the command
      */
-    public IntakeRotationAction(IntakeSubsystem intake,
-                                double expectedServoPos, long duration) {
+    public IntakeWristPitchAction(IntakeSubsystem intake,
+                                  double expectedServoPos, long duration) {
         super(expectedServoPos, duration);
         this.intake = intake;
     }
 
     @Override
     protected double getPosition() {
-        return intake.getRotation();
+        return intake.getPitch();
     }
 
     @Override
     protected void setPosition(double position) {
-        intake.setWristRotationAbsolute(position);
+        intake.setWristPitchAbsolute(position);
     }
 }
