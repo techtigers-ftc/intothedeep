@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
-import java.util.Arrays;
 import java.util.List;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -21,10 +20,10 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
-    private static final double LIMELIGHT_HRES = 640;
-    private static final double LIMELIGHT_VRES = 480;
     private static final int PYTHON_PIPELINE = 0;
     private static final int NEURAL_DETECTOR_PIPELINE = 4;
+    public static double TARGET_POINT_X = 450;
+    public static double TARGET_POINT_Y = 360;
     public static double FREEZING_CHECK = 900;
     private final RobotState robotState;
     private final Limelight3A limelight;
@@ -39,11 +38,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
     /**
      * Constructor for the LimelightSubsystem
      *
-     * @param hardwareMap Used to get the limelight camera from list of hardware devices
-     * @param robotState  Used to set limelight values in robotstate
-     * @param height How high the limelight is off the ground
-     * @param xOffset Lateral distance of limelight from robot's center
-     * @param yOffset Distance from the limelight to the front of the slides
+     * @param hardwareMap   Used to get the limelight camera from list of hardware devices
+     * @param robotState    Used to set limelight values in robotstate
+     * @param height        How high the limelight is off the ground
+     * @param xOffset       Lateral distance of limelight from robot's center
+     * @param yOffset       Distance from the limelight to the front of the slides
      * @param downwardAngle The angle the limelight is facing, in degrees
      */
     public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double height, double xOffset, double yOffset, double downwardAngle) {
@@ -74,7 +73,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @return The distance from the point to the center of the limelight
      */
     private double distanceFromExtensionPoint(double x, double y) {
-        return Math.sqrt(Math.pow(x - LIMELIGHT_HRES / 2, 2) + Math.pow(y - LIMELIGHT_VRES * 1 / 4, 2));
+        return Math.sqrt(Math.pow(x - TARGET_POINT_X, 2) + Math.pow(y - TARGET_POINT_Y, 2));
     }
 
     /**
@@ -205,7 +204,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
 //        //NEW CODE
         LLResult result = limelight.getLatestResult();
-        if(result != null) {
+        if (result != null) {
             double[] targetDegrees = getNeuralDetectorTargetDegrees(result.getDetectorResults(), "yellowsample");
             double tx = targetDegrees[0];
             double ty = downwardAngle - targetDegrees[1];
