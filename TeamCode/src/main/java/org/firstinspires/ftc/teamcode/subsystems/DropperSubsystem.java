@@ -27,11 +27,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    private static final double PITCH_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double ROTATION_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double DROPPER_PITCH_RANGE = 355;
-    private static final double DROPPER_ROTATION_RANGE = 180;
-    private static final double DROPPER_ROTATION_BUFFER = 0;
     public static final double PITCH_TRANSFER_POSITION = 250;
     public static final double PITCH_WALL_POSITION = 230;
     public static final double PITCH_BASKET_POSITION = 120;
@@ -70,7 +65,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_dropper_slide");
         //Wrist zero is over against the bar, with the rotation in the transfer position
         leftWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
-        rightWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
+        rightWrist = hardwareMap.get(Servo.class, "right_dropper_wrist");
         //Claw zero is open
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
 
@@ -85,15 +80,14 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
-        resetSlides();
+//        resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setPitchAbsolute(250);
-        setRotationAbsolute(0);
+        setWristAbsolute(0, ROTATION_TRANSFER_POSITION);
         openClaw();
     }
 
