@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
@@ -41,6 +43,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
+    private final DcMotorEx currentMotor;
     private final Servo rightPitchServo;
     private final Servo leftPitchServo;
     private final Servo rotationServo;
@@ -77,6 +80,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
+        currentMotor = (DcMotorEx) encoderMotor;
         resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
@@ -242,6 +246,13 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideCurrent() {
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    }
+
+    /**
      * Sets the rotation of the wrist, while keeping the pitch the same
      *
      * @param rotationAngle the desired change in pitch of the wrist
@@ -260,6 +271,11 @@ public class DropperSubsystem extends CloseableSubsystem {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
+
+        if(getSlideCurrent() > 3.5){
+            moveSlidesRelative(0);
+        }
+
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
