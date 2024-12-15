@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -22,25 +22,20 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 24.0 / 16.0; // Driver / Follower
+    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 29.0 / 25.2;
+    private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    private static final double CLAW_OPENED_POSITION = 0;
-    private static final double CLAW_CLOSED_POSITION = 1;
-    private static final double PITCH_GEAR_RATIO = 40.0 / 48.0; // Driver / Follower
-    private static final double ROTATION_GEAR_RATIO = 1.0 / 1.0; // Driver / Follower
+    private static final double PITCH_GEAR_RATIO = 1.0; // Driver / Follower
+    private static final double ROTATION_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double DROPPER_PITCH_RANGE = 355;
     private static final double DROPPER_ROTATION_RANGE = 180;
+    private static final double DROPPER_ROTATION_BUFFER = 0;
+    public static double CLAW_OPENED_POSITION = 0;
+    public static double CLAW_CLOSED_POSITION = 0.75;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 1;
-    public static final double ROTATION_TRANSFER_POSITION = 5;
-    public static final double ROTATION_BASKET_POSITION = 0;
-    public static final double ROTATION_CHAMBER_POSITION = 0;
-    public static final double PITCH_TRANSFER_POSITION = 210;
-    public static final double PITCH_BASKET_POSITION = 0;
-    public static final double PITCH_CHAMBER_POSITION = 0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -62,13 +57,13 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param hardwareMap: is a variable where you configure all the devices in the specific subsystem
      */
     public DropperSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        FtcDashboard ftcDashboard = FtcDashboard.getInstance();
-
         this.robotState = robotState;
         rightSlideMotor = hardwareMap.get(DcMotor.class, "right_dropper_slide");
         leftSlideMotor = hardwareMap.get(DcMotor.class, "left_dropper_slide");
+        //Wrist zero is over against the bar, with the rotation in the transfer position
         leftWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
         rightWrist = hardwareMap.get(Servo.class, "left_dropper_wrist");
+        //Claw zero is open
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
@@ -89,7 +84,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        setPitchAbsolute(250);
+        setRotationAbsolute(0);
         openClaw();
     }
 
@@ -99,6 +95,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void resetSlides() {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        moveSlidesAbsolute(0);
     }
 
     /**
@@ -115,6 +112,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void closeClaw() {
         grabServo.setPosition(CLAW_CLOSED_POSITION);
         robotState.setDropperClawState(ClawState.CLOSED);
+    }
+
+    /**
+     * Toggles the claw between open and closed
+     */
+    public void toggleClaw() {
+        if(robotState.getDropperClawState() == ClawState.CLOSED) {
+            openClaw();
+        } else {
+            closeClaw();
+        }
     }
 
     /**
@@ -235,11 +243,19 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristRelative(0, rotationAngle);
     }
 
+    public void setSlidesPower(double power) {
+        rightSlideMotor.setPower(power);
+        leftSlideMotor.setPower(power);
+    }
+
     @Override
     public void periodic() {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
+
+        RobotLog.dd(tag, "Current: %f Target %f",
+                getCurrentSlidePositionInches(), getTargetPositionInches());
     }
 }

@@ -26,11 +26,11 @@ public class DropperToTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperOpenAction(dropper),
+                new DropperPitchAction(dropper, 250, 300),
+                new DropperRotationAction(dropper, 0, 300),
                 new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
-                new DropperPitchAction(dropper, 210, 300),
-                new DropperRotationAction(dropper, 0, 300)
-        );
+                new DropperOpenAction(dropper)
+                );
     }
 
     @Override

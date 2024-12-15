@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,10 +31,10 @@ public class DropperToHighChamberWallAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new DropperCloseAction(dropper, 100),
-                new DropperSlidesAbsoluteAction(dropper, 5, 0.5),
                 new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
-                        new DropperPitchAction(dropper, 300, 300)
+                        new DropperSlidesAbsoluteAction(dropper, 16, 0.5),
+                        new DropperPitchAction(dropper, 70, 300),
+                        new DropperRotationAction(dropper, 180, 300)
                 )
         );
     }

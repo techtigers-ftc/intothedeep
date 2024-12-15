@@ -33,11 +33,11 @@ public class DropperToHighChamberTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperCloseAction(dropper, 100),
+                new DropperCloseAction(dropper, 200),
                 new IntakeOpenAction(intake, 200),
+                new DropperSlidesAbsoluteAction(dropper, 16, 0.5),
                 new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
-                        new DropperPitchAction(dropper, 300, 300),
+                        new DropperPitchAction(dropper, 70, 300),
                         new DropperRotationAction(dropper, 180, 300)
                 )
         );
