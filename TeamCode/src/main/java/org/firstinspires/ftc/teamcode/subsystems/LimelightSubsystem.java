@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.utils.GlobalConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -92,6 +93,15 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double bottomRightX = 0;
         double bottomRightY = 0;
         String sampleType = null;
+        if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
+            sampleType = "yellowsample";
+        } else if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
+            if(GlobalConstants.getInstance().isRed) {
+                sampleType = "redsample";
+            } else {
+                sampleType = "bluesample";
+            }
+        }
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newTopLeftX = detection.getTargetCorners().get(0).get(0);
@@ -118,27 +128,50 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
-    private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections, String sampleType) {
+    private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
         double centerX = 0;
         double centerY = 0;
         double targetXDegrees = 0;
         double targetYDegrees = 0;
+        String sampleType;
+        if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
+            sampleType = "yellowsample";
+        } else if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
+            if(GlobalConstants.getInstance().isRed) {
+                sampleType = "redsample";
+            } else {
+                sampleType = "bluesample";
+            }
+        }
+
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newCenterX = getCenterCoordinates(detection)[0];
             double newCenterY = getCenterCoordinates(detection)[1];
             // Determines whether a detection is closer to the center of the limelight
             // than a detection that has already been made
-            if ((distanceFromExtensionPoint(newCenterX, newCenterY) <
-                    distanceFromExtensionPoint(centerX, centerY)) &&
-                    (detection.getClassName().equals(sampleType))) {
-                // Asserts this new block detection as the one closest to the camera center
-                centerX = newCenterX;
-                centerY = newCenterY;
-                // Sets the values of this specific block detection to be used in the periodic
-                targetXDegrees = detection.getTargetXDegrees();
-                targetYDegrees = detection.getTargetYDegrees();
+            if (distanceFromExtensionPoint(newCenterX, newCenterY) <
+                    distanceFromExtensionPoint(centerX, centerY)) {
+                // If you are looking for any block, then just take the closest one
+                if(robotState.getBlockColorPreference() == BlockColorPreference.ANY) {
+                    // Asserts this new block detection as the one closest to the camera center
+                    centerX = newCenterX;
+                    centerY = newCenterY;
+                    // Sets the values of this specific block detection to be used in the periodic
+                    targetXDegrees = detection.getTargetXDegrees();
+                    targetYDegrees = detection.getTargetYDegrees();
+                } else {
+                    // If you are looking for a specific block, then only take the closest one of that type
+                    if(detection.getClassName().equals(sampleType)) {
+                        // Asserts this new block detection as the one closest to the camera center
+                        centerX = newCenterX;
+                        centerY = newCenterY;
+                        // Sets the values of this specific block detection to be used in the periodic
+                        targetXDegrees = detection.getTargetXDegrees();
+                        targetYDegrees = detection.getTargetYDegrees();
+                    }
+                }
             }
         }
         return new double[]{targetXDegrees, targetYDegrees};
