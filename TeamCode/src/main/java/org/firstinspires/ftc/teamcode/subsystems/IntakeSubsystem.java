@@ -100,6 +100,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         // Pitch zero is pointing directly forward
         // Rotation zero is pointing parallel to the robot
         setWristAbsolute(90, 90);
+        setClawRotationAbsolute(90);
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
