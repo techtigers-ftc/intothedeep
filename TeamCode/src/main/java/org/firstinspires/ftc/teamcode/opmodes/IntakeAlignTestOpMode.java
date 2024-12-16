@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.utils.GlobalConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
@@ -23,6 +24,7 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        GlobalConstants.initialize(false, true);
         RobotState robotState = new RobotState();
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
