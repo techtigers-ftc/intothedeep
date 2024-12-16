@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
@@ -47,6 +49,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
+    private final DcMotorEx currentMotor;
+    private final Servo rightPitchServo;
+    private final Servo leftPitchServo;
+    private final Servo rotationServo;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo grabServo;
@@ -81,6 +87,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
+        currentMotor = (DcMotorEx) encoderMotor;
         resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
@@ -161,7 +168,11 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
-//        moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
+        if ((getCurrentSlidePositionInches() + position) < 0){
+            slideController.moveToInches(0);
+        } else {
+            slideController.moveToInches(getCurrentSlidePositionInches() + position);
+        }
     }
 
     /**
@@ -170,7 +181,11 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-//        slideController.moveToInches(position);
+        if (position < 0){
+            slideController.moveToInches(0);
+        } else{
+            slideController.moveToInches(position);
+        }
     }
 
     /**
@@ -235,7 +250,14 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
-//        setWristAbsolute(getPitch(), rotationAngle);
+        setWristAbsolute(getPitch(), rotationAngle);
+    }
+
+    /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideCurrent() {
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
     }
 
     /**
@@ -244,19 +266,24 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in pitch of the wrist
      */
     public void setRotationRelative(double rotationAngle) {
-//        setWristRelative(0, rotationAngle);
+        setWristRelative(0, rotationAngle);
     }
 
     public void setSlidesPower(double power) {
-//        rightSlideMotor.setPower(power);
-//        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
+        leftSlideMotor.setPower(power);
     }
 
     @Override
     public void periodic() {
-//        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-//        leftSlideMotor.setPower(power);
-//        rightSlideMotor.setPower(power);
+        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        leftSlideMotor.setPower(power);
+        rightSlideMotor.setPower(power);
+
+        if(getSlideCurrent() > 3.5){
+            moveSlidesRelative(0);
+        }
+
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
