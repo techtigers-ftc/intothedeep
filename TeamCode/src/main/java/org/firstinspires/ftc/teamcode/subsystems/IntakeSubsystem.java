@@ -140,7 +140,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        if ((getCurrentSlidePositionInches() + distance) < 0){
+        if ((getCurrentSlidePositionInches() + distance) < 0 || (getCurrentSlidePositionInches() + distance) > 25){
             slideController.moveToInches(0);
         } else {
             slideController.moveToInches(getCurrentSlidePositionInches() + distance);

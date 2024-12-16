@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.intake;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -12,19 +12,21 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
  * Moves the intake slides to a position inside the claw based on the values from the camera
  * mounted on the claw
  */
+@Config
 public class IntakeFineCameraAction extends CommandBase {
+    private final static double INCHES_PER_PIXEL = 11 / 1280.0;
+    private final static double X_POSITION = 700;
+    public static double SLIDES_INCREMENT = 0.5;
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private final double pixelTolerance;
-    private final static double INCHES_PER_PIXEL = 11 / 1280.0;
-    private final static double X_POSITION = 700;
 
     /**
      * Initializes the command
      *
      * @param intake         the intake subsystem
      * @param robotState     the robot state
-     * @param pixelTolerance      the tolerance for the target position
+     * @param pixelTolerance the tolerance for the target position
      */
     public IntakeFineCameraAction(IntakeSubsystem intake, RobotState robotState, double pixelTolerance) {
         this.intake = intake;
@@ -34,16 +36,20 @@ public class IntakeFineCameraAction extends CommandBase {
 
     @Override
     public void execute() {
-        double positionChange;
-        if(robotState.getBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-                positionChange = 0.5;
+        if (robotState.getBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+//            intake.moveSlidesRelative(SLIDES_INCREMENT);
+//            RobotLog.dd("fine action", "target movement amount: %f", SLIDES_INCREMENT);
         } else {
-            positionChange = (X_POSITION - robotState.getBlockLateralFine()) * INCHES_PER_PIXEL;
-            intake.setRotationAbsolute(90 - robotState.getBlockOrientation());
+//            double positionChange = robotState.getBlockForwardFine() * INCHES_PER_PIXEL;
+//            intake.moveSlidesRelative(X_POSITION - positionChange);
+//            RobotLog.dd("fine action", "target movement amount: %f", (X_POSITION - positionChange));
+
+            
+//            intake.moveSlidesRelative(0);
+            intake.setRotationAbsolute(robotState.getBlockOrientation());
+            // TODO: Fix the INCHES_PER_PIXEL using trig and uncomment above code
+//            intake.setRotationAbsolute(90 - robotState.getBlockOrientation());
         }
-        intake.moveSlidesRelative(positionChange);
-        RobotLog.dd("fine action", "moving slides");
-        RobotLog.dd("fine action", "target movement amount: %f", positionChange);
     }
 
     @Override

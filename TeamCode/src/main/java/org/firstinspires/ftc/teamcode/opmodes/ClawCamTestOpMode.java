@@ -25,16 +25,21 @@ public class ClawCamTestOpMode extends BaseOpMode {
         telemetry = dashboard.getTelemetry();
 
         robotState = new RobotState();
-        GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
+        GamepadEx gamepad = new GamepadEx(gamepad1);
 
         VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, robotState);
-        registerSubsystems(visionSubsystem);
+        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
+
+        registerSubsystems(visionSubsystem, intakeSubsystem);
+
+        IntakeFineCameraAction intakeFineCameraAction = new IntakeFineCameraAction(intakeSubsystem, robotState, 100);
+        gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeFineCameraAction);
     }
 
     @Override
     public void update() {
-        telemetry.addData("Sample X", robotState.getBlockLateralFine());
-        telemetry.addData("Sample Y", robotState.getBlockForwardFine());
+        telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
+        telemetry.addData("Forward Fine", robotState.getBlockForwardFine());
         telemetry.addData("Orientation", robotState.getBlockOrientation());
     }
 }

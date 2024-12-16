@@ -44,9 +44,8 @@ public class VisionSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         double[] foundSample = processor.getFoundSample();
-        double number = processor.isBlockDetected()? 1: 0;
         BlockDetectionState blockDetectionState = processor.isBlockDetected()? BlockDetectionState.DETECTED : BlockDetectionState.NOT_DETECTED;
-        RobotLog.dd(tag, "is block detected: %f", number);
+        RobotLog.dd(tag, "is block detected: %f", processor.isBlockDetected());
         if(processor.isBlockDetected()) {
             robotState.setBlockLateralFine(foundSample[0]);
             robotState.setBlockForwardFine(foundSample[1]);
