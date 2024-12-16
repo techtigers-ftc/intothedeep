@@ -83,23 +83,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // If you detect a yellow sample
         if (detectionColor.equals("yellowsample")) {
             // If the color preference is not alliance, return true, otherwise return false
-            if (colorPreference != BlockColorPreference.ALLIANCE) {
-                return true;
-            } else {
-                return false;
-            }
-            // If you detect an alliance block
+            return colorPreference != BlockColorPreference.ALLIANCE;
+        // If you detect an alliance block
         } else if (detectionColor.equals(allianceBlock)) {
             // If the color preference is not yellow, return true, otherwise return false
-            if (colorPreference != BlockColorPreference.YELLOW) {
-                return true;
-            } else {
-                return false;
-            }
-            // If you detect a block that is not yellow or the color of your alliance, return false
-        } else {
-            return false;
+            return colorPreference != BlockColorPreference.YELLOW;
         }
+        // If you detect a block that is not yellow or the color of your alliance, return false
+        return false;
     }
 
     /**
