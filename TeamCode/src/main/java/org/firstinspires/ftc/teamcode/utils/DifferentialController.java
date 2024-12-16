@@ -21,7 +21,7 @@ public class DifferentialController {
      *
      * @param gearRatio      ratio between follower gear and driver gear as driver gear / follower gear
      * @param maxServoAngle  the maximum range of both servos
-     * @param servoGearRatio the ration between the gear on the servo and the driver gear of the
+     * @param servoGearRatio the ratio between the gear on the servo and the driver gear of the
      *                       differential claw (servo gear / driver gear)
      */
     public DifferentialController(double gearRatio, double maxServoAngle, double servoGearRatio) {

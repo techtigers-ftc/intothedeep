@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * A command group that moves the dropper to the transfer position
  */
-public class DropperToTransferAction extends SequentialCommandGroup {
+public class DropperToTransferAction extends ParallelCommandGroup {
     private final RobotState robotState;
 
     /**
@@ -27,15 +26,11 @@ public class DropperToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 7, 0.5),
-                        new DropperPitchAction(dropper, 195, 300),
-                        new DropperRotationAction(dropper, 0, 300),
-                        new DropperOpenAction(dropper)
-                ),
-                new DropperSlidesAbsoluteAction(dropper, 1.5, 0.5)
-
-        );
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 300),
+                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
+                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
+                new DropperOpenAction(dropper)
+                );
     }
 
     @Override
