@@ -331,10 +331,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
 
-
-        if(getSlideCurrent() > 3.5){
-            moveSlidesRelative(0);
-        }
+//
+//        if(getSlideCurrent() > 3.5){
+//            moveSlidesRelative(0);
+//        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());

@@ -37,6 +37,6 @@ public class IntakeSlidesCoarseAlignAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return  Math.abs(targetPosition - intake.getCurrentSlidePositionInches()) < tolerance;
+        return Math.abs(targetPosition - intake.getCurrentSlidePositionInches()) < tolerance;
     }
 }
