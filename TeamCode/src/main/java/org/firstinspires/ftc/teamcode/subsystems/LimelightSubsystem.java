@@ -25,10 +25,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
     private final Limelight3A limelight;
-    private double height;
-    private double xOffset;
-    private double yOffset;
-    private double downwardAngle;
+    private final double height;
+    private final double xOffset;
+    private final double yOffset;
+    private final double downwardAngle;
 
     /**
      * Constructor for the LimelightSubsystem
