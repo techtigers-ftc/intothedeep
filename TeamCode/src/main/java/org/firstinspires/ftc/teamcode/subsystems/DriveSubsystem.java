@@ -49,6 +49,8 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        this.robotstate = robotState;
+
         for (DcMotor motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
