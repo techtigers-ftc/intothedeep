@@ -50,9 +50,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
     private final DcMotorEx currentMotor;
-    private final Servo rightPitchServo;
-    private final Servo leftPitchServo;
-    private final Servo rotationServo;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo grabServo;
@@ -168,11 +165,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Amount you are incrementing by inches
      */
     public void moveSlidesRelative(double position) {
-        if ((getCurrentSlidePositionInches() + position) < 0){
-            slideController.moveToInches(0);
-        } else {
-            slideController.moveToInches(getCurrentSlidePositionInches() + position);
-        }
+        moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
     }
 
     /**
