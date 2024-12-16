@@ -93,7 +93,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setWristAbsolute(PITCH_TRANSFER_POSITION, 0);
-//        setPitchAbsolute(PITCH_TRANSFER_POSITION);
         openClaw();
     }
 
@@ -243,7 +242,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
-        setWristAbsolute(getPitch(), rotationAngle);
+//        setWristAbsolute(getPitch(), rotationAngle);
     }
 
     /**
