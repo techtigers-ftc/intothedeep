@@ -81,7 +81,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the color of the detection
         String detectionColor = detection.getClassName();
         // If you detect a yellow sample
-        if (detectionColor == "yellowsample") {
+        if (detectionColor.equals("yellowsample")) {
             // If the color preference is not alliance, return true, otherwise return false
             if (colorPreference != BlockColorPreference.ALLIANCE) {
                 return true;
@@ -89,7 +89,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 return false;
             }
             // If you detect an alliance block
-        } else if (detectionColor == allianceBlock) {
+        } else if (detectionColor.equals(allianceBlock)) {
             // If the color preference is not yellow, return true, otherwise return false
             if (colorPreference != BlockColorPreference.YELLOW) {
                 return true;
