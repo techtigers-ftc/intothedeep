@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,13 +26,14 @@ public class DriveSubsystem extends CloseableSubsystem {
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
     private final List<DcMotor> motors;
     private DriveVectorScaler driveVectorScaler;
+    private RobotState robotstate;
 
     /**
      * Constructs a new DriveSubsystem.
      *
      * @param hardwareMap The hardware map, used to get hardware references
      */
-    public DriveSubsystem(HardwareMap hardwareMap) {
+    public DriveSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         frontLeft = hardwareMap.get(DcMotor.class, "left_front");
         frontRight = hardwareMap.get(DcMotor.class, "right_front");
         backLeft = hardwareMap.get(DcMotor.class, "left_back");
@@ -108,6 +111,12 @@ public class DriveSubsystem extends CloseableSubsystem {
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
         double turnSpeed = Range.clip(rotation, -1, 1);
+
+        if(robotstate.getCurrentGear() == DriveGears.ENGAGED) {
+            strafeSpeed = strafeSpeed / 2;
+            forwardSpeed = forwardSpeed / 2;
+            turnSpeed = turnSpeed / 2;
+        }
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
                 forwardSpeed, strafeSpeed, turnSpeed);
 

@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
@@ -37,13 +38,18 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, dropper, drive);
 
         // DRIVER
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
+                () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED),
+                () -> robotState.setCurrentGear(DriveGears.ENGAGED)
+        );
         
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 

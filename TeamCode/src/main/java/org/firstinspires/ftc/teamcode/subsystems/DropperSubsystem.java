@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -274,6 +275,12 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         if(getSlideCurrent() > 3.5){
             moveSlidesRelative(0);
+        }
+
+        if(robotState.isVerticalExtended()){
+            robotState.setCurrentGear(DriveGears.ENGAGED);
+        } else {
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         }
 
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);

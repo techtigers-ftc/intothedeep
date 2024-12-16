@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -37,6 +38,7 @@ public class RobotState extends GlobalState {
     private double dropperClawRotation;
     private ClawState dropperClawState;
     private DropperState dropperState;
+    private DriveGears driveGears;
 
     /**
      * Initializes a new RobotState
@@ -64,6 +66,7 @@ public class RobotState extends GlobalState {
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
+        driveGears = DriveGears.NOT_ENGAGED;
     }
 
     /**
@@ -396,5 +399,20 @@ public class RobotState extends GlobalState {
      */
     public void setRobotVelocity(Waypoint robotVelocity) {
         this.robotVelocity = robotVelocity;
+    }
+    /**
+     *
+     * @return the current gear of the robot
+     */
+    public DriveGears getCurrentGear() {
+        return driveGears;
+    }
+
+    /**
+     * Sets the current gear of the robot
+     * @param gear the gear of the robot
+     */
+    public void setCurrentGear(DriveGears gear) {
+        this.driveGears = gear;
     }
 }

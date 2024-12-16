@@ -12,12 +12,13 @@ import team.techtigers.base.BaseOpMode;
 
 @TeleOp(name = "Regular TeleDrive OpMode", group = "TeleOp")
 public class RegularTeleDriveOpMode extends BaseOpMode {
-
+    private RobotState robotState;
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        robotState = new RobotState();
 
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(drive);
 
         ManualDriveCommand command = new ManualDriveCommand(drive, driverGamepad);

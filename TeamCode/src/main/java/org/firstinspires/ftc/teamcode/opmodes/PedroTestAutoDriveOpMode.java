@@ -17,7 +17,7 @@ public class PedroTestAutoDriveOpMode extends BaseOpMode {
     public void initialize() {
         robotState = new RobotState();
 
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         registerSubsystems(drive, odometry);
 
