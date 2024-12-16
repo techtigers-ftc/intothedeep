@@ -32,6 +32,7 @@ public class IntakeSlidesCoarseAlignAction extends CommandBase {
     @Override
     public void initialize() {
         targetPosition = robotState.getBlockForwardCoarse();
+        //TODO: figure out what we want to do if the robot decides to extend too far
         intake.moveSlidesAbsolute(targetPosition);
     }
 
