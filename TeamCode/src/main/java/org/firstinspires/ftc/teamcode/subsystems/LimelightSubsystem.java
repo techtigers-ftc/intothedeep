@@ -79,6 +79,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return Math.sqrt(Math.pow(x - TARGET_POINT_X, 2) + Math.pow(y - TARGET_POINT_Y, 2));
     }
 
+    private boolean isDetectionPreferedColor(LLResultTypes.DetectorResult detection) {
+
+    }
+
     /**
      * Gets the coordinates, in pixels, of the top left and bottom right corners of the
      * neural detection that is closest to the center of the limelight frame
@@ -134,46 +138,22 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double centerY = 0;
         double targetXDegrees = 0;
         double targetYDegrees = 0;
-        String sampleType;
-        if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
-            sampleType = "yellowsample";
-        } else if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
-            if(GlobalConstants.getInstance().isRed) {
-                sampleType = "redsample";
-            } else {
-                sampleType = "bluesample";
-            }
-        }
-
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newCenterX = getCenterCoordinates(detection)[0];
             double newCenterY = getCenterCoordinates(detection)[1];
             // Determines whether a detection is closer to the center of the limelight
             // than a detection that has already been made
-            if (distanceFromExtensionPoint(newCenterX, newCenterY) <
-                    distanceFromExtensionPoint(centerX, centerY)) {
-                // If you are looking for any block, then just take the closest one
-                if(robotState.getBlockColorPreference() == BlockColorPreference.ANY) {
+            if ((distanceFromExtensionPoint(newCenterX, newCenterY) <
+                    distanceFromExtensionPoint(centerX, centerY)) &&) {
                     // Asserts this new block detection as the one closest to the camera center
                     centerX = newCenterX;
                     centerY = newCenterY;
                     // Sets the values of this specific block detection to be used in the periodic
                     targetXDegrees = detection.getTargetXDegrees();
                     targetYDegrees = detection.getTargetYDegrees();
-                } else {
-                    // If you are looking for a specific block, then only take the closest one of that type
-                    if(detection.getClassName().equals(sampleType)) {
-                        // Asserts this new block detection as the one closest to the camera center
-                        centerX = newCenterX;
-                        centerY = newCenterY;
-                        // Sets the values of this specific block detection to be used in the periodic
-                        targetXDegrees = detection.getTargetXDegrees();
-                        targetYDegrees = detection.getTargetYDegrees();
-                    }
                 }
             }
-        }
         return new double[]{targetXDegrees, targetYDegrees};
     }
 
