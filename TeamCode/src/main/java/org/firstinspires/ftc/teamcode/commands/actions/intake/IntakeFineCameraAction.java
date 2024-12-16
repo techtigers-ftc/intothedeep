@@ -44,9 +44,9 @@ public class IntakeFineCameraAction extends CommandBase {
 //            intake.moveSlidesRelative(X_POSITION - positionChange);
 //            RobotLog.dd("fine action", "target movement amount: %f", (X_POSITION - positionChange));
 
-            
+
 //            intake.moveSlidesRelative(0);
-            intake.setRotationAbsolute(robotState.getBlockOrientation());
+            intake.setClawRotationAbsolute(robotState.getBlockOrientation());
             // TODO: Fix the INCHES_PER_PIXEL using trig and uncomment above code
 //            intake.setRotationAbsolute(90 - robotState.getBlockOrientation());
         }
