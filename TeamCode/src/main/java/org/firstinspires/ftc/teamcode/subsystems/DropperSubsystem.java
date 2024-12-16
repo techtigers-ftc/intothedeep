@@ -35,8 +35,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_WALL_POSITION = 5;
     public static final double ROTATION_BASKET_POSITION = 185;
     public static final double ROTATION_CHAMBER_POSITION = 185;
-    public static double CLAW_OPENED_POSITION = 0;
-    public static double CLAW_CLOSED_POSITION = 0.75;
+    public static double CLAW_OPENED_POSITION = 0.75;
+    public static double CLAW_CLOSED_POSITION = 0;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 1;
     public static double KP = 0.015;

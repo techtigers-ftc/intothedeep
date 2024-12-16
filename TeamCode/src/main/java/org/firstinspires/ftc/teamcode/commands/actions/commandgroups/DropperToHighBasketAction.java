@@ -33,6 +33,7 @@ public class DropperToHighBasketAction extends SequentialCommandGroup {
         addCommands(
                 new DropperCloseAction(dropper, 100),
                 new IntakeOpenAction(intake, 200),
+                new DropperSlidesAbsoluteAction(dropper, 4, 0.5),
                 new ParallelCommandGroup(
                         new DropperSlidesAbsoluteAction(dropper, 25, 0.5),
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300),
