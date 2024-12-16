@@ -46,10 +46,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED),
-                () -> robotState.setCurrentGear(DriveGears.ENGAGED)
-        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
         
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 

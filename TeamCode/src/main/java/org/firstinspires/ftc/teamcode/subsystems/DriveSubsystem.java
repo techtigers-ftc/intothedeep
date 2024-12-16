@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the drivebase.
  */
 public class DriveSubsystem extends CloseableSubsystem {
+    private static final double GEAR_MULTIPLIER = 0.5;
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
     private final List<DcMotor> motors;
     private DriveVectorScaler driveVectorScaler;
@@ -113,9 +115,9 @@ public class DriveSubsystem extends CloseableSubsystem {
         double turnSpeed = Range.clip(rotation, -1, 1);
 
         if(robotstate.getCurrentGear() == DriveGears.ENGAGED) {
-            strafeSpeed = strafeSpeed / 2;
-            forwardSpeed = forwardSpeed / 2;
-            turnSpeed = turnSpeed / 2;
+            strafeSpeed *= GEAR_MULTIPLIER;
+            forwardSpeed *= GEAR_MULTIPLIER;
+            turnSpeed *= GEAR_MULTIPLIER;
         }
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
                 forwardSpeed, strafeSpeed, turnSpeed);
@@ -168,6 +170,13 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRight.setPower(fr);
         backLeft.setPower(bl);
         backRight.setPower(br);
+    }
+    public void toggleDriveGears() {
+        if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
+            robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);
+        } else {
+            robotstate.setCurrentGear(DriveGears.ENGAGED);
+        }
     }
 
     /**
