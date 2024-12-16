@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.utils.GlobalConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import java.util.List;
 
@@ -153,6 +154,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
             }
+        }
+        if (targetXDegrees == 0 && targetYDegrees == 0) {
+            robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+        } else {
+            robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
         }
         return new double[]{targetXDegrees, targetYDegrees};
     }
