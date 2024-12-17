@@ -6,12 +6,12 @@ import java.util.Arrays;
  * A rectangle
  */
 public class Rectangle {
+    public Point center;
     /**
      * Top right, bottom left, and center
      */
     private Point topRight;
     private Point bottomLeft;
-    public Point center;
 
 
     /**
@@ -67,22 +67,4 @@ public class Rectangle {
         bottomLeft = bottomLeft.multiply(factor);
         center = center.multiply(factor);
     }
-
-    /**
-     * Translate the rectangle by the provided vector
-     * @param point The translation vector
-     * @return The translated rectangle
-     */
-    public Rectangle translate(Point point) {
-        return new Rectangle(topRight.add(point), bottomLeft.add(point));
-    }
-
-    public Point getTopRight() {
-        return topRight;
-    }
-
-    public Point getBottomLeft() {
-        return bottomLeft;
-    }
-
 }
