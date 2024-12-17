@@ -110,7 +110,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
                         new Point[]{rectPoints[1], rectPoints[2]};
                 //Find the slope of the long side
                 double slope = (longSidePoints[1].y - longSidePoints[0].y) / (longSidePoints[1].x - longSidePoints[0].x);
-                RobotLog.dd("Vision", String.valueOf(slope));
+                RobotLog.dd("slope", String.valueOf(slope));
                 //Find out which sides are the short sides of the rectangle
                 Point[] shortSidePoints = Math.hypot(rectPoints[0].x - rectPoints[1].x, rectPoints[0].y - rectPoints[1].y)
                         < Math.hypot(rectPoints[1].x - rectPoints[2].x, rectPoints[1].y - rectPoints[2].y) ?
@@ -127,7 +127,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
 //                Imgproc.rectangle(frame, new Point(310, 230), new Point(330, 250), new Scalar(0,255, 0));
 //                double[] values = frame.get(320, 240);
                 break;
-            } else{
+            } else {
                 foundSample = new double[]{-1, -1, -1};
             }
 //

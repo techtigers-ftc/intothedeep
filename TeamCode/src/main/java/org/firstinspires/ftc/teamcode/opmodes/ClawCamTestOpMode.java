@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.robot.Robot;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeFineCameraPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeFineCameraAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeFineRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -19,21 +15,23 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 public class ClawCamTestOpMode extends BaseOpMode {
     private RobotState robotState;
+
     @Override
     public void initialize() {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = dashboard.getTelemetry();
-
         robotState = new RobotState();
         GamepadEx gamepad = new GamepadEx(gamepad1);
 
         VisionSubsystem visionSubsystem = new VisionSubsystem(hardwareMap, robotState);
-        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
 
-        registerSubsystems(visionSubsystem, intakeSubsystem);
+        registerSubsystems(visionSubsystem, intake);
 
-        IntakeFineCameraAction intakeFineCameraAction = new IntakeFineCameraAction(intakeSubsystem, robotState, 100);
-        gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeFineCameraAction);
+        IntakeToPickupAction intakeToPickup =
+                new IntakeToPickupAction(intake, robotState);
+        gamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
+
+        IntakeFineRotationAction intakeFineRotationAction = new IntakeFineRotationAction(intake, robotState);
+        gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeFineRotationAction);
     }
 
     @Override

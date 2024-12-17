@@ -1,19 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import android.util.Size;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvWebcam;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -44,13 +37,11 @@ public class VisionSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         double[] foundSample = processor.getFoundSample();
-        BlockDetectionState blockDetectionState = processor.isBlockDetected()? BlockDetectionState.DETECTED : BlockDetectionState.NOT_DETECTED;
 //        RobotLog.dd(tag, "is block detected: %f", processor.isBlockDetected());
-        if(processor.isBlockDetected()) {
+        if (processor.isBlockDetected()) {
             robotState.setBlockLateralFine(foundSample[0]);
             robotState.setBlockForwardFine(foundSample[1]);
             robotState.setBlockOrientation(foundSample[2]);
-            robotState.setBlockDetectionState(blockDetectionState);
             RobotLog.dd(tag, "Block Lateral: %f, Block Forward: %f, Block Orientation: %f", foundSample[0], foundSample[1], foundSample[2]);
         }
     }
