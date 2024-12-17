@@ -44,6 +44,5 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         robotState.setIntakeState(IntakeState.TRANSFER);
         robotState.setBlockPosition(RobotBlockPosition.INTAKE);
-
     }
 }
