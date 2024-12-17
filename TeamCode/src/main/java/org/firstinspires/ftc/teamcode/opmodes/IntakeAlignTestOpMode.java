@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.CoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -25,11 +26,11 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        GamepadEx driverGamepad = new GamepadEx(gamepad1);
-
         GlobalConstants.initialize(false, true);
-        robotState = new RobotState();
+        GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
+        robotState = new RobotState();
+
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         // TODO: input values to global constants
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 3.9, 7.5, 25);
@@ -37,12 +38,18 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);
         registerSubsystems(limelight, intake, drive, odometry);
 
+        // DRIVER
+
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
+
+        // MANIPULATOR
+
         CoarseAlignAction coarseAlignAction = new CoarseAlignAction(intake, drive, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(coarseAlignAction);
 
-        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
+        IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, drive, robotState);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeVisionPickupAction);
     }
 
     @Override
