@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * Moves the intake slides to a position based on the coarse value obtained from the limelight
  */
-public class IntakeCoarseSlidesAlignAction extends CommandBase {
+public class IntakeCoarseAlignSlidesAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private final double tolerance;
@@ -21,7 +21,7 @@ public class IntakeCoarseSlidesAlignAction extends CommandBase {
      * @param robotState the robot state
      * @param tolerance  the tolerance for the target position
      */
-    public IntakeCoarseSlidesAlignAction(IntakeSubsystem intake, RobotState robotState, double tolerance) {
+    public IntakeCoarseAlignSlidesAction(IntakeSubsystem intake, RobotState robotState, double tolerance) {
         this.intake = intake;
         this.robotState = robotState;
         this.tolerance = tolerance;

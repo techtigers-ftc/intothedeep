@@ -1,33 +1,68 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignSlidesAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeFineRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * A command group that automically picks up a specimen using the vision system and limelight
+ * A command group that automatically picks up a specimen using the vision system and limelight
  */
 public class IntakeVisionPickupAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeToTransferAction
+     * Creates a new IntakeVisionPickupAction
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeVisionPickupAction(IntakeSubsystem intake, RobotState robotState) {
+    public IntakeVisionPickupAction(IntakeSubsystem intake, DriveSubsystem drive, RobotState robotState) {
         this.robotState = robotState;
-        addCommands();
+        addRequirements(intake, drive);
+        addCommands(
+                // MOVE SERVOS TO PICKUP
+                new ParallelCommandGroup(
+                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 1000),
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 1000),
+                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 1000),
+                        new IntakeOpenAction(intake)
+                ),
+                // RUNS COARSE ALIGNMENT
+                new ParallelCommandGroup(
+                        new DriveCoarseAlignAction(drive, robotState, 0.5),
+                        new IntakeCoarseAlignSlidesAction(intake, robotState, 0.5)
+                ),
+                // RUNS FINE ORIENTATION ALIGNMENT
+                new IntakeFineRotationAction(intake, robotState),
+                // MOVE INTAKE TO PICKUP POSITION
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 150),
+                new IntakeCloseAction(intake, 150),
+                new ParallelCommandGroup(
+                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 400),
+                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 400)
+                ),
+                new IntakeSlidesAbsoluteAction(intake, 0, 0.5)
+        );
     }
 
     @Override
     public void end(boolean interrupted) {
         robotState.setIntakeState(IntakeState.TRANSFER);
         robotState.setBlockPosition(RobotBlockPosition.INTAKE);
-
     }
 }

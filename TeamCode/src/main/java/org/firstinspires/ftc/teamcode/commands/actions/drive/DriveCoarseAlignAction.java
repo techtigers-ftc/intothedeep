@@ -12,14 +12,14 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A
  */
-public class CoarseAlignDriveAction extends CommandBase {
+public class DriveCoarseAlignAction extends CommandBase {
     private final double tolerance;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
     private double targetPosition;
 
-    public CoarseAlignDriveAction(DriveSubsystem drive, RobotState robotState, double tolerance) {
+    public DriveCoarseAlignAction(DriveSubsystem drive, RobotState robotState, double tolerance) {
         this.drive = drive;
         this.robotState = robotState;
         this.tolerance = tolerance;
