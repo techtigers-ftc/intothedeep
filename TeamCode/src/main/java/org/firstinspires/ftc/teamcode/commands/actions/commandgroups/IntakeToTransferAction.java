@@ -31,12 +31,12 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 150),
                 new IntakeCloseAction(intake, 150),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                 new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 400),
                         new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 400)
-                ),
-                new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 300),
+                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
+                )
         );
     }
 
