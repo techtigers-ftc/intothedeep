@@ -17,12 +17,12 @@ public class TestPedroAutoDriveCommand extends PedroAutoDriveCommandBase {
      */
     public TestPedroAutoDriveCommand(DriveSubsystem drive, RobotState robotState) {
         super(drive, robotState);
-//        setTranslationalPIDF(1, 0, 0.1, 0);
-//        setHeadingPIDF(1, 0.1, 0, 0);
-//        setDrivePIDF(1, 0.1, 0, 0.1, 0);
-        setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0 ,0);
+        setTranslationalPIDF(0.3, 0, 0.045, 0);
+        setHeadingPIDF(3, 0, 0.05, 0);
+        setDrivePIDF(0.003, 0, 0.00006, 0, 0);
+//        setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
+//        setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
+//        setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0 ,0);
         setPathChain(follower.pathBuilder().addBezierLine(new Point(0, 0), new Point(30,-40)).setLinearHeadingInterpolation(0,-Math.PI/2).build());
     }
 }

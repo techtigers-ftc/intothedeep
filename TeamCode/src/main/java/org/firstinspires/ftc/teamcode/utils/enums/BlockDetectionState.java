@@ -8,5 +8,4 @@ public enum BlockDetectionState {
     TRACKING,
     READY_TO_GRAB,
     NOT_DETECTED
-
-    }
+}

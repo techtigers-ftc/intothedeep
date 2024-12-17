@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotErrors;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -37,6 +38,7 @@ public class RobotState extends GlobalState {
     private double dropperClawRotation;
     private ClawState dropperClawState;
     private DropperState dropperState;
+    private int robotErrors;
 
     /**
      * Initializes a new RobotState
@@ -64,6 +66,7 @@ public class RobotState extends GlobalState {
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
+        robotErrors = 0;
     }
 
     /**
@@ -396,5 +399,30 @@ public class RobotState extends GlobalState {
      */
     public void setRobotVelocity(Waypoint robotVelocity) {
         this.robotVelocity = robotVelocity;
+    }
+
+    /**
+     * Sets a particular robot error to true
+     * @param error the error to set
+     */
+    public void setError(RobotErrors error) {
+        this.robotErrors |= error.code;
+    }
+
+    /**
+     * Clears a particular robot error
+     * @param error the error to clear
+     */
+    public void clearError(RobotErrors error) {
+        this.robotErrors &= ~error.code;
+    }
+
+    /**
+     * Checks if a particular robot error is set
+     * @param error the error to check
+     * @return true if the error is set, false otherwise
+     */
+    public boolean hasError(RobotErrors error) {
+        return (this.robotErrors & error.code) != 0;
     }
 }
