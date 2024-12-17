@@ -277,12 +277,6 @@ public class DropperSubsystem extends CloseableSubsystem {
             moveSlidesRelative(0);
         }
 
-        if(robotState.isVerticalExtended()){
-            robotState.setCurrentGear(DriveGears.ENGAGED);
-        } else {
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
-        }
-
         robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",

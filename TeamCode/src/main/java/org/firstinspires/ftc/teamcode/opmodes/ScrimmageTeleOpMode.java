@@ -29,12 +29,13 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp(name = "Scrimmage TeleOp Mode", group = "Scrimmage")
 public class ScrimmageTeleOpMode extends BaseOpMode {
     IntakeSubsystem intake;
+    RobotState robotState;
 
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
-        RobotState robotState = new RobotState();
+        robotState = new RobotState();
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
@@ -149,4 +150,5 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake Claw Pos", intake.getClawPosition());
     }
+
 }

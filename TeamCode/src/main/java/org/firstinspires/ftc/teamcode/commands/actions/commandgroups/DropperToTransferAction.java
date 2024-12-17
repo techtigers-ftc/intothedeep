@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAc
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
@@ -41,5 +42,6 @@ public class DropperToTransferAction extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         robotState.setDropperState(DropperState.TRANSFER);
+        robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
     }
 }

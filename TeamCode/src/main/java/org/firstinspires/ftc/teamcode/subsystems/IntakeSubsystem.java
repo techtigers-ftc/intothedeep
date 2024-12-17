@@ -335,12 +335,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         if(getSlideCurrent() > 3.5){
             moveSlidesRelative(0);
         }
-        // When extended it activates drive gears
-        if(robotState.isHorizontalExtended()){
-            robotState.setCurrentGear(DriveGears.ENGAGED);
-        } else {
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
-        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
