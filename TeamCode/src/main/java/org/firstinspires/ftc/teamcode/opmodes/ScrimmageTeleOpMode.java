@@ -38,7 +38,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         robotState = new RobotState();
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
-//        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, drive);
 
@@ -94,64 +94,60 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
-//        DropperToWallAction dropperToWall =
-//                new DropperToWallAction(dropper, robotState);
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
-//
-//        DropperToTransferAction dropperToTransfer =
-//                new DropperToTransferAction(dropper, robotState);
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
-//
-//        DropperToHighBasketAction highBasketDrop =
-//                new DropperToHighBasketAction(dropper, intake, robotState);
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
-//
-//        Trigger intakeFromWall = new Trigger(() ->
-//                robotState.getDropperState() == DropperState.WALL_INTAKE
-//        );
-//
-//        DropperToHighChamberTransferAction highChamberDropFromIntake =
-//                new DropperToHighChamberTransferAction(dropper, intake, robotState);
-//        DropperToHighChamberWallAction highChamberDropFromWall =
-//                new DropperToHighChamberWallAction(dropper, robotState);
-//
-//        // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
+        DropperToWallAction dropperToWall =
+                new DropperToWallAction(dropper, robotState);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
 
-        // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
-//
-//        // Reset the dropper slide encoders
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-//                dropper::resetSlides
-//        );
-//
-//        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
-//
-//        // Toggles the dropper claw between open and closed positions
-//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-//                dropper::toggleClaw
-//        );
-//
-//        Trigger dropperSlidesTrigger = new Trigger(() ->
-//                manipulatorGamepad.getRightY() != 0
-////                true
-//        );
-//        dropperSlidesTrigger.whileActiveContinuous(() ->
-//                dropper.moveSlidesRelative(
-//                -manipulatorGamepad.getRightY() * 2.5)
+        DropperToTransferAction dropperToTransfer =
+                new DropperToTransferAction(dropper, robotState);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
 
-//                dropper.setSlidesPower(-manipulatorGamepad.getRightY())
-  //      );
+        DropperToHighBasketAction highBasketDrop =
+                new DropperToHighBasketAction(dropper, intake, robotState);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
+
+        Trigger intakeFromWall = new Trigger(() ->
+                robotState.getDropperState() == DropperState.WALL_INTAKE
+        );
+
+        DropperToHighChamberTransferAction highChamberDropFromIntake =
+                new DropperToHighChamberTransferAction(dropper, intake, robotState);
+        DropperToHighChamberWallAction highChamberDropFromWall =
+                new DropperToHighChamberWallAction(dropper, robotState);
+
+        // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
+
+         //If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
+
+        // Reset the dropper slide encoders
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+                dropper::resetSlides
+        );
+
+        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
+
+        // Toggles the dropper claw between open and closed positions
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                dropper::toggleClaw
+        );
+
+        Trigger dropperSlidesTrigger = new Trigger(() ->
+                manipulatorGamepad.getRightY() != 0
+//                true
+        );
+        dropperSlidesTrigger.whileActiveContinuous(() ->
+                dropper.moveSlidesRelative(
+                -manipulatorGamepad.getRightY() * 2.5)
+                //          dropper.setSlidesPower(-manipulatorGamepad.getRightY())
+        );
     }
 
     @Override
     public void update() {
         telemetry.addData("Intake Claw Pos", intake.getClawPosition());
-        telemetry.addData("Drive Gears", robotState.getCurrentGear());
-        telemetry.addData("is horizontal extended", robotState.isHorizontalExtended());
-        telemetry.addData("is vertical extended", robotState.isVerticalExtended());
     }
 
 }
