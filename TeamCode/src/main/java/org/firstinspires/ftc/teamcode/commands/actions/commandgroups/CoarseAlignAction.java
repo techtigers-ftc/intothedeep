@@ -16,8 +16,8 @@ public class CoarseAlignAction extends ParallelCommandGroup {
         addCommands(
                 new CoarseAlignDriveAction(drive, robotState, 0.75),
                 new IntakeSlidesCoarseAlignAction(intake, robotState, 0.5),
-                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 200),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 200)
+                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 200)
+//                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 200)
         );
     }
 }

@@ -46,7 +46,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_ROTATION_PICKUP_POSITION = 180;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double CLAW_CLOSED_POSITION = 0.8;
+    public static final double CLAW_CLOSED_POSITION = 0.85;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;

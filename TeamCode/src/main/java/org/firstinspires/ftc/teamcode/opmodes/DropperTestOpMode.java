@@ -74,6 +74,8 @@ public class DropperTestOpMode extends BaseOpMode {
 
         telemetry.addData("CurrentPosInches", currentPos);
         telemetry.addData("ExpectedPosInches", expectedPos);
+        telemetry.addData("Dropper Pitch Position", dropperSubsystem.getPitch());
+        telemetry.addData("Dropper Rotation Position", dropperSubsystem.getRotation());
         telemetry.addData("Error", error);
     }
 }
