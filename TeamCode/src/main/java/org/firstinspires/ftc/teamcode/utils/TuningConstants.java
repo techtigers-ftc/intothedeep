@@ -7,9 +7,9 @@ import com.acmerobotics.dashboard.config.Config;
  */
 @Config
 public class TuningConstants {
-    public static double translationalP = 0.3;
+    public static double translationalP = 1.1;
     public static double translationalI = 0;
-    public static double translationalD = 0.045;
+    public static double translationalD = 0.05;
     public static double driveP = 0.003;
     public static double driveI = 0;
     public static double driveD = 0.00006;
