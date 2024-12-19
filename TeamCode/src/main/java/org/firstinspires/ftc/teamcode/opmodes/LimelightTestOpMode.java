@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.utils.GlobalConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
@@ -23,6 +24,8 @@ public class LimelightTestOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         robotState = new RobotState();
+        GlobalConstants.initialize(false, true);
+
         // TODO: input actual values below
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
         registerSubsystems(limelight);
