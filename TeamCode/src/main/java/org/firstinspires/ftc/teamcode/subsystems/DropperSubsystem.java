@@ -31,8 +31,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     public static final double PITCH_TRANSFER_POSITION = 335;
     public static final double PITCH_WALL_POSITION = 310;
-    public static final double PITCH_BASKET_POSITION = 210;
-    public static final double PITCH_CHAMBER_POSITION = 30;
+    public static final double PITCH_BASKET_POSITION = 130;
+    public static final double PITCH_CHAMBER_POSITION = 135;
     public static final double ROTATION_TRANSFER_POSITION = 5;
     public static final double ROTATION_WALL_POSITION = 5;
     public static final double ROTATION_BASKET_POSITION = 185;
