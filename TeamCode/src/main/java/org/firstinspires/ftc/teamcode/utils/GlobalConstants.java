@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 /**
- * Singelton class for constants for the robot, such as alliance color and game period
+ * Singleton class for constants for the robot, such as alliance color and game period
  **/
 public class GlobalConstants {
     private static GlobalConstants instance;

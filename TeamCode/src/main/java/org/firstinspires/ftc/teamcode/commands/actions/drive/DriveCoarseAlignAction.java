@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**
  * A
@@ -29,13 +31,17 @@ public class DriveCoarseAlignAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(0.5, 0, 0.05, 0);
-        follower.setHeadingPIDF(3, 0, 0.05, 0);
-        follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
+//        follower.setTranslationalPIDF(1.1, 0, 0.05, 0);
+//        follower.setHeadingPIDF(3, 0, 0.05, 0);
+//        follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
+        follower.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
+        follower.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
+        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0, 0);
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
         targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
         follower.holdPoint(new Point(currentPose.getX(), targetPosition), currentPose.getHeading());
+        RobotLog.dd("align", "ExpectedPos: X: %f Y: %f Heading: %f", currentPose.getX(), targetPosition, currentPose.getHeading());
     }
 
     @Override
@@ -43,6 +49,7 @@ public class DriveCoarseAlignAction extends CommandBase {
         // TODO: add for the edge case where the block is moved by an outside force
         //maybe track the difference in the limelight lateral value
         drive.drivePedroPath(follower.getCurrentDriveVectors());
+        RobotLog.dd("align", "CurrentPos: X: %f Y: %f Heading: %f", follower.getPose().getX(), follower.getPose().getY(), follower.getPose().getHeading());
     }
 
     @Override
