@@ -55,5 +55,8 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
     @Override
     public void update() {
         telemetry.addData("color preference", robotState.getBlockColorPreference());
+        telemetry.addData("block forward coarse", robotState.getBlockForwardCoarse());
+        telemetry.addData("block lateral coarse", robotState.getBlockLateralCoarse());
+        telemetry.addData("block orientation", robotState.getBlockOrientation());
     }
 }

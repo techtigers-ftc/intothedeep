@@ -149,9 +149,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     public double getBlockWidth(LLResultTypes.DetectorResult detection) {
         // Width is the distance between the top right and bottom right corners of the detection
-        double width = distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
                 detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
-        return width;
     }
 
     /**
@@ -161,7 +160,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @param detections The list of detections of the neural detector
      * @return the target x degrees, y degrees, and coarse orientation of the best neural detection
      */
-    private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections) {
+    private double[] getNeuralDetectorAttributes(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
         double centerX = 0;
         double centerY = 0;
@@ -215,15 +214,15 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public void periodic() {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
-            double[] targetDegrees = getNeuralDetectorTargetDegrees(result.getDetectorResults());
-            double tx = targetDegrees[0];
-            double ty = downwardAngle - targetDegrees[1];
+            double[] angularValues = getNeuralDetectorAttributes(result.getDetectorResults());
+            double tx = angularValues[0];
+            double ty = downwardAngle - angularValues[1];
             double yDist = height * (1 / Math.tan(Math.toRadians(ty)));
             double finalYDist = yDist - yOffset;
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
             robotState.setBlockForwardCoarse(finalYDist);
             robotState.setBlockLateralCoarse(xDist);
-            robotState.setBlockOrientation(targetDegrees[2]);
+            robotState.setBlockOrientation(angularValues[2]);
             RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, finalYDist);
         }
     }

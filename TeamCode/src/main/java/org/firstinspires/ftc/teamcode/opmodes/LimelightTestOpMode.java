@@ -21,7 +21,6 @@ public class LimelightTestOpMode extends BaseOpMode {
     public static double X_OFFSET = 4.9;
     public static double DOWNWARDS_ANGLE = 25;
     private RobotState robotState;
-    private LimelightSubsystem limelight;
 
     @Override
     public void initialize() {
@@ -29,7 +28,7 @@ public class LimelightTestOpMode extends BaseOpMode {
         GlobalConstants.initialize(false, true);
 
         // TODO: input actual values below
-        limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
         registerSubsystems(limelight);
     }
 
@@ -37,5 +36,6 @@ public class LimelightTestOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Lateral Sample Coarse Distance", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Sample Coarse Distance", robotState.getBlockForwardCoarse());
+        telemetry.addData("Sample Orientation", robotState.getBlockOrientation());
     }
 }
