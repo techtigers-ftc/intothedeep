@@ -68,6 +68,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return Math.sqrt(Math.pow(x - TARGET_POINT_X, 2) + Math.pow(y - TARGET_POINT_Y, 2));
     }
 
+    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
     /**
      * Determines if a detection is the preferred color based on the robot's current block color preference
      *
@@ -133,12 +137,24 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
+    private double getOrientation(LLResultTypes.DetectorResult detection) {
+        // Length is the distance between the top left and top right corners of the detection
+        double length = distanceBetweenPoints(detection.getTargetCorners().get(0).get(0), detection.getTargetCorners().get(0).get(1),
+                detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1));
+        // Width is the distance between the top right and bottom right corners of the detection
+        double width = distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+        // If the width is greater than the length, the orientation is 0 degrees, otherwise it is 90 degrees
+        return width > length ? 0 : 90;
+    }
+
     private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
         double centerX = 0;
         double centerY = 0;
         double targetXDegrees = 0;
         double targetYDegrees = 0;
+        double orientation = 0;
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newCenterX = getCenterCoordinates(detection)[0];
@@ -153,6 +169,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
+                orientation = getOrientation(detection);
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
@@ -160,7 +177,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         } else {
             robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
         }
-        return new double[]{targetXDegrees, targetYDegrees};
+        return new double[]{targetXDegrees, targetYDegrees, orientation};
     }
 
     @Override
@@ -175,6 +192,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
             robotState.setBlockForwardCoarse(finalYDist);
             robotState.setBlockLateralCoarse(xDist);
+            robotState.setBlockOrientation(targetDegrees[2]);
             RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, finalYDist);
         }
     }

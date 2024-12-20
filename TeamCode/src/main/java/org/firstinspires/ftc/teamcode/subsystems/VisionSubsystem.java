@@ -41,7 +41,7 @@ public class VisionSubsystem extends CloseableSubsystem {
         if (processor.isBlockDetected()) {
             robotState.setBlockLateralFine(foundSample[0]);
             robotState.setBlockForwardFine(foundSample[1]);
-            robotState.setBlockOrientation(foundSample[2]);
+//            robotState.setBlockOrientation(foundSample[2]);
             RobotLog.dd(tag, "Block Lateral: %f, Block Forward: %f, Block Orientation: %f", foundSample[0], foundSample[1], foundSample[2]);
         }
     }
