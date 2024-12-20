@@ -30,6 +30,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final double xOffset;
     private final double yOffset;
     private final double downwardAngle;
+    public double length;
+    public double width;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -137,6 +139,15 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
+    private void getBlockProperties(LLResultTypes.DetectorResult detection) {
+        // Length is the distance between the top left and top right corners of the detection
+        length = distanceBetweenPoints(detection.getTargetCorners().get(0).get(0), detection.getTargetCorners().get(0).get(1),
+                detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1));
+        // Width is the distance between the top right and bottom right corners of the detection
+        width = distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+    }
+
     /**
      * Gets the target x degrees, y degrees, and coarse orientation of the neural detector detection
      * that is closest to the extension point of the limelight frame
@@ -165,6 +176,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
+                getBlockProperties(detection);
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
