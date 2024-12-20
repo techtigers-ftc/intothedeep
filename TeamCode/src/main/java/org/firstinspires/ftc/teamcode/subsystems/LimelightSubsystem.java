@@ -148,6 +148,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return width > length ? 0 : 90;
     }
 
+    /**
+     * Gets the target x degrees, y degrees, and coarse orientation of the neural detector detection
+     * that is closest to the extension point of the limelight frame
+     *
+     * @param detections The list of detections of the neural detector
+     * @return the target x degrees, y degrees, and coarse orientation of the best neural detection
+     */
     private double[] getNeuralDetectorTargetDegrees(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
         double centerX = 0;
