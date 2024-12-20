@@ -30,8 +30,16 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final double xOffset;
     private final double yOffset;
     private final double downwardAngle;
-    public double length;
-    public double width;
+
+    // Logistic function parameters
+    private static final double FLOOR = 0.00221939;
+    private static final double CAP = 0.0725463 + FLOOR;
+    private static final double H_STRETCH = 4.40165;
+    private static final double RATE = 0.0902167;
+
+    // Block values
+    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
+    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -139,13 +147,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
-    private void getBlockProperties(LLResultTypes.DetectorResult detection) {
-        // Length is the distance between the top left and top right corners of the detection
-        length = distanceBetweenPoints(detection.getTargetCorners().get(0).get(0), detection.getTargetCorners().get(0).get(1),
-                detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1));
+    public double getBlockWidth(LLResultTypes.DetectorResult detection) {
         // Width is the distance between the top right and bottom right corners of the detection
-        width = distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+        double width = distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
                 detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+        return width;
     }
 
     /**
@@ -176,7 +182,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
-                getBlockProperties(detection);
+                orientation = getClawAngle(detection);
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
@@ -185,6 +191,24 @@ public class LimelightSubsystem extends CloseableSubsystem {
             robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
         }
         return new double[]{targetXDegrees, targetYDegrees, orientation};
+    }
+
+    /**
+     * Returns the angle the intake claw should go to in order to pick up the block
+     *
+     * @param detection The detected block
+     * @return The angle the claw should go to in order to pick up the block
+     */
+    public double getClawAngle(LLResultTypes.DetectorResult detection) {
+        double blockWidth = getBlockWidth(detection);
+        double distance = robotState.getBlockForwardCoarse();
+        double widthScalar = (CAP /(1 + H_STRETCH * Math.pow(Math.E, -RATE * distance))) + FLOOR;
+        double normalizedBlockWidth = blockWidth * widthScalar;
+        if (normalizedBlockWidth < 3.4) {
+            return 0;
+        } else {
+            return 90;
+        }
     }
 
     @Override
