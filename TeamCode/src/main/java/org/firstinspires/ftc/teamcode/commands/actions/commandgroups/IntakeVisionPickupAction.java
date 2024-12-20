@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignSlidesAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
@@ -40,10 +40,8 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 125),
                         new IntakeOpenAction(intake),
                         new DriveCoarseAlignAction(drive, robotState, 0.5),
-                        new IntakeCoarseAlignSlidesAction(intake, robotState, 0.5)
+                        new IntakeCoarseAlignAction(intake, robotState, 0.5)
                 ),
-                // RUNS FINE ORIENTATION ALIGNMENT
-//                new IntakeFineRotationAction(intake, robotState),
                 // MOVE INTAKE TO PICKUP POSITION
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 150),
                 new IntakeCloseAction(intake, 150),

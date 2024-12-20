@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeFineRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,8 +30,8 @@ public class ClawCamTestOpMode extends BaseOpMode {
                 new IntakeToPickupAction(intake, robotState);
         gamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
 
-        IntakeFineRotationAction intakeFineRotationAction = new IntakeFineRotationAction(intake, robotState);
-        gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeFineRotationAction);
+        IntakeCoarseAlignAction intakeCoarseAlignAction = new IntakeCoarseAlignAction(intake, robotState, 0.5);
+        gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeCoarseAlignAction);
     }
 
     @Override

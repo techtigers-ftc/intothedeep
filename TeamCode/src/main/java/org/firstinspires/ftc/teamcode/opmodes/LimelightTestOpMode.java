@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
@@ -23,6 +22,7 @@ public class LimelightTestOpMode extends BaseOpMode {
     public static double DOWNWARDS_ANGLE = 25;
     private RobotState robotState;
     private LimelightSubsystem limelight;
+
     @Override
     public void initialize() {
         robotState = new RobotState();
@@ -37,7 +37,5 @@ public class LimelightTestOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Lateral Sample Coarse Distance", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Sample Coarse Distance", robotState.getBlockForwardCoarse());
-        telemetry.addData("Normalized Sample Width", limelight.getBlockWidth());
-        telemetry.addData("Normalized Sample Width", limelight.getClawAngle());
     }
 }
