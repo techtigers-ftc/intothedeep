@@ -30,7 +30,7 @@ public class ClawCamTestOpMode extends BaseOpMode {
                 new IntakeToPickupAction(intake, robotState);
         gamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
 
-        IntakeCoarseAlignAction intakeCoarseAlignAction = new IntakeCoarseAlignAction(intake, robotState, 0.5);
+        IntakeCoarseAlignAction intakeCoarseAlignAction = new IntakeCoarseAlignAction(intake, robotState, 0.5, 5);
         gamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeCoarseAlignAction);
     }
 

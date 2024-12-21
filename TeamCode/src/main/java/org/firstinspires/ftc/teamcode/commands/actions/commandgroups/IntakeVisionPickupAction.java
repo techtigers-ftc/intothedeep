@@ -35,17 +35,17 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
         addCommands(
                 // MOVE SERVOS TO PICKUP AND RUNS COARSE ALIGNMENT
                 new ParallelCommandGroup(
-                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 125),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 125),
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 125),
+                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 350),
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
+                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 200),
                         new IntakeOpenAction(intake),
-                        new DriveCoarseAlignAction(drive, robotState, 0.5),
-                        new IntakeCoarseAlignAction(intake, robotState, 0.5)
+                        new DriveCoarseAlignAction(drive, robotState, 0.25),
+                        new IntakeCoarseAlignAction(intake, robotState, 0.5, 5)
                 ),
-                // MOVE INTAKE TO PICKUP POSITION
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 150),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 250),
                 new IntakeCloseAction(intake, 150),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
+                // MOVE INTAKE TO PICKUP POSITION
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 125),
                 new ParallelCommandGroup(
                         new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 300),

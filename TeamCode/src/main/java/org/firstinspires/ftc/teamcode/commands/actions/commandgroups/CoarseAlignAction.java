@@ -12,7 +12,7 @@ public class CoarseAlignAction extends ParallelCommandGroup {
     public CoarseAlignAction(IntakeSubsystem intake, DriveSubsystem drive, RobotState robotState) {
         addCommands(
                 new DriveCoarseAlignAction(drive, robotState, 0.75),
-                new IntakeCoarseAlignAction(intake, robotState, 0.5)
+                new IntakeCoarseAlignAction(intake, robotState, 0.5, 5)
         );
     }
 }

@@ -22,6 +22,14 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int NEURAL_DETECTOR_PIPELINE = 4;
+    // Logistic function parameters
+    private static final double FLOOR = 0.00221939;
+    private static final double CAP = 0.0725463 + FLOOR;
+    private static final double H_STRETCH = 4.40165;
+    private static final double RATE = 0.0902167;
+    // Block values
+    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
+    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
     public static double TARGET_POINT_X = 450;
     public static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
@@ -30,16 +38,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final double xOffset;
     private final double yOffset;
     private final double downwardAngle;
-
-    // Logistic function parameters
-    private static final double FLOOR = 0.00221939;
-    private static final double CAP = 0.0725463 + FLOOR;
-    private static final double H_STRETCH = 4.40165;
-    private static final double RATE = 0.0902167;
-
-    // Block values
-    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
-    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -99,7 +97,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         if (detectionColor.equals("yellowsample")) {
             // If the color preference is not alliance, return true, otherwise return false
             return colorPreference != BlockColorPreference.ALLIANCE;
-        // If you detect an alliance block
+            // If you detect an alliance block
         } else if (detectionColor.equals(allianceBlock)) {
             // If the color preference is not yellow, return true, otherwise return false
             return colorPreference != BlockColorPreference.YELLOW;
@@ -147,7 +145,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
-    public double getBlockWidth(LLResultTypes.DetectorResult detection) {
+    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
         // Width is the distance between the top right and bottom right corners of the detection
         return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
                 detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
@@ -198,12 +196,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @param detection The detected block
      * @return The angle the claw should go to in order to pick up the block
      */
-    public double getClawAngle(LLResultTypes.DetectorResult detection) {
+    private double getClawAngle(LLResultTypes.DetectorResult detection) {
         double blockWidth = getBlockWidth(detection);
+        RobotLog.dd(tag, "block width detection:%f", blockWidth);
         double distance = robotState.getBlockForwardCoarse();
-        double widthScalar = (CAP /(1 + H_STRETCH * Math.pow(Math.E, -RATE * distance))) + FLOOR;
+        double widthScalar = (CAP / (1 + H_STRETCH * Math.pow(Math.E, -RATE * distance))) + FLOOR;
         double normalizedBlockWidth = blockWidth * widthScalar;
-        if (normalizedBlockWidth < 3.4) {
+        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
+        if (normalizedBlockWidth > 2.4) {
             return 0;
         } else {
             return 90;
