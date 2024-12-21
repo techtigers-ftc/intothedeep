@@ -31,12 +31,12 @@ public class DriveCoarseAlignAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-//        follower.setTranslationalPIDF(1.1, 0, 0.05, 0);
-//        follower.setHeadingPIDF(3, 0, 0.05, 0);
-//        follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
-        follower.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        follower.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0, 0);
+        follower.setTranslationalPIDF(1.1, 0, 0.05, 0);
+        follower.setHeadingPIDF(3, 0, 0.05, 0);
+        follower.setDrivePIDF(0.003, 0, 0.00006, 0 ,0);
+//        follower.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
+//        follower.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
+//        follower.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, 0, 0);
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
         targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
