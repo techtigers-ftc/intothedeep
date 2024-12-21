@@ -40,8 +40,9 @@ public class DriveCoarseAlignAction extends CommandBase {
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
         targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
-        follower.holdPoint(new Point(currentPose.getX(), targetPosition), currentPose.getHeading());
-        RobotLog.dd("align", "ExpectedPos: X: %f Y: %f Heading: %f", currentPose.getX(), targetPosition, currentPose.getHeading());
+        follower.holdPoint(new Point(currentPose.getX(), targetPosition), 0);
+        //TODO:Tune this heading value later to the one we want
+        RobotLog.dd("align", "ExpectedPos: X: %f Y: %f Heading: %f", currentPose.getX(), targetPosition, 0.0);
     }
 
     @Override
