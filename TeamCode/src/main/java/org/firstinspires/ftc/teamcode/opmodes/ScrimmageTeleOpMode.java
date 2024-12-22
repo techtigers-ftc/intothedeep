@@ -7,10 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighBasketAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.HangSpecimenAction;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToPickupAction;
@@ -90,10 +88,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
-        DropperToWallAction dropperToWall =
-                new DropperToWallAction(dropper, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(dropperToWall);
-
         DropperToTransferAction dropperToTransfer =
                 new DropperToTransferAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
@@ -106,13 +100,8 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 robotState.getDropperState() == DropperState.WALL_INTAKE
         );
 
-        DropperToHighChamberTransferAction highChamberDropFromIntake =
-                new DropperToHighChamberTransferAction(dropper, intake, robotState);
-        DropperToHighChamberWallAction highChamberDropFromWall =
-                new DropperToHighChamberWallAction(dropper, robotState);
-
-        // If the dropper is intaking a specimen from the wall, activate the high chamber drop from wall command
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeFromWall).whenActive(highChamberDropFromWall);
+        DropperToHighChamberAction highChamberDropFromIntake =
+                new DropperToHighChamberAction(dropper, intake, robotState);
 
         // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
