@@ -39,8 +39,8 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 200),
                         new IntakeOpenAction(intake),
-                        new DriveCoarseAlignAction(drive, robotState, 0.25),
-                        new IntakeCoarseAlignAction(intake, robotState, 0.5, 5)
+                        new DriveCoarseAlignAction(drive, robotState, 0.1),
+                        new IntakeCoarseAlignAction(intake, robotState, 0.2, 5)
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 250),
                 new IntakeCloseAction(intake, 150),
