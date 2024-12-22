@@ -29,10 +29,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static final double PITCH_TRANSFER_POSITION = 335;
+    public static final double PITCH_TRANSFER_POSITION = 315;
     public static final double PITCH_WALL_POSITION = 310;
     public static final double PITCH_BASKET_POSITION = 210;
-    public static final double PITCH_CHAMBER_POSITION = 30;
+    public static final double PITCH_CHAMBER_POSITION = 220; //170
     public static final double ROTATION_TRANSFER_POSITION = 5;
     public static final double ROTATION_WALL_POSITION = 5;
     public static final double ROTATION_BASKET_POSITION = 185;

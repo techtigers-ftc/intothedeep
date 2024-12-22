@@ -29,7 +29,8 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 1000),
+                new IntakeWristPitchAction(intake,
+                        IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
                 new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 400),
