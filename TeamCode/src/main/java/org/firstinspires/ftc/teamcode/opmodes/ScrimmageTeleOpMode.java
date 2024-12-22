@@ -88,7 +88,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
-
         DropperToTransferAction dropperToTransfer =
                 new DropperToTransferAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
