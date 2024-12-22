@@ -24,6 +24,10 @@ import team.techtigers.base.BaseOpMode;
 @SuppressWarnings("unused")
 public class IntakeAlignTestOpMode extends BaseOpMode {
     private RobotState robotState;
+    public static double Y_OFFSET = 5.5;
+    public static double Y_HEIGHT = 10.5;
+    public static double X_OFFSET = 4.9;
+    public static double DOWNWARDS_ANGLE = 25;
 
     @Override
     public void initialize() {
@@ -34,7 +38,7 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         // TODO: input values to global constants
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 3.55, 8.4, 25);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
         // TODO: Test the following Limelight offsets: 10.5, 4.2, 10, 25
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap);

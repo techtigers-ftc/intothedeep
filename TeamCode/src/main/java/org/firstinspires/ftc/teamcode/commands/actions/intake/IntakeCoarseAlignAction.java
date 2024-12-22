@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.intake;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * Moves the intake slides to a position based on the coarse value obtained from the limelight
  * and rotates the claw rotation to the position absed on the orientation value from the limelight
  */
+@Config
 public class IntakeCoarseAlignAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
@@ -17,6 +19,7 @@ public class IntakeCoarseAlignAction extends CommandBase {
     private final double rotationTolerance;
     private double targetPosition;
     private double clawTargetPosition;
+    public static double SLIDES_OFFSET = 2.5;
 
     /**
      * Initializes the command
@@ -34,7 +37,7 @@ public class IntakeCoarseAlignAction extends CommandBase {
 
     @Override
     public void initialize() {
-        targetPosition = robotState.getBlockForwardCoarse();
+        targetPosition = robotState.getBlockForwardCoarse() - SLIDES_OFFSET;
         clawTargetPosition = IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION + robotState.getBlockOrientation();
         //TODO: figure out what we want to do if the robot decides to extend too far
         intake.moveSlidesAbsolute(targetPosition);
