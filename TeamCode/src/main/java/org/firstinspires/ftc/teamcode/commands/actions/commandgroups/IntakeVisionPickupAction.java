@@ -42,14 +42,14 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new DriveCoarseAlignAction(drive, robotState, 0.1),
                         new IntakeCoarseAlignAction(intake, robotState, 0.2, 5)
                 ),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 250),
-                new IntakeCloseAction(intake, 150),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 350),
+                new IntakeCloseAction(intake, 500),
                 // MOVE INTAKE TO PICKUP POSITION
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 125),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 250),
                 new ParallelCommandGroup(
                         new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 300),
-                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
+                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 300)
+//                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
                 )
         );
     }

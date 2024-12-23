@@ -19,7 +19,7 @@ public class IntakeCoarseAlignAction extends CommandBase {
     private final double rotationTolerance;
     private double targetPosition;
     private double clawTargetPosition;
-    public static double SLIDES_OFFSET = 2.5;
+    public static double SLIDES_OFFSET = 3.5;
 
     /**
      * Initializes the command
