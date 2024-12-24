@@ -179,7 +179,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
-                orientation = getClawAngle(detection);
+                orientation = getClawAngle(detection); // TODO: Get everything here to use the updated block distance values using the rational function
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
