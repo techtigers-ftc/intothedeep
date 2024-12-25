@@ -39,15 +39,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
+    private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 40;
-    public static final double WRIST_PITCH_PECK_POSITION = 90;
+    public static final double WRIST_PITCH_PECK_POSITION = 85;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 10;
-    public static final double WRIST_ROTATION_PICKUP_POSITION = 175;
+    public static final double WRIST_ROTATION_PICKUP_POSITION = 180;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double CLAW_CLOSED_POSITION = 0.9;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -99,8 +99,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.REVERSE);
-        leftClaw.setDirection(Servo.Direction.FORWARD);
+        rightClaw.setDirection(Servo.Direction.FORWARD);
+        leftClaw.setDirection(Servo.Direction.REVERSE);
 
 //        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
 //        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
@@ -190,7 +190,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        if (getPitch() <= 90) {
+        if (getPitch() <= 80) {
             leftClaw.setPosition(CLAW_MIDDLE_POSITION);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {

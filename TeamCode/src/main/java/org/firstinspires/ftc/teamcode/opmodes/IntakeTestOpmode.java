@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -16,6 +17,8 @@ public class IntakeTestOpmode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+
         GamepadEx gamepadEx = new GamepadEx(gamepad1);
         RobotState robotState = new RobotState();
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
