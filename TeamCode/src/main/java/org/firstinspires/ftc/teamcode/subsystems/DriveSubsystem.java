@@ -11,6 +11,9 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,16 +24,18 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the drivebase.
  */
 public class DriveSubsystem extends CloseableSubsystem {
+    private static final double GEAR_MULTIPLIER = 0.5;
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
     private final List<DcMotor> motors;
     private DriveVectorScaler driveVectorScaler;
+    private RobotState robotstate;
 
     /**
      * Constructs a new DriveSubsystem.
      *
      * @param hardwareMap The hardware map, used to get hardware references
      */
-    public DriveSubsystem(HardwareMap hardwareMap) {
+    public DriveSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         frontLeft = hardwareMap.get(DcMotor.class, "left_front");
         frontRight = hardwareMap.get(DcMotor.class, "right_front");
         backLeft = hardwareMap.get(DcMotor.class, "left_back");
@@ -43,6 +48,8 @@ public class DriveSubsystem extends CloseableSubsystem {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        this.robotstate = robotState;
 
         for (DcMotor motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -108,6 +115,12 @@ public class DriveSubsystem extends CloseableSubsystem {
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
         double turnSpeed = Range.clip(rotation, -1, 1);
+
+        if(robotstate.getCurrentGear() == DriveGears.ENGAGED) {
+            strafeSpeed *= GEAR_MULTIPLIER;
+            forwardSpeed *= GEAR_MULTIPLIER;
+            turnSpeed *= GEAR_MULTIPLIER;
+        }
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
                 forwardSpeed, strafeSpeed, turnSpeed);
 
@@ -159,6 +172,14 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRight.setPower(fr);
         backLeft.setPower(bl);
         backRight.setPower(br);
+    }
+
+    public void toggleDriveGears() {
+        if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
+            robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);
+        } else {
+            robotstate.setCurrentGear(DriveGears.ENGAGED);
+        }
     }
 
     /**

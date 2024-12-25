@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
@@ -25,23 +26,26 @@ import team.techtigers.base.BaseOpMode;
 
 @TeleOp(name = "Scrimmage TeleOp Mode", group = "Scrimmage")
 public class ScrimmageTeleOpMode extends BaseOpMode {
-    IntakeSubsystem intake;
+    private IntakeSubsystem intake;
+    private RobotState robotState;
 
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
-        RobotState robotState = new RobotState();
+        robotState = new RobotState();
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-        registerSubsystems(intake, dropper, drive);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        registerSubsystems(intake, drive, dropper);
 
         // DRIVER
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
         
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 
@@ -103,7 +107,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         DropperToHighChamberAction highChamberDropFromIntake =
                 new DropperToHighChamberAction(dropper, intake, robotState);
 
-        // If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
+         //If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
 
         // Reset the dropper slide encoders
@@ -126,8 +130,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         dropperSlidesTrigger.whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
                 -manipulatorGamepad.getRightY() * 2.5)
-
-//                dropper.setSlidesPower(-manipulatorGamepad.getRightY())
         );
     }
 

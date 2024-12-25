@@ -18,7 +18,7 @@ public class PedroTeleDriveOpMode extends BaseOpMode {
         RobotState robotState = new RobotState();
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
 
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         registerSubsystems(drive, odometry);
 

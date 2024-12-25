@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotatio
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
@@ -42,5 +43,6 @@ public class IntakeToPickupAction extends ParallelCommandGroup {
     @Override
     public void end(boolean interrupted) {
         robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+        robotState.setCurrentGear(DriveGears.ENGAGED);
     }
 }
