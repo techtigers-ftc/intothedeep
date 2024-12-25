@@ -400,8 +400,8 @@ public class RobotState extends GlobalState {
     public void setRobotVelocity(Waypoint robotVelocity) {
         this.robotVelocity = robotVelocity;
     }
+
     /**
-     *
      * @return the current gear of the robot
      */
     public DriveGears getCurrentGear() {

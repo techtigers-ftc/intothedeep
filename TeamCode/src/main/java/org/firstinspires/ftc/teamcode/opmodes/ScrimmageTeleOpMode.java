@@ -28,8 +28,8 @@ import team.techtigers.base.BaseOpMode;
 
 @TeleOp(name = "Scrimmage TeleOp Mode", group = "Scrimmage")
 public class ScrimmageTeleOpMode extends BaseOpMode {
-    IntakeSubsystem intake;
-    RobotState robotState;
+    private IntakeSubsystem intake;
+    private RobotState robotState;
 
     @Override
     public void initialize() {
@@ -40,7 +40,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
-        registerSubsystems(intake, drive);
+        registerSubsystems(intake, drive, dropper);
 
         // DRIVER
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
@@ -141,7 +141,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         dropperSlidesTrigger.whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
                 -manipulatorGamepad.getRightY() * 2.5)
-                //          dropper.setSlidesPower(-manipulatorGamepad.getRightY())
         );
     }
 
@@ -149,5 +148,4 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake Claw Pos", intake.getClawPosition());
     }
-
 }

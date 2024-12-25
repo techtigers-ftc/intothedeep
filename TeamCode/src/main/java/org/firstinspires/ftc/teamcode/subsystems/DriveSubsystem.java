@@ -173,6 +173,7 @@ public class DriveSubsystem extends CloseableSubsystem {
         backLeft.setPower(bl);
         backRight.setPower(br);
     }
+
     public void toggleDriveGears() {
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
             robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);
