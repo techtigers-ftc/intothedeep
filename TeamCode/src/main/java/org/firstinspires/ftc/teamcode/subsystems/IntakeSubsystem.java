@@ -86,7 +86,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         differentialController.setMaxRange(180, 180);
 
         //Assuming that the encoder is connected to the leftSlideMotor
-        encoderMotor = leftSlideMotor;
+        encoderMotor = rightSlideMotor;
         resetSlides();
         currentMotor = (DcMotorEx) encoderMotor;
 

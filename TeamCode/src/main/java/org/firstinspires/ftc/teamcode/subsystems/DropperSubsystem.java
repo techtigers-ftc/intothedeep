@@ -30,18 +30,16 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static final double PITCH_TRANSFER_POSITION = 315;
-    public static final double PITCH_WALL_POSITION = 310;
+    public static final double PITCH_TRANSFER_POSITION = 5;
     public static final double PITCH_BASKET_POSITION = 210;
     public static final double PITCH_CHAMBER_POSITION = 220; //170
-    public static final double ROTATION_TRANSFER_POSITION = 5;
-    public static final double ROTATION_WALL_POSITION = 5;
-    public static final double ROTATION_BASKET_POSITION = 185;
-    public static final double ROTATION_CHAMBER_POSITION = 185;
+    public static final double ROTATION_TRANSFER_POSITION = 10;
+    public static final double ROTATION_BASKET_POSITION = 210;
+    public static final double ROTATION_CHAMBER_POSITION = 210;
     public static double CLAW_OPENED_POSITION = 0.75;
     public static double CLAW_CLOSED_POSITION = 0;
     private static final double GEAR_RATIO = 1;
-    private static final double SERVO_GEAR_RATIO = 1;
+    private static final double SERVO_GEAR_RATIO = 40.0/26.0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -76,10 +74,10 @@ public class DropperSubsystem extends CloseableSubsystem {
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
-        differentialController.setMaxRange(355, 0);
+        differentialController.setMaxRange(330, 215);
 
-        leftWrist.setDirection(Servo.Direction.FORWARD);
-        rightWrist.setDirection(Servo.Direction.REVERSE);
+        leftWrist.setDirection(Servo.Direction.REVERSE);
+        rightWrist.setDirection(Servo.Direction.FORWARD);
 
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -93,7 +91,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_TRANSFER_POSITION, 0);
+        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         openClaw();
     }
 
@@ -243,7 +241,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
-//        setWristAbsolute(getPitch(), rotationAngle);
+        setWristAbsolute(getPitch(), rotationAngle);
     }
 
     /**

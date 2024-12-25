@@ -42,7 +42,10 @@ public class DifferentialController {
      */
     public void setMaxRange(double maxPitchAngle, double maxRotationAngle) {
         if (maxPitchAngle + maxRotationAngle > maxDriverRange) {
-            throw new IllegalArgumentException("The sum of the maxPitchAngle and maxRotationAngle must be less than or equal to the maxClawAngle");
+            throw new IllegalArgumentException(
+                    "The sum of the maxPitchAngle and maxRotationAngle ("
+                            + (maxPitchAngle + maxRotationAngle) + ") must " +
+                            "be less than or equal to the maxDriverRange (" + maxDriverRange + ")");
         }
         this.maxPitchAngle = maxPitchAngle;
         this.maxRotationAngle = maxRotationAngle;

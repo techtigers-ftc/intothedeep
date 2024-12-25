@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -58,6 +59,14 @@ public class DropperArmTestOpmode extends BaseOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.setRotationRelative(5);
         }));
+
+        Trigger dropperSlidesTrigger = new Trigger(() ->
+                gamepadEx.getRightY() != 0
+        );
+        dropperSlidesTrigger.whileActiveContinuous(() ->
+                dropperSubsystem.moveSlidesRelative(
+                        -gamepadEx.getRightY() * 2.5)
+        );
     }
 
     @Override
