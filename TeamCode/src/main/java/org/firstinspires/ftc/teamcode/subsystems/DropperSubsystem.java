@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -36,6 +37,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_TRANSFER_POSITION = 10;
     public static final double ROTATION_BASKET_POSITION = 210;
     public static final double ROTATION_CHAMBER_POSITION = 210;
+    private static final double SLIDE_MAX = 22;
     public static double CLAW_OPENED_POSITION = 0.75;
     public static double CLAW_CLOSED_POSITION = 0;
     private static final double GEAR_RATIO = 1;
@@ -79,8 +81,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
         rightWrist.setDirection(Servo.Direction.FORWARD);
 
-        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotor = (DcMotorEx) encoderMotor;
@@ -140,12 +142,21 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Gets the current position of the slides in ticks
+     *
+     * @return the current position of the slides in ticks
+     */
+    public double getCurrentSlidePositionTicks() {
+        return -encoderMotor.getCurrentPosition();
+    }
+
+    /**
      * Gets the current position of the slides in inches
      *
      * @return the current position of the slides in inches
      */
     public double getCurrentSlidePositionInches() {
-        return encoderMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
+        return getCurrentSlidePositionTicks() * INCHES_PER_MOTOR_TICK;
     }
 
     /**
@@ -172,11 +183,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        if (position < 0){
-            slideController.moveToInches(0);
-        } else{
-            slideController.moveToInches(position);
-        }
+        slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
     }
 
     /**
@@ -260,22 +267,18 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristRelative(0, rotationAngle);
     }
 
-    public void setSlidesPower(double power) {
-        rightSlideMotor.setPower(power);
-        leftSlideMotor.setPower(power);
-    }
-
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        double power =
+                slideController.calculateMotorPowers(getCurrentSlidePositionTicks());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
 
-        if(getSlideCurrent() > 3.5){
-            moveSlidesRelative(0);
-        }
+//        if(getSlideCurrent() > 3.5){
+//            moveSlidesRelative(0);
+//        }
 
-        robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
+        robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());
