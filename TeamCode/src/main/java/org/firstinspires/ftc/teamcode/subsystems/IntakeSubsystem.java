@@ -42,13 +42,21 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.75;
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+
+    public static final double WRIST_PITCH_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 14;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
-    public static final double WRIST_PITCH_PECK_POSITION = 85;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 14;
     public static final double WRIST_ROTATION_PICKUP_POSITION = 180;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 14;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+
+    public static final double WRIST_PITCH_PECK_POSITION = 85;
+
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -109,9 +117,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
         // Pitch init is in the transfer position
         //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
-        setWristAbsolute(WRIST_PITCH_TRANSFER_POSITION, WRIST_ROTATION_TRANSFER_POSITION);
-        setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
-        openClaw();
+        setWristAbsolute(WRIST_PITCH_TUCK_POSITION, WRIST_ROTATION_TUCK_POSITION);
+        setClawRotationAbsolute(CLAW_ROTATION_TUCK_POSITION);
+        closeClaw();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
