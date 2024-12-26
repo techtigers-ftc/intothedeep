@@ -38,12 +38,6 @@ public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
 
     @Override
     public void initialize() {
-        super.initialize();
-        RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
-    }
-
-    @Override
-    public void end(boolean interrupted){
         if (robotState.getIntakeState() != IntakeState.PREPARE_TO_INTAKE) {
             RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
@@ -51,6 +45,14 @@ public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
         } else {
             RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
             super.initialize();
+        }
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        super.end(interrupted);
+        if (!interrupted) {
+            robotState.setIntakeState(IntakeState.READY_TO_INTAKE);
         }
     }
 }
