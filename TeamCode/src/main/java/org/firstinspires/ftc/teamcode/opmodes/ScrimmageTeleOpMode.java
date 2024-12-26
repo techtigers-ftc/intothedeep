@@ -136,5 +136,6 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
     @Override
     public void update() {
         telemetry.addData("Intake Claw Pos", intake.getClawPosition());
+        telemetry.addData("Intake slide pos", intake.getCurrentSlidePositionInches());
     }
 }

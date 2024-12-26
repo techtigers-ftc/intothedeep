@@ -27,6 +27,6 @@ public class IntakeManualRotationCommand extends CommandBase {
 
     @Override
     public void execute() {
-        intake.setWristRotationRelative((gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - gamepad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1.5);
+        intake.setClawRotationRelative((gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - gamepad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1.5);
     }
 }

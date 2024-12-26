@@ -41,7 +41,7 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
                         new IntakeSlidesAbsoluteAction(intake, 2, 0.25)
                 ),
                 new IntakeLoosenAction(intake, 500),
-                new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
+                new IntakeSlidesAbsoluteAction(intake, 0, 0.5)
         );
     }
 
