@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeClawPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -41,6 +42,7 @@ public class RobotState extends GlobalState {
     private DropperState dropperState;
     private DriveGears driveGears;
     private IntakeClawPosition intakeClawPosition;
+    private int robotError;
 
     /**
      * Initializes a new RobotState
@@ -81,6 +83,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the dropper
+     *
      * @param dropperState the state of the dropper
      */
     public void setDropperState(DropperState dropperState) {
@@ -96,6 +99,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the dropper claw
+     *
      * @param dropperClawState the state of the dropper claw
      */
     public void setDropperClawState(ClawState dropperClawState) {
@@ -111,6 +115,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current pitch of the dropper claw
+     *
      * @param dropperClawRotation the pitch of the dropper claw in degrees
      */
     public void setDropperClawRotation(double dropperClawRotation) {
@@ -126,6 +131,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the dropper claw
+     *
      * @param dropperClawPitch the orientation of the dropper claw in degrees
      */
     public void setDropperClawPitch(double dropperClawPitch) {
@@ -141,6 +147,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the vertical extension
+     *
      * @param verticalExtended is the vertical extension extended
      */
     public void setVerticalExtended(boolean verticalExtended) {
@@ -156,6 +163,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's ascending
+     *
      * @param isAscending is the robot ascending
      */
     public void setIsAscending(boolean isAscending) {
@@ -171,6 +179,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current position of the robot's block
+     *
      * @param hasBlock the position of the robot's block
      */
     public void setBlockPosition(RobotBlockPosition hasBlock) {
@@ -186,6 +195,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's intake
+     *
      * @param intakeState the state of the robot's intake
      */
     public void setIntakeState(IntakeState intakeState) {
@@ -201,6 +211,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current pitch of the robot's intake claw
+     *
      * @param intakeClawPitch the pitch of the robot's intake claw in degrees
      */
     public void setIntakeClawPitch(double intakeClawPitch) {
@@ -216,6 +227,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the robot's intake claw
+     *
      * @param intakeClawRotation the orientation of the robot's intake claw in degrees
      */
     public void setIntakeClawRotation(double intakeClawRotation) {
@@ -231,6 +243,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's intake claw
+     *
      * @param intakeClawState the state of the robot's intake claw
      */
     public void setIntakeClawState(ClawState intakeClawState) {
@@ -246,6 +259,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's horizontal extension
+     *
      * @param horizontalExtended is the horizontal extension extended
      */
     public void setHorizontalExtended(boolean horizontalExtended) {
@@ -260,14 +274,8 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current fine forward position of the block from the robot
-     */
-    public double getBlockForwardFine() {
-        return blockForwardFine;
-    }
-
-    /**
      * Sets the current fine forward position of the block
+     *
      * @param blockLateralFine the fine forward position of the block from the robot
      */
     public void setBlockLateralFine(double blockLateralFine) {
@@ -275,7 +283,15 @@ public class RobotState extends GlobalState {
     }
 
     /**
+     * @return the current fine forward position of the block from the robot
+     */
+    public double getBlockForwardFine() {
+        return blockForwardFine;
+    }
+
+    /**
      * Sets the current fine lateral position of the block
+     *
      * @param blockForwardFine the fine lateral position of the block from the robot
      */
     public void setBlockForwardFine(double blockForwardFine) {
@@ -291,6 +307,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current color of the block in the robot
+     *
      * @param blockColor the color of the block
      */
     public void setBlockColor(BlockColor blockColor) {
@@ -306,6 +323,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current coarse lateral position of the block
+     *
      * @param blockForwardCoarse the coarse lateral position of the block from the robot
      */
     public void setBlockForwardCoarse(double blockForwardCoarse) {
@@ -321,6 +339,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the block
+     *
      * @param blockOrientation the orientation of the block in degrees
      */
     public void setBlockOrientation(double blockOrientation) {
@@ -336,6 +355,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current coarse lateral position of the block
+     *
      * @param blockLateralCoarse the coarse lateral position of the block from the robot
      */
     public void setBlockLateralCoarse(double blockLateralCoarse) {
@@ -351,6 +371,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of block detection
+     *
      * @param blockDetectionState the state of block detection
      */
     public void setBlockDetectionState(BlockDetectionState blockDetectionState) {
@@ -366,6 +387,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current color preference of the block
+     *
      * @param blockColorPreference the color preference of the block
      */
     public void setBlockColorPreference(BlockColorPreference blockColorPreference) {
@@ -413,6 +435,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current gear of the robot
+     *
      * @param gear the gear of the robot
      */
     public void setCurrentGear(DriveGears gear) {
@@ -428,9 +451,38 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current intake claw position of the robot
+     *
      * @param intakeClawPosition the position of the intake claw
      */
     public void setIntakeClawPosition(IntakeClawPosition intakeClawPosition) {
         this.intakeClawPosition = intakeClawPosition;
+    }
+
+    /**
+     * Sets a particular robot error to true
+     *
+     * @param error the error to set
+     */
+    public void setError(RobotError error) {
+        this.robotError |= error.code;
+    }
+
+    /**
+     * Clears a particular robot error
+     *
+     * @param error the error to clear
+     */
+    public void clearError(RobotError error) {
+        this.robotError &= ~error.code;
+    }
+
+    /**
+     * Checks if a particular robot error is set
+     *
+     * @param error the error to check
+     * @return true if the error is set, false otherwise
+     */
+    public boolean hasError(RobotError error) {
+        return (this.robotError & error.code) != 0;
     }
 }
