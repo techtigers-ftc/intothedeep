@@ -36,7 +36,7 @@ public class DropperToHighChamberAction extends SequentialCommandGroup {
                 new IntakeOpenAction(intake, 200),
                 new ParallelCommandGroup(
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
-                        new DropperRotationAction(dropper, DropperSubsystem.ROTATION_CHAMBER_POSITION, 300)
+                        new DropperRotationAction(dropper, DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 300)
                 )
         );
     }

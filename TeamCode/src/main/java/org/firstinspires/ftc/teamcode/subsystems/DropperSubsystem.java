@@ -31,15 +31,19 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static final double PITCH_TRANSFER_POSITION = 5;
-    public static final double PITCH_BASKET_POSITION = 210;
-    public static final double PITCH_CHAMBER_POSITION = 220; //170
-    public static final double ROTATION_TRANSFER_POSITION = 10;
-    public static final double ROTATION_BASKET_POSITION = 210;
-    public static final double ROTATION_CHAMBER_POSITION = 210;
     private static final double SLIDE_MAX = 22;
-    public static double CLAW_OPENED_POSITION = 0.75;
-    public static double CLAW_CLOSED_POSITION = 0;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 30;
+    public static final double PITCH_TRANSFER_POSITION = 20;
+    public static final double PITCH_BASKET_POSITION = 200;
+    public static final double PITCH_CHAMBER_POSITION = 175;
+    public static final double PITCH_FRONT_SLAP_POSITION = 115;
+    public static final double PITCH_BACK_SLAP_POSITION = 235;
+    public static final double ROTATION_TRANSFER_POSITION = 10;
+    public static final double ROTATION_BASKET_POSITION = 10;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 10;
+    public static final double ROTATION_BACK_SLAP_POSITION = 210;
+    public static double CLAW_OPENED_POSITION = 0.9;
+    public static double CLAW_CLOSED_POSITION = 0.04;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0/26.0;
     public static double KP = 0.015;
@@ -93,7 +97,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         openClaw();
     }
 
