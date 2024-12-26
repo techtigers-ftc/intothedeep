@@ -10,10 +10,6 @@ public enum DropperState {
      */
     PRE_TRANSFER,
     /**
-     * The dropper is in the transfer state
-     */
-    TRANSFER,
-    /**
      * The Dropper is Ready to Drop a Specimen When the Robot is Slapping Forward
      */
     FORWARD_CARRY,
