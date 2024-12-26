@@ -81,7 +81,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 manipulatorGamepad.getLeftY() != 0
         );
         intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY()));
+                manipulatorGamepad.getLeftY() * 2));
 
         IntakeManualRotationCommand intakeManualRotationCommand =
                 new IntakeManualRotationCommand(intake, manipulatorGamepad);
