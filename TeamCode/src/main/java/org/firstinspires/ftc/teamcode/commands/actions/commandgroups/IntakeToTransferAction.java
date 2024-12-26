@@ -5,9 +5,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeLoosenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
@@ -37,8 +38,10 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 400),
                         new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 400),
-                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
-            )
+                        new IntakeSlidesAbsoluteAction(intake, 2, 0.25)
+                ),
+                new IntakeLoosenAction(intake, 500),
+                new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
         );
     }
 

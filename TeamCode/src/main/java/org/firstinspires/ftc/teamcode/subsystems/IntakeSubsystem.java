@@ -39,6 +39,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.0;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
+    private static final double CLAW_LOOSE_POSITION = 0.75;
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
@@ -206,6 +207,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void closeClaw() {
         leftClaw.setPosition(CLAW_CLOSED_POSITION);
         rightClaw.setPosition(CLAW_CLOSED_POSITION);
+        robotState.setIntakeClawState(ClawState.CLOSED);
+    }
+
+    /**
+     * Loosens the intake claw
+     */
+    public void loosenClaw() {
+        leftClaw.setPosition(CLAW_LOOSE_POSITION);
+        rightClaw.setPosition(CLAW_LOOSE_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
