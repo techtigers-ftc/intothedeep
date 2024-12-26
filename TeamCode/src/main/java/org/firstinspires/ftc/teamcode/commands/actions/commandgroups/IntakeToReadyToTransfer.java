@@ -15,12 +15,15 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+/**
+ * Command to move intake to ready to transfer state.
+ */
 public class IntakeToReadyToTransfer extends SequentialCommandGroup {
     private final RobotState robotState;
     private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
     /**
-     * Creates a new IntakeTuckCommand
+     * Creates a new IntakeReadyToTransferCommand
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
@@ -42,7 +45,7 @@ public class IntakeToReadyToTransfer extends SequentialCommandGroup {
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
         } else {
-            RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
+            RobotLog.dd(LOG_TAG, "Executing IntakeToReadyToTransfer command from state: %s", robotState.getIntakeState());
             super.initialize();
         }
     }

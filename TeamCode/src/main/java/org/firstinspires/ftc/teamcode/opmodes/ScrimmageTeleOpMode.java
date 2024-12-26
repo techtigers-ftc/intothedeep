@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHi
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.HangSpecimenAction;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -50,13 +48,13 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         // MANIPULATOR
 
         // Intake
-        IntakeToPickupAction intakeToPickup =
-                new IntakeToPickupAction(intake, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
-
-        IntakeToTransferAction intakeToTransfer =
-                new IntakeToTransferAction(intake, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
+//        IntakeToPickupAction intakeToPickup =
+//                new IntakeToPickupAction(intake, robotState);
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeToPickup);
+//
+//        IntakeToTransferAction intakeToTransfer =
+//                new IntakeToTransferAction(intake, robotState);
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeToTransfer);
 
         // Reset the intake slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(

@@ -13,15 +13,14 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to move intake to prepare to intake state. This command will report an error if the current state of the
- * intake is not in an acceptable position.
+ * Command to move intake to prepare to intake state.
  */
 public class IntakePrepareToIntakeAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakePrepareToIntakeAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeToPrepareCommand
+     * Creates a new IntakeToPrepareToIntakeCommand
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
@@ -44,7 +43,7 @@ public class IntakePrepareToIntakeAction extends ParallelCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-        RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
+        RobotLog.dd(LOG_TAG, "Executing Prepare To Intake command from state: %s", robotState.getIntakeState());
     }
 
     @Override

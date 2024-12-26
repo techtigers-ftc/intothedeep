@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils.enums;
 
 /**
- * Enum for the five positions of the intake claw
+ * Enum for the five positions of the intake
  */
 public enum IntakeState {
     /**

@@ -13,6 +13,9 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+/**
+ * Command to move intake to prepare for intake state
+ */
 public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakePrepareToIntakeAction.class.getSimpleName();
     private final RobotState robotState;
@@ -43,7 +46,7 @@ public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
         } else {
-            RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
+            RobotLog.dd(LOG_TAG, "Executing IntakeReadyToIntakeAction command from state: %s", robotState.getIntakeState());
             super.initialize();
         }
     }
