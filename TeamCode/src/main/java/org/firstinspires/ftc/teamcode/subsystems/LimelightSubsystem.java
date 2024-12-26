@@ -21,7 +21,7 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
-    private static final int NEURAL_DETECTOR_PIPELINE = 4;
+    private static final int NEURAL_DETECTOR_PIPELINE = 5;
     // Logistic function parameters
     private static final double FLOOR = 0.00221939;
     private static final double CAP = 0.0725463 + FLOOR;
