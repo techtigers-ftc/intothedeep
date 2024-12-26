@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -64,14 +63,15 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 intake::resetSlides
         );
 
-        Trigger intakeInTransfer = new Trigger(() ->
-                robotState.getIntakeState() == IntakeState.TRANSFER
-        );
+        // TODO: Removed reference to old IntakeState; need to come back and update
+//        Trigger intakeInTransfer = new Trigger(() ->
+////                robotState.getIntakeState() == IntakeState.TRANSFER
+//        );
 
-        // Toggles the rotation on the intake between two perpendicular positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).whenActive(
-                intake::togglePerpendicularRotation
-        );
+//        // Toggles the rotation on the intake between two perpendicular positions
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(intakeInTransfer.negate()).whenActive(
+//                intake::togglePerpendicularRotation
+//        );
 
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
@@ -88,7 +88,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
                         manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0
         );
-        intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
+//        intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
         DropperToTransferAction dropperToTransfer =
@@ -97,7 +97,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 
         DropperToHighBasketAction highBasketDrop =
                 new DropperToHighBasketAction(dropper, intake, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
         Trigger intakeFromWall = new Trigger(() ->
                 robotState.getDropperState() == DropperState.WALL_INTAKE
@@ -107,7 +107,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 new DropperToHighChamberAction(dropper, intake, robotState);
 
          //If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
 
         // Reset the dropper slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(

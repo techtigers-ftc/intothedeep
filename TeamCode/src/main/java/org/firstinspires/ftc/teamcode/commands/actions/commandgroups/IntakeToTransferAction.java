@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotatio
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
@@ -47,7 +46,8 @@ public class IntakeToTransferAction extends SequentialCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setIntakeState(IntakeState.TRANSFER);
+        // TODO: Fix this
+//        robotState.setIntakeState(IntakeState.TRANSFER);
         robotState.setBlockPosition(RobotBlockPosition.INTAKE);
         robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
 

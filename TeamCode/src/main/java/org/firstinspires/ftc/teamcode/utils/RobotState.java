@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeClawPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
@@ -32,7 +31,6 @@ public class RobotState extends GlobalState {
     private ClawState intakeClawState;
     private double intakeClawRotation;
     private double intakeClawPitch;
-    private IntakeState intakeState;
     private RobotBlockPosition blockPosition;
     private boolean isAscending;
     private boolean isVerticalExtended;
@@ -41,7 +39,7 @@ public class RobotState extends GlobalState {
     private ClawState dropperClawState;
     private DropperState dropperState;
     private DriveGears driveGears;
-    private IntakeClawPosition intakeClawPosition;
+    private IntakeState intakeState;
     private int robotError;
 
     /**
@@ -62,7 +60,6 @@ public class RobotState extends GlobalState {
         intakeClawState = ClawState.OPEN;
         intakeClawRotation = 0;
         intakeClawPitch = 0;
-        intakeState = IntakeState.TRANSFER;
         blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
@@ -71,7 +68,7 @@ public class RobotState extends GlobalState {
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
         driveGears = DriveGears.NOT_ENGAGED;
-        intakeClawPosition = IntakeClawPosition.TUCK;
+        intakeState = IntakeState.TUCK;
     }
 
     /**
@@ -184,22 +181,6 @@ public class RobotState extends GlobalState {
      */
     public void setBlockPosition(RobotBlockPosition hasBlock) {
         this.blockPosition = hasBlock;
-    }
-
-    /**
-     * @return the current state of the robot's intake
-     */
-    public IntakeState getIntakeState() {
-        return intakeState;
-    }
-
-    /**
-     * Sets the current state of the robot's intake
-     *
-     * @param intakeState the state of the robot's intake
-     */
-    public void setIntakeState(IntakeState intakeState) {
-        this.intakeState = intakeState;
     }
 
     /**
@@ -443,19 +424,19 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current position of the intake claw
+     * @return the current state of the intake
      */
-    public IntakeClawPosition getIntakeClawPosition() {
-        return intakeClawPosition;
+    public IntakeState getIntakeState() {
+        return intakeState;
     }
 
     /**
-     * Sets the current intake claw position of the robot
+     * Sets the current intake state of the robot
      *
-     * @param intakeClawPosition the position of the intake claw
+     * @param intakeState the state of the intake
      */
-    public void setIntakeClawPosition(IntakeClawPosition intakeClawPosition) {
-        this.intakeClawPosition = intakeClawPosition;
+    public void setIntakeState(IntakeState intakeState) {
+        this.intakeState = intakeState;
     }
 
     /**

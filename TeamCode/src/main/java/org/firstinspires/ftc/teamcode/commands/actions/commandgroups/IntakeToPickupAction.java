@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsolu
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * A command group that moves the intake system to the pickup position, ready to pick up a sample
@@ -42,7 +41,8 @@ public class IntakeToPickupAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+        // TODO: Fix this
+//        robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
         robotState.setCurrentGear(DriveGears.ENGAGED);
     }
 }
