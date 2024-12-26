@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -30,18 +31,21 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    public static final double PITCH_TRANSFER_POSITION = 315;
-    public static final double PITCH_WALL_POSITION = 310;
-    public static final double PITCH_BASKET_POSITION = 210;
-    public static final double PITCH_CHAMBER_POSITION = 220; //170
-    public static final double ROTATION_TRANSFER_POSITION = 5;
-    public static final double ROTATION_WALL_POSITION = 5;
-    public static final double ROTATION_BASKET_POSITION = 185;
-    public static final double ROTATION_CHAMBER_POSITION = 185;
-    public static double CLAW_OPENED_POSITION = 0.75;
-    public static double CLAW_CLOSED_POSITION = 0;
+    private static final double SLIDE_MAX = 22;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 35;
+    public static final double PITCH_TRANSFER_POSITION = 30;
+    public static final double PITCH_BASKET_POSITION = 200;
+    public static final double PITCH_CHAMBER_POSITION = 175;
+    public static final double PITCH_FRONT_SLAP_POSITION = 115;
+    public static final double PITCH_BACK_SLAP_POSITION = 235;
+    public static final double ROTATION_TRANSFER_POSITION = 10;
+    public static final double ROTATION_BASKET_POSITION = 10;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 10;
+    public static final double ROTATION_BACK_SLAP_POSITION = 210;
+    public static double CLAW_OPENED_POSITION = 0.9;
+    public static double CLAW_CLOSED_POSITION = 0.04;
     private static final double GEAR_RATIO = 1;
-    private static final double SERVO_GEAR_RATIO = 1;
+    private static final double SERVO_GEAR_RATIO = 40.0/26.0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -76,13 +80,13 @@ public class DropperSubsystem extends CloseableSubsystem {
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
-        differentialController.setMaxRange(355, 0);
+        differentialController.setMaxRange(330, 215);
 
-        leftWrist.setDirection(Servo.Direction.FORWARD);
-        rightWrist.setDirection(Servo.Direction.REVERSE);
+        leftWrist.setDirection(Servo.Direction.REVERSE);
+        rightWrist.setDirection(Servo.Direction.FORWARD);
 
-        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotor = (DcMotorEx) encoderMotor;
@@ -93,7 +97,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_TRANSFER_POSITION, 0);
+        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         openClaw();
     }
 
@@ -142,12 +146,21 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Gets the current position of the slides in ticks
+     *
+     * @return the current position of the slides in ticks
+     */
+    public double getCurrentSlidePositionTicks() {
+        return -encoderMotor.getCurrentPosition();
+    }
+
+    /**
      * Gets the current position of the slides in inches
      *
      * @return the current position of the slides in inches
      */
     public double getCurrentSlidePositionInches() {
-        return encoderMotor.getCurrentPosition() * INCHES_PER_MOTOR_TICK;
+        return getCurrentSlidePositionTicks() * INCHES_PER_MOTOR_TICK;
     }
 
     /**
@@ -174,11 +187,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        if (position < 0){
-            slideController.moveToInches(0);
-        } else{
-            slideController.moveToInches(position);
-        }
+        slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
     }
 
     /**
@@ -243,7 +252,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setRotationAbsolute(double rotationAngle) {
-//        setWristAbsolute(getPitch(), rotationAngle);
+        setWristAbsolute(getPitch(), rotationAngle);
     }
 
     /**
@@ -262,22 +271,14 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristRelative(0, rotationAngle);
     }
 
-    public void setSlidesPower(double power) {
-        rightSlideMotor.setPower(power);
-        leftSlideMotor.setPower(power);
-    }
-
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        double power =
+                slideController.calculateMotorPowers(getCurrentSlidePositionTicks());
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
 
-        if(getSlideCurrent() > 3.5){
-            moveSlidesRelative(0);
-        }
-
-        robotState.setVerticalExtended(encoderMotor.getCurrentPosition() > 100);
+        robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperCloseActio
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -32,11 +33,14 @@ public class DropperToHighChamberAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 500),
                 new DropperCloseAction(dropper, 200),
                 new IntakeOpenAction(intake, 200),
+                new IntakeWristPitchAction(intake, 70, 500),
                 new ParallelCommandGroup(
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
-                        new DropperRotationAction(dropper, DropperSubsystem.ROTATION_CHAMBER_POSITION, 300)
+                        new DropperRotationAction(dropper,
+                                DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 300)
                 )
         );
     }
