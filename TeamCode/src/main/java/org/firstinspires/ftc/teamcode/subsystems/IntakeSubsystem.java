@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -47,9 +46,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_ROTATION_TUCK_POSITION = 14;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
+    public static final double WRIST_PITCH_READY_TO_INTAKE_POSITION = 70;
+    public static final double WRIST_ROTATION_READY_TO_INTAKE_POSITION = 180;
+    public static final double CLAW_ROTATION_READY_TO_INTAKE_POSITION = 90;
+
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
-    public static final double WRIST_ROTATION_PICKUP_POSITION = 180;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
 
     public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 14;

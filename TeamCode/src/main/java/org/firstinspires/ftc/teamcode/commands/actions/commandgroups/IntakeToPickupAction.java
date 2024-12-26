@@ -30,9 +30,9 @@ public class IntakeToPickupAction extends ParallelCommandGroup {
         addCommands(
                 new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
                 new IntakeWristRotationAction(intake,
-                        IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 500),
+                        IntakeSubsystem.WRIST_ROTATION_READY_TO_INTAKE_POSITION, 500),
                 new IntakeClawRotationAction(intake,
-                        IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
+                        IntakeSubsystem.CLAW_ROTATION_READY_TO_INTAKE_POSITION, 500),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 500),
                 new IntakeOpenAction(intake)
