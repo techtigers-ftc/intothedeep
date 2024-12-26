@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;

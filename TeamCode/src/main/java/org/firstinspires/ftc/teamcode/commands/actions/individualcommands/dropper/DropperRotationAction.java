@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.commands.actions.dropper;
+package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 import team.techtigers.base.actions.ServoActionCommand;
 
 /**
- * Action Command to move the dropper pitch to a certain position
+ * Action Command to move the dropper claw rotation to a certain position
  */
-public class DropperPitchAction extends ServoActionCommand {
+public class DropperRotationAction extends ServoActionCommand {
     private final DropperSubsystem dropper;
 
     /**
@@ -17,19 +17,19 @@ public class DropperPitchAction extends ServoActionCommand {
      * @param expectedServoPos the expected servo position
      * @param duration         the duration of the command
      */
-    public DropperPitchAction(DropperSubsystem dropper,
-                              double expectedServoPos, long duration) {
+    public DropperRotationAction(DropperSubsystem dropper,
+                                 double expectedServoPos, long duration) {
         super(expectedServoPos, duration);
         this.dropper = dropper;
     }
 
     @Override
     protected double getPosition() {
-        return dropper.getPitch();
+        return dropper.getRotation();
     }
 
     @Override
     protected void setPosition(double position) {
-        dropper.setPitchAbsolute(position);
+        dropper.setRotationAbsolute(position);
     }
 }
