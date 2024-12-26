@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  */
 public class IntakeToReadyToTransfer extends SequentialCommandGroup {
     private final RobotState robotState;
-    private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
+    private static final String LOG_TAG = IntakeToReadyToTransfer.class.getSimpleName();
 
     /**
      * Creates a new IntakeReadyToTransferCommand

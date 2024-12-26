@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * Command to move intake to prepare for intake state
  */
 public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
-    private static final String LOG_TAG = IntakePrepareToIntakeAction.class.getSimpleName();
+    private static final String LOG_TAG = IntakeReadyToIntakeAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
