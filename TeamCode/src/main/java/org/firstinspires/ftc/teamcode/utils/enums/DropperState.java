@@ -24,5 +24,13 @@ public enum DropperState {
     /**
      * The dropper is ready to drop to the low basket
      */
-    LOW_BASKET
+    LOW_BASKET,
+    /**
+     * The Dropper is Finished Slapping Forward
+     */
+    FRONT_SLAP,
+    /**
+     * The Dropper is Finished Slapping Backward
+     */
+    BACK_SLAP,
 }

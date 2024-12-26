@@ -66,7 +66,7 @@ public class RobotState extends GlobalState {
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
-        dropperState = DropperState.TRANSFER;
+        dropperState = DropperState.PRE_TRANSFER;
         driveGears = DriveGears.NOT_ENGAGED;
         intakeState = IntakeState.TUCK;
     }

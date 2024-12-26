@@ -6,48 +6,50 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper to the high chamber drop position, with the specimen
- * upside down, ready to be clipped upwards onto the high chamber
+ * moves the dropper system to the high basket drop position
  */
-public class DropperToHighChamberAction extends SequentialCommandGroup {
+public class DropperHighBasketAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperToHighChamberAction
+     * Creates a new DropperToHighBasketDropCommandGroup
      *
-     * @param dropper    the dropper subsystem
-     * @param intake     the intake subsystem
-     * @param robotState the robot state
+     * @param dropper the dropper subsystem
+     * @param intake  the intake subsystem
      */
-    public DropperToHighChamberAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DropperHighBasketAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(dropper, intake);
+        addRequirements(dropper);
         addCommands(
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 500),
                 new DropperCloseAction(dropper, 200),
                 new IntakeOpenAction(intake, 200),
                 new IntakeWristPitchAction(intake, 70, 500),
                 new ParallelCommandGroup(
-                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
+                        new DropperSlidesAbsoluteAction(dropper, 22, 1),
+                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300),
                         new DropperRotationAction(dropper,
-                                DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 300)
+                                DropperSubsystem.ROTATION_BASKET_POSITION, 300)
                 )
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.DROP);
+        robotState.setDropperState(DropperState.HIGH_BASKET);
         robotState.setBlockPosition(RobotBlockPosition.DROPPER);
+        robotState.setCurrentGear(DriveGears.ENGAGED);
     }
 }

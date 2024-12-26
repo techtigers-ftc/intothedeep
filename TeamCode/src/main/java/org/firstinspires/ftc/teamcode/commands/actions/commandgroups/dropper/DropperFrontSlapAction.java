@@ -6,18 +6,18 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
- * A command group that moves the dropper slides in order to hang the specimen on the chamber
+ * A command group that moves the dropper slides in order to hang the specimen on the chamber forwards
  */
-public class HangSpecimenAction extends SequentialCommandGroup {
+public class DropperFrontSlapAction extends SequentialCommandGroup {
     /**
-     * Creates a new HangSpecimenAction
+     * Creates a new DropperFrontSlapAction
      *
      * @param dropper the dropper subsystem
      */
-    public HangSpecimenAction(DropperSubsystem dropper) {
+    public DropperFrontSlapAction(DropperSubsystem dropper) {
         addRequirements(dropper);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACK_SLAP_POSITION, 0)
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0)
         );
     }
 }
