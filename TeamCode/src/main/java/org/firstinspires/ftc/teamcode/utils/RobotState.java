@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeClawPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -39,6 +40,7 @@ public class RobotState extends GlobalState {
     private ClawState dropperClawState;
     private DropperState dropperState;
     private DriveGears driveGears;
+    private IntakeClawPosition intakeClawPosition;
 
     /**
      * Initializes a new RobotState
@@ -67,6 +69,7 @@ public class RobotState extends GlobalState {
         dropperClawState = ClawState.OPEN;
         dropperState = DropperState.TRANSFER;
         driveGears = DriveGears.NOT_ENGAGED;
+        intakeClawPosition = IntakeClawPosition.TUCK;
     }
 
     /**
@@ -414,5 +417,20 @@ public class RobotState extends GlobalState {
      */
     public void setCurrentGear(DriveGears gear) {
         this.driveGears = gear;
+    }
+
+    /**
+     * @return the current position of the intake claw
+     */
+    public IntakeClawPosition getIntakeClawPosition() {
+        return intakeClawPosition;
+    }
+
+    /**
+     * Sets the current intake claw position of the robot
+     * @param intakeClawPosition the position of the intake claw
+     */
+    public void setIntakeClawPosition(IntakeClawPosition intakeClawPosition) {
+        this.intakeClawPosition = intakeClawPosition;
     }
 }
