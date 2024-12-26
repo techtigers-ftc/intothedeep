@@ -21,6 +21,7 @@ public enum RobotError {
 
     /**
      * Constructor for the RobotError enum
+     *
      * @param code The error code
      */
     RobotError(int code) {
