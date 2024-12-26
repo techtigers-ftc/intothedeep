@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -41,7 +40,7 @@ public class IntakeTuckAction extends ParallelCommandGroup {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_INTAKE
+        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP
                 && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER) {
             RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);

@@ -13,13 +13,13 @@ public enum IntakeState {
      * Position of the claw when the slides are being extended; allows the slides to extend
      * without the claw colliding into the submersible or other blocks
      */
-    PREPARE_TO_INTAKE,
+    PREPARE_TO_PICKUP,
 
     /**
      * Slides are extended and the claw is positioned over the block to be picked up, allowing for
      * fine adjustments to be made before picking up the block
      */
-    READY_TO_INTAKE,
+    READY_TO_PICKUP,
 
     /**
      * Claw is closed and facing the robot, but the slides could be extended

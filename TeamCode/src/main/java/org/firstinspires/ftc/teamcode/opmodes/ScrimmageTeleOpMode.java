@@ -6,10 +6,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighBasketAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToHighChamberAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.DropperToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.HangSpecimenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToHighBasketAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToHighChamberAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.HangSpecimenAction;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;

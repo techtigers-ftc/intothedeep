@@ -6,11 +6,11 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakePrepareToIntakeAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakePrepareToTransfer;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeReadyToIntakeAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeToReadyToTransfer;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -36,27 +36,27 @@ public class IntakeStateTestOpMode extends BaseOpMode {
         registerSubsystems(intakeSubsystem);
 
         IntakeTuckAction intakeTuckCommand = new IntakeTuckAction(intakeSubsystem, robotState);
-        IntakePrepareToIntakeAction intakePrepareToIntakeAction = new IntakePrepareToIntakeAction(intakeSubsystem, robotState);
-        IntakeReadyToIntakeAction intakeReadyToIntakeAction = new IntakeReadyToIntakeAction(intakeSubsystem, robotState);
-        IntakePrepareToTransfer intakePrepareToTransferAction = new IntakePrepareToTransfer(intakeSubsystem, robotState);
-        IntakeToReadyToTransfer intakeToReadyToTransferAction = new IntakeToReadyToTransfer(intakeSubsystem, robotState);
+        IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intakeSubsystem, robotState);
+        IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intakeSubsystem, robotState);
+        IntakePrepareToTransferAction intakePrepareToTransferAction = new IntakePrepareToTransferAction(intakeSubsystem, robotState);
+        IntakeToReadyToTransferAction intakeToReadyToTransferAction = new IntakeToReadyToTransferAction(intakeSubsystem, robotState);
 
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         Trigger leftBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
 
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
-        Trigger inPrepareToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_INTAKE);
-        Trigger inReadyToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_INTAKE);
+        Trigger inPrepareToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
+        Trigger inReadyToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
 
         leftBumper.and(inPrepareToIntake).whenActive(intakeTuckCommand);
-        leftBumper.and(inReadyToIntake).whenActive(intakePrepareToIntakeAction);
-        leftBumper.and(inPrepareToTransfer).whenActive(intakePrepareToIntakeAction);
-        leftBumper.and(inReadyToTransfer).whenActive(intakePrepareToIntakeAction);
+        leftBumper.and(inReadyToIntake).whenActive(intakePrepareToPickupAction);
+        leftBumper.and(inPrepareToTransfer).whenActive(intakePrepareToPickupAction);
+        leftBumper.and(inReadyToTransfer).whenActive(intakePrepareToPickupAction);
 
-        rightBumper.and(inTuck).whenActive(intakePrepareToIntakeAction);
-        rightBumper.and(inPrepareToIntake).whenActive(intakeReadyToIntakeAction);
+        rightBumper.and(inTuck).whenActive(intakePrepareToPickupAction);
+        rightBumper.and(inPrepareToIntake).whenActive(intakeReadyToPickupAction);
         rightBumper.and(inReadyToIntake).whenActive(intakePrepareToTransferAction);
         rightBumper.and(inPrepareToTransfer).whenActive(intakeToReadyToTransferAction);
         // TODO: CHANGE THIS LOGIC
