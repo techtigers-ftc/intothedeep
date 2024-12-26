@@ -6,8 +6,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakePrepareToIntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeTuckCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakePrepareToIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -32,8 +32,8 @@ public class IntakeStateTestOpMode extends BaseOpMode {
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
         registerSubsystems(intakeSubsystem);
 
-        IntakeTuckCommand intakeTuckCommand = new IntakeTuckCommand(intakeSubsystem, robotState);
-        IntakePrepareToIntakeCommand intakePrepareToIntakeCommand = new IntakePrepareToIntakeCommand(intakeSubsystem, robotState);
+        IntakeTuckAction intakeTuckCommand = new IntakeTuckAction(intakeSubsystem, robotState);
+        IntakePrepareToIntakeAction intakePrepareToIntakeAction = new IntakePrepareToIntakeAction(intakeSubsystem, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(intakeTuckCommand);
 
@@ -49,7 +49,7 @@ public class IntakeStateTestOpMode extends BaseOpMode {
         // To Tuck
         leftBumper.and(inPrepareToIntake).whenActive(intakeTuckCommand);
         // To Prepare to Intake
-        rightBumper.and(inTuck).whenActive(intakePrepareToIntakeCommand);
+        rightBumper.and(inTuck).whenActive(intakePrepareToIntakeAction);
 
 
     }

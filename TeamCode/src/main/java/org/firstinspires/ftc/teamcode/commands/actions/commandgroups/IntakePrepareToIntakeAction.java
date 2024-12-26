@@ -1,8 +1,13 @@
-package org.firstinspires.ftc.teamcode.commands.actions.intake;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -11,8 +16,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
  * Command to move intake to prepare to intake state. This command will report an error if the current state of the
  * intake is not in an acceptable position.
  */
-public class IntakePrepareToIntakeCommand extends ParallelCommandGroup {
-    private static final String LOG_TAG = IntakePrepareToIntakeCommand.class.getSimpleName();
+public class IntakePrepareToIntakeAction extends ParallelCommandGroup {
+    private static final String LOG_TAG = IntakePrepareToIntakeAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
@@ -21,7 +26,7 @@ public class IntakePrepareToIntakeCommand extends ParallelCommandGroup {
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakePrepareToIntakeCommand(IntakeSubsystem intake, RobotState robotState) {
+    public IntakePrepareToIntakeAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(

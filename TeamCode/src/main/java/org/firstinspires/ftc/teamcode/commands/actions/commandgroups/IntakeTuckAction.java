@@ -1,9 +1,14 @@
-package org.firstinspires.ftc.teamcode.commands.actions.intake;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -13,9 +18,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * Command to tuck the intake in. This command will report an error if the current state of the
  * intake is not in an acceptable position.
  */
-public class IntakeTuckCommand extends SequentialCommandGroup {
+public class IntakeTuckAction extends SequentialCommandGroup {
     private final RobotState robotState;
-    private static final String LOG_TAG = IntakeTuckCommand.class.getSimpleName();
+    private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
     /**
      * Creates a new IntakeTuckCommand
@@ -23,7 +28,7 @@ public class IntakeTuckCommand extends SequentialCommandGroup {
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeTuckCommand(IntakeSubsystem intake, RobotState robotState) {
+    public IntakeTuckAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
