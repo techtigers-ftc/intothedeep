@@ -73,5 +73,6 @@ public class IntakeStateTestOpMode extends BaseOpMode {
         telemetry.addData("Claw diff pitch", intakeSubsystem.getPitch());
         telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
         telemetry.addData("Slides Position", intakeSubsystem.getCurrentSlidePositionInches());
+        telemetry.addData("Current Intake State", robotState.getIntakeState());
     }
 }

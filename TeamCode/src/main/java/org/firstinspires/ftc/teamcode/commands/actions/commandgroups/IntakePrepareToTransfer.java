@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-public class IntakePrepareToTransfer extends ParallelCommandGroup {
+public class IntakePrepareToTransfer extends SequentialCommandGroup {
     private final RobotState robotState;
     private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
