@@ -23,8 +23,6 @@ public class HangSpecimenAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACK_SLAP_POSITION, 0)
-//                new WaitCommand(200),
-//                new DropperOpenAction(dropper)
         );
     }
 }

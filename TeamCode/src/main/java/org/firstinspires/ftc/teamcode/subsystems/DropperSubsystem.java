@@ -278,10 +278,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
 
-//        if(getSlideCurrent() > 3.5){
-//            moveSlidesRelative(0);
-//        }
-
         robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
 
         RobotLog.dd(tag, "Current: %f Target %f",
