@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeClawPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -41,6 +42,7 @@ public class RobotState extends GlobalState {
     private DropperState dropperState;
     private DriveGears driveGears;
     private IntakeClawPosition intakeClawPosition;
+    private int robotError;
 
     /**
      * Initializes a new RobotState
@@ -432,5 +434,30 @@ public class RobotState extends GlobalState {
      */
     public void setIntakeClawPosition(IntakeClawPosition intakeClawPosition) {
         this.intakeClawPosition = intakeClawPosition;
+    }
+
+    /**
+     * Sets a particular robot error to true
+     * @param error the error to set
+     */
+    public void setError(RobotError error) {
+        this.robotError |= error.code;
+    }
+
+    /**
+     * Clears a particular robot error
+     * @param error the error to clear
+     */
+    public void clearError(RobotError error) {
+        this.robotError &= ~error.code;
+    }
+
+    /**
+     * Checks if a particular robot error is set
+     * @param error the error to check
+     * @return true if the error is set, false otherwise
+     */
+    public boolean hasError(RobotError error) {
+        return (this.robotError & error.code) != 0;
     }
 }
