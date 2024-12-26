@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions.dropper;
+package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;

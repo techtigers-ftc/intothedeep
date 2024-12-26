@@ -1,13 +1,8 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.dropper.DropperSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 
 /**
