@@ -15,10 +15,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * Command to tuck the intake in. This command will report an error if the current state of the
- * intake is not in an acceptable position.
+ * Command to tuck the intake in.
  */
-public class IntakeTuckAction extends SequentialCommandGroup {
+public class IntakeTuckAction extends ParallelCommandGroup {
     private final RobotState robotState;
     private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
@@ -32,13 +31,10 @@ public class IntakeTuckAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 200),
-                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25),
-                        new IntakeCloseAction(intake),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION, 200)
-
-                ),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 200),
+                new IntakeSlidesAbsoluteAction(intake, 0, 0.25),
+                new IntakeCloseAction(intake),
+                new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION, 200),
                 new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION, 200)
         );
     }
@@ -57,7 +53,7 @@ public class IntakeTuckAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.TUCK);

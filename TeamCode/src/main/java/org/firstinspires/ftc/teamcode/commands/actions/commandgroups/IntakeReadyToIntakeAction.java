@@ -14,14 +14,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * Command to move intake to prepare for intake state
+ * Command to move intake to ready to intake state
  */
 public class IntakeReadyToIntakeAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeReadyToIntakeAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeToPrepareCommand
+     * Creates a new IntakeReadyToIntakeCommand
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
