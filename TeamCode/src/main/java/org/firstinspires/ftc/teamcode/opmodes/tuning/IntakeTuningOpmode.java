@@ -94,7 +94,7 @@ public class IntakeTuningOpmode extends BaseOpMode {
         telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
         telemetry.addData("Slides position", intakeSubsystem.getCurrentSlidePositionInches());
         telemetry.addLine();
-        telemetry.addData("Current Draw", intakeSubsystem.getSlideMotorCurrent());
+        telemetry.addData("Current Draw", intakeSubsystem.getSlideCurrent());
         telemetry.addData("Invalid intake error:", robotState.hasError(RobotError.INVALID_INTAKE_POSITION));
     }
 }

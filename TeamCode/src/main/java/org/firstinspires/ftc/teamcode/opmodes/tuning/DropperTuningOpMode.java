@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -18,6 +20,8 @@ import team.techtigers.base.BaseOpMode;
 public class DropperTuningOpMode extends BaseOpMode {
     private DropperSubsystem dropperSubsystem;
     private RobotState robotState;
+    private SlidingAverageCalculator leftMotorCurrentDraw;
+    private SlidingAverageCalculator rightMotorCurrentDraw;
 
     @Override
     public void initialize() {
@@ -26,6 +30,9 @@ public class DropperTuningOpMode extends BaseOpMode {
         registerSubsystems(dropperSubsystem);
 
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        leftMotorCurrentDraw = new SlidingAverageCalculator(10);
+        rightMotorCurrentDraw = new SlidingAverageCalculator(10);
 
         // Claw
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
@@ -79,6 +86,8 @@ public class DropperTuningOpMode extends BaseOpMode {
         double currentPos = dropperSubsystem.getCurrentSlidePositionInches();
         double expectedPos = dropperSubsystem.getTargetPositionInches();
         double error = expectedPos - currentPos;
+        leftMotorCurrentDraw.add(dropperSubsystem.getSlideCurrntLeft());
+        rightMotorCurrentDraw.add(dropperSubsystem.getSlideCurrntRight());
 
         telemetry.addData("Current slide position (inches)", currentPos);
         telemetry.addData("Expected slide position (inches)", expectedPos);
@@ -87,7 +96,8 @@ public class DropperTuningOpMode extends BaseOpMode {
         telemetry.addData("Claw rotation angle", dropperSubsystem.getRotation());
         telemetry.addData("Claw diff pitch", dropperSubsystem.getPitch());
         telemetry.addLine();
-        telemetry.addData("Current Draw:", dropperSubsystem.getSlideMotorCurrent());
+        telemetry.addData("Left Draw:", dropperSubsystem.getSlideCurrntLeft());
+        telemetry.addData("Right Draw:", dropperSubsystem.getSlideCurrntRight());
 //        telemetry.addData("Invalid dropper state error:", robotState.hasError(RobotError.INVALID_INTAKE_POSITION));
     }
 }

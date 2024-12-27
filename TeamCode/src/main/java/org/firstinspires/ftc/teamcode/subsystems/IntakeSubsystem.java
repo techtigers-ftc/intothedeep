@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -64,7 +65,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
     private final DcMotor encoderMotor;
-    private final DcMotorEx currentMotor;
+    private final DcMotorEx currentMotorRight;
+    private final DcMotorEx currentMotorLeft;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo leftClaw;
@@ -72,8 +74,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
-
-
+    private final SlidingAverageCalculator totalSlideCurrentAverage;
+    private final SlidingAverageCalculator leftSlideCurrentAverage;
+    private final SlidingAverageCalculator rightSlideCurrentAverage;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -96,11 +99,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
+        totalSlideCurrentAverage = new SlidingAverageCalculator(10);
+        rightSlideCurrentAverage = new SlidingAverageCalculator(10);
+        leftSlideCurrentAverage = new SlidingAverageCalculator(10);
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
         resetSlides();
-        currentMotor = (DcMotorEx) encoderMotor;
+        currentMotorRight = (DcMotorEx) encoderMotor;
+        currentMotorLeft = (DcMotorEx) leftSlideMotor;
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -342,10 +349,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the slide motors
      */
-    public double getSlideMotorCurrent() {
-        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    public double getSlideCurrent() {
+        double sum = currentMotorRight.getCurrent(CurrentUnit.AMPS) + currentMotorLeft.getCurrent(CurrentUnit.AMPS);
+        return sum;
     }
-
+    public double getSlideCurrntRight(){
+        return currentMotorRight.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getSlideCurrntLeft(){
+        return currentMotorLeft.getCurrent(CurrentUnit.AMPS);
+    }
     /**
      * Updates and powers motors every cycle
      */
@@ -359,9 +372,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
 
+        totalSlideCurrentAverage.add(getSlideCurrent());
+        leftSlideCurrentAverage.add(getSlideCurrntLeft());
+        rightSlideCurrentAverage.add(getSlideCurrntRight());
+
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
         RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
+        RobotLog.dd(tag, "Average Current: %f", totalSlideCurrentAverage.getAverage());
+        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
+        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
     }
 }
