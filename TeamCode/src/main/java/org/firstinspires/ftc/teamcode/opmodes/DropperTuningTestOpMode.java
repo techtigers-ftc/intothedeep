@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -16,10 +15,11 @@ import team.techtigers.base.BaseOpMode;
  * An opmode to test the capabilities of the dropper subsystem, including the slides, arm, and claw
  */
 @TeleOp(name = "Dropper Test OpMode")
-public class DropperTestOpMode extends BaseOpMode {
+public class DropperTuningTestOpMode extends BaseOpMode {
     private DropperSubsystem dropperSubsystem;
     private RobotState robotState;
     private GamepadEx driverGamepad;
+    private GamepadEx manipulatorGamepad;
 
     @Override
     public void initialize() {
@@ -28,6 +28,55 @@ public class DropperTestOpMode extends BaseOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);
         registerSubsystems(dropperSubsystem);
+
+        manipulatorGamepad = new GamepadEx(gamepad1);
+
+        //Arm
+
+        // Claw
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.closeClaw();
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.openClaw();
+        }));
+
+        // Pitch
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setPitchRelative(-5);
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setPitchRelative(5);
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setPitchAbsolute(355);
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setPitchAbsolute(0);
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setRotationRelative(-5);
+        }));
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(() -> {
+            dropperSubsystem.setRotationRelative(5);
+        }));
+
+        Trigger dropperSlidesTrigger = new Trigger(() ->
+                manipulatorGamepad.getRightY() != 0
+        );
+        dropperSlidesTrigger.whileActiveContinuous(() ->
+                dropperSubsystem.moveSlidesRelative(
+                        -manipulatorGamepad.getRightY() * 2.5)
+        );
+
+        //Slides
 
         // Moving by 1-inch increments
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
@@ -75,5 +124,9 @@ public class DropperTestOpMode extends BaseOpMode {
         telemetry.addData("CurrentPosInches", currentPos);
         telemetry.addData("ExpectedPosInches", expectedPos);
         telemetry.addData("Error", error);
+
+        //Arm
+        telemetry.addData("Pitch Servo Value", dropperSubsystem.getPitch());
+        telemetry.addData("Rotation Servo Value", dropperSubsystem.getRotation());
     }
 }

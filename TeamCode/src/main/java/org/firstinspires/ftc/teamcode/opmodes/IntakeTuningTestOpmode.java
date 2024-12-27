@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import team.techtigers.base.BaseOpMode;
 
 @TeleOp
-public class IntakeTestOpmode extends BaseOpMode {
+public class IntakeTuningTestOpmode extends BaseOpMode {
     private IntakeSubsystem intakeSubsystem;
 
     @Override
