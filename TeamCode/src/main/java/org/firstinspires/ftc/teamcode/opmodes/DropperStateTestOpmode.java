@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNTAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNTAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
@@ -42,7 +42,7 @@ public class DropperStateTestOpmode extends BaseOpMode {
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper);
         DropperBackwardCarryNTAction dropperBackwardCarryNTAction = new DropperBackwardCarryNTAction(dropper, robotState);
-        DropperForwardCarryAction dropperForwardCarryAction = new DropperForwardCarryAction(dropper, robotState);
+        DropperForwardCarryNTAction dropperForwardCarryNTAction = new DropperForwardCarryNTAction(dropper, robotState);
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
         DropperTransferAction dropperTransferAction = new DropperTransferAction(dropper, intake, robotState);
@@ -69,9 +69,9 @@ public class DropperStateTestOpmode extends BaseOpMode {
 
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
         dpadRight.and(forwardCarry.negate()).and(blockInIntake).whenActive(
-                new SequentialCommandGroup(dropperTransferAction, dropperForwardCarryAction)
+                new SequentialCommandGroup(dropperTransferAction, dropperForwardCarryNTAction)
         );
-        dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryAction);
+        dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryNTAction);
 
     }
     @Override
