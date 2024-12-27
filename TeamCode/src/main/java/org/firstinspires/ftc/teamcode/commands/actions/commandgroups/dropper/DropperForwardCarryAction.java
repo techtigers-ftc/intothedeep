@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -12,8 +14,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * upside down, ready to be clipped downwards onto the high chamber
  */
 public class DropperForwardCarryAction extends SequentialCommandGroup {
-    private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Creates a new DropperForwardCarryAction
@@ -23,12 +23,11 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public DropperForwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        this.robotState = robotState;
-        this.intake = intake;
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperForwardCarryNTAction(dropper, robotState)
+                new DropperForwardCarryNTAction(dropper, robotState),
+                new IntakeTuckAction(intake, robotState)
         );
     }
 }

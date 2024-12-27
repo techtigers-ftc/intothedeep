@@ -25,9 +25,9 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    private static final double FORWARD_KP = 0.01;
+    private static final double FORWARD_KP = 0.0175;
     private static final double FORWARD_KI = 0.0;
-    private static final double FORWARD_KD = 0.0001;
+    private static final double FORWARD_KD = 0.00013;
     private static final double FORWARD_KF = 0.0;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -45,20 +45,20 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 14;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 4;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 180;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double CLAW_ROTATION_READY_TO_PICKUP_POSITION = 90;
 
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
 
     public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 14;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 4;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 85;
+    public static final double WRIST_PITCH_PECK_POSITION = 90;
 
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
