@@ -29,6 +29,8 @@ public class DropperBackSlapAction extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        robotState.setDropperState(DropperState.BACK_SLAP);
+        if (!interrupted){
+            robotState.setDropperState(DropperState.BACK_SLAP);
+        }
     }
 }
