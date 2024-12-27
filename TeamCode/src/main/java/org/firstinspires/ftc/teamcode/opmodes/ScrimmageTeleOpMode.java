@@ -108,7 +108,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 dropper::resetSlides
         );
 
-        DropperFrontSlapAction hangSpecimen = new DropperFrontSlapAction(dropper);
+        DropperFrontSlapAction hangSpecimen = new DropperFrontSlapAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
         // Toggles the dropper claw between open and closed positions

@@ -34,6 +34,8 @@ public class DropperForwardCarryNTAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.FORWARD_CARRY);
+        if (!interrupted) {
+            robotState.setDropperState(DropperState.FORWARD_CARRY);
+        }
     }
 }

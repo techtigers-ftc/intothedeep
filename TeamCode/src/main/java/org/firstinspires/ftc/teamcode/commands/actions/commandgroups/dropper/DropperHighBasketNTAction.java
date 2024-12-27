@@ -36,7 +36,10 @@ public class DropperHighBasketNTAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.HIGH_BASKET);
-        robotState.setCurrentGear(DriveGears.ENGAGED);
+        super.end(interrupted);
+        if (!interrupted){
+            robotState.setDropperState(DropperState.HIGH_BASKET);
+            robotState.setCurrentGear(DriveGears.ENGAGED);
+        }
     }
 }

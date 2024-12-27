@@ -37,7 +37,10 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.PRE_TRANSFER);
-        robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        super.end(interrupted);
+        if (!interrupted){
+            robotState.setDropperState(DropperState.PRE_TRANSFER);
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        }
     }
 }

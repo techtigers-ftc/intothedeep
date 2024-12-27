@@ -42,8 +42,8 @@ public class DropperStateTestOpmode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         registerSubsystems(dropper, intake);
 
-        DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper);
-        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper);
+        DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
+        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNTAction dropperBackwardCarryNTAction = new DropperBackwardCarryNTAction(dropper, robotState);
         DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
         DropperForwardCarryNTAction dropperForwardCarryNTAction = new DropperForwardCarryNTAction(dropper, robotState);

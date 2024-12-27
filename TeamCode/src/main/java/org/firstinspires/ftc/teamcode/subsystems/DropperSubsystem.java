@@ -10,12 +10,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -26,13 +25,6 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
-    private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
-    private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
-    private static final double SLIDE_MAX = 22;
     public static final double PITCH_PRE_TRANSFER_POSITION = 35;
     public static final double PITCH_TRANSFER_POSITION = 30;
     public static final double PITCH_BASKET_POSITION = 200;
@@ -43,10 +35,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_BASKET_POSITION = 10;
     public static final double ROTATION_FRONT_SLAP_POSITION = 10;
     public static final double ROTATION_BACK_SLAP_POSITION = 210;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
+    private static final double TICKS_PER_ROTATION = 384.5;
+    private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
+    private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
+    private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
+    private static final double SLIDE_MAX = 22;
+    private static final double GEAR_RATIO = 1;
+    private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
     public static double CLAW_CLOSED_POSITION = 0.04;
-    private static final double GEAR_RATIO = 1;
-    private static final double SERVO_GEAR_RATIO = 40.0/26.0;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -115,7 +114,9 @@ public class DropperSubsystem extends CloseableSubsystem {
      * Method that moves servo to make the claw open
      */
     public void openClaw() {
-        robotState.setBlockPosition(RobotBlockPosition.NONE);
+        if (robotState.getBlockPosition() == RobotBlockPosition.DROPPER) {
+            robotState.setBlockPosition(RobotBlockPosition.NONE);
+        }
         grabServo.setPosition(CLAW_OPENED_POSITION);
         robotState.setDropperClawState(ClawState.OPEN);
     }
@@ -132,7 +133,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * Toggles the claw between open and closed
      */
     public void toggleClaw() {
-        if(robotState.getDropperClawState() == ClawState.CLOSED) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED) {
             openClaw();
         } else {
             closeClaw();

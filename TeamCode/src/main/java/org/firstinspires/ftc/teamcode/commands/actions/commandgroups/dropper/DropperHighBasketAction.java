@@ -1,16 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -30,21 +24,10 @@ public class DropperHighBasketAction extends SequentialCommandGroup {
     public DropperHighBasketAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
-        addRequirements(dropper);
+        addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 22, 1),
-                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300),
-                        new DropperRotationAction(dropper,
-                                DropperSubsystem.ROTATION_BASKET_POSITION, 300)
-                )
+                new DropperHighBasketNTAction(dropper, robotState)
         );
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.HIGH_BASKET);
-        robotState.setCurrentGear(DriveGears.ENGAGED);
     }
 }
