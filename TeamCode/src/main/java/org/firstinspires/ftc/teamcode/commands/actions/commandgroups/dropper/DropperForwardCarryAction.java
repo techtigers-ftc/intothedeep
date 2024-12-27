@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -26,7 +25,7 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperForwardCarryNTAction(dropper, robotState),
+                new DropperForwardCarryNoTransferAction(dropper, robotState),
                 new IntakeTuckAction(intake, robotState)
         );
     }

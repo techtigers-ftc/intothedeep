@@ -7,39 +7,37 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that moves the dropper system to the high basket drop position
+ * A command group that moves the dropper to the forward high chamber drop position, with the
+ * specimen upside down, ready to be clipped downwards onto the high chamber.
  * The NT stands for "No Transfer"
  */
-public class DropperHighBasketNTAction extends ParallelCommandGroup {
+public class DropperForwardCarryNoTransferAction extends ParallelCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperHighBasketNTAction
+     * Creates a new DropperForwardCarryNTAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperHighBasketNTAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperForwardCarryNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 22, 1),
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300),
+                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_BASKET_POSITION, 300)
+                        DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 300)
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        super.end(interrupted);
-        if (!interrupted){
-            robotState.setDropperState(DropperState.HIGH_BASKET);
-            robotState.setCurrentGear(DriveGears.ENGAGED);
+        if (!interrupted) {
+            robotState.setDropperState(DropperState.FORWARD_CARRY);
         }
     }
 }

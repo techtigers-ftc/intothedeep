@@ -24,7 +24,7 @@ public class DropperHighBasketAction extends SequentialCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperHighBasketNTAction(dropper, robotState),
+                new DropperHighBasketNoTransferAction(dropper, robotState),
                 new IntakeTuckAction(intake, robotState)
         );
     }
