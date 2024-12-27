@@ -83,14 +83,7 @@ public class DropperStateTestOpmode extends BaseOpMode {
     }
     @Override
     public void update() {
-        double currentPos = dropper.getCurrentSlidePositionInches();
-        double expectedPos = dropper.getTargetPositionInches();
-        double error = expectedPos - currentPos;
-
-        telemetry.addData("CurrentPosInches", currentPos);
-        telemetry.addData("ExpectedPosInches", expectedPos);
-        telemetry.addData("Error", error);
-        telemetry.addLine();
         telemetry.addData("Block in Intake?", robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
+        telemetry.addData("Dropper State", robotState.getDropperState());
     }
 }
