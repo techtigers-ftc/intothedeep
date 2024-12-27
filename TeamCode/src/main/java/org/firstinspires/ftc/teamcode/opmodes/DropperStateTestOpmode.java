@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNTAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -55,6 +57,9 @@ public class DropperStateTestOpmode extends BaseOpMode {
         Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
         Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
 
+        Trigger a = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A);
+        Trigger b = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B);
+
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
         Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
@@ -72,6 +77,9 @@ public class DropperStateTestOpmode extends BaseOpMode {
         dpadRight.and(forwardCarry.negate()).and(blockInIntake).whenActive(dropperForwardCarryAction);
         dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryNTAction);
 
+        a.whenActive(new DropperCloseAction(dropper, 200));
+        b.whenActive(new DropperOpenAction(dropper, 200));
+
     }
     @Override
     public void update() {
@@ -82,5 +90,7 @@ public class DropperStateTestOpmode extends BaseOpMode {
         telemetry.addData("CurrentPosInches", currentPos);
         telemetry.addData("ExpectedPosInches", expectedPos);
         telemetry.addData("Error", error);
+        telemetry.addLine();
+        telemetry.addData("Block in Intake?", robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
     }
 }
