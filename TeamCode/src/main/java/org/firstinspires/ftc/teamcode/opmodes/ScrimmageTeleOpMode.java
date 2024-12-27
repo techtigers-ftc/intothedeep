@@ -6,17 +6,16 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToHighBasketAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToHighChamberAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.HangSpecimenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNTAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNTAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -89,20 +88,17 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
 //        intakeRotationTrigger.and(intakeInTransfer.negate()).whileActiveContinuous(intakeManualRotationCommand);
 
         // Dropper
-        DropperToTransferAction dropperToTransfer =
-                new DropperToTransferAction(dropper, robotState);
+        DropperPreTransferAction dropperToTransfer =
+                new DropperPreTransferAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
 
-        DropperToHighBasketAction highBasketDrop =
-                new DropperToHighBasketAction(dropper, intake, robotState);
+        DropperHighBasketNTAction highBasketDrop =
+                new DropperHighBasketNTAction(dropper, robotState);
 //        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
-        Trigger intakeFromWall = new Trigger(() ->
-                robotState.getDropperState() == DropperState.WALL_INTAKE
-        );
 
-        DropperToHighChamberAction highChamberDropFromIntake =
-                new DropperToHighChamberAction(dropper, intake, robotState);
+        DropperForwardCarryNTAction highChamberDropFromIntake =
+                new DropperForwardCarryNTAction(dropper, robotState);
 
          //If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
 //        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
@@ -112,7 +108,7 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
                 dropper::resetSlides
         );
 
-        HangSpecimenAction hangSpecimen = new HangSpecimenAction(dropper);
+        DropperFrontSlapAction hangSpecimen = new DropperFrontSlapAction(dropper, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(hangSpecimen);
 
         // Toggles the dropper claw between open and closed positions

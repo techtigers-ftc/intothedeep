@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * A command group that moves the dropper to the transfer position
  */
-public class DropperToTransferAction extends ParallelCommandGroup {
+public class DropperPreTransferAction extends ParallelCommandGroup {
     private final RobotState robotState;
 
     /**
@@ -23,7 +23,7 @@ public class DropperToTransferAction extends ParallelCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperToTransferAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperPreTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
@@ -37,7 +37,10 @@ public class DropperToTransferAction extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.TRANSFER);
-        robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        super.end(interrupted);
+        if (!interrupted){
+            robotState.setDropperState(DropperState.PRE_TRANSFER);
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        }
     }
 }

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
@@ -58,6 +59,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.PREPARE_TO_TRANSFER);
+            robotState.setBlockPosition(RobotBlockPosition.INTAKE);
         }
     }
 }

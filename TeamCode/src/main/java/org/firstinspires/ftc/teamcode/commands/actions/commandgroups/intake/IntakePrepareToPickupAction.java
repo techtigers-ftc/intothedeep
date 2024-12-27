@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * Command to move intake to prepare to intake state.
@@ -51,6 +52,9 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
+            if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
+                robotState.setBlockPosition(RobotBlockPosition.NONE);
+            }
         }
     }
 }
