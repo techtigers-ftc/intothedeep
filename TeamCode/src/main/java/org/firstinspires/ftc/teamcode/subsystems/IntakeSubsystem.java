@@ -25,10 +25,10 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    public static double FORWARD_KP = 0.01;
-    public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.0001;
-    public static double FORWARD_KF = 0.0;
+    public static final double FORWARD_KP = 0.01;
+    public static final double FORWARD_KI = 0.0;
+    public static final double FORWARD_KD = 0.0001;
+    public static final double FORWARD_KF = 0.0;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -42,7 +42,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.75;
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
-    private static final double SLIDES_MAXIMUM_EXTENSION = 19;
+    private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
     public static final double WRIST_ROTATION_TUCK_POSITION = 14;
@@ -168,7 +168,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance) {
-        slideController.moveToInches(Range.clip(distance, 0, 19));
+        slideController.moveToInches(Range.clip(distance, 0, SLIDES_MAX));
     }
 
     /**
