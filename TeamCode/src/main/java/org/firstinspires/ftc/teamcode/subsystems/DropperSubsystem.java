@@ -274,6 +274,13 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristRelative(0, rotationAngle);
     }
 
+    /**
+     * @return the current draw of the slide motors
+     */
+    public double getSlideMotorCurrent(){
+        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    }
+
     @Override
     public void periodic() {
         double power =
