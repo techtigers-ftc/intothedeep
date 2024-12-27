@@ -173,21 +173,21 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Increments slides from wherever it is currently
-     *
-     * @param position Amount you are incrementing by inches
-     */
-    public void moveSlidesRelative(double position) {
-        moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
-    }
-
-    /**
      * Moves slides to that position from wherever it is
      *
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
         slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
+    }
+
+    /**
+     * Increments slides from wherever it is currently
+     *
+     * @param position Amount you are incrementing by inches
+     */
+    public void moveSlidesRelative(double position) {
+        moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
     }
 
     /**
