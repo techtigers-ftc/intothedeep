@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -114,6 +115,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * Method that moves servo to make the claw open
      */
     public void openClaw() {
+        robotState.setBlockPosition(RobotBlockPosition.NONE);
         grabServo.setPosition(CLAW_OPENED_POSITION);
         robotState.setDropperClawState(ClawState.OPEN);
     }

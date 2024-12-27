@@ -93,12 +93,12 @@ public class ScrimmageTeleOpMode extends BaseOpMode {
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(dropperToTransfer);
 
         DropperHighBasketAction highBasketDrop =
-                new DropperHighBasketAction(dropper, intake, robotState);
+                new DropperHighBasketAction(dropper, robotState);
 //        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).and(intakeInTransfer).whenActive(highBasketDrop);
 
 
         DropperForwardCarryAction highChamberDropFromIntake =
-                new DropperForwardCarryAction(dropper, intake, robotState);
+                new DropperForwardCarryAction(dropper, robotState);
 
          //If the dropper is transferring a specimen from the intake, activate the high chamber drop from intake command
 //        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).and(intakeInTransfer).and(intakeFromWall.negate()).whenActive(highChamberDropFromIntake);
