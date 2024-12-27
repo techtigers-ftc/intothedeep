@@ -16,20 +16,20 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper to the backward high chamber drop position, with the specimen
+ * moves the dropper to the forward high chamber drop position, with the specimen
  * upside down, ready to be clipped upwards onto the high chamber
  */
-public class DropperBackwardHighChamberAction extends SequentialCommandGroup {
+public class DropperForwardCarryAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperBackwardHighChamberAction
+     * Creates a new DropperForwardHighChamberAction
      *
      * @param dropper    the dropper subsystem
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public DropperBackwardHighChamberAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DropperForwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
@@ -40,14 +40,14 @@ public class DropperBackwardHighChamberAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                         new DropperRotationAction(dropper,
-                                DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 300)
+                                DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 300)
                 )
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDropperState(DropperState.BACKWARD_CARRY);
+        robotState.setDropperState(DropperState.FORWARD_CARRY);
         robotState.setBlockPosition(RobotBlockPosition.DROPPER);
     }
 }
