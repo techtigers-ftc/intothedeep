@@ -17,6 +17,7 @@ public class DropperFrontSlapAction extends SequentialCommandGroup {
      * Creates a new DropperFrontSlapAction
      *
      * @param dropper the dropper subsystem
+     * @param robotState the robot state
      */
     public DropperFrontSlapAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
@@ -29,6 +30,8 @@ public class DropperFrontSlapAction extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        robotState.setDropperState(DropperState.FRONT_SLAP);
+        if (!interrupted){
+            robotState.setDropperState(DropperState.FRONT_SLAP);
+        }
     }
 }
