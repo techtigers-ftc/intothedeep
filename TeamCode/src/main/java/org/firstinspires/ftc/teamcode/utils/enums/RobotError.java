@@ -12,7 +12,12 @@ public enum RobotError {
     /**
      * Attempting to transition to an intake position from an invalid start position
      */
-    INVALID_INTAKE_POSITION(1);
+    INVALID_INTAKE_POSITION(1),
+
+    /**
+     * Attempting to transition to a dropper position from an invalid start position
+     */
+    INVALID_DROPPER_POSITION(2);
 
     /**
      * The error code associated with the error
