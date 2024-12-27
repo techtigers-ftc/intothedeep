@@ -190,6 +190,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the target position of the slides in inches
+     */
+    public double getTargetPositionInches() {
+        return slideController.targetTicks * MOTOR_TICKS_PER_INCH;
+    }
+
+    /**
      * Stops slides
      */
     public void stopSlides() {
@@ -335,7 +342,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the slide motors
      */
-    public double getSlideCurrent() {
+    public double getSlideMotorCurrent() {
         return currentMotor.getCurrent(CurrentUnit.AMPS);
     }
 
