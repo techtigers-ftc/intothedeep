@@ -41,7 +41,6 @@ public class RegularTeleOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-//        FtcDashboard.getInstance();
 
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
