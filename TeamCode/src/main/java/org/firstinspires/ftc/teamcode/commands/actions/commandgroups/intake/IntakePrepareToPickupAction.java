@@ -44,7 +44,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-        RobotLog.dd(LOG_TAG, "Executing Prepare To Intake command from state: %s", robotState.getIntakeState());
+        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
     }
 
     @Override

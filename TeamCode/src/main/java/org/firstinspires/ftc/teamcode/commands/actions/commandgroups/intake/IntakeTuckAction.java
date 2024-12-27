@@ -46,7 +46,7 @@ public class IntakeTuckAction extends ParallelCommandGroup {
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
         } else {
-            RobotLog.dd(LOG_TAG, "Executing tuck command from state: %s", robotState.getIntakeState());
+            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
             super.initialize();
         }
     }
