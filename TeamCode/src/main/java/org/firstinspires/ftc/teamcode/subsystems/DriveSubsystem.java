@@ -2,17 +2,19 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import java.util.Arrays;
@@ -29,6 +31,14 @@ public class DriveSubsystem extends CloseableSubsystem {
     private final List<DcMotor> motors;
     private DriveVectorScaler driveVectorScaler;
     private RobotState robotstate;
+    private final SlidingAverageCalculator frontLeftSlideCurrentAverage;
+    private final SlidingAverageCalculator frontRightSlideCurrentAverage;
+    private final SlidingAverageCalculator backLeftSlideCurrentAverage;
+    private final SlidingAverageCalculator backRightSlideCurrentAverage;
+    private final DcMotorEx currentFrontRight;
+    private final DcMotorEx currentFrontLeft;
+    private final DcMotorEx currentBackRight;
+    private final DcMotorEx currentBackLeft;
 
     /**
      * Constructs a new DriveSubsystem.
@@ -40,6 +50,15 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRight = hardwareMap.get(DcMotor.class, "right_front");
         backLeft = hardwareMap.get(DcMotor.class, "left_back");
         backRight = hardwareMap.get(DcMotor.class, "right_back");
+
+        frontRightSlideCurrentAverage = new SlidingAverageCalculator(10);
+        frontLeftSlideCurrentAverage = new SlidingAverageCalculator(10);
+        backRightSlideCurrentAverage = new SlidingAverageCalculator(10);
+        backLeftSlideCurrentAverage = new SlidingAverageCalculator(10);
+        currentFrontRight = (DcMotorEx) frontRight;
+        currentFrontLeft = (DcMotorEx) frontLeft;
+        currentBackRight = (DcMotorEx) backRight;
+        currentBackLeft = (DcMotorEx) backLeft;
 
         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
 
@@ -190,5 +209,13 @@ public class DriveSubsystem extends CloseableSubsystem {
     public void drivePedroPath(DriveVectors vectors) {
         double[] drivePowers = driveVectorScaler.getDrivePowers(vectors.correctivePower, vectors.headingPower, vectors.pathingPower, vectors.robotHeading);
         setMotorPowers(drivePowers[0], drivePowers[1], drivePowers[2], drivePowers[3]);
+    }
+
+    @Override
+    public void periodic() {
+        frontLeftSlideCurrentAverage.add(currentFrontLeft.getCurrent(CurrentUnit.AMPS));
+        frontRightSlideCurrentAverage.add(currentFrontRight.getCurrent(CurrentUnit.AMPS));
+        backLeftSlideCurrentAverage.add(currentBackLeft.getCurrent(CurrentUnit.AMPS));
+        backRightSlideCurrentAverage.add(currentBackRight.getCurrent(CurrentUnit.AMPS));
     }
 }
