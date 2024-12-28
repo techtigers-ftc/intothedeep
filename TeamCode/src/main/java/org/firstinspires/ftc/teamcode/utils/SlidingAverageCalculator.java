@@ -28,16 +28,13 @@ public class SlidingAverageCalculator {
         sum += value;
         count = Math.min(count + 1, capacity);
         index = (index + 1) % capacity;
+        average = sum / count;
     }
 
     /**
      * @return the average of the values in the calculator
      */
     public double getAverage() {
-        if (count == 0) {
-            return 0;
-        }
-        average = sum / count;
         return average;
     }
 
