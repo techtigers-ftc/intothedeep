@@ -63,7 +63,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final RobotState robotState;
     private final SlideController slideController;
     private final DifferentialController differentialController;
-    private final SlidingAverageCalculator slideCurrentAverage;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
 
@@ -86,7 +85,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
         differentialController.setMaxRange(330, 215);
-        slideCurrentAverage = new SlidingAverageCalculator(10);
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
         leftSlideCurrentAverage = new SlidingAverageCalculator(10);
 
@@ -278,17 +276,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * @return the current draw of the slide motors
+     * @return the current draw of the right slide motor
      */
-    public double getSlideCurrent() {
-        double sum = currentMotorRight.getCurrent(CurrentUnit.AMPS) + currentMotorLeft.getCurrent(CurrentUnit.AMPS);
-        return sum;
+    public double getSlideCurrentRight(){
+        return rightSlideCurrentAverage.getAverage();
     }
-    public double getSlideCurrntRight(){
-        return currentMotorRight.getCurrent(CurrentUnit.AMPS);
-    }
-    public double getSlideCurrntLeft(){
-        return currentMotorLeft.getCurrent(CurrentUnit.AMPS);
+
+    /**
+     * @return the current draw of the right slide motor
+     */
+    public double getSlideCurrentLeft(){
+        return leftSlideCurrentAverage.getAverage();
     }
 
     @Override
@@ -299,14 +297,12 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setPower(power);
 
         robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
-        slideCurrentAverage.add(getSlideCurrent());
-        leftSlideCurrentAverage.add(getSlideCurrntLeft());
-        rightSlideCurrentAverage.add(getSlideCurrntRight());
+        leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
+        rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
 
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());
-        RobotLog.dd(tag, "Slide Current: %f", getSlideCurrent());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
     }
