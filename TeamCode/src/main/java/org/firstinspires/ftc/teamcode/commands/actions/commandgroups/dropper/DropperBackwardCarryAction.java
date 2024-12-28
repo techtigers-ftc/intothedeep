@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -13,6 +16,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * upside down, ready to be clipped upwards onto the high chamber
  */
 public class DropperBackwardCarryAction extends SequentialCommandGroup {
+    private final RobotState robotState;
+    private static final String LOG_TAG = DropperBackwardCarryAction.class.getSimpleName();
 
     /**
      * Creates a new DropperBackwardCarryAction
@@ -22,11 +27,19 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public DropperBackwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+        this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperBackwardCarryNTAction(dropper, robotState),
+                new DropperBackwardCarryNoTransferAction(dropper, robotState),
                 new IntakeTuckAction(intake, robotState)
         );
+    }
+
+    @Override
+    public void initialize() {
+        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
+        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
+        super.initialize();
     }
 }

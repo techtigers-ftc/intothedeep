@@ -49,7 +49,8 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
         } else {
-            RobotLog.dd(LOG_TAG, "Executing Intake Prepare To Transfer command from state: %s", robotState.getIntakeState());
+            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
+            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
             super.initialize();
         }
     }

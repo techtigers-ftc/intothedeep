@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -8,14 +9,16 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that moves the dropper to the backward high chamber drop position, with the
  * specimen upside down, ready to be clipped upwards onto the high chamber.
  * The NT stands for "No Transfer"
  */
-public class DropperBackwardCarryNTAction extends ParallelCommandGroup {
+public class DropperBackwardCarryNoTransferAction extends ParallelCommandGroup {
     private final RobotState robotState;
+    private static final String LOG_TAG = DropperBackwardCarryNoTransferAction.class.getSimpleName();
 
     /**
      * Creates a new DropperBackwardCarryNTAction
@@ -23,7 +26,7 @@ public class DropperBackwardCarryNTAction extends ParallelCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperBackwardCarryNTAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperBackwardCarryNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
@@ -32,6 +35,12 @@ public class DropperBackwardCarryNTAction extends ParallelCommandGroup {
                 new DropperRotationAction(dropper,
                         DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 300)
         );
+    }
+    @Override
+    public void initialize() {
+        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
+        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
+        super.initialize();
     }
 
     @Override

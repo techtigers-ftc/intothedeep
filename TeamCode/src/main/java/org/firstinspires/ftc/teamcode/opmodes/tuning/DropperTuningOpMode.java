@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -8,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -26,6 +29,7 @@ public class DropperTuningOpMode extends BaseOpMode {
         registerSubsystems(dropperSubsystem);
 
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
+        FtcDashboard dashboard = FtcDashboard.getInstance();
 
         // Claw
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
@@ -87,7 +91,8 @@ public class DropperTuningOpMode extends BaseOpMode {
         telemetry.addData("Claw rotation angle", dropperSubsystem.getRotation());
         telemetry.addData("Claw diff pitch", dropperSubsystem.getPitch());
         telemetry.addLine();
-        telemetry.addData("Current Draw:", dropperSubsystem.getSlideMotorCurrent());
-//        telemetry.addData("Invalid dropper state error:", robotState.hasError(RobotError.INVALID_INTAKE_POSITION));
+        telemetry.addData("Left slide current draw:", dropperSubsystem.getSlideCurrentLeft());
+        telemetry.addData("Right slide current draw:", dropperSubsystem.getSlideCurrentRight());
+        telemetry.addData("Invalid dropper state error:", robotState.hasError(RobotError.INVALID_DROPPER_POSITION));
     }
 }

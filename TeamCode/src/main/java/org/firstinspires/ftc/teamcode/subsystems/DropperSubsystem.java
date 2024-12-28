@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -54,13 +55,16 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DcMotor rightSlideMotor;
     private final DcMotor leftSlideMotor;
     private final DcMotor encoderMotor;
-    private final DcMotorEx currentMotor;
+    private final DcMotorEx currentMotorRight;
+    private final DcMotorEx currentMotorLeft;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo grabServo;
     private final RobotState robotState;
     private final SlideController slideController;
     private final DifferentialController differentialController;
+    private final SlidingAverageCalculator leftSlideCurrentAverage;
+    private final SlidingAverageCalculator rightSlideCurrentAverage;
 
     /**
      * Initializes dropper subsystem
@@ -81,6 +85,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
         differentialController.setMaxRange(330, 215);
+        rightSlideCurrentAverage = new SlidingAverageCalculator(10);
+        leftSlideCurrentAverage = new SlidingAverageCalculator(10);
 
         leftWrist.setDirection(Servo.Direction.REVERSE);
         rightWrist.setDirection(Servo.Direction.FORWARD);
@@ -89,7 +95,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
-        currentMotor = (DcMotorEx) encoderMotor;
+        currentMotorRight = (DcMotorEx) rightSlideMotor;
+        currentMotorLeft = (DcMotorEx) leftSlideMotor;
         resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
@@ -258,12 +265,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristAbsolute(getPitch(), rotationAngle);
     }
 
-    /**
-     * @return the current draw of the slide motors
-     */
-    public double getSlideCurrent() {
-        return currentMotor.getCurrent(CurrentUnit.AMPS);
-    }
 
     /**
      * Sets the rotation of the wrist, while keeping the pitch the same
@@ -275,10 +276,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * @return the current draw of the slide motors
+     * @return the current draw of the right slide motor
      */
-    public double getSlideMotorCurrent(){
-        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    public double getSlideCurrentRight(){
+        return rightSlideCurrentAverage.getAverage();
+    }
+
+    /**
+     * @return the current draw of the right slide motor
+     */
+    public double getSlideCurrentLeft(){
+        return leftSlideCurrentAverage.getAverage();
     }
 
     @Override
@@ -289,8 +297,13 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setPower(power);
 
         robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
+        leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
+        rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
+
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());
+        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
+        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
     }
 }
