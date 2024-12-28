@@ -104,7 +104,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
         resetSlides();
-        currentMotorRight = (DcMotorEx) encoderMotor;
+        currentMotorRight = (DcMotorEx) rightSlideMotor;
         currentMotorLeft = (DcMotorEx) leftSlideMotor;
 
         //Configure Motors

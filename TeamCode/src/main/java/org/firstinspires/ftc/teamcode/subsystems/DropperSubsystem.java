@@ -95,7 +95,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
-        currentMotorRight = (DcMotorEx) encoderMotor;
+        currentMotorRight = (DcMotorEx) rightSlideMotor;
         currentMotorLeft = (DcMotorEx) leftSlideMotor;
         resetSlides();
 
