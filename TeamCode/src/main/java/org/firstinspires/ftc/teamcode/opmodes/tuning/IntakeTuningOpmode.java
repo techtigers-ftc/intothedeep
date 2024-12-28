@@ -53,7 +53,7 @@ public class IntakeTuningOpmode extends BaseOpMode {
 
         // Presets for the differential
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
-            intakeSubsystem.setWristAbsolute(90, 90);
+            intakeSubsystem.setWristAbsolute(90, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
         });
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
             intakeSubsystem.setWristAbsolute(180, 90);
