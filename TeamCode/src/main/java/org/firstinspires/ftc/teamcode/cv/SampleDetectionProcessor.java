@@ -22,8 +22,16 @@ import java.util.List;
 
 @Config
 public class SampleDetectionProcessor implements VisionProcessor {
-    private Scalar UPPER_BOUND = new Scalar(30,255,255);
-    private Scalar LOWER_BOUND = new Scalar(10,50,70);
+    public static int U_H = 40;
+    public static int U_S = 255;
+    public static int U_V = 255;
+    public static int L_H = 10;
+    public static int L_S = 50;
+    public static int L_V = 70;
+//    private Scalar UPPER_BOUND = new Scalar(40,255,255);
+//    private Scalar LOWER_BOUND = new Scalar(10,10,70);
+    private Scalar UPPER_BOUND = new Scalar(U_H,U_S,U_V);
+    private Scalar LOWER_BOUND = new Scalar(L_H,L_S,L_V);
     public static int ERODE_NUMBER = 10;
     private Sample foundSample;
 
@@ -59,7 +67,10 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
         Imgproc.cvtColor(frame, processedMat, Imgproc.COLOR_RGB2HSV);
 //
+        Mat processedMat2 = new Mat();
         Core.inRange(processedMat, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
+
+//        return frame;
 
         List<MatOfPoint> contours = getCanny(processedMat);
 
@@ -73,7 +84,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
             rotatedRect.points(rectPoints);
 
             // Draw the rotated rectangle
-            if (rotatedRect.size.width * rotatedRect.size.height > 60000 && rotatedRect.size.width * rotatedRect.size.height < 145000) {
+            if (rotatedRect.size.width * rotatedRect.size.height > 5000 && rotatedRect.size.width * rotatedRect.size.height < 145000) {
                 double avgX = 0;
                 double avgY = 0;
                 for (int i = 0; i < 4; i++) {
@@ -114,15 +125,15 @@ public class SampleDetectionProcessor implements VisionProcessor {
             }
 
             // Approximate the contour to a polygon
-//            MatOfPoint2f approxCurve = new MatOfPoint2f();
-//            double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
-//            Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
-//
-//            // Convert back the polygon approximation to MatOfPoint
-//            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
+            MatOfPoint2f approxCurve = new MatOfPoint2f();
+            double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
+            Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
+
+            // Convert back the polygon approximation to MatOfPoint
+            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
 
             // Draw the polygon on the image
-//            Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
+            Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
         }
         return processedMat;
     }
