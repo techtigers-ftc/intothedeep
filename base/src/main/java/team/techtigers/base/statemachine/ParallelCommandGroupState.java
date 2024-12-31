@@ -1,5 +1,6 @@
 package team.techtigers.base.statemachine;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 /**
@@ -7,7 +8,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
  *
  * @param <T> The type of the condition, usually an enum
  */
-public abstract class ParallelCommandGroupState<T> extends SequentialCommandGroup implements State<T> {
+public abstract class ParallelCommandGroupState<T> extends ParallelCommandGroup implements State<T> {
     private final String name;
 
     /**
