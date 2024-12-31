@@ -473,26 +473,47 @@ public class RobotState extends GlobalState {
         return (this.robotError & error.code) != 0;
     }
 
+    /**
+     * @return the current driver current
+     */
     public double getDriverCurrent() {
         return driverCurrent;
     }
 
+    /**
+     * Sets the current driver current
+     * @param driverCurrent the current driver current
+     */
     public void setDriverCurrent(double driverCurrent) {
         this.driverCurrent = driverCurrent;
     }
 
+    /**
+     * @return the current intake current
+     */
     public double getIntakeCurrent() {
         return intakeCurrent;
     }
 
+    /**
+     * Sets the current intake current
+     * @param intakeCurrent the current intake current
+     */
     public void setIntakeCurrent(double intakeCurrent) {
         this.intakeCurrent = intakeCurrent;
     }
 
+    /**
+     * @return the current dropper current
+     */
     public double getDropperCurrent() {
         return dropperCurrent;
     }
 
+    /**
+     * Sets the current dropper current
+     * @param dropperCurrent the current dropper current
+     */
     public void setDropperCurrent(double dropperCurrent) {
         this.dropperCurrent = dropperCurrent;
     }
