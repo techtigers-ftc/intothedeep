@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 /**
  * State that extends ParallelCommandGroup, to be used in a state machine
+ *
  * @param <T> The type of the condition, usually an enum
  */
 public abstract class ParallelCommandGroupState<T> extends SequentialCommandGroup implements State<T> {
