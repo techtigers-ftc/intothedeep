@@ -61,8 +61,8 @@ public class RegularTeleOpMode extends BaseOpMode {
 
         //Intake State Movements
         IntakeTuckAction intakeTuckCommand = new IntakeTuckAction(intake, robotState);
-        IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, robotState);
-        IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intake, robotState);
+        IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, robotState, 10);
+        IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intake, robotState, IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION);
         IntakePrepareToTransferAction intakePrepareToTransferAction = new IntakePrepareToTransferAction(intake, robotState);
         IntakeReadyToTransferAction intakeReadyToTransferAction = new IntakeReadyToTransferAction(intake, robotState);
 
