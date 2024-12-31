@@ -216,5 +216,10 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRightSlideCurrentAverage.add(currentFrontRight.getCurrent(CurrentUnit.AMPS));
         backLeftSlideCurrentAverage.add(currentBackLeft.getCurrent(CurrentUnit.AMPS));
         backRightSlideCurrentAverage.add(currentBackRight.getCurrent(CurrentUnit.AMPS));
+
+        robotstate.setDriverCurrent(frontLeftSlideCurrentAverage.getAverage() + frontRightSlideCurrentAverage.getAverage() + backLeftSlideCurrentAverage.getAverage() + backRightSlideCurrentAverage.getAverage());
+
+        RobotLog.dd("DriveSubsystem", "Front Left Current: %f, Front Right Current: %f, Back Left Current: %f, Back Right Current: %f",
+                frontLeftSlideCurrentAverage.getAverage(), frontRightSlideCurrentAverage.getAverage(), backLeftSlideCurrentAverage.getAverage(), backRightSlideCurrentAverage.getAverage());
     }
 }
