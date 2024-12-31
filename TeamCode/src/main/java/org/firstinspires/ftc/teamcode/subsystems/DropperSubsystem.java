@@ -300,6 +300,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
         rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
 
+        robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
+
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());

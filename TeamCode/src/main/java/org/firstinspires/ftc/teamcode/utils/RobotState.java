@@ -36,6 +36,9 @@ public class RobotState extends GlobalState {
     private boolean isVerticalExtended;
     private double dropperClawPitch;
     private double dropperClawRotation;
+    private double driverCurrent;
+    private double intakeCurrent;
+    private double dropperCurrent;
     private ClawState dropperClawState;
     private DropperState dropperState;
     private DriveGears driveGears;
@@ -69,6 +72,9 @@ public class RobotState extends GlobalState {
         dropperState = DropperState.PRE_TRANSFER;
         driveGears = DriveGears.NOT_ENGAGED;
         intakeState = IntakeState.TUCK;
+        driverCurrent = 0;
+        intakeCurrent = 0;
+        dropperCurrent = 0;
     }
 
     /**
@@ -465,5 +471,50 @@ public class RobotState extends GlobalState {
      */
     public boolean hasError(RobotError error) {
         return (this.robotError & error.code) != 0;
+    }
+
+    /**
+     * @return the current driver current
+     */
+    public double getDriverCurrent() {
+        return driverCurrent;
+    }
+
+    /**
+     * Sets the current driver current
+     * @param driverCurrent the current driver current
+     */
+    public void setDriverCurrent(double driverCurrent) {
+        this.driverCurrent = driverCurrent;
+    }
+
+    /**
+     * @return the current intake current
+     */
+    public double getIntakeCurrent() {
+        return intakeCurrent;
+    }
+
+    /**
+     * Sets the current intake current
+     * @param intakeCurrent the current intake current
+     */
+    public void setIntakeCurrent(double intakeCurrent) {
+        this.intakeCurrent = intakeCurrent;
+    }
+
+    /**
+     * @return the current dropper current
+     */
+    public double getDropperCurrent() {
+        return dropperCurrent;
+    }
+
+    /**
+     * Sets the current dropper current
+     * @param dropperCurrent the current dropper current
+     */
+    public void setDropperCurrent(double dropperCurrent) {
+        this.dropperCurrent = dropperCurrent;
     }
 }
