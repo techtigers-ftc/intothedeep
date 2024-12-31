@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * A command group that transfers a block from the intake to the dropper.
  */
 public class DropperTransferAction extends SequentialCommandGroup {
-    private RobotState robotState;
+    private final RobotState robotState;
     private static final String LOG_TAG = DropperTransferAction.class.getSimpleName();
 
     /**
@@ -31,10 +31,10 @@ public class DropperTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 500),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 300),
                 new DropperCloseAction(dropper, 200),
                 new IntakeOpenAction(intake, 200),
-                new IntakeWristPitchAction(intake, 70, 500)
+                new IntakeWristPitchAction(intake, 70, 200)
         );
     }
 

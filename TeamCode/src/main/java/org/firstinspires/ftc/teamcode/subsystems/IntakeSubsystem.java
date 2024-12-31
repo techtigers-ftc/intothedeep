@@ -38,7 +38,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.0;
+    private static final double CLAW_OPEN_POSITION = 0.25;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
     private static final double CLAW_LOOSE_POSITION = 0.75;
     private static final double CLAW_CLOSED_POSITION = 0.8;
@@ -46,7 +46,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 4;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
@@ -56,7 +56,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
 
     public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 4;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double WRIST_PITCH_PECK_POSITION = 90;
@@ -214,7 +214,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        if (getPitch() <= 80) {
+        if (getPitch() <= IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION - 5) {
             leftClaw.setPosition(CLAW_MIDDLE_POSITION);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
@@ -319,7 +319,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Toggles the rotation of the wrist between 0 and 90
      */
     public void togglePerpendicularRotation() {
-        if (getRotation() == 90) {
+        if (getClawRotation() == 90) {
             setClawRotationAbsolute(0);
         } else {
             setClawRotationAbsolute(90);

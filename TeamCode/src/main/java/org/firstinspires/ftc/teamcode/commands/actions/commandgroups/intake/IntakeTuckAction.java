@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -57,6 +58,7 @@ public class IntakeTuckAction extends ParallelCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.TUCK);
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         }
     }
 }

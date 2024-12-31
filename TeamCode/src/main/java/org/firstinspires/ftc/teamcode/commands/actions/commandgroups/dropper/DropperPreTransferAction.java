@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * A command group that moves the dropper to the transfer position
  */
 public class DropperPreTransferAction extends ParallelCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = DropperPreTransferAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new DropperToTransferAction
@@ -35,7 +34,7 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                 new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
                 new DropperOpenAction(dropper)
-                );
+        );
     }
 
     @Override
@@ -48,9 +47,8 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted){
+        if (!interrupted) {
             robotState.setDropperState(DropperState.PRE_TRANSFER);
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         }
     }
 }

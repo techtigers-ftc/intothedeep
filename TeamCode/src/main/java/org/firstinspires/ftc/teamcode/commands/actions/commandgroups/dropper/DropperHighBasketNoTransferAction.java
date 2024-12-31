@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * The NT stands for "No Transfer"
  */
 public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = DropperHighBasketNoTransferAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new DropperHighBasketNTAction
@@ -36,6 +35,7 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
                         DropperSubsystem.ROTATION_BASKET_POSITION, 300)
         );
     }
+
     @Override
     public void initialize() {
         RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
@@ -46,9 +46,8 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted){
+        if (!interrupted) {
             robotState.setDropperState(DropperState.HIGH_BASKET);
-            robotState.setCurrentGear(DriveGears.ENGAGED);
         }
     }
 }

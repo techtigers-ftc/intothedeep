@@ -17,9 +17,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
-import java.util.Arrays;
-import java.util.List;
-
 import team.techtigers.base.CloseableSubsystem;
 
 /**
@@ -27,10 +24,11 @@ import team.techtigers.base.CloseableSubsystem;
  */
 public class DriveSubsystem extends CloseableSubsystem {
     private static final double GEAR_MULTIPLIER = 0.5;
+    private static final double TURN_MULTIPLIER = 0.75;
+    private static final double TURN_GEAR_MULTIPLIER = 0.375;
     private final DcMotor frontLeft, frontRight, backLeft, backRight;
-    private final List<DcMotor> motors;
-    private DriveVectorScaler driveVectorScaler;
-    private RobotState robotstate;
+    private final DriveVectorScaler driveVectorScaler;
+    private final RobotState robotstate;
     private final SlidingAverageCalculator frontLeftSlideCurrentAverage;
     private final SlidingAverageCalculator frontRightSlideCurrentAverage;
     private final SlidingAverageCalculator backLeftSlideCurrentAverage;
@@ -62,7 +60,7 @@ public class DriveSubsystem extends CloseableSubsystem {
 
         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
 
-        motors = Arrays.asList(frontLeft, backLeft, frontRight, backRight);
+        DcMotor[] motors = {frontLeft, backLeft, frontRight, backRight};
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -133,13 +131,14 @@ public class DriveSubsystem extends CloseableSubsystem {
                 forward, strafe, rotation);
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
-        double turnSpeed = Range.clip(rotation, -1, 1);
+        double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER;
 
-        if(robotstate.getCurrentGear() == DriveGears.ENGAGED) {
+        if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
             strafeSpeed *= GEAR_MULTIPLIER;
             forwardSpeed *= GEAR_MULTIPLIER;
-            turnSpeed *= GEAR_MULTIPLIER;
+            turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
         }
+
         RobotLog.dd("DriveSubsystem", "Forward: %f, Strafe: %f, Turn: %f",
                 forwardSpeed, strafeSpeed, turnSpeed);
 
