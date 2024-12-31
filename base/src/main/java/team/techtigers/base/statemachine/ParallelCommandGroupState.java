@@ -1,7 +1,6 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 /**
  * State that extends ParallelCommandGroup, to be used in a state machine
