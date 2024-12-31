@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -14,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * Command to move intake to ready to intake state
  */
-public class IntakeReadyToPickupAction extends ParallelCommandGroup {
+public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakeReadyToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -28,12 +30,15 @@ public class IntakeReadyToPickupAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeWristRotationAction(intake,
-                        IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
-                new IntakeClawRotationAction(intake,
-                        IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION, 500),
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
+                new ParallelCommandGroup(
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
+                        new IntakeClawRotationAction(intake,
+                                IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION, 500),
+                        new IntakeWristPitchAction(intake,
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
+                ),
+                new IntakeOpenAction(intake, 0)
         );
     }
 

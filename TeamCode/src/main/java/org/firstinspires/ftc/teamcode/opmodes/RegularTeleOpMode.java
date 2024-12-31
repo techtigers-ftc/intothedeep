@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
@@ -20,7 +19,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -32,7 +31,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.BaseOpMode;
 
-@TeleOp()
+@TeleOp
+@SuppressWarnings("unused")
 public class RegularTeleOpMode extends BaseOpMode {
 
     private RobotState robotState;
@@ -40,7 +40,6 @@ public class RegularTeleOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         robotState = new RobotState();
@@ -51,7 +50,6 @@ public class RegularTeleOpMode extends BaseOpMode {
         registerSubsystems(intake, drive, dropper);
 
         // DRIVER
-        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
@@ -66,7 +64,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, robotState);
         IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intake, robotState);
         IntakePrepareToTransferAction intakePrepareToTransferAction = new IntakePrepareToTransferAction(intake, robotState);
-        IntakeToReadyToTransferAction intakeToReadyToTransferAction = new IntakeToReadyToTransferAction(intake, robotState);
+        IntakeReadyToTransferAction intakeReadyToTransferAction = new IntakeReadyToTransferAction(intake, robotState);
 
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         Trigger leftBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
@@ -85,7 +83,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         rightBumper.and(inTuck).whenActive(intakePrepareToPickupAction);
         rightBumper.and(inPrepareToIntake).whenActive(intakeReadyToPickupAction);
         rightBumper.and(inReadyToIntake).whenActive(intakePrepareToTransferAction);
-        rightBumper.and(inPrepareToTransfer).whenActive(intakeToReadyToTransferAction);
+        rightBumper.and(inPrepareToTransfer).whenActive(intakeReadyToTransferAction);
 
         //Other Intake Stuff
         // Reset the intake slide encoders
@@ -107,9 +105,10 @@ public class RegularTeleOpMode extends BaseOpMode {
         Trigger intakeRotationTrigger = new Trigger(() ->
                 (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
                         manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
-                        && robotState.getIntakeState() == IntakeState.READY_TO_PICKUP
         );
-        intakeRotationTrigger.whileActiveContinuous(intakeManualRotationCommand);
+        intakeRotationTrigger.and(inReadyToIntake).whileActiveContinuous(intakeManualRotationCommand);
+
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake).whenActive(intake::togglePerpendicularRotation);
 
         //Dropper
 

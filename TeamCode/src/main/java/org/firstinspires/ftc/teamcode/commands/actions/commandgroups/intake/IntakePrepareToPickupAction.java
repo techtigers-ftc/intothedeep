@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -55,6 +56,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
             if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
+            robotState.setCurrentGear(DriveGears.ENGAGED);
         }
     }
 }

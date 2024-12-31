@@ -13,17 +13,18 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * Command to move intake to ready to transfer state.
  */
-public class IntakeToReadyToTransferAction extends SequentialCommandGroup {
+public class IntakeReadyToTransferAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = IntakeReadyToTransferAction.class.getSimpleName();
     private final RobotState robotState;
-    private static final String LOG_TAG = IntakeToReadyToTransferAction.class.getSimpleName();
 
     /**
-     * Creates a new IntakeToReadyToTransferAction
+     * Creates a new IntakeReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeToReadyToTransferAction(IntakeSubsystem intake, RobotState robotState) {
+    public IntakeReadyToTransferAction(IntakeSubsystem intake,
+                                       RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
