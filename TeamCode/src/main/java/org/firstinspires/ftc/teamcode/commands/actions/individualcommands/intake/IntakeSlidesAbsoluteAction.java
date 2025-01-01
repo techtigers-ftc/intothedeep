@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
  * Moves the intake slides to a target position
  */
 public class IntakeSlidesAbsoluteAction extends CommandBase {
+    private static final String LOG_TAG = IntakeSlidesAbsoluteAction.class.getSimpleName();
     private final IntakeSubsystem intake;
     private final DoubleSupplier targetPositionSupplier;
     private final double tolerance;
@@ -35,7 +36,7 @@ public class IntakeSlidesAbsoluteAction extends CommandBase {
     @Override
     public void initialize() {
         targetPosition = targetPositionSupplier.getAsDouble();
-        RobotLog.dd("IntakeSlidesAbsoluteAction", "Target pos: %f", targetPosition);
+        RobotLog.dd(LOG_TAG, "Target pos: %f", targetPosition);
         intake.moveSlidesAbsolute(targetPosition);
     }
 
