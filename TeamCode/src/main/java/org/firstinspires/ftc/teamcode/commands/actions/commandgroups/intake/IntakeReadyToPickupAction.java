@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -27,12 +28,15 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
      *
      * @param intake                the intake subsystem
      * @param robotState            the robot state
-     * @param clawRotationSupplier the supplier for the target slide position
+     * @param slidePositionSupplier the supplier for the target slide position
+     * @param clawRotationSupplier  the supplier for the target claw rotation
      */
-    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState, DoubleSupplier clawRotationSupplier) {
+    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState,
+                                     DoubleSupplier slidePositionSupplier, DoubleSupplier clawRotationSupplier) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
+                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
                 new ParallelCommandGroup(
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
@@ -46,14 +50,16 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     }
 
     /**
-     * Overloaded constructor that takes a target claw rotation position instead of a supplier
+     * Overloaded constructor that takes a target claw rotation position instead of a supplier,
+     * Also defaults to no slide movement.
      *
-     * @param intake                the intake subsystem
-     * @param robotState            the robot state
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
      * @param clawRotationPosition the target claw rotation position
      */
-    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState, double clawRotationPosition) {
-        this(intake, robotState, () -> clawRotationPosition);
+    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState,
+                                     double clawRotationPosition) {
+        this(intake, robotState, intake::getCurrentSlidePositionInches, () -> clawRotationPosition);
     }
 
     @Override

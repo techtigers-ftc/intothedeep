@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -10,6 +11,7 @@ import java.util.function.DoubleSupplier;
  * Moves the intake slides to a target position
  */
 public class IntakeSlidesAbsoluteAction extends CommandBase {
+    private static final String LOG_TAG = IntakeSlidesAbsoluteAction.class.getSimpleName();
     private final IntakeSubsystem intake;
     private final DoubleSupplier targetPositionSupplier;
     private final double tolerance;
@@ -34,6 +36,7 @@ public class IntakeSlidesAbsoluteAction extends CommandBase {
     @Override
     public void initialize() {
         targetPosition = targetPositionSupplier.getAsDouble();
+        RobotLog.dd(LOG_TAG, "Target pos: %f", targetPosition);
         intake.moveSlidesAbsolute(targetPosition);
     }
 
