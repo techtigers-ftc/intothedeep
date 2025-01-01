@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * Command to move intake to prepare to intake state.
  */
@@ -26,20 +28,32 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
      *
      * @param intake     the intake subsystem
      * @param robotState the robot state
+     * @param slidePositionSupplier the supplier for the target slide position
      */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, RobotState robotState) {
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, RobotState robotState, DoubleSupplier slidePositionSupplier) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, 10, 0.5),
+                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
                 new IntakeWristRotationAction(intake,
                         IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
                 new IntakeClawRotationAction(intake,
-                        IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION, 500),
+                        () -> IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION, 500),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 500),
                 new IntakeOpenAction(intake)
         );
+    }
+
+    /**
+     * Overloaded constructor that takes a target slide position instead of a supplier
+     *
+     * @param intake     the intake subsystem
+     * @param robotState the robot state
+     * @param slidePosition the target slide position
+     */
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, RobotState robotState, double slidePosition) {
+        this(intake, robotState, () -> slidePosition);
     }
 
     @Override

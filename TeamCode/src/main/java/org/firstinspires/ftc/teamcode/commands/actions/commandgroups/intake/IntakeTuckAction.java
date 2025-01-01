@@ -32,9 +32,9 @@ public class IntakeTuckAction extends ParallelCommandGroup {
         addRequirements(intake);
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 200),
-                new IntakeSlidesAbsoluteAction(intake, 0, 0.5),
+                new IntakeSlidesAbsoluteAction(intake, () -> 2, 0.5),
                 new IntakeCloseAction(intake),
-                new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION, 200),
+                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION, 200),
                 new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION, 200)
         );
     }
