@@ -68,6 +68,11 @@ public abstract class AutoDriveCommandBase extends CommandBase {
         return pathChain.getPath(pathChain.size()-1).isAtParametricEnd();
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        drive.driveRobotCentric(0,0,0);
+    }
+
     protected void setPathChain(PathChain pathChain) {
         this.pathChain = pathChain;
     }

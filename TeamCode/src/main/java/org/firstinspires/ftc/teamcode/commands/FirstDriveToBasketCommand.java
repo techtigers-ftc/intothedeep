@@ -35,9 +35,8 @@ public class FirstDriveToBasketCommand extends AutoDriveCommandBase {
                                     new Point(11, 12)
                             )
                         )
-                        .setLinearHeadingInterpolation(
-                                Math.toRadians(90), Math.toRadians(45)
-                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(90),
+                                Math.toRadians(45))
                         .build()
         );
     }
