@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A base class for autonomous drive commands that use PedroPathing.
  */
-public class PedroAutoDriveCommandBase extends CommandBase {
+public abstract class AutoDriveCommandBase extends CommandBase {
     protected final DriveSubsystem drive;
     protected final RobotState robotState;
     protected final Follower follower;
@@ -24,12 +24,13 @@ public class PedroAutoDriveCommandBase extends CommandBase {
     protected FilteredPIDFController drivePIDF;
 
     /**
-     * Constructs a new PedroAutoDriveCommandBase.
+     * Constructs a new AutoDriveCommandBase.
      *
      * @param drive      The drive subsystem
      * @param robotState The robot state
      */
-    public PedroAutoDriveCommandBase(DriveSubsystem drive, RobotState robotState) {
+    public AutoDriveCommandBase(DriveSubsystem drive,
+                                RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
         follower = new Follower(robotState);
@@ -60,6 +61,11 @@ public class PedroAutoDriveCommandBase extends CommandBase {
     @Override
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
+    }
+
+    @Override
+    public boolean isFinished() {
+        return pathChain.getPath(pathChain.size()-1).isAtParametricEnd();
     }
 
     protected void setPathChain(PathChain pathChain) {

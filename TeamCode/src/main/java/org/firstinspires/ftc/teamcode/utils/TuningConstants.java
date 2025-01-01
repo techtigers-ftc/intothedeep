@@ -16,11 +16,4 @@ public class TuningConstants {
     public static double headingP = 3;
     public static double headingI = 0;
     public static double headingD = 0.05;
-
-    public static double rangeP = 0.045;
-    public static double rangeI = 0.02;
-    public static double rangeD = 0;
-    public static double bearingP = 0.03;
-    public static double bearingI = 0;
-    public static double bearingD = 0;
 }
