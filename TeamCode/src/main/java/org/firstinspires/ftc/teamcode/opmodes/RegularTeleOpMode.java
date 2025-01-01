@@ -73,7 +73,7 @@ public class RegularTeleOpMode extends BaseOpMode {
                 IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
                 () -> robotState.getBlockForwardFine(),
-                () -> (-robotState.getBlockOrientation() + 180) % 180); // Done to translate claw rotation around block orientation
+                () -> (-robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(intake, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(intake, robotState);
 
