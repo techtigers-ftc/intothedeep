@@ -57,11 +57,10 @@ public class RegularTeleOpMode extends BaseOpMode {
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
 
-        //MANIPULATOR
-
-        // Intake
+        // MANIPULATOR
 
         // Intake State Movements
+
         // Commands
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(intake, robotState,
@@ -73,19 +72,20 @@ public class RegularTeleOpMode extends BaseOpMode {
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(intake, robotState,
                 IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
-                () -> robotState.getBlockForwardFine(), () -> robotState.getBlockOrientation());
+                () -> robotState.getBlockForwardFine(),
+                () -> (-robotState.getBlockOrientation() + 180) % 180); // Done to translate claw rotation around block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(intake, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(intake, robotState);
 
-        // Button Triggers
+        // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         Trigger leftBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
-        Trigger start = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START);
+        Trigger isManual = new Trigger(() -> robotState.isManualIntakeSelected());
 
-        Trigger autoExtendTrigger = rightBumper.and(start.negate());
-        Trigger manualExtendTrigger = rightBumper.and(start);
-        Trigger autoRetractTrigger = leftBumper.and(start.negate());
-        Trigger manualRetractTrigger = leftBumper.and(start);
+        Trigger autoExtendTrigger = rightBumper.and(isManual.negate());
+        Trigger manualExtendTrigger = rightBumper.and(isManual);
+        Trigger autoRetractTrigger = leftBumper.and(isManual.negate());
+        Trigger manualRetractTrigger = leftBumper.and(isManual);
 
         // State triggers
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
@@ -113,7 +113,14 @@ public class RegularTeleOpMode extends BaseOpMode {
         autoExtendTrigger.and(inTuck).whenActive(prepareToPickupAuto);
         autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
 
-        //Other Intake Stuff
+        // Other Intake Stuff
+
+        // Toggles manual intake mode
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
+                () -> robotState.setManualIntakeSelected(true),
+                () -> robotState.setManualIntakeSelected(false)
+        );
+
         // Reset the intake slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
                 intake::resetSlides
@@ -122,12 +129,14 @@ public class RegularTeleOpMode extends BaseOpMode {
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
+        // Controls intake slides
         Trigger intakeSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getLeftY() != 0
         );
         intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
                 manipulatorGamepad.getLeftY() * 2));
 
+        // Manual intake rotation
         IntakeManualRotationCommand intakeManualRotationCommand =
                 new IntakeManualRotationCommand(intake, manipulatorGamepad);
         Trigger intakeRotationTrigger = new Trigger(() ->
@@ -136,11 +145,13 @@ public class RegularTeleOpMode extends BaseOpMode {
         );
         intakeRotationTrigger.and(inReadyToIntake).whileActiveContinuous(intakeManualRotationCommand);
 
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake).whenActive(intake::togglePerpendicularRotation);
+        // Intake claw rotation toggle to 0 or 90
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake)
+                .whenActive(intake::togglePerpendicularRotation);
 
-        //Dropper
+        // Dropper
 
-        //Dropper State Transitions
+        // Dropper State Transitions
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
@@ -198,15 +209,6 @@ public class RegularTeleOpMode extends BaseOpMode {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
-        if (gamepad2.back) {
-            telemetry.addLine("Back Pressed");
-        } else {
-            telemetry.addLine("Back Not Pressed");
-        }
-        if (gamepad2.start) {
-            telemetry.addLine("Start Pressed");
-        } else {
-            telemetry.addLine("Start Not Pressed");
-        }
+        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
     }
 }
