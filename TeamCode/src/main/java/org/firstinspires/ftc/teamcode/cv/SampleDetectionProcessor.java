@@ -28,12 +28,21 @@ public class SampleDetectionProcessor implements VisionProcessor {
     public static int L_H = 10;
     public static int L_S = 50;
     public static int L_V = 70;
+//    Yellow:
 //    private Scalar UPPER_BOUND = new Scalar(40,255,255);
-//    private Scalar LOWER_BOUND = new Scalar(10,10,70);
+//    private Scalar LOWER_BOUND = new Scalar(10,50,70);
+//    Red
+//    private Scalar UPPER_BOUND = new Scalar(10,255,255);
+//    private Scalar LOWER_BOUND = new Scalar(0,50,70);
+//    Blue
+//    private Scalar UPPER_BOUND = new Scalar(130,255,255);
+//    private Scalar LOWER_BOUND = new Scalar(100,50,70);
     private Scalar UPPER_BOUND = new Scalar(U_H,U_S,U_V);
     private Scalar LOWER_BOUND = new Scalar(L_H,L_S,L_V);
     public static int ERODE_NUMBER = 10;
+    public static int DILATE_SIZE = 3;
     private Sample foundSample;
+    private Mat processedMat = new Mat();
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -41,10 +50,13 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
     private static List<MatOfPoint> getCanny(Mat frame) {
         Mat edges = new Mat();
+
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
-        Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0);
+//        for (int i = 0; i < DILATE_SIZE; i++) {
+//            Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0);
+//        }
 
         Imgproc.Canny(frame, edges, 100, 200);
 
@@ -61,7 +73,6 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Mat processedMat = new Mat();
 
 //        Mat edges = new Mat(frame.rows(), frame.cols(), frame.type());
 
@@ -70,9 +81,10 @@ public class SampleDetectionProcessor implements VisionProcessor {
         Mat processedMat2 = new Mat();
         Core.inRange(processedMat, this.LOWER_BOUND, this.UPPER_BOUND, processedMat);
 
-//        return frame;
 
         List<MatOfPoint> contours = getCanny(processedMat);
+
+//        return frame;
 
         for (MatOfPoint contour : contours) {
 
