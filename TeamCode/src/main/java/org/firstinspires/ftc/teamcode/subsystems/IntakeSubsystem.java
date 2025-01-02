@@ -434,6 +434,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
 
-        RobotLog.dd(tag, "Intake Block Color: %f", robotState.getIntakeBlockColor());
+        RobotLog.dd(tag, "Intake Block Color: %f", robotState.getIntakeBlockColor().toString());
     }
 }
