@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -65,6 +67,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
+    private final NormalizedColorSensor colorSensor;
 
     /**
      * Initializes dropper subsystem
@@ -80,6 +83,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightWrist = hardwareMap.get(Servo.class, "right_dropper_wrist");
         //Claw zero is open
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "dropper_color_sensor");
 
         PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
         slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
@@ -289,6 +293,51 @@ public class DropperSubsystem extends CloseableSubsystem {
         return leftSlideCurrentAverage.getAverage();
     }
 
+    /**
+     * Updates the block color of the color sensor
+     */
+    private void updateBlockColor() {
+        double sensorRed = getSensorRed();
+        double sensorGreen = getSensorGreen();
+        double sensorBlue = getSensorBlue();
+        double colorsSum = sensorRed + sensorGreen + sensorBlue;
+        double normalizedBlue = sensorBlue / colorsSum;
+        double normalizedGreen = sensorGreen / colorsSum;
+        double normalizedRed = sensorRed / colorsSum;
+        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+
+        if (magnitude < 30) {
+            robotState.setIntakeBlockColor(BlockColor.NONE);
+        } else if (normalizedBlue > 0.53) {
+            robotState.setIntakeBlockColor(BlockColor.BLUE);
+        } else if (normalizedRed > 0.43) {
+            robotState.setIntakeBlockColor(BlockColor.RED);
+        } else if (normalizedBlue < 0.165) {
+            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+        }
+    }
+
+    /**
+     * @return the blue value of the color sensor
+     */
+    public double getSensorBlue() {
+        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
+    }
+
+    /**
+     * @return the red value of the color sensor
+     */
+    public double getSensorRed() {
+        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
+    }
+
+    /**
+     * @return the green value of the color sensor
+     */
+    public double getSensorGreen() {
+        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
+    }
+
     @Override
     public void periodic() {
         double power =
@@ -302,10 +351,13 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
+        updateBlockColor();
+
 
         RobotLog.dd(tag, "Current: %f Target %f",
                 getCurrentSlidePositionInches(), getTargetPositionInches());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
+        RobotLog.dd(tag, "Dropper Block Color: %s", robotState.getDropperBlockColor().toString());
     }
 }
