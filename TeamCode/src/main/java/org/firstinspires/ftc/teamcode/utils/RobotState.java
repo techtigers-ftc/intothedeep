@@ -24,7 +24,8 @@ public class RobotState extends GlobalState {
     private double blockLateralCoarse;
     private double blockOrientation;
     private double blockForwardCoarse;
-    private BlockColor blockColor;
+    private BlockColor intakeBlockColor;
+    private BlockColor dropperBlockColor;
     private double blockForwardFine;
     private double blockLateralFine;
     private boolean isHorizontalExtended;
@@ -57,7 +58,8 @@ public class RobotState extends GlobalState {
         blockLateralCoarse = 0;
         blockOrientation = 0;
         blockForwardCoarse = 0;
-        blockColor = BlockColor.NONE;
+        intakeBlockColor = BlockColor.NONE;
+        dropperBlockColor = BlockColor.NONE;
         blockForwardFine = 0;
         blockLateralFine = 0;
         isHorizontalExtended = false;
@@ -288,19 +290,35 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current color of the block in the robot
+     * @return the current color of the block the intake is detecting
      */
-    public BlockColor getBlockColor() {
-        return blockColor;
+    public BlockColor getIntakeBlockColor() {
+        return intakeBlockColor;
     }
 
     /**
-     * Sets the current color of the block in the robot
+     * Sets the current color of the block the intake is detecting
      *
      * @param blockColor the color of the block
      */
-    public void setBlockColor(BlockColor blockColor) {
-        this.blockColor = blockColor;
+    public void setIntakeBlockColor(BlockColor blockColor) {
+        this.intakeBlockColor = blockColor;
+    }
+
+    /**
+     * @return the current color of the block the dropper is detecting
+     */
+    public BlockColor getDropperBlockColor() {
+        return dropperBlockColor;
+    }
+
+    /**
+     * Sets the current color of the block the dropper is detecting
+     *
+     * @param blockColor the color of the block
+     */
+    public void setDropperBlockColor(BlockColor blockColor) {
+        this.dropperBlockColor = blockColor;
     }
 
     /**
