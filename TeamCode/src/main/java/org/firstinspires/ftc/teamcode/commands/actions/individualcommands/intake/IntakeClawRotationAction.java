@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intak
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.base.actions.ServoActionCommand;
 
 /**
@@ -13,13 +15,14 @@ public class IntakeClawRotationAction extends ServoActionCommand {
     /**
      * Initializes the command with the intake subsystem, the expected servo position, and the duration
      *
-     * @param intake           the intake subsystem
-     * @param expectedServoPos the expected servo position
-     * @param duration         the duration of the command
+     * @param intake              the intake subsystem
+     * @param expectedPosSupplier the supplier for the expected servo position
+     * @param duration            the duration of the command
      */
     public IntakeClawRotationAction(IntakeSubsystem intake,
-                                    double expectedServoPos, long duration) {
-        super(expectedServoPos, duration);
+                                    DoubleSupplier expectedPosSupplier,
+                                    long duration) {
+        super(expectedPosSupplier, duration);
         this.intake = intake;
     }
 

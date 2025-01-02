@@ -1,32 +1,42 @@
 package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * Moves the intake slides to a target position
  */
 public class IntakeSlidesAbsoluteAction extends CommandBase {
+    private static final String LOG_TAG = IntakeSlidesAbsoluteAction.class.getSimpleName();
     private final IntakeSubsystem intake;
-    private final double targetPosition;
+    private final DoubleSupplier targetPositionSupplier;
     private final double tolerance;
+    private double targetPosition;
 
     /**
      * Initializes the command
      *
      * @param intake         the intake subsystem
-     * @param targetPosition the target position in inches
+     * @param targetPositionSupplier the supplier for the target position
      * @param tolerance      the tolerance for the target position
      */
-    public IntakeSlidesAbsoluteAction(IntakeSubsystem intake, double targetPosition, double tolerance) {
+    public IntakeSlidesAbsoluteAction(IntakeSubsystem intake,
+                                      DoubleSupplier targetPositionSupplier,
+                                      double tolerance) {
         this.intake = intake;
-        this.targetPosition = targetPosition;
+        this.targetPositionSupplier = targetPositionSupplier;
         this.tolerance = tolerance;
+        targetPosition = targetPositionSupplier.getAsDouble();
     }
 
     @Override
     public void initialize() {
+        targetPosition = targetPositionSupplier.getAsDouble();
+        RobotLog.dd(LOG_TAG, "Target pos: %f", targetPosition);
         intake.moveSlidesAbsolute(targetPosition);
     }
 

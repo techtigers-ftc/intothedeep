@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.MockSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -49,43 +50,78 @@ public class RegularTeleOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, drive, dropper);
 
-        // DRIVER
+        // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
 
-        //MANIPULATOR
+        // MANIPULATOR
 
-        // Intake
+        // Intake TODO: Split into a different method
 
-        //Intake State Movements
-        IntakeTuckAction intakeTuckCommand = new IntakeTuckAction(intake, robotState);
-        IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, robotState);
-        IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intake, robotState);
-        IntakePrepareToTransferAction intakePrepareToTransferAction = new IntakePrepareToTransferAction(intake, robotState);
-        IntakeReadyToTransferAction intakeReadyToTransferAction = new IntakeReadyToTransferAction(intake, robotState);
+        // Commands
+        IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
+        IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
+                intake, robotState, 10);
+        IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
+                intake, robotState, () -> robotState.getBlockForwardCoarse());
+        IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
+                intake, robotState, () -> intake.getCurrentSlidePositionInches());
+        IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
+                intake, robotState, IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION);
+        IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
+                () -> robotState.getBlockForwardFine(),
+                () -> (-robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
+        IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
+                intake, robotState);
+        IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
+                intake, robotState);
 
+        // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
         Trigger leftBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
+        Trigger isManual = new Trigger(() -> robotState.isManualIntakeSelected());
 
+        Trigger autoExtendTrigger = rightBumper.and(isManual.negate());
+        Trigger manualExtendTrigger = rightBumper.and(isManual);
+        Trigger autoRetractTrigger = leftBumper.and(isManual.negate());
+        Trigger manualRetractTrigger = leftBumper.and(isManual);
+
+        // State triggers
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
         Trigger inPrepareToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
         Trigger inReadyToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
 
-        leftBumper.and(inPrepareToIntake).whenActive(intakeTuckCommand);
-        leftBumper.and(inReadyToIntake).whenActive(intakePrepareToPickupAction);
-        leftBumper.and(inPrepareToTransfer).whenActive(intakePrepareToPickupAction);
-        leftBumper.and(inReadyToTransfer).whenActive(intakePrepareToPickupAction);
+        // Retract Trigger bindings
+        manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
 
-        rightBumper.and(inTuck).whenActive(intakePrepareToPickupAction);
-        rightBumper.and(inPrepareToIntake).whenActive(intakeReadyToPickupAction);
-        rightBumper.and(inReadyToIntake).whenActive(intakePrepareToTransferAction);
-        rightBumper.and(inPrepareToTransfer).whenActive(intakeReadyToTransferAction);
+        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake).whenActive(tuck);
+        manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
+        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToTransfer).whenActive(prepareToPickupNoSlides);
 
-        //Other Intake Stuff
+        autoRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupAuto);
+
+        // Extend Trigger Bindings
+        manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
+        manualExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
+
+        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToIntake).whenActive(prepareToTransfer);
+        manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(readyToTransfer);
+
+        autoExtendTrigger.and(inTuck).whenActive(prepareToPickupAuto);
+        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
+
+        // Other Intake Stuff
+
+        // Toggles manual intake mode
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
+                () -> robotState.setManualIntakeSelected(true),
+                () -> robotState.setManualIntakeSelected(false)
+        );
+
         // Reset the intake slide encoders
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
                 intake::resetSlides
@@ -94,12 +130,14 @@ public class RegularTeleOpMode extends BaseOpMode {
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
+        // Controls intake slides
         Trigger intakeSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getLeftY() != 0
         );
         intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
                 manipulatorGamepad.getLeftY() * 2));
 
+        // Manual intake rotation
         IntakeManualRotationCommand intakeManualRotationCommand =
                 new IntakeManualRotationCommand(intake, manipulatorGamepad);
         Trigger intakeRotationTrigger = new Trigger(() ->
@@ -108,11 +146,13 @@ public class RegularTeleOpMode extends BaseOpMode {
         );
         intakeRotationTrigger.and(inReadyToIntake).whileActiveContinuous(intakeManualRotationCommand);
 
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake).whenActive(intake::togglePerpendicularRotation);
+        // Intake claw rotation toggle to 0 or 90
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake)
+                .whenActive(intake::togglePerpendicularRotation);
 
-        //Dropper
+        // Dropper TODO: Split into a different method
 
-        //Dropper State Transitions
+        // Dropper State Transitions
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
@@ -170,5 +210,6 @@ public class RegularTeleOpMode extends BaseOpMode {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
     }
 }

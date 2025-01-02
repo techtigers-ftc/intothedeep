@@ -34,6 +34,7 @@ public class RobotState extends GlobalState {
     private RobotBlockPosition blockPosition;
     private boolean isAscending;
     private boolean isVerticalExtended;
+    private boolean isManualIntakeSelected;
     private double dropperClawPitch;
     private double dropperClawRotation;
     private double driverCurrent;
@@ -66,6 +67,7 @@ public class RobotState extends GlobalState {
         blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
+        isManualIntakeSelected = false;
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
@@ -516,5 +518,20 @@ public class RobotState extends GlobalState {
      */
     public void setDropperCurrent(double dropperCurrent) {
         this.dropperCurrent = dropperCurrent;
+    }
+
+    /**
+     * @return if the manual intake is selected
+     */
+    public boolean isManualIntakeSelected() {
+        return isManualIntakeSelected;
+    }
+
+    /**
+     * Sets intake control to be manual or autonomous (with vision)
+     * @param manualIntakeSelected Whether the intake should be manual or not
+     */
+    public void setManualIntakeSelected(boolean manualIntakeSelected) {
+        isManualIntakeSelected = manualIntakeSelected;
     }
 }
