@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * A command group that moves the dropper system to the high basket drop position
  * The NT stands for "No Transfer"
  */
-public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
+public class DropperHighBasketNoTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = DropperHighBasketNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -29,10 +30,13 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 22, 1),
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300),
-                new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_BASKET_POSITION, 300)
+                new ParallelCommandGroup(
+                        new DropperSlidesAbsoluteAction(dropper, 22, 1),
+                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
+                        new DropperRotationAction(dropper,
+                                DropperSubsystem.ROTATION_BASKET_POSITION, 300)
+                ),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300)
         );
     }
 
