@@ -293,7 +293,10 @@ public class DropperSubsystem extends CloseableSubsystem {
         return leftSlideCurrentAverage.getAverage();
     }
 
-    private void baseUpdatePixelColors() {
+    /**
+     * Updates the pixel colors of the color sensor
+     */
+    private void updatePixelColors() {
         double sensorRed = getSensorRed();
         double sensorGreen = getSensorGreen();
         double sensorBlue = getSensorBlue();
@@ -314,14 +317,23 @@ public class DropperSubsystem extends CloseableSubsystem {
         }
     }
 
+    /**
+     * @return the blue value of the color sensor
+     */
     public double getSensorBlue() {
         return (colorSensor.getNormalizedColors().toColor() & 0xFF);
     }
 
+    /**
+     * @return the red value of the color sensor
+     */
     public double getSensorRed() {
         return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
     }
 
+    /**
+     * @return the green value of the color sensor
+     */
     public double getSensorGreen() {
         return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
     }
