@@ -1,20 +1,28 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+
+import team.techtigers.core.paths.Waypoint;
 
 /**
  * A base class for autonomous drive commands that use PedroPathing.
  */
 public abstract class AutoDriveCommandBase extends CommandBase {
+    private static final String LOG_TAG =
+            AutoDriveCommandBase.class.getSimpleName();
+
     protected final DriveSubsystem drive;
     protected final RobotState robotState;
     protected final Follower follower;
@@ -55,17 +63,27 @@ public abstract class AutoDriveCommandBase extends CommandBase {
         follower.setHeadingPIDF(headingPIDF.P(), headingPIDF.I(), headingPIDF.D(), headingPIDF.F());
         follower.setDrivePIDF(drivePIDF.P(), drivePIDF.I(), drivePIDF.D(), drivePIDF.T(), drivePIDF.F());
 
+        Path finalPath = pathChain.getPath(pathChain.size()-1);
+        Waypoint target =
+                PoseTranslator.pointToWaypoint(finalPath.getLastControlPoint());
+        target = new Waypoint(target.getX(), target.getY(), finalPath.getEndHeading());
+
+        robotState.setRobotFinalPose(target);
         follower.followPath(pathChain);
+    }
+
+    private double distToTarget(Waypoint current, Waypoint target) {
+        return Math.hypot(target.getX() - current.getX(),
+                target.getY() - current.getY());
+    }
+
+    private double angleDistance(double currentHeading, double targetHeading) {
+        return Math.abs(currentHeading - targetHeading);
     }
 
     @Override
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
-    }
-
-    @Override
-    public boolean isFinished() {
-        return pathChain.getPath(pathChain.size()-1).isAtParametricEnd();
     }
 
     @Override

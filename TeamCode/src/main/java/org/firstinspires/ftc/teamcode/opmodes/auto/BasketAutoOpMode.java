@@ -48,5 +48,6 @@ public class BasketAutoOpMode extends BaseOpMode {
     @Override
     public void update() {
         telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
+        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
     }
 }

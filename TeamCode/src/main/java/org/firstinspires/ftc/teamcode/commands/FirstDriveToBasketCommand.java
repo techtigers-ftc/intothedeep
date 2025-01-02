@@ -32,7 +32,7 @@ public class FirstDriveToBasketCommand extends AutoDriveCommandBase {
                         .addPath(
                             new BezierLine(
                                     new Point(29.75, 7.25),
-                                    new Point(11, 12)
+                                    new Point(13, 13)
                             )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
