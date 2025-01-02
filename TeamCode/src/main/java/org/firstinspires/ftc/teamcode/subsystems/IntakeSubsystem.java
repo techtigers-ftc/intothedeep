@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -76,6 +78,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
+    private final NormalizedColorSensor colorSensor;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -94,6 +97,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -356,6 +360,39 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public double getSlideCurrentLeft(){
         return leftSlideCurrentAverage.getAverage();
+    }
+
+    private void baseUpdatePixelColors() {
+        double sensorRed = getSensorRed();
+        double sensorGreen = getSensorGreen();
+        double sensorBlue = getSensorBlue();
+        double colorsSum = sensorRed + sensorGreen + sensorBlue;
+        double normalizedBlue = sensorBlue / colorsSum;
+        double normalizedGreen = sensorGreen / colorsSum;
+        double normalizedRed = sensorRed / colorsSum;
+        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+
+        if (magnitude < 30) {
+            robotState.setIntakeBlockColor(BlockColor.NONE);
+        } else if (normalizedBlue > 0.53) {
+            robotState.setIntakeBlockColor(BlockColor.BLUE);
+        } else if (normalizedRed > 0.43) {
+            robotState.setIntakeBlockColor(BlockColor.RED);
+        } else if (normalizedBlue < 0.165) {
+            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+        }
+    }
+
+    public double getSensorBlue() {
+        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
+    }
+
+    public double getSensorRed() {
+        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
+    }
+
+    public double getSensorGreen() {
+        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
     }
 
     /**
