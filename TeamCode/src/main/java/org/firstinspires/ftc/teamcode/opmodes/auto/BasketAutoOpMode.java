@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
+import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakePosition;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -31,18 +33,24 @@ public class BasketAutoOpMode extends BaseOpMode {
                 robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
 
         // Create the state machine
         stateMachine
                 .addState(new FirstDriveToBasketState("firstDrive", drive,
                         dropper, robotState))
                 .addState(new DropState("drop", dropper, robotState))
+                .addState(new SecondDriveToIntakePosition("secondDrive", drive, dropper,
+                        robotState))
                 .addState(new EndState("end"))
 
                 .from("firstDrive")
                 .to("drop")
                 .when(AutoState.END_1)
                 .from("drop")
+                .to("secondDrive")
+                .when(AutoState.END_1)
+                .from("secondDrive")
                 .to("end")
                 .when(AutoState.END_1)
 
