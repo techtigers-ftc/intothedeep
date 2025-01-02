@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -28,6 +29,9 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
+    public static double minMagnitude = 1;
+    public static double minBlue = 0.53;
+    public static double minRed = 0.43;
     private static final double FORWARD_KP = 0.0175;
     private static final double FORWARD_KI = 0.0;
     private static final double FORWARD_KD = 0.00013;
@@ -375,11 +379,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double normalizedRed = sensorRed / colorsSum;
         int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
 
-        if (magnitude < 30) {
+        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
+        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
+
+        if (magnitude < minMagnitude) {
             robotState.setIntakeBlockColor(BlockColor.NONE);
-        } else if (normalizedBlue > 0.53) {
+        } else if (normalizedBlue > minBlue) {
             robotState.setIntakeBlockColor(BlockColor.BLUE);
-        } else if (normalizedRed > 0.43) {
+        } else if (normalizedRed > minRed) {
             robotState.setIntakeBlockColor(BlockColor.RED);
         } else if (normalizedBlue < 0.165) {
             robotState.setIntakeBlockColor(BlockColor.YELLOW);
