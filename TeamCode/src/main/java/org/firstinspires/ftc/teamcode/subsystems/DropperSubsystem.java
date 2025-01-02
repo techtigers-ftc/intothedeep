@@ -296,7 +296,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * Updates the block color of the color sensor
      */
-    private void updatePixelColors() {
+    private void updateBlockColor() {
         double sensorRed = getSensorRed();
         double sensorGreen = getSensorGreen();
         double sensorBlue = getSensorBlue();
@@ -351,7 +351,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        updatePixelColors();
+        updateBlockColor();
 
 
         RobotLog.dd(tag, "Current: %f Target %f",

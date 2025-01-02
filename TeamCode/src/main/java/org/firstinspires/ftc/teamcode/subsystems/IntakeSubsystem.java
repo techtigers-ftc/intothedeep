@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -369,7 +368,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * Updates the block color of the color sensor
      */
-    private void updatePixelColors() {
+    private void updateBlockColor() {
         double sensorRed = getSensorRed();
         double sensorGreen = getSensorGreen();
         double sensorBlue = getSensorBlue();
@@ -432,7 +431,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        updatePixelColors();
+        updateBlockColor();
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
