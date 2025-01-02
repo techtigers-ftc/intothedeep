@@ -358,7 +358,6 @@ public class DropperSubsystem extends CloseableSubsystem {
                 getCurrentSlidePositionInches(), getTargetPositionInches());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-
-        RobotLog.dd(tag, "Dropper Block Color: %f", robotState.getDropperBlockColor());
+        RobotLog.dd(tag, "Dropper Block Color: %s", robotState.getDropperBlockColor().toString());
     }
 }
