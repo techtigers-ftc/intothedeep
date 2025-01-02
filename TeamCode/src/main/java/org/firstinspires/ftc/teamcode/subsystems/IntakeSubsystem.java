@@ -367,7 +367,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Updates the pixel colors of the color sensor
+     * Updates the block color of the color sensor
      */
     private void updatePixelColors() {
         double sensorRed = getSensorRed();
