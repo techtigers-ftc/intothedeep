@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -26,6 +28,9 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
+    public static double minMagnitude = 1;
+    public static double minBlue = 0.53;
+    public static double minRed = 0.43;
     private static final double FORWARD_KP = 0.0175;
     private static final double FORWARD_KI = 0.0;
     private static final double FORWARD_KD = 0.00013;
@@ -46,7 +51,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 7;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
@@ -55,8 +60,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 55;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double WRIST_PITCH_PECK_POSITION = 90;
@@ -76,6 +81,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
+    private final NormalizedColorSensor colorSensor;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -94,6 +100,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -359,6 +366,54 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Updates the block color of the color sensor
+     */
+    private void updateBlockColor() {
+        double sensorRed = getSensorRed();
+        double sensorGreen = getSensorGreen();
+        double sensorBlue = getSensorBlue();
+        double colorsSum = sensorRed + sensorGreen + sensorBlue;
+        double normalizedBlue = sensorBlue / colorsSum;
+        double normalizedGreen = sensorGreen / colorsSum;
+        double normalizedRed = sensorRed / colorsSum;
+        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+
+        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
+        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
+
+        if (magnitude < minMagnitude) {
+            robotState.setIntakeBlockColor(BlockColor.NONE);
+        } else if (normalizedBlue > minBlue) {
+            robotState.setIntakeBlockColor(BlockColor.BLUE);
+        } else if (normalizedRed > minRed) {
+            robotState.setIntakeBlockColor(BlockColor.RED);
+        } else if (normalizedBlue < 0.165) {
+            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+        }
+    }
+
+    /**
+     * @return the blue value of the color sensor
+     */
+    public double getSensorBlue() {
+        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
+    }
+
+    /**
+     * @return the red value of the color sensor
+     */
+    public double getSensorRed() {
+        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
+    }
+
+    /**
+     * @return the green value of the color sensor
+     */
+    public double getSensorGreen() {
+        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
@@ -376,11 +431,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
+        // TODO: Add debounce
+//        updateBlockColor();
+
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
         RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
+
+        RobotLog.dd(tag, "Intake Block Color: %s", robotState.getIntakeBlockColor().toString());
     }
 }
