@@ -7,16 +7,15 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to drop a block
  */
-public class FirstIntakeState extends SequentialCommandGroupState<AutoState> {
+public class IntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            FirstIntakeState.class.getSimpleName();
+            IntakeState.class.getSimpleName();
     private RobotState robotState;
 
     /**
@@ -24,7 +23,7 @@ public class FirstIntakeState extends SequentialCommandGroupState<AutoState> {
      *
      * @param name The name of the state
      */
-    public FirstIntakeState(String name, IntakeSubsystem intake, RobotState robotState) {
+    public IntakeState(String name, IntakeSubsystem intake, RobotState robotState) {
         super(name);
         this.robotState = robotState;
         addCommands(
@@ -38,7 +37,7 @@ public class FirstIntakeState extends SequentialCommandGroupState<AutoState> {
 
     @Override
     public AutoState getCurrentCondition() {
-        if(robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER){
+        if (robotState.getIntakeState() == org.firstinspires.ftc.teamcode.utils.enums.IntakeState.READY_TO_TRANSFER) {
             return AutoState.END_1;
         }
         return AutoState.RUNNING;

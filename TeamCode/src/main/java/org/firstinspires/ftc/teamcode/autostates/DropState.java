@@ -39,7 +39,7 @@ public class DropState extends ParallelCommandGroupState<AutoState> {
     @Override
     public AutoState getCurrentCondition() {
         if (isFinished()) {
-            if(runCounter == 1){
+            if (runCounter <= 2) {
                 return AutoState.END_1;
             }
             return AutoState.END_2;

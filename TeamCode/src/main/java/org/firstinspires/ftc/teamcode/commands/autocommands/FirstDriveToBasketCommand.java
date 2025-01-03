@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.autocommands;
 
+import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;

@@ -5,9 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.FirstIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.IntakeState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToBasketState;
+import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.ThirdDriveToBasketState;
+import org.firstinspires.ftc.teamcode.commands.autocommands.ThirdDriveToBasketCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -39,28 +42,44 @@ public class BasketAutoOpMode extends BaseOpMode {
 
         // Create the state machine
         stateMachine
-                .addState(new FirstDriveToBasketState("firstDrive", drive,
+                .addState(new FirstDriveToBasketState("firstDriveToBasket", drive,
                         dropper, robotState))
                 .addState(new DropState("drop", dropper, robotState))
-                .addState(new FirstDriveToIntakeState("secondDrive", drive, dropper,
+                .addState(new FirstDriveToIntakeState("firstDriveToIntake", drive, dropper,
                         robotState))
-                .addState(new FirstIntakeState("intakefirstpreload", intake, robotState))
-                .addState(new SecondDriveToBasketState("second-drive", drive, dropper, intake, robotState))
+                .addState(new IntakeState("intake", intake, robotState))
+                .addState(new SecondDriveToBasketState("secondDriveToBasket", drive, dropper, intake, robotState))
+                .addState(new SecondDriveToIntakeState("secondDriveToIntake", drive, dropper, robotState))
+                .addState(new ThirdDriveToBasketState("thirdDriveToBasket", drive, dropper, intake, robotState))
                 .addState(new EndState("end"))
 
-                .from("firstDrive")
+                .from("firstDriveToBasket")
                 .to("drop")
                 .when(AutoState.END_1)
+                
                 .from("drop")
-                .to("secondDrive")
+                .to("firstDriveToIntake")
                 .when(AutoState.END_1)
-                .from("secondDrive")
-                .to("intakefirstpreload")
+                .from("firstDriveToIntake")
+                .to("intake")
                 .when(AutoState.END_1)
-                .from("intakefirstpreload")
-                .to("second-drive")
+                .from("intake")
+                .to("secondDriveToBasket")
                 .when(AutoState.END_1)
-                .from("second-drive")
+                .from("secondDriveToBasket")
+                .to("drop")
+                .when(AutoState.END_1)
+                
+                .from("drop")
+                .to("secondDriveToIntake")
+                .when(AutoState.END_1)
+                .from("secondDriveToIntake")
+                .to("intake")
+                .when(AutoState.END_1)
+                .from("intake")
+                .to("thirdDriveToBasket")
+                .when(AutoState.END_1)
+                .from("thirdDriveToBasket")
                 .to("drop")
                 .when(AutoState.END_1)
                 .from("drop")
@@ -69,7 +88,7 @@ public class BasketAutoOpMode extends BaseOpMode {
 
 
 
-                .setFirstState("firstDrive");
+                .setFirstState("firstDriveToBasket");
 
 
         // Register subsystems + Create state machine subsystem
