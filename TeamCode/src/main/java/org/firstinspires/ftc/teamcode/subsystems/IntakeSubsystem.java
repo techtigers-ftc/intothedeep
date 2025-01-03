@@ -51,7 +51,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 7;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
@@ -60,8 +60,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     public static final double WRIST_PITCH_PICKUP_POSITION = 45;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 55;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double WRIST_PITCH_PECK_POSITION = 90;
@@ -431,7 +431,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        updateBlockColor();
+        // TODO: Add debounce
+//        updateBlockColor();
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
