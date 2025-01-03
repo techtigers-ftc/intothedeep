@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
+import org.firstinspires.ftc.teamcode.autostates.IntakeFirstPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakePosition;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -42,6 +43,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addState(new DropState("drop", dropper, robotState))
                 .addState(new SecondDriveToIntakePosition("secondDrive", drive, dropper,
                         robotState))
+                .addState(new IntakeFirstPreloadState("intakefirstpreload", intake, robotState))
                 .addState(new EndState("end"))
 
                 .from("firstDrive")
@@ -51,8 +53,12 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .to("secondDrive")
                 .when(AutoState.END_1)
                 .from("secondDrive")
+                .to("intakefirstpreload")
+                .when(AutoState.END_1)
+                .from("intakefirstpreload")
                 .to("end")
                 .when(AutoState.END_1)
+
 
                 .setFirstState("firstDrive");
 

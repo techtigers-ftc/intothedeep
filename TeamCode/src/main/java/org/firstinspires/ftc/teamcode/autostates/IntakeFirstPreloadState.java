@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -8,11 +13,12 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
+import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to drop a block
  */
-public class IntakeFirstPreloadState extends ParallelCommandGroupState<AutoState> {
+public class IntakeFirstPreloadState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             IntakeFirstPreloadState.class.getSimpleName();
     private RobotState robotState;
@@ -26,7 +32,10 @@ public class IntakeFirstPreloadState extends ParallelCommandGroupState<AutoState
         super(name);
         this.robotState = robotState;
         addCommands(
-                //new IntakePrepareToPickupAction(intake, robotState)
+                new IntakePrepareToPickupAction(intake, robotState, 18.5),
+                new IntakeReadyToPickupAction(intake, robotState, 70)
+                //new IntakePrepareToTransferAction(intake, robotState),
+                //new IntakeReadyToTransferAction(intake, robotState)
 
         );
     }

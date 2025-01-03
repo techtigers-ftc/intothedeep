@@ -62,7 +62,7 @@ public class SecondDriveToIntakePosition extends ParallelCommandGroupState<AutoS
                 angleDistance(current.getHeading(), target.getHeading()));
         if (distToTarget(current, target) < TOLERANCE
                 && angleDistance(current.getHeading(), target.getHeading()) < ANGULAR_TOLERANCE
-                    && robotState.getDropperState() == DropperState.HIGH_BASKET) {
+                    && robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.END_1;
         }
 
