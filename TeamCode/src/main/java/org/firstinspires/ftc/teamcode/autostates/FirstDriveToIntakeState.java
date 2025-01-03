@@ -4,14 +4,14 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.SecondDriveToBasketCommand;
+import org.firstinspires.ftc.teamcode.commands.autocommands.FirstDriveToIntakePosition;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
@@ -19,29 +19,29 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A test autonomous state that drives the robot using PedroPathing.
  */
-public class SecondDriveToIntakePosition extends ParallelCommandGroupState<AutoState> {
+public class FirstDriveToIntakeState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            SecondDriveToIntakePosition.class.getSimpleName();
+            FirstDriveToIntakeState.class.getSimpleName();
     private static final double TOLERANCE = 1;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(2);
+    private static final double ANGULAR_TOLERANCE = Math.toRadians(3);
+    private RobotState robotState;
+
     /**
      * Constructor for the SequentialCommandGroupState
      *
      * @param name The name of the state
      */
-    public SecondDriveToIntakePosition(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public FirstDriveToIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         this.robotState = robotState;
         addCommands(
-                new SecondDriveToBasketCommand(drive, robotState),
+                new FirstDriveToIntakePosition(drive, robotState),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
                         new DropperPreTransferAction(dropper, robotState)
                 )
         );
     }
-
-    private RobotState robotState;
 
     private double distToTarget(Waypoint current, Waypoint target) {
         return Math.hypot(target.getX() - current.getX(),

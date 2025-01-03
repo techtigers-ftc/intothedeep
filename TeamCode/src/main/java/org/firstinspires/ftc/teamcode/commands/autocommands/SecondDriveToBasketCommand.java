@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
@@ -31,11 +31,12 @@ public class SecondDriveToBasketCommand extends AutoDriveCommandBase {
                 follower.pathBuilder()
                         .addPath(
                             new BezierLine(
-                                    new Point(12, 12),
-                                    new Point(15, 19)
+                                    new Point(15,19),
+                                    new Point(12, 12)
                             )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(75))
+                        .setLinearHeadingInterpolation(Math.toRadians(78),
+                                Math.toRadians(45))
                         .build()
         );
     }

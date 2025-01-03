@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.IntakeFirstPreloadState;
-import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakePosition;
+import org.firstinspires.ftc.teamcode.autostates.FirstIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.FirstDriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.SecondDriveToBasketState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -41,9 +42,10 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addState(new FirstDriveToBasketState("firstDrive", drive,
                         dropper, robotState))
                 .addState(new DropState("drop", dropper, robotState))
-                .addState(new SecondDriveToIntakePosition("secondDrive", drive, dropper,
+                .addState(new FirstDriveToIntakeState("secondDrive", drive, dropper,
                         robotState))
-                .addState(new IntakeFirstPreloadState("intakefirstpreload", intake, robotState))
+                .addState(new FirstIntakeState("intakefirstpreload", intake, robotState))
+                .addState(new SecondDriveToBasketState("second-drive", drive, dropper, intake, robotState))
                 .addState(new EndState("end"))
 
                 .from("firstDrive")
@@ -56,8 +58,15 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .to("intakefirstpreload")
                 .when(AutoState.END_1)
                 .from("intakefirstpreload")
-                .to("end")
+                .to("second-drive")
                 .when(AutoState.END_1)
+                .from("second-drive")
+                .to("drop")
+                .when(AutoState.END_1)
+                .from("drop")
+                .to("end")
+                .when(AutoState.END_2)
+
 
 
                 .setFirstState("firstDrive");

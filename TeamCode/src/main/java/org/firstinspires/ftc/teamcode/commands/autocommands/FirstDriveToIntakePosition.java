@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 /**
  * A test autonomous drive command that uses PedroPathing.
  */
-public class FirstDriveToBasketCommand extends AutoDriveCommandBase {
+public class FirstDriveToIntakePosition extends AutoDriveCommandBase {
 
     /**
      * Constructs a new FirstDriveToBasketCommand.
@@ -17,7 +17,7 @@ public class FirstDriveToBasketCommand extends AutoDriveCommandBase {
      * @param drive      The drive subsystem
      * @param robotState The robot state
      */
-    public FirstDriveToBasketCommand(DriveSubsystem drive, RobotState robotState) {
+    public FirstDriveToIntakePosition(DriveSubsystem drive, RobotState robotState) {
         super(drive, robotState);
         setTranslationalPIDF(TuningConstants.translationalP,
                 TuningConstants.translationalI,
@@ -31,12 +31,11 @@ public class FirstDriveToBasketCommand extends AutoDriveCommandBase {
                 follower.pathBuilder()
                         .addPath(
                             new BezierLine(
-                                    new Point(29.75, 7.25),
-                                    new Point(12, 12)
+                                    new Point(12, 12),
+                                    new Point(15, 19)
                             )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(90),
-                                Math.toRadians(45))
+                        .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(78))
                         .build()
         );
     }
