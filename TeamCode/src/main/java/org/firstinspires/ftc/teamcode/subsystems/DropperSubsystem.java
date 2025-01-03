@@ -28,7 +28,7 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
-    public static final double PITCH_PRE_TRANSFER_POSITION = 33;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 37;
     public static final double PITCH_TRANSFER_POSITION = 20;
     public static final double PITCH_BASKET_POSITION = 200;
     public static final double PITCH_CHAMBER_POSITION = 175;
@@ -48,7 +48,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
-    public static double CLAW_CLOSED_POSITION = 0.04;
+    public static double CLAW_CLOSED_POSITION = 0.02;
     public static double KP = 0.015;
     public static double KI = 0;
     public static double KD = 0.000000001;
@@ -351,7 +351,8 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        updateBlockColor();
+        // TODO: Add debounce
+//        updateBlockColor();
 
 
         RobotLog.dd(tag, "Current: %f Target %f",
