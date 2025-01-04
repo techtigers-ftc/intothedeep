@@ -42,6 +42,7 @@ public class StateMachine<T> {
             throw new IllegalArgumentException("State: " + state.getName() + " already exists");
         }
         stateList.add(state);
+        transitionMap.put(state.getName(), new ArrayList<>());
 
         return this;
     }
@@ -71,9 +72,6 @@ public class StateMachine<T> {
             throw new IllegalArgumentException("State: " + transition.getNextState() + " does not exist");
         }
 
-        if (!transitionMap.containsKey(currentState.getName())) {
-            transitionMap.put(currentState.getName(), new ArrayList<>());
-        }
         Objects.requireNonNull(transitionMap.get(currentState.getName())).add(transition);
     }
 
