@@ -2,14 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
-import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.FirstDriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.SecondDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.ThirdDriveToBasketState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -21,7 +19,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.BaseOpMode;
-import team.techtigers.base.statemachine.State;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
@@ -48,55 +45,60 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
 
         // Creating states
-        State<AutoState> drivePreloadToBasket = new FirstDriveToBasketState(
+        DriveToPreloadDropState drivePreloadToBasket = new DriveToPreloadDropState(
                 "firstDriveToBasket",
                 drive,
                 dropper,
                 robotState);
+        DriveStateConfigurator.configPreloadDrop(drivePreloadToBasket);
 
-        State<AutoState> dropSample = new DropState(
+        DropState dropSample = new DropState(
                 "drop",
                 dropper);
 
-        State<AutoState> driveIntakeFirstSample = new FirstDriveToIntakeState(
+        DriveToIntakeState driveIntakeFirstSample = new DriveToIntakeState(
                 "firstDriveToIntake",
                 drive,
                 dropper,
                 robotState);
+        DriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
 
-        State<AutoState> intakeFirstSample = new IntakeSampleState("intakeFirst", intake,
+        IntakeSampleState intakeFirstSample = new IntakeSampleState("intakeFirst", intake,
                 robotState,
                 distToTarget(robotState, new Waypoint(22.5, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
-        State<AutoState> driveBasketFirstSample = new SecondDriveToBasketState(
+        DriveToGeneralDropState driveBasketFirstSample = new DriveToGeneralDropState(
                 "secondDriveToBasket",
                 drive,
                 dropper,
                 intake,
                 robotState);
+        DriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
 
-        State<AutoState> driveIntakeSecondSample = new SecondDriveToIntakeState(
+        DriveToIntakeState driveIntakeSecondSample = new DriveToIntakeState(
                 "secondDriveToIntake",
                 drive,
                 dropper,
                 robotState);
+        DriveStateConfigurator.configSecondSampleIntake(driveIntakeSecondSample);
 
-        State<AutoState> intakeSecondSample = new IntakeSampleState(
+        IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecond",
                 intake,
                 robotState,
                 distToTarget(robotState, new Waypoint(12.5, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
-        State<AutoState> driveBasketSecondSample = new ThirdDriveToBasketState(
+        DriveToGeneralDropState driveBasketSecondSample = new DriveToGeneralDropState(
                 "thirdDriveToBasket",
                 drive,
                 dropper,
                 intake,
                 robotState);
+        DriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
 
-        State<AutoState> end = new EndState("end");
+        EndState end = new EndState("end");
 
         // Create the state machine
         stateMachine

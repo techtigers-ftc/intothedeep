@@ -16,11 +16,11 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
- * A base class for autonomous drive commands that use PedroPathing.
+ * A class for autonomous drive commands that use PedroPathing.
  */
-public abstract class AutoDriveCommandBase extends CommandBase {
+public class AutoDriveCommand extends CommandBase {
     private static final String LOG_TAG =
-            AutoDriveCommandBase.class.getSimpleName();
+            AutoDriveCommand.class.getSimpleName();
 
     protected final DriveSubsystem drive;
     protected final RobotState robotState;
@@ -31,13 +31,13 @@ public abstract class AutoDriveCommandBase extends CommandBase {
     protected FilteredPIDFController drivePIDF;
 
     /**
-     * Constructs a new AutoDriveCommandBase.
+     * Constructs a new AutoDriveCommand.
      *
      * @param drive      The drive subsystem
      * @param robotState The robot state
      */
-    public AutoDriveCommandBase(DriveSubsystem drive,
-                                RobotState robotState) {
+    public AutoDriveCommand(DriveSubsystem drive,
+                            RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
         follower = new Follower(robotState);
@@ -90,19 +90,49 @@ public abstract class AutoDriveCommandBase extends CommandBase {
         drive.driveRobotCentric(0,0,0);
     }
 
-    protected void setPathChain(PathChain pathChain) {
+    /**
+     * Sets the path chain for the command.
+     *
+     * @param pathChain the path chain to run
+     */
+    public void setPathChain(PathChain pathChain) {
         this.pathChain = pathChain;
     }
 
-    protected void setTranslationalPIDF(double p, double i, double d, double f) {
+    /**
+     * Sets the translational PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setTranslationalPIDF(double p, double i, double d, double f) {
         translationalPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
     }
 
-    protected void setHeadingPIDF(double p, double i, double d, double f) {
+    /**
+     * Sets the heading PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setHeadingPIDF(double p, double i, double d, double f) {
         headingPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
     }
 
-    protected void setDrivePIDF(double p, double i, double d, double t, double f) {
+    /**
+     * Sets the drive PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param t the time constant
+     * @param f the feedforward coefficient
+     */
+    public void setDrivePIDF(double p, double i, double d, double t, double f) {
         drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
     }
 }

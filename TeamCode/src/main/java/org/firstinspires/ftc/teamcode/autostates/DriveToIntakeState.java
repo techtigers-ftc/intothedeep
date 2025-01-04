@@ -4,43 +4,39 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.autocommands.FirstDriveToBasketCommand;
-import org.firstinspires.ftc.teamcode.commands.autocommands.SecondDriveToBasketCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
-import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
  * A test autonomous state that drives the robot using PedroPathing.
  */
-public class SecondDriveToBasketState extends ParallelCommandGroupState<AutoState> {
+public class DriveToIntakeState extends DriveStateBase {
     private static final String LOG_TAG =
-            SecondDriveToBasketState.class.getSimpleName();
-    private static final double TOLERANCE = 3;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
-    private RobotState robotState;
+            DriveToIntakeState.class.getSimpleName();
+    private static final double TOLERANCE = 1.5;
+    private static final double ANGULAR_TOLERANCE = Math.toRadians(2);
+    private final RobotState robotState;
 
     /**
      * Constructor for the SequentialCommandGroupState
      *
      * @param name The name of the state
      */
-    public SecondDriveToBasketState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name);
+    public DriveToIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+        super(name, drive, robotState);
         this.robotState = robotState;
-
         addCommands(
-                new SecondDriveToBasketCommand(drive, robotState),
-                new DropperHighBasketAction(dropper, intake, robotState)
+                autoDriveCommand,
+                new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        new DropperPreTransferAction(dropper, robotState)
+                )
         );
     }
 
@@ -63,7 +59,7 @@ public class SecondDriveToBasketState extends ParallelCommandGroupState<AutoStat
                 angleDistance(current.getHeading(), target.getHeading()));
         if (distToTarget(current, target) < TOLERANCE
                 && angleDistance(current.getHeading(), target.getHeading()) < ANGULAR_TOLERANCE
-                    && robotState.getDropperState() == DropperState.HIGH_BASKET) {
+                    && robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.END_1;
         }
 
