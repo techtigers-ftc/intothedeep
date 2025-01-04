@@ -28,7 +28,7 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     private DoubleSupplier distToTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
-                target.getY() - robotState.getRobotCurrentPose().getY()) - 7, 19);
+                target.getY() - robotState.getRobotCurrentPose().getY()) - 8, 19);
     }
 
     @Override
@@ -63,9 +63,11 @@ public class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         DriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
 
-        IntakeSampleState intakeFirstSample = new IntakeSampleState("intakeFirst", intake,
+        IntakeSampleState intakeFirstSample = new IntakeSampleState(
+                "intakeFirst",
+                intake,
                 robotState,
-                distToTarget(robotState, new Waypoint(22.5, 45)),
+                distToTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketFirstSample = new DriveToGeneralDropState(
@@ -87,7 +89,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 "intakeSecond",
                 intake,
                 robotState,
-                distToTarget(robotState, new Waypoint(12.5, 45)),
+                distToTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketSecondSample = new DriveToGeneralDropState(
@@ -97,6 +99,28 @@ public class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 robotState);
         DriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
+
+        DriveToIntakeState driveIntakeThirdSample = new DriveToIntakeState(
+                "thirdDriveToIntake",
+                drive,
+                dropper,
+                robotState);
+        DriveStateConfigurator.configThirdSampleIntake(driveIntakeThirdSample);
+
+        IntakeSampleState intakeThirdSample = new IntakeSampleState(
+                "intakeThird",
+                intake,
+                robotState,
+                distToTarget(robotState, new Waypoint(3, 45)),
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+
+        DriveToGeneralDropState driveBasketThirdSample = new DriveToGeneralDropState(
+                "fourthDriveToBasket",
+                drive,
+                dropper,
+                intake,
+                robotState);
+        DriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
 
         EndState end = new EndState("end");
 
@@ -110,6 +134,9 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveIntakeSecondSample)
                 .addState(intakeSecondSample)
                 .addState(driveBasketSecondSample)
+                .addState(driveIntakeThirdSample)
+                .addState(intakeThirdSample)
+                .addState(driveBasketThirdSample)
                 .addState(end)
 
                 .addTransition(drivePreloadToBasket, dropSample, AutoState.END_1)
@@ -121,7 +148,11 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.END_1)
                 .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.END_1)
                 .addTransition(driveBasketSecondSample, dropSample, AutoState.END_1)
-                .addTransition(dropSample, end, AutoState.END_3)
+                .addTransition(dropSample, driveIntakeThirdSample, AutoState.END_3)
+                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.END_1)
+                .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.END_1)
+                .addTransition(driveBasketThirdSample, dropSample, AutoState.END_1)
+                .addTransition(dropSample, end, AutoState.SAMPLE_3_DROP_COMPLETE)
 
                 .setCurrentState(drivePreloadToBasket);
 
