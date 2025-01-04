@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SimpleVisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -20,6 +21,7 @@ public class VisionTestOpmode extends BaseOpMode {
     @Override
     public void initialize() {
         robotState = new RobotState();
+        robotState.setBlockColorPreference(BlockColorPreference.ANY);
         SimpleVisionSubsystem vision = new SimpleVisionSubsystem(hardwareMap, robotState);
         registerSubsystems(vision);
     }
