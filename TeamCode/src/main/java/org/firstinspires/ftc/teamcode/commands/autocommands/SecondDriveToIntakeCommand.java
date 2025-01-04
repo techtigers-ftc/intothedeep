@@ -32,7 +32,7 @@ public class SecondDriveToIntakeCommand extends AutoDriveCommandBase {
                         .addPath(
                             new BezierLine(
                                     new Point(12, 12),
-                                    new Point(15, 19)
+                                    new Point(12, 20)
                             )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))

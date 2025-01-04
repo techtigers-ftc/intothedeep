@@ -13,7 +13,6 @@ import team.techtigers.base.statemachine.ParallelCommandGroupState;
 public class DropState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             DropState.class.getSimpleName();
-    private RobotState robotState;
     private int runCounter;
 
     /**
@@ -21,10 +20,9 @@ public class DropState extends ParallelCommandGroupState<AutoState> {
      *
      * @param name The name of the state
      */
-    public DropState(String name, DropperSubsystem dropper, RobotState robotState) {
+    public DropState(String name, DropperSubsystem dropper) {
         super(name);
         runCounter = 0;
-        this.robotState = robotState;
         addCommands(
                 new DropperOpenAction(dropper, 200)
         );
@@ -39,10 +37,12 @@ public class DropState extends ParallelCommandGroupState<AutoState> {
     @Override
     public AutoState getCurrentCondition() {
         if (isFinished()) {
-            if (runCounter <= 2) {
+            if (runCounter == 1) {
                 return AutoState.END_1;
+            } else if (runCounter == 2) {
+                return AutoState.END_2;
             }
-            return AutoState.END_2;
+            return AutoState.END_3;
         }
         return AutoState.RUNNING;
     }

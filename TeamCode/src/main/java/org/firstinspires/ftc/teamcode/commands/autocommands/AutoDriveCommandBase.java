@@ -68,7 +68,7 @@ public abstract class AutoDriveCommandBase extends CommandBase {
         target = new Waypoint(target.getX(), target.getY(), finalPath.getEndHeading());
 
         robotState.setRobotFinalPose(target);
-        follower.followPath(pathChain);
+        follower.followPath(pathChain, true);
     }
 
     private double distToTarget(Waypoint current, Waypoint target) {

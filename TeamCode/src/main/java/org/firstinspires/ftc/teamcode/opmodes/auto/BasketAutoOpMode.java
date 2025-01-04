@@ -5,12 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.IntakeState;
+import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToBasketState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.ThirdDriveToBasketState;
-import org.firstinspires.ftc.teamcode.commands.autocommands.ThirdDriveToBasketCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -19,6 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
@@ -26,6 +27,11 @@ import team.techtigers.core.paths.Waypoint;
 @Autonomous
 public class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
+
+    private DoubleSupplier distToTarget(RobotState robotState, Waypoint target) {
+        return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
+                target.getY() - robotState.getRobotCurrentPose().getY()) - 7, 19);
+    }
 
     @Override
     public void initialize() {
@@ -44,12 +50,17 @@ public class BasketAutoOpMode extends BaseOpMode {
         stateMachine
                 .addState(new FirstDriveToBasketState("firstDriveToBasket", drive,
                         dropper, robotState))
-                .addState(new DropState("drop", dropper, robotState))
+                .addState(new DropState("drop", dropper))
                 .addState(new FirstDriveToIntakeState("firstDriveToIntake", drive, dropper,
                         robotState))
-                .addState(new IntakeState("intake", intake, robotState))
+                .addState(new IntakeSampleState("intakeFirst", intake, robotState, distToTarget(
+                        robotState, new Waypoint(22.5, 45)),
+                        () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())))
                 .addState(new SecondDriveToBasketState("secondDriveToBasket", drive, dropper, intake, robotState))
                 .addState(new SecondDriveToIntakeState("secondDriveToIntake", drive, dropper, robotState))
+                .addState(new IntakeSampleState("intakeSecond", intake, robotState, distToTarget(
+                        robotState, new Waypoint(12.5, 45)),
+                        () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())))
                 .addState(new ThirdDriveToBasketState("thirdDriveToBasket", drive, dropper, intake, robotState))
                 .addState(new EndState("end"))
 
@@ -61,9 +72,9 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .to("firstDriveToIntake")
                 .when(AutoState.END_1)
                 .from("firstDriveToIntake")
-                .to("intake")
+                .to("intakeFirst")
                 .when(AutoState.END_1)
-                .from("intake")
+                .from("intakeFirst")
                 .to("secondDriveToBasket")
                 .when(AutoState.END_1)
                 .from("secondDriveToBasket")
@@ -72,11 +83,11 @@ public class BasketAutoOpMode extends BaseOpMode {
                 
                 .from("drop")
                 .to("secondDriveToIntake")
-                .when(AutoState.END_1)
+                .when(AutoState.END_2)
                 .from("secondDriveToIntake")
-                .to("intake")
+                .to("intakeSecond")
                 .when(AutoState.END_1)
-                .from("intake")
+                .from("intakeSecond")
                 .to("thirdDriveToBasket")
                 .when(AutoState.END_1)
                 .from("thirdDriveToBasket")
@@ -84,7 +95,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .when(AutoState.END_1)
                 .from("drop")
                 .to("end")
-                .when(AutoState.END_2)
+                .when(AutoState.END_3)
 
 
 

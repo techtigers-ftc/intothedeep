@@ -21,8 +21,8 @@ import team.techtigers.core.paths.Waypoint;
 public class SecondDriveToIntakeState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             SecondDriveToIntakeState.class.getSimpleName();
-    private static final double TOLERANCE = 1;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(3);
+    private static final double TOLERANCE = 1.5;
+    private static final double ANGULAR_TOLERANCE = Math.toRadians(2);
     private RobotState robotState;
 
     /**
