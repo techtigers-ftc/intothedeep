@@ -6,17 +6,18 @@ package team.techtigers.base.statemachine;
  * @param <T> The type of the condition, usually an enum
  **/
 public class TransitionBuilder<T> {
-    private final StateMachine stateMachine;
-    private final String currentState;
-    private String nextState;
+    private final StateMachine<T> stateMachine;
+    private final State<T> currentState;
+    private State<T> nextState;
 
     /**
      * Initializes a new TransitionBuilder
      *
      * @param stateMachine the state machine to add the transition to
-     * @param currentState the name of the current state
+     * @param currentState the current state
      */
-    public TransitionBuilder(StateMachine stateMachine, String currentState) {
+    public TransitionBuilder(StateMachine<T> stateMachine,
+                             State<T> currentState) {
         this.stateMachine = stateMachine;
         this.currentState = currentState;
     }
@@ -27,12 +28,12 @@ public class TransitionBuilder<T> {
      * @param condition the condition that must be met for the state to transition
      * @return the state machine to allow for method chaining
      */
-    public StateMachine when(T condition) {
+    public StateMachine<T> when(T condition) {
         if (nextState == null) {
             throw new IllegalStateException("Condition must be set (use to)");
         }
 
-        stateMachine.addCondition(currentState, new Transition<T>(condition,
+        stateMachine.addCondition(currentState, new Transition<>(condition,
                 nextState));
 
         return stateMachine;
@@ -41,10 +42,10 @@ public class TransitionBuilder<T> {
     /**
      * Adds the next state to the transition
      *
-     * @param nextState the name of the next state
+     * @param nextState the next state to transition to
      * @return the transition builder to allow for method chaining
      */
-    public TransitionBuilder to(String nextState) {
+    public TransitionBuilder<T> to(State<T> nextState) {
         this.nextState = nextState;
 
         return this;
