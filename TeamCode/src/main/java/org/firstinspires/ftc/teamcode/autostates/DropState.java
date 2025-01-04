@@ -41,8 +41,10 @@ public class DropState extends ParallelCommandGroupState<AutoState> {
                 return AutoState.END_1;
             } else if (runCounter == 2) {
                 return AutoState.END_2;
+            } else if (runCounter == 3){
+                return AutoState.END_3;
             }
-            return AutoState.END_3;
+            return AutoState.SAMPLE_3_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
     }

@@ -8,4 +8,5 @@ public enum AutoState {
     END_1,
     END_2,
     END_3,
+    SAMPLE_3_DROP_COMPLETE
 }

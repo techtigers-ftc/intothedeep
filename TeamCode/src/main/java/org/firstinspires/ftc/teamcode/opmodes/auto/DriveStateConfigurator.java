@@ -63,7 +63,7 @@ public class DriveStateConfigurator {
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(78))
+                                Math.toRadians(77))
                         .build()
         );
     }
@@ -148,6 +148,62 @@ public class DriveStateConfigurator {
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
                                 Math.toRadians(45))
+                        .build()
+        );
+    }
+
+    /**
+     * Configures the DriveToIntakeState.
+     *
+     * @param state The DriveToIntakeState to configure
+     */
+    public static void configThirdSampleIntake(DriveToIntakeState state) {
+        state.setTranslationalPIDF(TuningConstants.translationalP,
+                TuningConstants.translationalI,
+                TuningConstants.translationalD, 0);
+        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
+                TuningConstants.headingD, 0);
+        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
+                TuningConstants.driveD, 0, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(12, 12),
+                                        new Point(14.5, 21.75)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                                Math.toRadians(117))
+                        .build()
+        );
+    }
+
+    /**
+     * Configures the DriveToSecondSampleDropState.
+     *
+     * @param state The DriveToSecondSampleDropState to configure
+     */
+    public static void configThirdSampleDrop(DriveToGeneralDropState state) {
+        state.setTranslationalPIDF(TuningConstants.translationalP,
+                TuningConstants.translationalI,
+                TuningConstants.translationalD, 0);
+        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
+                TuningConstants.headingD, 0);
+        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
+                TuningConstants.driveD, 0, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(14.5, 21.75),
+                                        new Point(8, 13)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(117),
+                                Math.toRadians(70))
                         .build()
         );
     }
