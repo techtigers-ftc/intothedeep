@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToBasketState;
-import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.FirstDriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToBasketState;
 import org.firstinspires.ftc.teamcode.autostates.SecondDriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.ThirdDriveToBasketState;
@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.BaseOpMode;
+import team.techtigers.base.statemachine.State;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
@@ -35,7 +36,7 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        StateMachine stateMachine = new StateMachine();
+        StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState();
 
         // Initialize subsystems
@@ -46,60 +47,81 @@ public class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
 
+        // Creating states
+        State<AutoState> drivePreloadToBasket = new FirstDriveToBasketState(
+                "firstDriveToBasket",
+                drive,
+                dropper,
+                robotState);
+
+        State<AutoState> dropSample = new DropState(
+                "drop",
+                dropper);
+
+        State<AutoState> driveIntakeFirstSample = new FirstDriveToIntakeState(
+                "firstDriveToIntake",
+                drive,
+                dropper,
+                robotState);
+
+        State<AutoState> intakeFirstSample = new IntakeSampleState("intakeFirst", intake,
+                robotState,
+                distToTarget(robotState, new Waypoint(22.5, 45)),
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+
+        State<AutoState> driveBasketFirstSample = new SecondDriveToBasketState(
+                "secondDriveToBasket",
+                drive,
+                dropper,
+                intake,
+                robotState);
+
+        State<AutoState> driveIntakeSecondSample = new SecondDriveToIntakeState(
+                "secondDriveToIntake",
+                drive,
+                dropper,
+                robotState);
+
+        State<AutoState> intakeSecondSample = new IntakeSampleState(
+                "intakeSecond",
+                intake,
+                robotState,
+                distToTarget(robotState, new Waypoint(12.5, 45)),
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+
+        State<AutoState> driveBasketSecondSample = new ThirdDriveToBasketState(
+                "thirdDriveToBasket",
+                drive,
+                dropper,
+                intake,
+                robotState);
+
+        State<AutoState> end = new EndState("end");
+
         // Create the state machine
         stateMachine
-                .addState(new FirstDriveToBasketState("firstDriveToBasket", drive,
-                        dropper, robotState))
-                .addState(new DropState("drop", dropper))
-                .addState(new FirstDriveToIntakeState("firstDriveToIntake", drive, dropper,
-                        robotState))
-                .addState(new IntakeSampleState("intakeFirst", intake, robotState, distToTarget(
-                        robotState, new Waypoint(22.5, 45)),
-                        () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())))
-                .addState(new SecondDriveToBasketState("secondDriveToBasket", drive, dropper, intake, robotState))
-                .addState(new SecondDriveToIntakeState("secondDriveToIntake", drive, dropper, robotState))
-                .addState(new IntakeSampleState("intakeSecond", intake, robotState, distToTarget(
-                        robotState, new Waypoint(12.5, 45)),
-                        () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())))
-                .addState(new ThirdDriveToBasketState("thirdDriveToBasket", drive, dropper, intake, robotState))
-                .addState(new EndState("end"))
+                .addState(drivePreloadToBasket)
+                .addState(dropSample)
+                .addState(driveIntakeFirstSample)
+                .addState(intakeFirstSample)
+                .addState(driveBasketFirstSample)
+                .addState(driveIntakeSecondSample)
+                .addState(intakeSecondSample)
+                .addState(driveBasketSecondSample)
+                .addState(end)
 
-                .from("firstDriveToBasket")
-                .to("drop")
-                .when(AutoState.END_1)
-                
-                .from("drop")
-                .to("firstDriveToIntake")
-                .when(AutoState.END_1)
-                .from("firstDriveToIntake")
-                .to("intakeFirst")
-                .when(AutoState.END_1)
-                .from("intakeFirst")
-                .to("secondDriveToBasket")
-                .when(AutoState.END_1)
-                .from("secondDriveToBasket")
-                .to("drop")
-                .when(AutoState.END_1)
-                
-                .from("drop")
-                .to("secondDriveToIntake")
-                .when(AutoState.END_2)
-                .from("secondDriveToIntake")
-                .to("intakeSecond")
-                .when(AutoState.END_1)
-                .from("intakeSecond")
-                .to("thirdDriveToBasket")
-                .when(AutoState.END_1)
-                .from("thirdDriveToBasket")
-                .to("drop")
-                .when(AutoState.END_1)
-                .from("drop")
-                .to("end")
-                .when(AutoState.END_3)
+                .addTransition(drivePreloadToBasket, dropSample, AutoState.END_1)
+                .addTransition(dropSample, driveIntakeFirstSample, AutoState.END_1)
+                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.END_1)
+                .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.END_1)
+                .addTransition(driveBasketFirstSample, dropSample, AutoState.END_1)
+                .addTransition(dropSample, driveIntakeSecondSample, AutoState.END_2)
+                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.END_1)
+                .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.END_1)
+                .addTransition(driveBasketSecondSample, dropSample, AutoState.END_1)
+                .addTransition(dropSample, end, AutoState.END_3)
 
-
-
-                .setFirstState("firstDriveToBasket");
+                .setCurrentState(drivePreloadToBasket);
 
 
         // Register subsystems + Create state machine subsystem

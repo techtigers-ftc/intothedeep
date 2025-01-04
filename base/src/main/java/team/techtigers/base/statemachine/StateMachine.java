@@ -83,10 +83,12 @@ public class StateMachine<T> {
      * @param fromState the state to transition from
      * @param toState the state to transition to
      * @param condition the condition that must be met for the transition
+     * @return the state machine to allow for method chaining
      */
-    public void addTransition(State<T> fromState, State<T> toState,
+    public StateMachine<T> addTransition(State<T> fromState, State<T> toState,
                               T condition) {
         addCondition(fromState, new Transition<>(condition, toState));
+        return this;
     }
 
     /**
