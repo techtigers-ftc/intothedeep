@@ -31,9 +31,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    private static final double FORWARD_KP = 0.0175;
+    private static final double FORWARD_KP = 0.005;
     private static final double FORWARD_KI = 0.0;
-    private static final double FORWARD_KD = 0.00013;
+    private static final double FORWARD_KD = 0.0;
     private static final double FORWARD_KF = 0.0;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -60,7 +60,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     public static final double WRIST_PITCH_PICKUP_POSITION = 42;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 55;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
