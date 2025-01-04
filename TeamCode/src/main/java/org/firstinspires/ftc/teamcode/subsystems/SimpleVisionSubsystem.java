@@ -27,8 +27,8 @@ public class SimpleVisionSubsystem extends CloseableSubsystem {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(640, 480))
-                .addProcessor(new SampleDetectionProcessor())
+                .setCameraResolution(new Size(SampleDetectionProcessor.WIDTH_RESOLUTION, SampleDetectionProcessor.HEIGHT_RESOLUTION))
+                .addProcessor(new SampleDetectionProcessor(robotState))
                 .build();
     }
     @Override

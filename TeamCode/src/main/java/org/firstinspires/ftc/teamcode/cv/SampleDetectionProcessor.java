@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -28,21 +29,32 @@ public class SampleDetectionProcessor implements VisionProcessor {
     public static int L_H = 10;
     public static int L_S = 50;
     public static int L_V = 70;
+    private static final double CAMERA_VIEWING_VERTICAL_DIST = 5.25; // inches
+    private static final double CAMERA_VIEWING_HORIZONTAL_DIST = 7.5; // inches
+    private static final double CAMERA_VIEWING_VERTICAL_OVERLAP = 2.25; // inches
+    public static final int WIDTH_RESOLUTION = 640;
+    public static final int HEIGHT_RESOLUTION = 480;
+    private double counter = 0;
 //    Yellow:
 //    private Scalar UPPER_BOUND = new Scalar(40,255,255);
 //    private Scalar LOWER_BOUND = new Scalar(10,50,70);
 //    Red
 //    private Scalar UPPER_BOUND = new Scalar(10,255,255);
-//    private Scalar LOWER_BOUND = new Scalar(0,50,70);
+//    private Scalar LOWER_BOUND = new Scalar(0,50,50);
 //    Blue
 //    private Scalar UPPER_BOUND = new Scalar(130,255,255);
-//    private Scalar LOWER_BOUND = new Scalar(100,50,70);
+//    private Scalar LOWER_BOUND = new Scalar(100,50,50);
     private Scalar UPPER_BOUND = new Scalar(U_H,U_S,U_V);
     private Scalar LOWER_BOUND = new Scalar(L_H,L_S,L_V);
     public static int ERODE_NUMBER = 10;
     public static int DILATE_SIZE = 3;
     private Sample foundSample;
     private Mat processedMat = new Mat();
+    private RobotState robotState;
+
+    public SampleDetectionProcessor(RobotState robotState) {
+        this.robotState = robotState;
+    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -54,9 +66,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
         Imgproc.erode(frame, frame,new Mat(ERODE_NUMBER,ERODE_NUMBER, Imgproc.MORPH_RECT));
-//        for (int i = 0; i < DILATE_SIZE; i++) {
-//            Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0);
-//        }
+        Imgproc.GaussianBlur(frame, frame, new Size(3, 3), 0);
 
         Imgproc.Canny(frame, edges, 100, 200);
 
@@ -132,6 +142,9 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 Imgproc.line(frame, shortMidpoint1, shortMidpoint2, new Scalar(0, 0, 255), 2);
                 //Adding information from the sample to eventually be added to robotState
                 double orientation = Math.atan(slope);
+                robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
+                robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION/2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
+                robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
                 foundSample = new Sample(avgX, avgY, orientation, new Point[]{shortMidpoint1,shortMidpoint2});
                 break;
             }

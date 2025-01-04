@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SimpleVisionSubsystem;
@@ -14,10 +15,19 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 @SuppressWarnings("unused")
 public class VisionTestOpmode extends BaseOpMode {
+    RobotState robotState;
 
     @Override
     public void initialize() {
-        SimpleVisionSubsystem vision = new SimpleVisionSubsystem(hardwareMap, new RobotState());
+        robotState = new RobotState();
+        SimpleVisionSubsystem vision = new SimpleVisionSubsystem(hardwareMap, robotState);
         registerSubsystems(vision);
+    }
+
+    @Override
+    public void update() {
+       telemetry.addData("Forward fine", robotState.getBlockForwardFine());
+       telemetry.addData("Lateral fine", robotState.getBlockLateralFine());
+       telemetry.addData("Orientation", robotState.getBlockOrientation());
     }
 }
