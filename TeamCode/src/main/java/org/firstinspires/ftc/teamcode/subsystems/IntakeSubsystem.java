@@ -52,20 +52,22 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 7;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
-    public static final double CLAW_ROTATION_READY_TO_PICKUP_POSITION = 90;
-
-    public static final double WRIST_PITCH_PICKUP_POSITION = 42;
-
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double WRIST_PITCH_PECK_POSITION = 90;
+
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+
 
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
@@ -434,7 +436,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(colorSensorTimer.milliseconds() > 250){
+        if(colorSensorTimer.milliseconds() > 1000){
             updateBlockColor();
             colorSensorTimer.reset();
         }
