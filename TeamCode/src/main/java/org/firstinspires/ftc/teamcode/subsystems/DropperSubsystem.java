@@ -113,6 +113,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         openClaw();
+
         colorSensorTimer = new ElapsedTime();
     }
 
