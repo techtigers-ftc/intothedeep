@@ -25,6 +25,9 @@ public class DriveToIntakeState extends DriveStateBase {
      * Constructor for the DriveToIntakeState
      *
      * @param name The name of the state
+     * @param drive The drive subsystem
+     * @param dropper The dropper subsystem
+     * @param robotState The robot state
      */
     public DriveToIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);

@@ -19,6 +19,7 @@ public class DropState extends ParallelCommandGroupState<AutoState> {
      * Constructor for the DropState
      *
      * @param name The name of the state
+     * @param dropper The dropper subsystem
      */
     public DropState(String name, DropperSubsystem dropper) {
         super(name);

@@ -18,6 +18,7 @@ public class FirstLevelAscent extends ParallelCommandGroupState<AutoState> {
      * Constructor for the FirstLevelAscent
      *
      * @param name The name of the state
+     * @param dropper The dropper subsystem
      */
     public FirstLevelAscent(String name, DropperSubsystem dropper) {
         super(name);

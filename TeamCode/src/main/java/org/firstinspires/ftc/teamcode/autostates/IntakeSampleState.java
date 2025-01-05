@@ -31,6 +31,7 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      * Constructor for the IntakeSampleState
      *
      * @param name The name of the state
+     * @param intake The intake subsystem
      */
     public IntakeSampleState(String name, IntakeSubsystem intake,
                              RobotState robotState, DoubleSupplier targetSlidePos,

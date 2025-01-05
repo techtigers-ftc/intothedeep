@@ -29,6 +29,10 @@ public class DriveToSubmersible extends DriveStateBase {
      * Constructor for the DriveToSubmersible
      *
      * @param name The name of the state
+     * @param drive The drive subsystem
+     * @param dropper The dropper subsystem
+     * @param intake The intake subsystem
+     * @param robotState The robot state
      */
     public DriveToSubmersible(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
