@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
- * A test autonomous state that drives the robot using PedroPathing.
+ * A State to Drive to the submersible position
  */
 public class DriveToSubmersible extends DriveStateBase {
     private static final String LOG_TAG =

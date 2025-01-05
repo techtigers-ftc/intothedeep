@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
 /**
- * A state to drop a block
+ * A state to ascend to the first level
  */
 public class FirstLevelAscent extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =

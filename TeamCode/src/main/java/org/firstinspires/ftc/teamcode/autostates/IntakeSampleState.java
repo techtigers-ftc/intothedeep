@@ -18,7 +18,7 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
- * A state to drop a block
+ * A state to intake a sample
  */
 public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
