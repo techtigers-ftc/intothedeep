@@ -47,11 +47,13 @@ public class RobotState extends GlobalState {
     private DriveGears driveGears;
     private IntakeState intakeState;
     private int robotError;
+    private final boolean isBlue;
+    private final boolean isAuto;
 
     /**
      * Initializes a new RobotState
      */
-    public RobotState() {
+    public RobotState(boolean isBlue, boolean isAuto) {
         robotCurrentPose = new Waypoint(0, 0, 0);
         robotVelocity = new Waypoint(0, 0, 0);
         robotFinalPose = new Waypoint(0, 0, 0);
@@ -81,6 +83,8 @@ public class RobotState extends GlobalState {
         driverCurrent = 0;
         intakeCurrent = 0;
         dropperCurrent = 0;
+        this.isBlue = isBlue;
+        this.isAuto = isAuto;
     }
 
     /**
@@ -553,6 +557,22 @@ public class RobotState extends GlobalState {
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
         isManualIntakeSelected = manualIntakeSelected;
+    }
+
+    /**
+     * Get the alliance color
+     * @return Is alliance blue?
+     */
+    public boolean isBlue() {
+        return this.isBlue;
+    }
+
+    /**
+     * Get the opmode mode
+     * @return Is mode auto?
+     */
+    public boolean isAuto() {
+        return this.isAuto;
     }
 
     /**

@@ -23,7 +23,7 @@ public class IntakeTuningOpmode extends BaseOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        robotState = new RobotState();
+        robotState = new RobotState(true, false);
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
         registerSubsystems(intakeSubsystem);
 
