@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autostates;
+package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
-import team.techtigers.core.paths.Waypoint;
 
 /**
  * A state to intake a sample

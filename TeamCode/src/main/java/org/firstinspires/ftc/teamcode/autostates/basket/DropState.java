@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.autostates;
+package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;

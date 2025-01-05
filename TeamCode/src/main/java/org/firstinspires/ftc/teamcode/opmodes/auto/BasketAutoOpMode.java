@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
-import org.firstinspires.ftc.teamcode.autostates.DropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
-import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
-import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
+import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscent;
+import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
