@@ -3,13 +3,23 @@ package team.techtigers.base;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.Subsystem;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import team.techtigers.core.utils.GlobalState;
+
 
 /**
  * A CommandOpMode from FTCLib that allows for custom telemetry and more
  * features
  */
 public abstract class BaseOpMode extends CommandOpMode {
+    protected GlobalState robotState;
     private CloseableSubsystem[] subsystems;
+    private boolean serialization = true;
+    private ArrayList<GlobalState> robotStates = new ArrayList<>();
 
     /**
      * Method run during the loop. Needed methods and telemetry should be placed here.
@@ -29,6 +39,13 @@ public abstract class BaseOpMode extends CommandOpMode {
      * use subsystems end() method if possible, but this is also an option.
      */
     protected void end() {
+    }
+
+    /**
+     * Disables the process of copying robotState and setting it to a file
+     */
+    protected void disableSerialization() {
+        serialization = false;
     }
 
     /**
@@ -64,6 +81,9 @@ public abstract class BaseOpMode extends CommandOpMode {
                 run();
                 update();
                 telemetry.update();
+                if (serialization) {
+                    robotStates.add(robotState);
+                }
             }
         } finally {
             reset();
@@ -72,6 +92,14 @@ public abstract class BaseOpMode extends CommandOpMode {
                 subsystem.close();
             }
             end();
+            if (serialization) {
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("states.json"))) {
+                    for (GlobalState state : robotStates) {
+                        oos.writeObject(state);
+                    }
+                } catch (IOException ignored) {
+                }
+            }
         }
     }
 }
