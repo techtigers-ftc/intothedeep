@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import team.techtigers.base.CloseableSubsystem;
 
 /**
- * A subsystem for using the camera
+ * A subsystem for using the intake camera
  */
 public class VisionSubsystem extends CloseableSubsystem {
     private final WebcamName camera;
@@ -28,8 +28,8 @@ public class VisionSubsystem extends CloseableSubsystem {
 
     /**
      * Construct a VisionSubsystem
-     * @param hardwareMap
-     * @param robotState
+     * @param hardwareMap The HardwareMap
+     * @param robotState The RobotState
      */
     public VisionSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         camera = hardwareMap.get(WebcamName.class, "camera");

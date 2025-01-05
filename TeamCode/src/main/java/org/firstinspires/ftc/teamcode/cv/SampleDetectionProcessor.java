@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.cv;
 
 import android.graphics.Canvas;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -32,19 +30,23 @@ public class SampleDetectionProcessor implements VisionProcessor {
     public static final int WIDTH_RESOLUTION = 640;
     public static final int HEIGHT_RESOLUTION = 480;
     //    Yellow:
-    private Scalar YELLOW_UPPER_BOUND = new Scalar(40,255,255);
-    private Scalar YELLOW_LOWER_BOUND = new Scalar(10,50,70);
+    private final Scalar YELLOW_UPPER_BOUND = new Scalar(40,255,255);
+    private final Scalar YELLOW_LOWER_BOUND = new Scalar(10,50,70);
     //    Red
-    private Scalar RED_UPPER_BOUND = new Scalar(10,255,255);
-    private Scalar RED_LOWER_BOUND = new Scalar(0,50,50);
+    private final Scalar RED_UPPER_BOUND = new Scalar(10,255,255);
+    private final Scalar RED_LOWER_BOUND = new Scalar(0,50,50);
     //    Blue
-    private Scalar BLUE_UPPER_BOUND = new Scalar(130,255,255);
-    private Scalar BLUE_LOWER_BOUND = new Scalar(100,50,50);
+    private final Scalar BLUE_UPPER_BOUND = new Scalar(130,255,255);
+    private final Scalar BLUE_LOWER_BOUND = new Scalar(100,50,50);
 
-    public static int ERODE_NUMBER = 10;
+    private static final int ERODE_NUMBER = 10;
     private Mat processedMat = new Mat();
     private RobotState robotState;
 
+    /**
+     * Construct a SampleDetectionProcessor
+     * @param robotState The state of the robot
+     */
     public SampleDetectionProcessor(RobotState robotState) {
         this.robotState = robotState;
     }
