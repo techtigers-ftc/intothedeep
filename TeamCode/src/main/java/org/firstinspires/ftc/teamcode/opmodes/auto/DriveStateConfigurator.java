@@ -199,11 +199,11 @@ public class DriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(14.5, 21.75),
-                                        new Point(8, 13)
+                                        new Point(12, 12)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(117),
-                                Math.toRadians(70))
+                                Math.toRadians(45))
                         .build()
         );
     }
