@@ -7,7 +7,7 @@ import java.io.Serializable;
  * intended to be extended from, and child classes can add in additional
  * attributes that are desired in the state.
  */
-public class GlobalState implements Serializable {
+public class GlobalState implements Serializable, Cloneable {
     private long startTime;
 
     /**
@@ -29,5 +29,13 @@ public class GlobalState implements Serializable {
      */
     public void resetTimer() {
         startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public GlobalState clone() {
+        GlobalState clone = new GlobalState();
+        clone.startTime = this.startTime;
+
+        return clone;
     }
 }

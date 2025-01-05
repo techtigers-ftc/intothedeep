@@ -10,13 +10,15 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import java.io.Serializable;
+
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
 /**
  * Implementation of a global state for the robot
  */
-public class RobotState extends GlobalState {
+public class RobotState extends GlobalState implements Cloneable, Serializable {
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
     private BlockColorPreference blockColorPreference;
@@ -502,6 +504,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current driver current
+     *
      * @param driverCurrent the current driver current
      */
     public void setDriverCurrent(double driverCurrent) {
@@ -517,6 +520,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current intake current
+     *
      * @param intakeCurrent the current intake current
      */
     public void setIntakeCurrent(double intakeCurrent) {
@@ -532,6 +536,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current dropper current
+     *
      * @param dropperCurrent the current dropper current
      */
     public void setDropperCurrent(double dropperCurrent) {
@@ -547,9 +552,46 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets intake control to be manual or autonomous (with vision)
+     *
      * @param manualIntakeSelected Whether the intake should be manual or not
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
         isManualIntakeSelected = manualIntakeSelected;
+    }
+
+    @Override
+    public RobotState clone() {
+        RobotState clone = (RobotState) super.clone();
+        clone.robotCurrentPose = robotCurrentPose;
+        clone.robotVelocity = robotVelocity;
+        clone.robotError = robotError;
+        clone.blockColorPreference = blockColorPreference;
+        clone.blockDetectionState = blockDetectionState;
+        clone.blockLateralCoarse = blockLateralCoarse;
+        clone.blockOrientation = blockOrientation;
+        clone.blockForwardCoarse = blockForwardCoarse;
+        clone.intakeBlockColor = intakeBlockColor;
+        clone.dropperBlockColor = dropperBlockColor;
+        clone.blockForwardFine = blockForwardFine;
+        clone.blockLateralFine = blockLateralFine;
+        clone.isHorizontalExtended = isHorizontalExtended;
+        clone.intakeClawState = intakeClawState;
+        clone.intakeClawRotation = intakeClawRotation;
+        clone.intakeClawPitch = intakeClawPitch;
+        clone.blockPosition = blockPosition;
+        clone.isAscending = isAscending;
+        clone.isVerticalExtended = isVerticalExtended;
+        clone.isManualIntakeSelected = isManualIntakeSelected;
+        clone.dropperClawPitch = dropperClawPitch;
+        clone.dropperClawRotation = dropperClawRotation;
+        clone.driverCurrent = driverCurrent;
+        clone.intakeCurrent = intakeCurrent;
+        clone.dropperCurrent = dropperCurrent;
+        clone.dropperClawState = dropperClawState;
+        clone.dropperState = dropperState;
+        clone.driveGears = driveGears;
+        clone.intakeState = intakeState;
+
+        return clone;
     }
 }
