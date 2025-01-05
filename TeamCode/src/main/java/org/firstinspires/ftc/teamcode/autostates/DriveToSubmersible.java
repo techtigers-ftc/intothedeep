@@ -27,7 +27,7 @@ public class DriveToSubmersible extends DriveStateBase {
     private final RobotState robotState;
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Constructor for the DriveToSubmersible
      *
      * @param name The name of the state
      */
@@ -46,15 +46,31 @@ public class DriveToSubmersible extends DriveStateBase {
         );
     }
 
+    /**
+     * Calculate the distance to the target
+     * @param current current waypoint
+     * @param target target waypoint
+     * @return the distance to the target
+     */
     private double distToTarget(Waypoint current, Waypoint target) {
         return Math.hypot(target.getX() - current.getX(),
                 target.getY() - current.getY());
     }
 
+    /**
+     * Calculate the angle distance to the target
+     * @param currentHeading current heading
+     * @param targetHeading target heading
+     * @return the angle distance to the target
+     */
     private double angleDistance(double currentHeading, double targetHeading) {
         return Math.abs(currentHeading - targetHeading);
     }
 
+    /**
+     * Check if the robot has reached the target
+     * @return the State of the robot from the AutoState enum
+     */
     @Override
     public AutoState getCurrentCondition() {
         Waypoint current = robotState.getRobotCurrentPose();
@@ -66,7 +82,7 @@ public class DriveToSubmersible extends DriveStateBase {
         if (distToTarget(current, target) < TOLERANCE
                 && angleDistance(current.getHeading(), target.getHeading()) < ANGULAR_TOLERANCE
                     && robotState.getDropperState() == DropperState.PRE_TRANSFER) {
-            return AutoState.END_1;
+            return AutoState.DRIVE_END;
         }
 
         return AutoState.RUNNING;

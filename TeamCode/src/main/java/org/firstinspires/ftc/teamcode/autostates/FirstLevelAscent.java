@@ -15,7 +15,7 @@ public class FirstLevelAscent extends ParallelCommandGroupState<AutoState> {
     private int runCounter;
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Constructor for the FirstLevelAscent
      *
      * @param name The name of the state
      */
@@ -26,11 +26,10 @@ public class FirstLevelAscent extends ParallelCommandGroupState<AutoState> {
         );
     }
 
-    @Override
-    public void initialize() {
-        super.initialize();
-    }
-
+    /**
+     * Get the current condition of the robot
+     * @return the current condition of the robot using the AutoState enum
+     */
     @Override
     public AutoState getCurrentCondition() {
         return AutoState.RUNNING;

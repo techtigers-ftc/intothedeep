@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
-import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
@@ -28,7 +27,7 @@ import team.techtigers.core.paths.Waypoint;
 public class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
 
-    private DoubleSupplier distToTarget(RobotState robotState, Waypoint target) {
+    private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
                 target.getY() - robotState.getRobotCurrentPose().getY()) - 9, 19);
     }
@@ -69,7 +68,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 "intakeFirst",
                 intake,
                 robotState,
-                distToTarget(robotState, new Waypoint(23, 45)),
+                distToIntakeTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketFirstSample = new DriveToGeneralDropState(
@@ -91,7 +90,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 "intakeSecond",
                 intake,
                 robotState,
-                distToTarget(robotState, new Waypoint(13, 45)),
+                distToIntakeTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketSecondSample = new DriveToGeneralDropState(
@@ -113,7 +112,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 "intakeThird",
                 intake,
                 robotState,
-                distToTarget(robotState, new Waypoint(3, 45)),
+                distToIntakeTarget(robotState, new Waypoint(3, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketThirdSample = new DriveToGeneralDropState(
@@ -138,8 +137,6 @@ public class BasketAutoOpMode extends BaseOpMode {
                 dropper
         );
 
-        EndState end = new EndState("end");
-
         // Create the state machine
         stateMachine
                 .addState(drivePreloadToBasket)
@@ -156,21 +153,21 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveToSubmersible)
                 .addState(firstLevelAscent)
 
-                .addTransition(drivePreloadToBasket, dropSample, AutoState.END_1)
-                .addTransition(dropSample, driveIntakeFirstSample, AutoState.END_1)
-                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.END_1)
-                .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.END_1)
-                .addTransition(driveBasketFirstSample, dropSample, AutoState.END_1)
-                .addTransition(dropSample, driveIntakeSecondSample, AutoState.END_2)
-                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.END_1)
-                .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.END_1)
-                .addTransition(driveBasketSecondSample, dropSample, AutoState.END_1)
-                .addTransition(dropSample, driveIntakeThirdSample, AutoState.END_3)
-                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.END_1)
-                .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.END_1)
-                .addTransition(driveBasketThirdSample, dropSample, AutoState.END_1)
+                .addTransition(drivePreloadToBasket, dropSample, AutoState.SAMPLE_0_DROP_COMPLETE)
+                .addTransition(dropSample, driveIntakeFirstSample, AutoState.SAMPLE_0_DROP_COMPLETE)
+                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.DRIVE_END)
+                .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketFirstSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, driveIntakeSecondSample, AutoState.SAMPLE_1_DROP_COMPLETE)
+                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketSecondSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, driveIntakeThirdSample, AutoState.SAMPLE_2_DROP_COMPLETE)
+                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.DRIVE_END)
+                .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
-                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.END_1)
+                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
 
                 .setCurrentState(drivePreloadToBasket);
 

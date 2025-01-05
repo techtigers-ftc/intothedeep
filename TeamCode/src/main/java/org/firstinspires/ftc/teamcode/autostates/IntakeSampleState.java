@@ -28,7 +28,7 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
     private DoubleSupplier clawPos;
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Constructor for the IntakeSampleState
      *
      * @param name The name of the state
      */
@@ -48,6 +48,9 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         );
     }
 
+    /**
+     * Get the current condition of the robot
+     */
     @Override
     public void initialize() {
         super.initialize();
@@ -55,11 +58,15 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
                 slidePos.getAsDouble(), clawPos.getAsDouble());
     }
 
+    /**
+     * Get the current condition of the robot
+     * @return the current condition of the robot using the AutoState enum
+     */
     @Override
     public AutoState getCurrentCondition() {
         if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER &&
             robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-            return AutoState.END_1;
+            return AutoState.SAMPLE_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
     }

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
- * A test autonomous state that drives the robot using PedroPathing.
+ * Drives to Preload Drop
  */
 public class DriveToPreloadDropState extends DriveStateBase {
     private static final String LOG_TAG =
@@ -24,7 +24,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
     private RobotState robotState;
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Constructor for the DriveToPreloadDropState
      *
      * @param name The name of the state
      */
@@ -40,15 +40,31 @@ public class DriveToPreloadDropState extends DriveStateBase {
         );
     }
 
+    /**
+     * Calculate the distance to the target
+     * @param current current waypoint
+     * @param target target waypoint
+     * @return the distance to the target
+     */
     private double distToTarget(Waypoint current, Waypoint target) {
         return Math.hypot(target.getX() - current.getX(),
                 target.getY() - current.getY());
     }
 
+    /**
+     * Calculate the angle distance to the target
+     * @param currentHeading current heading
+     * @param targetHeading target heading
+     * @return the angle distance to the target
+     */
     private double angleDistance(double currentHeading, double targetHeading) {
         return Math.abs(currentHeading - targetHeading);
     }
 
+    /**
+     * Check if the robot has reached the target
+     * @return the State of the robot from the AutoState enum
+     */
     @Override
     public AutoState getCurrentCondition() {
         Waypoint current = robotState.getRobotCurrentPose();
@@ -60,7 +76,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
         if (distToTarget(current, target) < TOLERANCE
                 && angleDistance(current.getHeading(), target.getHeading()) < ANGULAR_TOLERANCE
                     && robotState.getDropperState() == DropperState.HIGH_BASKET) {
-            return AutoState.END_1;
+            return AutoState.SAMPLE_0_DROP_COMPLETE;
         }
 
         return AutoState.RUNNING;
