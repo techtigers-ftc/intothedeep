@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
- * A State to Drive to the submersible position
+ * A State to drive to the submersible position
  */
 public class DriveToSubmersible extends DriveStateBase {
     private static final String LOG_TAG =
@@ -46,42 +46,10 @@ public class DriveToSubmersible extends DriveStateBase {
         );
     }
 
-    /**
-     * Calculate the distance to the target
-     * @param current current waypoint
-     * @param target target waypoint
-     * @return the distance to the target
-     */
-    private double distToTarget(Waypoint current, Waypoint target) {
-        return Math.hypot(target.getX() - current.getX(),
-                target.getY() - current.getY());
-    }
-
-    /**
-     * Calculate the angle distance to the target
-     * @param currentHeading current heading
-     * @param targetHeading target heading
-     * @return the angle distance to the target
-     */
-    private double angleDistance(double currentHeading, double targetHeading) {
-        return Math.abs(currentHeading - targetHeading);
-    }
-
-    /**
-     * Check if the robot has reached the target
-     * @return the State of the robot from the AutoState enum
-     */
     @Override
     public AutoState getCurrentCondition() {
-        Waypoint current = robotState.getRobotCurrentPose();
-        Waypoint target = robotState.getRobotFinalPose();
-
-        RobotLog.dd(LOG_TAG, "Dist to target: %f Angle diff: %f",
-                distToTarget(current, target),
-                angleDistance(current.getHeading(), target.getHeading()));
-        if (distToTarget(current, target) < TOLERANCE
-                && angleDistance(current.getHeading(), target.getHeading()) < ANGULAR_TOLERANCE
-                    && robotState.getDropperState() == DropperState.PRE_TRANSFER) {
+        if (getCurrentCondition() == AutoState.DRIVE_END &&
+                robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
         }
 

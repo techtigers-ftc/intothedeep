@@ -71,15 +71,6 @@ public class AutoDriveCommand extends CommandBase {
         follower.followPath(pathChain, true);
     }
 
-    private double distToTarget(Waypoint current, Waypoint target) {
-        return Math.hypot(target.getX() - current.getX(),
-                target.getY() - current.getY());
-    }
-
-    private double angleDistance(double currentHeading, double targetHeading) {
-        return Math.abs(currentHeading - targetHeading);
-    }
-
     @Override
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
