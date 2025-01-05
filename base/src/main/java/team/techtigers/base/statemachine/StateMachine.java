@@ -79,12 +79,12 @@ public class StateMachine<T> {
      * Single line utility method to add a transition to the state machine.
      *
      * @param fromState the state to transition from
-     * @param toState the state to transition to
+     * @param toState   the state to transition to
      * @param condition the condition that must be met for the transition
      * @return the state machine to allow for method chaining
      */
     public StateMachine<T> addTransition(State<T> fromState, State<T> toState,
-                              T condition) {
+                                         T condition) {
         addCondition(fromState, new Transition<>(condition, toState));
         return this;
     }
@@ -132,11 +132,11 @@ public class StateMachine<T> {
 
         for (Transition<T> transition : currentTransitions) {
             if (transition.meetsCondition(currentCondition)) {
-                RobotLog.ii("StateMachine", "Ending %s state", currentState);
+                RobotLog.ii("StateMachine", "Ending %s state", currentState.getName());
                 CommandScheduler.getInstance().cancel(currentState);
                 setCurrentState(transition.getNextState());
                 CommandScheduler.getInstance().schedule(currentState);
-                RobotLog.ii("StateMachine", "Switching to %s state", currentState);
+                RobotLog.ii("StateMachine", "Switching to %s state", currentState.getName());
                 break;
             }
         }
