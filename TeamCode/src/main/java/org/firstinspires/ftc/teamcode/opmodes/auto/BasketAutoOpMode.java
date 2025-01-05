@@ -124,7 +124,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         DriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
 
         DriveToSubmersible driveToSubmersible = new DriveToSubmersible(
-                "drive-to-park",
+                "driveToPark",
                 drive,
                 dropper,
                 intake,
@@ -133,7 +133,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         DriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
         FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
-                "First-Level_Ascent",
+                "firstLevelAscent",
                 dropper
         );
 

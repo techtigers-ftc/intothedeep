@@ -22,13 +22,13 @@ public class AutoDriveCommand extends CommandBase {
     private static final String LOG_TAG =
             AutoDriveCommand.class.getSimpleName();
 
-    protected final DriveSubsystem drive;
-    protected final RobotState robotState;
-    protected final Follower follower;
-    protected PathChain pathChain;
-    protected PIDFController translationalPIDF;
-    protected PIDFController headingPIDF;
-    protected FilteredPIDFController drivePIDF;
+    private final DriveSubsystem drive;
+    private final RobotState robotState;
+    private final Follower follower;
+    private PathChain pathChain;
+    private PIDFController translationalPIDF;
+    private PIDFController headingPIDF;
+    private FilteredPIDFController drivePIDF;
 
     /**
      * Constructs a new AutoDriveCommand.

@@ -71,9 +71,9 @@ public class DriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToGeneralDropState.
+     * Configures the FirstSampleDrop.
      *
-     * @param state The DriveToGeneralDropState to configure
+     * @param state The FirstSampleDrop to configure
      */
     public static void configFirstSampleDrop(DriveToGeneralDropState state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
@@ -99,9 +99,9 @@ public class DriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToIntakeState.
+     * Configures the SecondSampleIntake.
      *
-     * @param state The DriveToIntakeState to configure
+     * @param state The SecondSampleIntake to configure
      */
     public static void configSecondSampleIntake(DriveToIntakeState state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
@@ -127,9 +127,9 @@ public class DriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToSecondSampleDropState.
+     * Configures the ThirdSampleDrop.
      *
-     * @param state The DriveToSecondSampleDropState to configure
+     * @param state The ThirdSampleDrop to configure
      */
     public static void configThirdSampleDrop(DriveToGeneralDropState state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
@@ -155,9 +155,9 @@ public class DriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToSecondSampleDropState.
+     * Configures the SecondSampleDrop.
      *
-     * @param state The DriveToSecondSampleDropState to configure
+     * @param state The SecondSampleDrop to configure
      */
     public static void configSecondSampleDrop(DriveToGeneralDropState state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
@@ -183,9 +183,9 @@ public class DriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToIntakeState.
+     * Configures the ThirdSampleIntake.
      *
-     * @param state The DriveToIntakeState to configure
+     * @param state The ThirdSampleIntake to configure
      */
     public static void configThirdSampleIntake(DriveToIntakeState state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
@@ -210,6 +210,10 @@ public class DriveStateConfigurator {
         );
     }
 
+    /**
+     * Configures the DriveToSubmersible.
+     * @param state The DriveToSubmersible to configure
+     */
     public static void configDriveToSubmersible(DriveToSubmersible state) {
         state.setTranslationalPIDF(TuningConstants.translationalP,
                 TuningConstants.translationalI,
