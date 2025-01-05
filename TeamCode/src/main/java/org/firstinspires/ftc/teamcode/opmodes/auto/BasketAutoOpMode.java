@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
+import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -28,7 +30,7 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     private DoubleSupplier distToTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
-                target.getY() - robotState.getRobotCurrentPose().getY()) - 8, 19);
+                target.getY() - robotState.getRobotCurrentPose().getY()) - 9, 19);
     }
 
     @Override
@@ -122,6 +124,20 @@ public class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         DriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
 
+        DriveToSubmersible driveToSubmersible = new DriveToSubmersible(
+                "drive-to-park",
+                drive,
+                dropper,
+                intake,
+                robotState
+        );
+        DriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
+
+        FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
+                "First-Level_Ascent",
+                dropper
+        );
+
         EndState end = new EndState("end");
 
         // Create the state machine
@@ -137,7 +153,8 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveIntakeThirdSample)
                 .addState(intakeThirdSample)
                 .addState(driveBasketThirdSample)
-                .addState(end)
+                .addState(driveToSubmersible)
+                .addState(firstLevelAscent)
 
                 .addTransition(drivePreloadToBasket, dropSample, AutoState.END_1)
                 .addTransition(dropSample, driveIntakeFirstSample, AutoState.END_1)
@@ -152,7 +169,8 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.END_1)
                 .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.END_1)
                 .addTransition(driveBasketThirdSample, dropSample, AutoState.END_1)
-                .addTransition(dropSample, end, AutoState.SAMPLE_3_DROP_COMPLETE)
+                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
+                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.END_1)
 
                 .setCurrentState(drivePreloadToBasket);
 
