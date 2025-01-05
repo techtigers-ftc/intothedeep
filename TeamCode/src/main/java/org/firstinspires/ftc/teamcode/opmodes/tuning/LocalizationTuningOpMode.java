@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -15,7 +14,7 @@ public class LocalizationTuningOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        robotState = new RobotState();
+        robotState = new RobotState(true, false);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
 
         registerSubsystems(odometry);
