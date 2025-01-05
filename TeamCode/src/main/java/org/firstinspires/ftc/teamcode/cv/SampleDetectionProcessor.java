@@ -22,7 +22,9 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-@Config
+/**
+ * Processor for using the extension camera to detect blocks
+ */
 public class SampleDetectionProcessor implements VisionProcessor {
     private static final double CAMERA_VIEWING_VERTICAL_DIST = 5.25; // inches
     private static final double CAMERA_VIEWING_HORIZONTAL_DIST = 7.5; // inches

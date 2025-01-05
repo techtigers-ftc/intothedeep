@@ -17,12 +17,20 @@ import java.util.concurrent.TimeUnit;
 
 import team.techtigers.base.CloseableSubsystem;
 
+/**
+ * A subsystem for using the camera
+ */
 public class VisionSubsystem extends CloseableSubsystem {
     private final WebcamName camera;
     private final VisionPortal visionPortal;
     public static int EXPOSURE = 16;
     public static int GAIN = 0;
 
+    /**
+     * Construct a VisionSubsystem
+     * @param hardwareMap
+     * @param robotState
+     */
     public VisionSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
@@ -33,7 +41,6 @@ public class VisionSubsystem extends CloseableSubsystem {
     }
     @Override
     public void init() {
-//        startCamera();
         visionPortal.stopLiveView();
         setExposure();
     }
