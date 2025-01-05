@@ -19,6 +19,7 @@ import team.techtigers.core.utils.GlobalState;
 public class RobotState extends GlobalState {
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
+    private Waypoint robotFinalPose;
     private BlockColorPreference blockColorPreference;
     private BlockDetectionState blockDetectionState;
     private double blockLateralCoarse;
@@ -53,6 +54,7 @@ public class RobotState extends GlobalState {
     public RobotState() {
         robotCurrentPose = new Waypoint(0, 0, 0);
         robotVelocity = new Waypoint(0, 0, 0);
+        robotFinalPose = new Waypoint(0, 0, 0);
         blockColorPreference = BlockColorPreference.ANY;
         blockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
@@ -551,5 +553,21 @@ public class RobotState extends GlobalState {
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
         isManualIntakeSelected = manualIntakeSelected;
+    }
+
+    /**
+     * @return the final pose of the robot in a trajectory
+     */
+    public Waypoint getRobotFinalPose() {
+        return robotFinalPose;
+    }
+
+    /**
+     * Sets the final pose of the robot in a trajectory
+     *
+     * @param robotFinalPose the final pose of the robot
+     */
+    public void setRobotFinalPose(Waypoint robotFinalPose) {
+        this.robotFinalPose = robotFinalPose;
     }
 }

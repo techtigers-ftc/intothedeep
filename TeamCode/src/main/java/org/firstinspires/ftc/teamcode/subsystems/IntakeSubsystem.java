@@ -32,7 +32,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    private static final double FORWARD_KP = 0.005;
+    private static final double FORWARD_KP = 0.00675;
     private static final double FORWARD_KI = 0.0;
     private static final double FORWARD_KD = 0.0;
     private static final double FORWARD_KF = 0.0;
@@ -59,9 +59,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double CLAW_ROTATION_READY_TO_PICKUP_POSITION = 90;
 
-    public static final double WRIST_PITCH_PICKUP_POSITION = 45;
+    public static final double WRIST_PITCH_PICKUP_POSITION = 42;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 50;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 

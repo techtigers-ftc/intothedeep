@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.paths.geometry.Point;
 
 @TeleOp(name = "Localization Tuning OpMode", group = "Tuning")
 public class LocalizationTuningOpMode extends BaseOpMode {
@@ -16,7 +17,8 @@ public class LocalizationTuningOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         robotState = new RobotState();
-        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
+                robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
 
         registerSubsystems(odometry);
     }

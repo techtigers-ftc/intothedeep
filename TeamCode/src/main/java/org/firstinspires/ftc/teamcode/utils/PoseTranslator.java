@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Vector;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
 
@@ -37,5 +38,15 @@ public class PoseTranslator {
      */
     public static Vector waypointToVector(Waypoint waypoint) {
         return new Vector(waypoint.getX(), waypoint.getY());
+    }
+
+    /**
+     * Converts a pedro pathing point to a waypoint
+     *
+     * @param point the pedro pathing point to convert
+     * @return the waypoint
+     */
+    public static Waypoint pointToWaypoint(Point point) {
+        return new Waypoint(point.getX(), point.getY(), 0);
     }
 }
