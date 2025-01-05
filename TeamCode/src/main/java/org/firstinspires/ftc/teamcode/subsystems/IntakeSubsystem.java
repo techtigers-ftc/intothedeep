@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -82,6 +83,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private final ElapsedTime colorSensorTimer;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -135,6 +137,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         setWristAbsolute(WRIST_PITCH_TUCK_POSITION, WRIST_ROTATION_TUCK_POSITION);
         setClawRotationAbsolute(CLAW_ROTATION_TUCK_POSITION);
         closeClaw();
+        colorSensorTimer = new ElapsedTime();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -431,8 +434,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        // TODO: Add debounce
-//        updateBlockColor();
+        if(colorSensorTimer.milliseconds() > 250){
+            updateBlockColor();
+            colorSensorTimer.reset();
+        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());

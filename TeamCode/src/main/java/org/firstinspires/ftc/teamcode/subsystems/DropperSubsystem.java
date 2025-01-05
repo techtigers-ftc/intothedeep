@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -68,6 +69,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private final ElapsedTime colorSensorTimer;
 
     /**
      * Initializes dropper subsystem
@@ -110,6 +112,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         openClaw();
+        colorSensorTimer = new ElapsedTime();
     }
 
     /**
@@ -351,8 +354,10 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        // TODO: Add debounce
-//        updateBlockColor();
+        if(colorSensorTimer.milliseconds() > 250){
+            updateBlockColor();
+            colorSensorTimer.reset();
+        }
 
 
         RobotLog.dd(tag, "Current: %f Target %f",
