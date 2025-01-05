@@ -2,8 +2,6 @@ package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.util.RobotLog;
-import com.arcrobotics.ftclib.command.Robot;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +36,7 @@ public class StateMachine<T> {
      * @return the state machine to allow for method chaining
      */
     public StateMachine<T> addState(State<T> state) {
-        if (stateList.contains(state)) {
+        if (transitionMap.containsKey(state.getName())) {
             throw new IllegalArgumentException("State: " + state.getName() + " already exists");
         }
         stateList.add(state);
