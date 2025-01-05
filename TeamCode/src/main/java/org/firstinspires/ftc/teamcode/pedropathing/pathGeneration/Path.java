@@ -343,6 +343,15 @@ public class Path {
     }
 
     /**
+     * Returns the end heading for this Path.
+     *
+     * @return This returns the end heading.
+     */
+    public double getEndHeading() {
+        return endHeading;
+    }
+
+    /**
      * Returns the last control point for this BezierCurve.
      *
      * @return This returns the Point.

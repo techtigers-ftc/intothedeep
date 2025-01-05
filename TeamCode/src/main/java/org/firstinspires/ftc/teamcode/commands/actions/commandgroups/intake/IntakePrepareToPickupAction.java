@@ -34,7 +34,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
+                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
                 new IntakeWristRotationAction(intake,
                         IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 200),
                 new IntakeClawRotationAction(intake,

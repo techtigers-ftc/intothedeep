@@ -1,6 +1,7 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,10 +36,11 @@ public class StateMachine<T> {
      * @return the state machine to allow for method chaining
      */
     public StateMachine<T> addState(State<T> state) {
-        if (stateList.contains(state)) {
+        if (transitionMap.containsKey(state.getName())) {
             throw new IllegalArgumentException("State: " + state.getName() + " already exists");
         }
         stateList.add(state);
+        transitionMap.put(state.getName(), new ArrayList<>());
 
         return this;
     }
@@ -68,9 +70,6 @@ public class StateMachine<T> {
             throw new IllegalArgumentException("State: " + transition.getNextState() + " does not exist");
         }
 
-        if (!transitionMap.containsKey(currentState.getName())) {
-            transitionMap.put(currentState.getName(), new ArrayList<>());
-        }
         Objects.requireNonNull(transitionMap.get(currentState.getName())).add(transition);
     }
 
@@ -78,12 +77,14 @@ public class StateMachine<T> {
      * Single line utility method to add a transition to the state machine.
      *
      * @param fromState the state to transition from
-     * @param toState the state to transition to
+     * @param toState   the state to transition to
      * @param condition the condition that must be met for the transition
+     * @return the state machine to allow for method chaining
      */
-    public void addTransition(State<T> fromState, State<T> toState,
-                              T condition) {
+    public StateMachine<T> addTransition(State<T> fromState, State<T> toState,
+                                         T condition) {
         addCondition(fromState, new Transition<>(condition, toState));
+        return this;
     }
 
     /**
@@ -124,11 +125,16 @@ public class StateMachine<T> {
         }
         T currentCondition = currentState.getCurrentCondition();
 
+        RobotLog.dd("StateMachine", "Current State %s is in condition %s",
+                currentState.getName(), currentCondition);
+
         for (Transition<T> transition : currentTransitions) {
             if (transition.meetsCondition(currentCondition)) {
+                RobotLog.ii("StateMachine", "Ending %s state", currentState.getName());
                 CommandScheduler.getInstance().cancel(currentState);
                 setCurrentState(transition.getNextState());
                 CommandScheduler.getInstance().schedule(currentState);
+                RobotLog.ii("StateMachine", "Switching to %s state", currentState.getName());
                 break;
             }
         }
