@@ -561,17 +561,17 @@ public class RobotState extends GlobalState {
 
     /**
      * Get the alliance color
-     * @return True if blue, false if red
+     * @return Is alliance blue?
      */
-    public boolean getAlliance() {
+    public boolean isBlue() {
         return this.isBlue;
     }
 
     /**
      * Get the opmode mode
-     * @return True if auto, false if tele
+     * @return Is mode auto?
      */
-    public boolean getOpmodeMode() {
+    public boolean isAuto() {
         return this.isAuto;
     }
 
