@@ -112,7 +112,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        openClaw();
+        closeClaw();
 
         colorSensorTimer = new ElapsedTime();
     }
