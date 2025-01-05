@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -559,6 +561,10 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         isManualIntakeSelected = manualIntakeSelected;
     }
 
+    /**
+     * @return a clone of the current RobotState
+     */
+    @NonNull
     @Override
     public RobotState clone() {
         RobotState clone = (RobotState) super.clone();
