@@ -20,7 +20,6 @@ import team.techtigers.core.paths.Waypoint;
 public class DriveToIntakeState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToIntakeState.class.getSimpleName();
-    private final RobotState robotState;
 
     /**
      * Constructor for the DriveToIntakeState
@@ -29,7 +28,6 @@ public class DriveToIntakeState extends DriveStateBase {
      */
     public DriveToIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
-        this.robotState = robotState;
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
@@ -41,7 +39,7 @@ public class DriveToIntakeState extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (getCurrentCondition() == AutoState.DRIVE_END &&
+        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
         }

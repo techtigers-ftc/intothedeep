@@ -19,9 +19,6 @@ import team.techtigers.core.paths.Waypoint;
 public class DriveToPreloadDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToPreloadDropState.class.getSimpleName();
-    private static final double TOLERANCE = 3;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
-    private RobotState robotState;
 
     /**
      * Constructor for the DriveToPreloadDropState
@@ -30,7 +27,6 @@ public class DriveToPreloadDropState extends DriveStateBase {
      */
     public DriveToPreloadDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
-        this.robotState = robotState;
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
@@ -42,7 +38,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (getCurrentCondition() == AutoState.DRIVE_END &&
+        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
         }

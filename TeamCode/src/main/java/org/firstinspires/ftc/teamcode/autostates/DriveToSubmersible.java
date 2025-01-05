@@ -24,7 +24,6 @@ public class DriveToSubmersible extends DriveStateBase {
             DriveToSubmersible.class.getSimpleName();
     private static final double TOLERANCE = 1.5;
     private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
-    private final RobotState robotState;
 
     /**
      * Constructor for the DriveToSubmersible
@@ -33,7 +32,6 @@ public class DriveToSubmersible extends DriveStateBase {
      */
     public DriveToSubmersible(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
-        this.robotState = robotState;
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
@@ -48,7 +46,7 @@ public class DriveToSubmersible extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (getCurrentCondition() == AutoState.DRIVE_END &&
+        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
         }

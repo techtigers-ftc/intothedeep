@@ -18,8 +18,6 @@ import team.techtigers.core.paths.Waypoint;
 public class DriveToGeneralDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToGeneralDropState.class.getSimpleName();
-    private static final double TOLERANCE = 3;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
 
     /**
      * Constructor for the DriveToGeneralDropState
@@ -37,7 +35,7 @@ public class DriveToGeneralDropState extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (getCurrentCondition() == AutoState.DRIVE_END &&
+        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
         }
