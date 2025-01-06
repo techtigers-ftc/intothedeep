@@ -43,7 +43,7 @@ public class DriveToPreloadDropStateSpecimen extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FRONT_SLAP) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             return AutoState.DRIVE_END;
         }
 

@@ -1,21 +1,25 @@
-//package org.firstinspires.ftc.teamcode.autostates.specimen;
-//
-//import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-//import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-//import org.firstinspires.ftc.teamcode.utils.RobotState;
-//import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-//
-//public class EndState extends DriveStateBase {
-//    /**
-//     * Constructor for the SequentialCommandGroupState
-//     *
-//     * @param name       The name of the state
-//     */
-//    @Override
-//    public EndState(String name) {
-//
-//    }
-//    public AutoState getCurrentCondition() {
-//        return AutoState.DRIVE_END;
-//    }
-//}
+package org.firstinspires.ftc.teamcode.autostates.specimen;
+
+import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+
+import team.techtigers.base.statemachine.CommandState;
+
+/**
+ * A placeholder class for the end state of an autonomous command
+ */
+public class EndState extends CommandState<AutoState> {
+
+    /**
+     * Constructor for the CommandState
+     *
+     * @param name The name of the state
+     */
+    public EndState(String name) {
+        super(name);
+    }
+
+    @Override
+    public AutoState getCurrentCondition() {
+        return AutoState.RUNNING;
+    }
+}

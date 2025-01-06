@@ -25,13 +25,9 @@ public class DriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -56,13 +52,9 @@ public class DriveStateConfigurator {
      * @param state The DriveToFirstSampleIntakeState to configure
      */
     public static void configFirstSampleIntake(DriveToIntakeState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -87,13 +79,9 @@ public class DriveStateConfigurator {
      * @param state The FirstSampleDrop to configure
      */
     public static void configFirstSampleDrop(DriveToGeneralDropState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -118,13 +106,9 @@ public class DriveStateConfigurator {
      * @param state The SecondSampleIntake to configure
      */
     public static void configSecondSampleIntake(DriveToIntakeState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -149,13 +133,9 @@ public class DriveStateConfigurator {
      * @param state The SecondSampleDrop to configure
      */
     public static void configSecondSampleDrop(DriveToGeneralDropState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -180,13 +160,9 @@ public class DriveStateConfigurator {
      * @param state The ThirdSampleIntake to configure
      */
     public static void configThirdSampleIntake(DriveToIntakeState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -211,13 +187,9 @@ public class DriveStateConfigurator {
      * @param state The ThirdSampleDrop to configure
      */
     public static void configThirdSampleDrop(DriveToGeneralDropState state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -242,13 +214,9 @@ public class DriveStateConfigurator {
      * @param state The DriveToSubmersible to configure
      */
     public static void configDriveToSubmersible(DriveToSubmersible state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP,
-                TuningConstants.translationalI,
-                TuningConstants.translationalD, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
-                TuningConstants.headingD, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
-                TuningConstants.driveD, 0, 0);
+        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
+        state.setHeadingPIDF(0.6, 0, 0, 0);
+        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()

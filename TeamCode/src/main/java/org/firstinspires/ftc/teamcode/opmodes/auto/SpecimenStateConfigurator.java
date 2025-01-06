@@ -22,23 +22,28 @@ public class SpecimenStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropStateSpecimen state) {
-        state.setTranslationalPIDF(0.14, 0, 0.02, 0);
-        state.setHeadingPIDF(0.6, 0, 0, 0);
-        state.setDrivePIDF(0.0026, 0, 0.001, 0, 0);
+
+        state.setTranslationalPIDF(TuningConstants.translationalP,
+                TuningConstants.translationalI,
+                TuningConstants.translationalD, 0);
+        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI,
+                TuningConstants.headingD, 0);
+        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI,
+                TuningConstants.driveD, 0, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(77, 7.25),
-                                        new Point(77, 41.25)
+                                        new Point(73, 41.25)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
-        state.setTolerance(5);
+        state.setTolerance(0.5);
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 

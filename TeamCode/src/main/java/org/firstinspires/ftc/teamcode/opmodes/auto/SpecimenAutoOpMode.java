@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.GeneralDriveToPush;
+import org.firstinspires.ftc.teamcode.autostates.specimen.SlapState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -48,15 +48,20 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 //                robotState);
 //        SpecimenStateConfigurator.configFirstPushDrive(firstDriveToPush);
 
-        EndState endState = new EndState(drive, robotState);
+        SlapState slapAction = new SlapState("slap", dropper, robotState);
+
+        EndState endState = new EndState("end");
 
 
 
         stateMachine
                 .addState(driveChamberPreload)
+                .addState(slapAction)
+                .addState(endState)
 //                .addState(firstDriveToPush)
 
-//                .addTransition(driveChamberPreload, firstDriveToPush, AutoState.DRIVE_END)
+                .addTransition(driveChamberPreload, slapAction , AutoState.DRIVE_END)
+                .addTransition(slapAction, endState, AutoState.SAMPLE_0_DROP_COMPLETE)
 
                 .setCurrentState(driveChamberPreload);
 
