@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
+import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.GeneralDriveToPush;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -13,6 +17,7 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
 
@@ -37,14 +42,24 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenStateConfigurator.configPreloadDrop(driveChamberPreload);
 
+//        GeneralDriveToPush firstDriveToPush = new GeneralDriveToPush(
+//                "driveToPush",
+//                drive,
+//                robotState);
+//        SpecimenStateConfigurator.configFirstPushDrive(firstDriveToPush);
+
+        EndState endState = new EndState(drive, robotState);
+
 
 
         stateMachine
-                .addState(new DriveToPreloadDropStateSpecimen("driveToChamberPreload", drive, dropper, robotState))
+                .addState(driveChamberPreload)
+//                .addState(firstDriveToPush)
 
-
+//                .addTransition(driveChamberPreload, firstDriveToPush, AutoState.DRIVE_END)
 
                 .setCurrentState(driveChamberPreload);
+
 
 
 
@@ -52,5 +67,11 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry, dropper);
+    }
+
+    @Override
+    public void update(){
+        telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
+        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
     }
 }
