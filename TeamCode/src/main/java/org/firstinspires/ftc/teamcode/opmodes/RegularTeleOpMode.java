@@ -35,7 +35,7 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 @SuppressWarnings("unused")
 public class RegularTeleOpMode extends BaseOpMode {
-
+    private static final double INTAKE_CAMERA_OFFSET = 3;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -72,7 +72,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
-                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine()-3,
+                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine()-INTAKE_CAMERA_OFFSET,
                 () -> (robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
                 intake, robotState);
