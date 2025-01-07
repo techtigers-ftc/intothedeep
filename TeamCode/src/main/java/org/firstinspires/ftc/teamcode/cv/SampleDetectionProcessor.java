@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.cv;
 import android.graphics.Canvas;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
@@ -31,6 +34,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
     private static final double CAMERA_VIEWING_VERTICAL_OVERLAP = 2.25; // inches
     public static final int WIDTH_RESOLUTION = 640;
     public static final int HEIGHT_RESOLUTION = 480;
+    private static final Translation2d center = new Translation2d(WIDTH_RESOLUTION/2., HEIGHT_RESOLUTION/2.);
     //    Yellow:
     private final Scalar YELLOW_UPPER_BOUND = new Scalar(40,255,255);
     private final Scalar YELLOW_LOWER_BOUND = new Scalar(10,50,70);
@@ -90,8 +94,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
         switch (robotState.getBlockColorPreference()) {
             case ALLIANCE:
-                // TODO: fix below to be if alliance color is blue
-                if (true) {
+                if (robotState.isBlue()) {
                     Core.inRange(processedMat, this.BLUE_LOWER_BOUND, this.BLUE_UPPER_BOUND, masked);
                 } else {
                     Core.inRange(processedMat, this.RED_LOWER_BOUND, this.RED_UPPER_BOUND, masked);
@@ -101,10 +104,9 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 Core.inRange(processedMat, this.YELLOW_LOWER_BOUND, this.YELLOW_UPPER_BOUND, masked);
                 break;
             case ANY:
-                // TODO: fix below to be if alliance color is blue
                 Mat allianceMask = new Mat();
                 Mat yellowMask = new Mat();
-                if (true) {
+                if (robotState.isBlue()) {
                     Core.inRange(processedMat, this.BLUE_LOWER_BOUND, this.BLUE_UPPER_BOUND, allianceMask);
 
                 } else {
@@ -115,6 +117,8 @@ public class SampleDetectionProcessor implements VisionProcessor {
         }
 
         List<MatOfPoint> contours = getCanny(masked);
+        ArrayList<Pose2d> blockPoses = new ArrayList<>();
+
         for (MatOfPoint contour : contours) {
 
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
@@ -161,11 +165,26 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 Imgproc.line(frame, shortMidpoint1, shortMidpoint2, new Scalar(0, 0, 255), 2);
                 // Adding information from the sample to eventually be added to robotState
                 double orientation = Math.atan(slope);
-                robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
-                robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION/2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
-                robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
-                break;
+                blockPoses.add(new Pose2d(new Translation2d(avgX, avgY), new Rotation2d(orientation)));
             }
+            Pose2d bestBlock;
+            try {
+                bestBlock = blockPoses.get(0);
+            } catch (Exception e) {
+                return processedMat;
+            }
+
+            for (Pose2d pose : blockPoses) {
+                if (pose.getTranslation().getDistance(center) > bestBlock.getTranslation().getDistance(center)) {
+                    bestBlock = pose;
+                }
+            }
+            double avgY = bestBlock.getY();
+            double avgX = bestBlock.getX();
+            double orientation = bestBlock.getHeading();
+            robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
+            robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION/2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
+            robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
             // Approximate the contour to a polygon
             MatOfPoint2f approxCurve = new MatOfPoint2f();
             double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
