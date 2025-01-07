@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -34,7 +35,7 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 @SuppressWarnings("unused")
 public class RegularTeleOpMode extends BaseOpMode {
-
+    private static final double INTAKE_CAMERA_OFFSET = 3;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -47,7 +48,8 @@ public class RegularTeleOpMode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
-        registerSubsystems(intake, drive, dropper);
+        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+        registerSubsystems(intake, drive, dropper, smallCamera);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
@@ -68,10 +70,10 @@ public class RegularTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
                 intake, robotState, () -> intake.getCurrentSlidePositionInches());
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, IntakeSubsystem.CLAW_ROTATION_READY_TO_PICKUP_POSITION);
+                intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
-                () -> robotState.getBlockForwardFine(),
-                () -> (-robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
+                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine()-INTAKE_CAMERA_OFFSET,
+                () -> (robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
                 intake, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
@@ -101,7 +103,8 @@ public class RegularTeleOpMode extends BaseOpMode {
         manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
         manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToTransfer).whenActive(prepareToPickupNoSlides);
 
-        autoRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupAuto);
+        // TODO: Change to Prepare to pickup auto
+        autoRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
 
         // Extend Trigger Bindings
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
@@ -110,7 +113,8 @@ public class RegularTeleOpMode extends BaseOpMode {
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToIntake).whenActive(prepareToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(readyToTransfer);
 
-        autoExtendTrigger.and(inTuck).whenActive(prepareToPickupAuto);
+        // TODO: Change to Prepare to pickup auto
+        autoExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
         autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
