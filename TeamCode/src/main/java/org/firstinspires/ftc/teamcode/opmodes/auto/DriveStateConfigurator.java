@@ -4,10 +4,10 @@ import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierCurve;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.BezierLine;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathBuilder;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.BezierCurve;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.BezierLine;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.PathBuilder;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**

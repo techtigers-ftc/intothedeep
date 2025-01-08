@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Vector;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Vector;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.Pose;
 
 import team.techtigers.core.paths.Waypoint;
 

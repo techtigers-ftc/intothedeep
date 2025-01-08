@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Path;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
-import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing_old.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Path;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;

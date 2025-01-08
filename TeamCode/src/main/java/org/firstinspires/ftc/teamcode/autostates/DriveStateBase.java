@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.autostates;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
-import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
-import team.techtigers.base.statemachine.SequentialCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
