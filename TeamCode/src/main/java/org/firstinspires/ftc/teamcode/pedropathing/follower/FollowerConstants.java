@@ -28,23 +28,23 @@ public class FollowerConstants {
 
     /** The Localizer that the Follower & Pose Updater will use
      * @value Default Value: Localizers.THREE_WHEEL */
-    public static Localizers localizers = Localizers.THREE_WHEEL;
+    public static Localizers localizers = Localizers.PINPOINT;
 
     /** The name of the left front motor
      * @value Default Value: "leftFront" */
-    public static String leftFrontMotorName = "leftFront";
+    public static String leftFrontMotorName = "left_front";
 
     /** The name of the left rear motor
      * @value Default Value: "leftRear" */
-    public static String leftRearMotorName = "leftRear";
+    public static String leftRearMotorName = "left_back";
 
     /** The name of the right front motor
      * @value Default Value: "rightFront" */
-    public static String rightFrontMotorName = "rightFront";
+    public static String rightFrontMotorName = "right_front";
 
     /** The name of the right rear motor
      * @value Default Value: "rightRear" */
-    public static String rightRearMotorName = "rightRear";
+    public static String rightRearMotorName = "right_back";
 
     /** The direction of the left front motor
      * @value Default Value: DcMotorSimple.Direction.REVERSE */
