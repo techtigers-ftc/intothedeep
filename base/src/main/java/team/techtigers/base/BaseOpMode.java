@@ -93,7 +93,7 @@ public abstract class BaseOpMode extends CommandOpMode {
             }
             end();
             if (serialization) {
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("states.json"))) {
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("cache/states.json"))) {
                     for (GlobalState state : robotStates) {
                         oos.writeObject(state);
                     }
