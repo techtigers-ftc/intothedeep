@@ -83,6 +83,6 @@ public class Waypoint {
 
     @Override
     public String toString() {
-        return "x: " + getX() + " y: " + getY() + " h: " + getHeading();
+        return "x: " + getX() + " y: " + getY() + " h: " + Math.toDegrees(getHeading());
     }
 }

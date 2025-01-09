@@ -17,6 +17,7 @@ import static org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.DriveVectors;
@@ -320,13 +321,18 @@ public class Follower {
         updatePose();
 
         if (!teleopDrive) {
+            RobotLog.dd("PedroPathing", "Not in tele drive");
             if (currentPath != null) {
+                RobotLog.dd("PedroPathing", "Current Path isn't null");
                 if (holdingPosition) {
+                    RobotLog.dd("PedroPathing", "Holding pos");
                     closestPose = currentPath.getClosestPoint(getPose(), 1);
 
                     currentDriveVectors = new DriveVectors(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), getPose().getHeading());
                 } else {
+                    RobotLog.dd("PedroPathing", "Not Holding pos");
                     if (isBusy) {
+                        RobotLog.dd("PedroPathing", "Is Busy");
                         closestPose = currentPath.getClosestPoint(getPose(), BEZIER_CURVE_BINARY_STEP_LIMIT);
 
                         if (followingPathChain) updateCallbacks();
@@ -334,7 +340,9 @@ public class Follower {
                         currentDriveVectors = new DriveVectors(getCorrectiveVector(), getHeadingVector(), getDriveVector(), getPose().getHeading());
                     }
                     if (currentPath.isAtParametricEnd()) {
+                        RobotLog.ww("PedroPathing", "At Parametric End");
                         if (followingPathChain && chainIndex < currentPathChain.size() - 1) {
+                            RobotLog.ww("PedroPathing", "Not at last path");
                             // Not at last path, keep going
                             breakFollowing();
                             pathStartTimes[chainIndex] = System.currentTimeMillis();
@@ -344,18 +352,23 @@ public class Follower {
                             currentPath = currentPathChain.getPath(chainIndex);
                             closestPose = currentPath.getClosestPoint(getPose(), BEZIER_CURVE_BINARY_STEP_LIMIT);
                         } else {
+                            RobotLog.ww("PedroPathing", "At last path");
                             // At last path, run some end detection stuff
                             // set isBusy to false if at end
                             if (!reachedParametricPathEnd) {
+                                RobotLog.ww("PedroPathing", "Reached end");
                                 reachedParametricPathEnd = true;
                                 reachedParametricPathEndTime = System.currentTimeMillis();
                             }
 
                             if ((System.currentTimeMillis() - reachedParametricPathEndTime > currentPath.getPathEndTimeoutConstraint()) || (getVelocityMagnitude() < currentPath.getPathEndVelocityConstraint() && MathFunctions.distance(getPose(), closestPose) < currentPath.getPathEndTranslationalConstraint() && MathFunctions.getSmallestAngleDifference(getPose().getHeading(), currentPath.getClosestPointHeadingGoal()) < currentPath.getPathEndHeadingConstraint())) {
+                                RobotLog.ww("PedroPathing", "Actually at end");
                                 if (holdPositionAtEnd) {
+                                    RobotLog.ww("PedroPathing", "Holding position");
                                     holdPositionAtEnd = false;
                                     holdPoint(new BezierPoint(currentPath.getLastControlPoint()), currentPath.getHeadingGoal(1));
                                 } else {
+                                    RobotLog.ww("PedroPathing", "Breaking follow");
                                     breakFollowing();
                                 }
                             }

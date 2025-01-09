@@ -1,0 +1,148 @@
+package org.firstinspires.ftc.teamcode.autostates;
+
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+
+import team.techtigers.base.statemachine.ParallelCommandGroupState;
+import team.techtigers.base.statemachine.SequentialCommandGroupState;
+import team.techtigers.core.paths.Waypoint;
+
+/**
+ * A base class for autonomous drive states, using a parallel command group.
+ */
+public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState> {
+    private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
+    protected final AutoDriveCommand autoDriveCommand;
+    protected final RobotState robotState;
+    private double tolerance;
+    private double angleTolerance;
+
+    /**
+     * Constructor for the SequentialCommandGroupState
+     *
+     * @param name The name of the state
+     * @param drive The drive subsystem
+     * @param robotState The robot state
+     */
+    public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
+        super(name);
+        this.robotState = robotState;
+        autoDriveCommand = new AutoDriveCommand(drive, robotState);
+        tolerance = -1;
+        angleTolerance = -1;
+    }
+
+    /**
+     * Calculate the distance to the target
+     *
+     * @param current current waypoint
+     * @param target  target waypoint
+     * @return the distance to the target
+     */
+    protected double distToTarget(Waypoint current, Waypoint target) {
+        return Math.hypot(target.getX() - current.getX(),
+                target.getY() - current.getY());
+    }
+
+    /**
+     * Calculate the angle distance to the target
+     *
+     * @param currentHeading current heading
+     * @param targetHeading target heading
+     * @return the angle distance to the target
+     */
+    protected double angleDistance(double currentHeading, double targetHeading) {
+        return Math.abs(currentHeading - targetHeading);
+    }
+
+    /**
+     * Sets the path chain for the drive command.
+     *
+     * @param pathChain the path chain to run
+     */
+    public void setPathChain(PathChain pathChain) {
+        autoDriveCommand.setPathChain(pathChain);
+    }
+
+    /**
+     * Sets the translational PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setTranslationalPIDF(double p, double i, double d, double f) {
+        autoDriveCommand.setTranslationalPIDF(p, i, d, f);
+    }
+
+    /**
+     * Sets the heading PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setHeadingPIDF(double p, double i, double d, double f) {
+        autoDriveCommand.setHeadingPIDF(p, i, d, f);
+    }
+
+    /**
+     * Sets the drive PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param t the time constant
+     * @param f the feedforward coefficient
+     */
+    public void setDrivePIDF(double p, double i, double d, double t, double f) {
+        autoDriveCommand.setDrivePIDF(p, i, d, t, f);
+    }
+
+    /**
+     * Sets the tolerance for the drive state
+     *
+     * @param tolerance the tolerance for the drive state
+     */
+    public void setTolerance(double tolerance) {
+        this.tolerance = tolerance;
+    }
+
+    /**
+     * Sets the angle tolerance for the drive state
+     *
+     * @param angleTolerance the angle tolerance for the drive state
+     */
+    public void setAngleTolerance(double angleTolerance) {
+        this.angleTolerance = angleTolerance;
+    }
+
+    @Override
+    public AutoState getCurrentCondition() {
+        if (tolerance < 0 || angleTolerance < 0) {
+            throw new IllegalStateException("Tolerance and angle tolerance must be set");
+        }
+
+        Waypoint current = robotState.getRobotCurrentPose();
+        Waypoint target = robotState.getRobotFinalPose();
+
+        RobotLog.dd(LOG_TAG, "Dist to target: %f Angle diff: %f",
+                distToTarget(current, target),
+                angleDistance(current.getHeading(), target.getHeading()));
+        if (distToTarget(current, target) < tolerance
+                && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
+            return AutoState.DRIVE_END;
+        }
+
+        return AutoState.RUNNING;
+    }
+}

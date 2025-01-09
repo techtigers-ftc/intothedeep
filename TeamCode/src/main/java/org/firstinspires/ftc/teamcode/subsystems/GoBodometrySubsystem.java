@@ -14,6 +14,7 @@ import team.techtigers.core.paths.Waypoint;
 public class GoBodometrySubsystem extends CloseableSubsystem {
     private final GoBildaPinpointDriver odo;
     private final RobotState robotState;
+    private Waypoint startPose;
 
     /**
      * Initializes a new RoadometrySubsystem.
@@ -26,6 +27,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
     public GoBodometrySubsystem(HardwareMap hardwareMap, RobotState robotState,
                                 Waypoint startPose) {
         this.robotState = robotState;
+        this.startPose = startPose;
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
@@ -71,7 +73,8 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         //odo.recalibrateIMU();
         odo.resetPosAndIMU();
 
-        odo.setPosition(startPose);
+//        startPose = new Waypoint(startPose.getX()*25.4, startPose.getY()*25.4, startPose.getHeading());
+//        odo.setPosition(startPose);
     }
 
     /**
@@ -84,6 +87,14 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         this(hardwareMap, state, new Waypoint(0, 0));
     }
 
+    private Waypoint rotateWaypoint(Waypoint waypoint, double heading) {
+        double x = waypoint.getX();
+        double y = waypoint.getY();
+        double cos = Math.cos(heading);
+        double sin = Math.sin(heading);
+        return new Waypoint(x * cos - y * sin, x * sin + y * cos, waypoint.getHeading());
+    }
+
     @Override
     public void periodic() {
         odo.update();
@@ -91,9 +102,21 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         double heading = odo.getHeading();
         double headingVelocity = odo.getHeadingVelocity();
 
-        robotState.setRobotPose(new Waypoint(odo.getPosX()/25.4,
-                odo.getPosY()/25.4, heading));
-        robotState.setRobotVelocity(new Waypoint(odo.getVelX()/25.4,
-                odo.getVelY()/25.4, headingVelocity));
+        Waypoint robotPose = new Waypoint(odo.getPosX()/25.4,
+                odo.getPosY()/25.4, heading);
+        robotPose = rotateWaypoint(robotPose, startPose.getHeading());
+        robotPose = new Waypoint(robotPose.getX() + startPose.getX(),
+                robotPose.getY() + startPose.getY(),
+                robotPose.getHeading() + startPose.getHeading());
+
+        Waypoint robotVelocity = new Waypoint(odo.getVelX()/25.4,
+                odo.getVelY()/25.4, headingVelocity);
+        robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
+        robotVelocity = new Waypoint(robotVelocity.getX() + startPose.getX(),
+                robotVelocity.getY() + startPose.getY(),
+                robotVelocity.getHeading() + startPose.getHeading());
+
+        robotState.setRobotPose(robotPose);
+        robotState.setRobotVelocity(robotVelocity);
     }
 }

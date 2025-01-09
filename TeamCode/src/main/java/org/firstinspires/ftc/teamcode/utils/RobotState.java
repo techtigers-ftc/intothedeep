@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import androidx.annotation.NonNull;
-
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -23,6 +21,7 @@ import team.techtigers.core.utils.GlobalState;
 public class RobotState extends GlobalState implements Cloneable, Serializable {
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
+    private Waypoint robotFinalPose;
     private BlockColorPreference blockColorPreference;
     private BlockDetectionState blockDetectionState;
     private double blockLateralCoarse;
@@ -57,6 +56,7 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
     public RobotState() {
         robotCurrentPose = new Waypoint(0, 0, 0);
         robotVelocity = new Waypoint(0, 0, 0);
+        robotFinalPose = new Waypoint(0, 0, 0);
         blockColorPreference = BlockColorPreference.ANY;
         blockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
@@ -506,7 +506,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
 
     /**
      * Sets the current driver current
-     *
      * @param driverCurrent the current driver current
      */
     public void setDriverCurrent(double driverCurrent) {
@@ -522,7 +521,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
 
     /**
      * Sets the current intake current
-     *
      * @param intakeCurrent the current intake current
      */
     public void setIntakeCurrent(double intakeCurrent) {
@@ -538,7 +536,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
 
     /**
      * Sets the current dropper current
-     *
      * @param dropperCurrent the current dropper current
      */
     public void setDropperCurrent(double dropperCurrent) {
@@ -554,7 +551,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
 
     /**
      * Sets intake control to be manual or autonomous (with vision)
-     *
      * @param manualIntakeSelected Whether the intake should be manual or not
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
@@ -564,7 +560,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
     /**
      * @return a clone of the current RobotState
      */
-    @NonNull
     @Override
     public RobotState clone() {
         RobotState clone = (RobotState) super.clone();
@@ -599,5 +594,21 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         clone.intakeState = intakeState;
 
         return clone;
+    }
+
+    /**
+     * @return the final pose of the robot in a trajectory
+     */
+    public Waypoint getRobotFinalPose() {
+        return robotFinalPose;
+    }
+
+    /**
+     * Sets the final pose of the robot in a trajectory
+     *
+     * @param robotFinalPose the final pose of the robot
+     */
+    public void setRobotFinalPose(Waypoint robotFinalPose) {
+        this.robotFinalPose = robotFinalPose;
     }
 }
