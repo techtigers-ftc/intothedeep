@@ -68,11 +68,11 @@ public class FollowerConstants {
 
     /** The Forward Velocity of the Robot - Different for each robot
      * @value Default Value: 81.34056 */
-    public static double xMovement = 81.34056;
+    public static double xMovement = 76.715;
 
     /** The Lateral Velocity of the Robot - Different for each robot
      * @value Default Value: 65.43028 */
-    public static double yMovement = 65.43028;
+    public static double yMovement = 57.012;
 
 
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
@@ -93,7 +93,7 @@ public class FollowerConstants {
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
             0.1,
             0,
-            0,
+            0.009,
             0);
 
     /** Translational Integral
@@ -114,7 +114,7 @@ public class FollowerConstants {
     public static CustomPIDFCoefficients headingPIDFCoefficients = new CustomPIDFCoefficients(
             1,
             0,
-            0,
+            0.03,
             0);
 
     /** Feed forward constant added on to the heading PIDF
@@ -125,9 +125,9 @@ public class FollowerConstants {
     /** Drive PIDF coefficients
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.025,0,0.00001,0.6,0); */
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.025,
+            0.075,
             0,
-            0.00001,
+            0.000001,
             0.6,
             0);
 
@@ -144,11 +144,11 @@ public class FollowerConstants {
 
     /** Mass of robot in kilograms
      * @value Default Value: 10.65942 */
-    public static double mass = 10.65942;
+    public static double mass = 15.1;
 
     /** Centripetal force to power scaling
      * @value Default Value: 0.0005 */
-    public static double centripetalScaling = 0.0005;
+    public static double centripetalScaling = 0.00035;
 
 
     /** Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
@@ -236,17 +236,17 @@ public class FollowerConstants {
     /** This activates/deactivates the secondary translational PIDF. It takes over at a certain translational error
      * @see #translationalPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryTranslationalPID = false;
+    public static boolean useSecondaryTranslationalPID = true;
 
     /** Use the secondary heading PIDF. It takes over at a certain heading error
      * @see #headingPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryHeadingPID = false;
+    public static boolean useSecondaryHeadingPID = true;
 
     /** Use the secondary drive PIDF. It takes over at a certain drive error
      * @see #drivePIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryDrivePID = false;
+    public static boolean useSecondaryDrivePID = true;
 
     /** The limit at which the translational PIDF switches between the main and secondary translational PIDFs,
      * if the secondary PID is active.
@@ -258,7 +258,7 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @value Default Value: new CustomPIDFCoefficients(0.3, 0, 0.01, 0) */
     public static CustomPIDFCoefficients secondaryTranslationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.3,
+            0.01,
             0,
             0.01,
             0);
@@ -287,10 +287,10 @@ public class FollowerConstants {
      * @see #useSecondaryHeadingPID
      * @value Default Value: new CustomPIDFCoefficients(5, 0, 0.08, 0) */
     public static CustomPIDFCoefficients secondaryHeadingPIDFCoefficients = new CustomPIDFCoefficients(
-            5,
+            1,
             0,
-            0.08,
-            0);
+            0.1,
+            0.1);
 
     /** Feed forward constant added on to the secondary heading PIDF.
      * @see #useSecondaryHeadingPID
@@ -307,9 +307,9 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
     public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.02,
+            0.005,
             0,
-            0.000005,
+            0.000015,
             0.6,
             0);
 
