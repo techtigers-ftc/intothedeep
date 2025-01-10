@@ -19,4 +19,9 @@ public class AutoDriveTestOpMode extends BaseOpMode {
     public void justAfterStart() {
         command.schedule();
     }
+
+    @Override
+    public void update() {
+        telemetry.addData("Pose: ", command.follower.getPose());
+    }
 }

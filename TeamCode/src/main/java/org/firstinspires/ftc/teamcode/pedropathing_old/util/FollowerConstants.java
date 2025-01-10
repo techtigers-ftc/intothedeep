@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Vector;
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/4/2024
  */
-@Config
 public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot

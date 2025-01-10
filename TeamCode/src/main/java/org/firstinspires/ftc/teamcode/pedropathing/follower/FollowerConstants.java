@@ -52,11 +52,13 @@ public class FollowerConstants {
 
     /** The direction of the right front motor
      * @value Default Value: DcMotorSimple.Direction.REVERSE */
-    public static DcMotorSimple.Direction rightFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
+    public static DcMotorSimple.Direction rightFrontMotorDirection =
+            DcMotorSimple.Direction.FORWARD;
 
     /** The direction of the left rear motor
      * @value Default Value: DcMotorSimple.Direction.FORWARD */
-    public static DcMotorSimple.Direction leftRearMotorDirection = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction leftRearMotorDirection =
+            DcMotorSimple.Direction.REVERSE;
 
     /** The direction of the right rear motor
      * @value Default Value: DcMotorSimple.Direction.FORWARD */
@@ -125,9 +127,9 @@ public class FollowerConstants {
     /** Drive PIDF coefficients
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.025,0,0.00001,0.6,0); */
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.075,
+            0.005,
             0,
-            0.000001,
+            0.0001,
             0.6,
             0);
 
@@ -236,17 +238,17 @@ public class FollowerConstants {
     /** This activates/deactivates the secondary translational PIDF. It takes over at a certain translational error
      * @see #translationalPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryTranslationalPID = true;
+    public static boolean useSecondaryTranslationalPID = false;
 
     /** Use the secondary heading PIDF. It takes over at a certain heading error
      * @see #headingPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryHeadingPID = true;
+    public static boolean useSecondaryHeadingPID = false;
 
     /** Use the secondary drive PIDF. It takes over at a certain drive error
      * @see #drivePIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryDrivePID = true;
+    public static boolean useSecondaryDrivePID = false;
 
     /** The limit at which the translational PIDF switches between the main and secondary translational PIDFs,
      * if the secondary PID is active.

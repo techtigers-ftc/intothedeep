@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.pedropathing.localization.localizers;
 
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
+
 import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.PinpointConstants.*;
 
 import android.os.Build;
@@ -172,6 +174,8 @@ public class PinpointLocalizer extends Localizer {
         Pose deltaPose = MathFunctions.subtractPoses(currentPinpointPose, previousPinpointPose);
         currentVelocity = new Pose(deltaPose.getX() / (deltaTimeNano / Math.pow(10.0, 9)), deltaPose.getY() / (deltaTimeNano / Math.pow(10.0, 9)), deltaPose.getHeading() / (deltaTimeNano / Math.pow(10.0, 9)));
         previousPinpointPose = currentPinpointPose;
+
+        RobotLog.dd("Pinpoint", "Pose: %s", currentPinpointPose);
     }
 
     /**
