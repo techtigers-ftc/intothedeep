@@ -32,10 +32,10 @@ public class TransmissionTuningOpMode extends BaseOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
-            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()-0.5);
+            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()-0.05);
         }));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
-            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()+0.5);
+            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()+0.05);
         }));
     }
 }

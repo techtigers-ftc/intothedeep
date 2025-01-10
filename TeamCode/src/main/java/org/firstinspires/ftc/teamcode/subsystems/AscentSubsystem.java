@@ -11,7 +11,7 @@ public class AscentSubsystem extends CloseableSubsystem {
     private final Servo changingTransmission;
 
     public AscentSubsystem(HardwareMap hardwareMap) {
-        changingTransmission = hardwareMap.get(Servo.class, "changingTransmission");
+        changingTransmission = hardwareMap.get(Servo.class, "transmission_switch");
     }
 
     public void setChangingTransmissionPosition(double position) {
