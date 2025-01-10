@@ -1,5 +1,11 @@
 package team.techtigers.core.utils;
 
+import androidx.annotation.NonNull;
+
+//import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -37,5 +43,10 @@ public class GlobalState implements Serializable, Cloneable {
         clone.startTime = this.startTime;
 
         return clone;
+    }
+
+    public void write(ObjectOutputStream out) throws IOException {
+//        Gson gson = new Gson();
+//        out.writeChars(gson.toJson(this));
     }
 }

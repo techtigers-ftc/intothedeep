@@ -1,8 +1,12 @@
 package team.techtigers.base;
 
+import android.os.Environment;
+
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.Subsystem;
+import com.qualcomm.robotcore.util.RobotLog;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -83,23 +87,33 @@ public abstract class BaseOpMode extends CommandOpMode {
                 telemetry.update();
                 if (serialization) {
                     robotStates.add(robotState);
+                    RobotLog.dd("Serialization", "Saved new robot state");
                 }
             }
         } finally {
+            if (serialization) {
+                String filename = "states.json";
+                String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/"+"cache";
+                File directory = new File(directoryPath);
+                //noinspection ResultOfMethodCallIgnored
+                directory.mkdir();
+                RobotLog.dd("Serialization", "Preparing to write to file %s", filename);
+                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(directoryPath+"/"+filename))) {
+                    for (GlobalState state : robotStates) {
+                        state.write(oos);
+                    }
+                    RobotLog.dd("Serialization", "Writing to file %s", filename);
+                } catch (IOException e) {
+                    RobotLog.ee("Serialization", "error: %s", e);
+                }
+            }
+
             reset();
             // Cleaning up after execution, whether or not there are no errors
             for (CloseableSubsystem subsystem : subsystems) {
                 subsystem.close();
             }
             end();
-            if (serialization) {
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("cache/states.json"))) {
-                    for (GlobalState state : robotStates) {
-                        oos.writeObject(state);
-                    }
-                } catch (IOException ignored) {
-                }
-            }
         }
     }
 }

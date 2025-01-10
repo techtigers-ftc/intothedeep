@@ -10,7 +10,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.ObjectOutputStream;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
