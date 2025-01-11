@@ -37,7 +37,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                          DropperSubsystem dropper,
                                          RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(intake);
+        addRequirements(intake, dropper);
         addCommands(
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
