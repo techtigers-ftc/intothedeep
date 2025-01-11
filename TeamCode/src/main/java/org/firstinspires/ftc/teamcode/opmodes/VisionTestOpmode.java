@@ -19,7 +19,7 @@ public class VisionTestOpmode extends BaseOpMode {
     @Override
     public void initialize() {
         robotState = new RobotState(true, false);
-        robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
+        robotState.setBlockColorPreference(BlockColorPreference.ANY);
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
         registerSubsystems(vision);
     }
