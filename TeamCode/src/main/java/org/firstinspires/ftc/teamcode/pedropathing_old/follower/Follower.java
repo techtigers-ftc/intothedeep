@@ -188,7 +188,7 @@ public class Follower {
      * @return returns the pose
      */
     public Pose getPose() {
-        return PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
+        return null;
     }
 
     /**
@@ -197,7 +197,7 @@ public class Follower {
      * @return returns the current velocity as a Vector.
      */
     public Vector getVelocity() {
-        return PoseTranslator.waypointToVector(robotState.getRobotVelocity());
+        return null;
     }
 
     /**

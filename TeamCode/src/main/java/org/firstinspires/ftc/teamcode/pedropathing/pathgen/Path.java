@@ -278,6 +278,13 @@ public class Path {
     }
 
     /**
+     * @return returns the end heading.
+     */
+    public double getEndHeading() {
+        return endHeading;
+    }
+
+    /**
      * This gets the heading goal at a specified t-value.
      *
      * @param t the specified t-value.

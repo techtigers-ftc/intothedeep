@@ -23,7 +23,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
  * @version 1.0, 3/4/2024
  */
 public class PoseUpdater {
-    private HardwareMap hardwareMap;
 
     private IMU imu;
 
@@ -51,11 +50,9 @@ public class PoseUpdater {
     /**
      * Creates a new PoseUpdater from a HardwareMap and a Localizer.
      *
-     * @param hardwareMap the HardwareMap
      * @param localizer the Localizer
      */
-    public PoseUpdater(HardwareMap hardwareMap, Localizer localizer) {
-        this.hardwareMap = hardwareMap;
+    public PoseUpdater(Localizer localizer) {
         this.localizer = localizer;
 
         try {
@@ -64,35 +61,6 @@ public class PoseUpdater {
 
         imu = localizer.getIMU();
     }
-
-    /**
-     * Creates a new PoseUpdater from a HardwareMap.
-     *
-     * @param hardwareMap the HardwareMap
-     */
-    public PoseUpdater(HardwareMap hardwareMap) {
-        this(hardwareMap, createLocalizer(hardwareMap));
-    }
-
-    private static Localizer createLocalizer(HardwareMap hardwareMap) {
-        switch (localizers) {
-            case DRIVE_ENCODERS:
-                return new DriveEncoderLocalizer(hardwareMap);
-            case TWO_WHEEL:
-                return new TwoWheelLocalizer(hardwareMap);
-            case THREE_WHEEL:
-                return new ThreeWheelLocalizer(hardwareMap);
-            case THREE_WHEEL_IMU:
-                return new ThreeWheelIMULocalizer(hardwareMap);
-            case OTOS:
-                throw new IllegalArgumentException("OTOS is not supported");
-            case PINPOINT:
-                return new PinpointLocalizer(hardwareMap);
-            default:
-                throw new IllegalArgumentException("Unsupported localizer type");
-        }
-    }
-
 
     /**
      * This updates the robot's pose, as well as updating the previous pose, velocity, and
@@ -370,7 +338,7 @@ public class PoseUpdater {
     }
 
     /**
-     *
+     * Resets the IMU
      */
     public void resetIMU() throws InterruptedException {
         localizer.resetIMU();

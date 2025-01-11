@@ -6,14 +6,6 @@ import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConst
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.headingPIDFFeedForward;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.headingPIDFSwitch;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.lateralZeroPowerAcceleration;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.secondaryDrivePIDFFeedForward;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.secondaryHeadingPIDFFeedForward;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.secondaryTranslationalPIDFFeedForward;
@@ -25,11 +17,7 @@ import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConst
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Localizer;
@@ -43,15 +31,16 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathCallback;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilter;
 import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This is the Follower class. It handles the actual following of the paths and all the on-the-fly
@@ -64,14 +53,6 @@ import java.util.List;
  */
 @Config
 public class Follower {
-    private HardwareMap hardwareMap;
-
-    private DcMotorEx leftFront;
-    private DcMotorEx leftRear;
-    private DcMotorEx rightFront;
-    private DcMotorEx rightRear;
-    private List<DcMotorEx> motors;
-
     private DriveVectorScaler driveVectorScaler;
 
     public PoseUpdater poseUpdater;
@@ -106,7 +87,7 @@ public class Follower {
 
     private long reachedParametricPathEndTime;
 
-    private double[] drivePowers;
+    private DriveVectors currentDriveVectors;
     private double[] teleopDriveValues;
 
     private ArrayList<Vector> velocities = new ArrayList<>();
@@ -146,21 +127,10 @@ public class Follower {
     public static boolean useDrive = true;
 
     /**
-     * This creates a new Follower given a HardwareMap.
-     * @param hardwareMap HardwareMap required
-     */
-    public Follower(HardwareMap hardwareMap) {
-        this.hardwareMap = hardwareMap;
-        initialize();
-    }
-
-    /**
      * This creates a new Follower given a HardwareMap and a localizer.
-     * @param hardwareMap HardwareMap required
      * @param localizer the localizer you wish to use
      */
-    public Follower(HardwareMap hardwareMap, Localizer localizer) {
-        this.hardwareMap = hardwareMap;
+    public Follower(Localizer localizer) {
         initialize(localizer);
     }
 
@@ -169,87 +139,47 @@ public class Follower {
      * In this, the DriveVectorScaler and PoseUpdater is instantiated, the drive motors are
      * initialized and their behavior is set, and the variables involved in approximating first and
      * second derivatives for teleop are set.
-     */
-    public void initialize() {
-        poseUpdater = new PoseUpdater(hardwareMap);
-        driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
-
-        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
-        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
-        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
-        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
-        leftFront.setDirection(leftFrontMotorDirection);
-        leftRear.setDirection(leftRearMotorDirection);
-        rightFront.setDirection(rightFrontMotorDirection);
-        rightRear.setDirection(rightRearMotorDirection);
-
-        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
-        }
-
-        setMotorsToBrake();
-
-        dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
-
-        breakFollowing();
-    }
-
-    /**
-     * This initializes the follower.
-     * In this, the DriveVectorScaler and PoseUpdater is instantiated, the drive motors are
-     * initialized and their behavior is set, and the variables involved in approximating first and
-     * second derivatives for teleop are set.
      * @param localizer the localizer you wish to use
      */
-
     public void initialize(Localizer localizer) {
-        poseUpdater = new PoseUpdater(hardwareMap, localizer);
+        poseUpdater = new PoseUpdater(localizer);
         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
-
-        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
-        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
-        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
-        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
-        leftFront.setDirection(leftFrontMotorDirection);
-        leftRear.setDirection(leftRearMotorDirection);
-        rightFront.setDirection(rightFrontMotorDirection);
-        rightRear.setDirection(rightRearMotorDirection);
-
-        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
-        }
-
-        setMotorsToBrake();
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
         breakFollowing();
     }
 
-    /**
-     * This sets the motors to the zero power behavior of brake.
-     */
-    private void setMotorsToBrake() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
+    public void setSecondaryTranslationalPIDF(CustomPIDFCoefficients coefficients) {
+        secondaryTranslationalPIDF.setCoefficients(coefficients);
     }
 
-    /**
-     * This sets the motors to the zero power behavior of float.
-     */
-    private void setMotorsToFloat() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
+    public void setSecondaryTranslationalIntegral(CustomPIDFCoefficients coefficients) {
+        secondaryTranslationalIntegral.setCoefficients(coefficients);
+    }
+
+    public void setTranslationalPIDF(CustomPIDFCoefficients coefficients) {
+        translationalPIDF.setCoefficients(coefficients);
+    }
+
+    public void setTranslationalIntegral(CustomPIDFCoefficients coefficients) {
+        translationalIntegral.setCoefficients(coefficients);
+    }
+
+    public void setSecondaryHeadingPIDF(CustomPIDFCoefficients coefficients) {
+        secondaryHeadingPIDF.setCoefficients(coefficients);
+    }
+
+    public void setHeadingPIDF(CustomPIDFCoefficients coefficients) {
+        headingPIDF.setCoefficients(coefficients);
+    }
+
+    public void setSecondaryDrivePIDF(CustomFilteredPIDFCoefficients coefficients) {
+        secondaryDrivePIDF.setCoefficients(coefficients);
+    }
+
+    public void setDrivePIDF(CustomFilteredPIDFCoefficients coefficients) {
+        drivePIDF.setCoefficients(coefficients);
     }
 
     /**
@@ -495,10 +425,6 @@ public class Follower {
     public void startTeleopDrive() {
         breakFollowing();
         teleopDrive = true;
-
-        if(FollowerConstants.useBrakeModeInTeleOp) {
-            setMotorsToBrake();
-        }
     }
 
     /**
@@ -524,26 +450,26 @@ public class Follower {
                 if (holdingPosition) {
                     closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), 1);
 
-                    drivePowers = driveVectorScaler.getDrivePowers(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), poseUpdater.getPose().getHeading());
-
-                    for (int i = 0; i < motors.size(); i++) {
-                        if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                            motors.get(i).setPower(drivePowers[i]);
-                        }
-                    }
+                    currentDriveVectors = new DriveVectors(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), getPose().getHeading());
+//
+//                    for (int i = 0; i < motors.size(); i++) {
+//                        if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                            motors.get(i).setPower(drivePowers[i]);
+//                        }
+//                    }
                 } else {
                     if (isBusy) {
                         closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_BINARY_STEP_LIMIT);
 
                         if (followingPathChain) updateCallbacks();
 
-                        drivePowers = driveVectorScaler.getDrivePowers(getCorrectiveVector(), getHeadingVector(), getDriveVector(), poseUpdater.getPose().getHeading());
-
-                        for (int i = 0; i < motors.size(); i++) {
-                            if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                                motors.get(i).setPower(drivePowers[i]);
-                            }
-                        }
+                        currentDriveVectors = new DriveVectors(getCorrectiveVector(), getHeadingVector(), getDriveVector(), getPose().getHeading());
+//
+//                        for (int i = 0; i < motors.size(); i++) {
+//                            if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                                motors.get(i).setPower(drivePowers[i]);
+//                            }
+//                        }
                     }
                     if (currentPath.isAtParametricEnd()) {
                         if (followingPathChain && chainIndex < currentPathChain.size() - 1) {
@@ -581,14 +507,22 @@ public class Follower {
 
             calculateAveragedVelocityAndAcceleration();
 
-            drivePowers = driveVectorScaler.getDrivePowers(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, poseUpdater.getPose().getHeading());
-
-            for (int i = 0; i < motors.size(); i++) {
-                if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                    motors.get(i).setPower(drivePowers[i]);
-                }
-            }
+            currentDriveVectors = new DriveVectors(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, getPose().getHeading());
+//
+//            for (int i = 0; i < motors.size(); i++) {
+//                if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                    motors.get(i).setPower(drivePowers[i]);
+//                }
+//            }
         }
+    }
+
+    /**
+     * @return The powers to set all the motors to
+     */
+    public DriveVectors getCurrentDriveVectors() {
+        update();
+        return currentDriveVectors;
     }
 
     /**
@@ -684,7 +618,6 @@ public class Follower {
      */
     public void breakFollowing() {
         teleopDrive = false;
-        setMotorsToBrake();
         holdingPosition = false;
         isBusy = false;
         reachedParametricPathEnd = false;
@@ -725,10 +658,6 @@ public class Follower {
         teleopDriveValues = new double[3];
         teleopDriveVector = new Vector();
         teleopHeadingVector = new Vector();
-
-        for (int i = 0; i < motors.size(); i++) {
-            motors.get(i).setPower(0);
-        }
     }
 
     /**

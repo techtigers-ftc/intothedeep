@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.pedropathing_old.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.Path;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomFilteredPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing_old.util.FilteredPIDFController;
-import org.firstinspires.ftc.teamcode.pedropathing_old.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -40,7 +41,8 @@ public class AutoDriveCommand extends CommandBase {
                             RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
-        follower = new Follower(robotState);
+        RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
+        follower = new Follower(localizer);
         addRequirements(drive);
     }
 
@@ -58,9 +60,9 @@ public class AutoDriveCommand extends CommandBase {
         if (pathChain == null) {
             throw new IllegalArgumentException("Path chain not set");
         }
-        follower.setTranslationalPIDF(translationalPIDF.P(), translationalPIDF.I(), translationalPIDF.D(), translationalPIDF.F());
-        follower.setHeadingPIDF(headingPIDF.P(), headingPIDF.I(), headingPIDF.D(), headingPIDF.F());
-        follower.setDrivePIDF(drivePIDF.P(), drivePIDF.I(), drivePIDF.D(), drivePIDF.T(), drivePIDF.F());
+        follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
+        follower.setHeadingPIDF(headingPIDF.getCoefficients());
+        follower.setDrivePIDF(drivePIDF.getCoefficients());
 
         Path finalPath = pathChain.getPath(pathChain.size()-1);
         Waypoint target =
@@ -73,6 +75,7 @@ public class AutoDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        follower.update();
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 

@@ -18,7 +18,7 @@ public class NewAutoDriveCommand extends CommandBase {
     private static final String LOG_TAG =
             NewAutoDriveCommand.class.getSimpleName();
 
-    public final Follower follower;
+//    public final Follower follower;
     private PathChain pathChain;
     private PIDFController translationalPIDF;
     private PIDFController headingPIDF;
@@ -28,25 +28,25 @@ public class NewAutoDriveCommand extends CommandBase {
      * Constructs a new AutoDriveCommand.
      */
     public NewAutoDriveCommand(HardwareMap hardwareMap) {
-        follower = new Follower(hardwareMap);
+//        follower = new Follower(hardwareMap);
     }
 
     @Override
     public void initialize() {
-        pathChain = follower.pathBuilder().addPath(
-                        new BezierCurve(
-                                new Point(0, 0),
-                                new Point(40, 0),
-                                new Point(20, 40),
-                                new Point(50, 60)
-                        ))
-                .setLinearHeadingInterpolation(0, Math.PI)
-                .build();
-        follower.followPath(pathChain, true);
+//        pathChain = follower.pathBuilder().addPath(
+//                        new BezierCurve(
+//                                new Point(0, 0),
+//                                new Point(40, 0),
+//                                new Point(20, 40),
+//                                new Point(50, 60)
+//                        ))
+//                .setLinearHeadingInterpolation(0, Math.PI)
+//                .build();
+//        follower.followPath(pathChain, true);
     }
 
     @Override
     public void execute() {
-        follower.update();
+//        follower.update();
     }
 }
