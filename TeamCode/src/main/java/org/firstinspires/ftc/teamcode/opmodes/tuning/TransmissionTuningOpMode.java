@@ -25,17 +25,21 @@ public class TransmissionTuningOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         robotState = new RobotState(true, false);
-        ascentSubsystem = new AscentSubsystem(hardwareMap);
+        ascentSubsystem = new AscentSubsystem(hardwareMap, robotState);
         registerSubsystems(ascentSubsystem);
 
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        FtcDashboard dashboard = FtcDashboard.getInstance();
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(() -> {
-            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()-0.05);
+            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()-0.01);
         }));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
-            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()+0.05);
+            ascentSubsystem.setChangingTransmissionPosition(ascentSubsystem.getChangingTransmissionPosition()+0.01);
         }));
+    }
+
+    @Override
+    public void update() {
+        telemetry.addData("Transmission Position", ascentSubsystem.getChangingTransmissionPosition());
     }
 }
