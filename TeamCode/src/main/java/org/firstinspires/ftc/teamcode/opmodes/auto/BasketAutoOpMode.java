@@ -67,6 +67,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -89,6 +90,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -111,6 +113,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(3, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
