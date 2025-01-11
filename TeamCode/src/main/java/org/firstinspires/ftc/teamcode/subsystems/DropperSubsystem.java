@@ -347,8 +347,11 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void periodic() {
         double power =
                 slideController.calculateMotorPowers(getCurrentSlidePositionTicks());
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
+
+        if (!robotState.getIsAscending()) {
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
 
         robotState.setVerticalExtended(getCurrentSlidePositionTicks() > 100);
         leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));

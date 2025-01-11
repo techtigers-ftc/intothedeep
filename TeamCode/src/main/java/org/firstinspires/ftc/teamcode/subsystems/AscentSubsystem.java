@@ -64,4 +64,9 @@ public class AscentSubsystem extends CloseableSubsystem {
     public void periodic(){
         RobotLog.dd("AscentSubsystem", "Changing Transmission Position: %f", getChangingTransmissionPosition());
     }
+
+    @Override
+    public void close() {
+        disengageAscent();
+    }
 }

@@ -36,11 +36,11 @@ public class AscentTestOpMode extends BaseOpMode {
 
         Gamepad.RumbleEffect ascentDisengagementRumble =
                 new Gamepad.RumbleEffect.Builder()
-                        .addStep(0.5, 0.5, 100)
-                        .addStep(0, 0, 50)
-                        .addStep(0.3, 0.3, 100)
-                        .addStep(0, 0, 50)
-                        .addStep(0.3, 0.3, 100)
+                        .addStep(0.8, 0.3, 200)
+                        .addStep(0, 0, 100)
+                        .addStep(0.3, 0.8, 200)
+                        .addStep(0, 0, 100)
+                        .addStep(0.8, 0.8, 200)
                         .build();
 
         // Ascent Trigger
@@ -49,30 +49,30 @@ public class AscentTestOpMode extends BaseOpMode {
         doubleDriverTouchpad.toggleWhenActive(
                 () -> {
                     ascent.engageAscent();
-                    gamepad1.runRumbleEffect(ascentEngagementRumble);
+                    gamepad1.runRumbleEffect(ascentDisengagementRumble);
                 },
                 () -> {
                     ascent.disengageAscent();
-                    gamepad1.runRumbleEffect(ascentDisengagementRumble);
+                    gamepad1.runRumbleEffect(ascentEngagementRumble);
                 }
         );
 
         // Ascent and drive and dropper
-        Trigger ascentTrigger = new Trigger(() -> true);
+        Trigger ascentTrigger = new Trigger(() -> robotState.getIsAscending());
 //
-//        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
-//        ascentTrigger.negate().whenActive(manualDriveCommand);
+        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
+        ascentTrigger.negate().whenActive(manualDriveCommand);
 
         AscentCommand ascentCommand = new AscentCommand(ascent, driverGamepad);
         ascentTrigger.whileActiveContinuous(ascentCommand);
 
-//        Trigger dropperSlidesTrigger = new Trigger(() ->
-//                driverGamepad.getRightY() != 0
-//        );
-//        dropperSlidesTrigger.and(ascentTrigger.negate()).whileActiveContinuous(() ->
-//                dropper.moveSlidesRelative(
-//                        -driverGamepad.getRightY() * 2.5)
-//        );
+        Trigger dropperSlidesTrigger = new Trigger(() ->
+                driverGamepad.getRightY() != 0
+        );
+        dropperSlidesTrigger.and(ascentTrigger.negate()).whileActiveContinuous(() ->
+                dropper.moveSlidesRelative(
+                        -driverGamepad.getRightY() * 2.5)
+        );
     }
 
     @Override
