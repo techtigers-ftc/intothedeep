@@ -47,8 +47,8 @@ public class SampleDetectionProcessor implements VisionProcessor {
     private final Scalar BLUE_LOWER_BOUND = new Scalar(105,110,80);
 
     private static final int ERODE_NUMBER = 10;
-    private Mat processedMat = new Mat();
-    private RobotState robotState;
+    private final Mat processedMat = new Mat();
+    private final RobotState robotState;
 
     /**
      * Construct a SampleDetectionProcessor
