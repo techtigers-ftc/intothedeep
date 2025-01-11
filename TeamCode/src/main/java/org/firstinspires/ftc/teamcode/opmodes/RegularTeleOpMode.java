@@ -35,7 +35,7 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 @SuppressWarnings("unused")
 public class RegularTeleOpMode extends BaseOpMode {
-    private static final double INTAKE_CAMERA_OFFSET = 3;
+    private static final double INTAKE_CAMERA_OFFSET = 2;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
