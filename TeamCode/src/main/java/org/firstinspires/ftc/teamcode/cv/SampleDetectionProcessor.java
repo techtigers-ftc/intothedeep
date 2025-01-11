@@ -43,16 +43,8 @@ public class SampleDetectionProcessor implements VisionProcessor {
     private final Scalar RED_UPPER_BOUND = new Scalar(10,255,255);
     private final Scalar RED_LOWER_BOUND = new Scalar(0,50,50);
     //    Blue
-    public static double UH = 130;
-    public static double US = 255;
-    public static double UV = 255;
-    public static double LH = 100;
-    public static double LS = 50;
-    public static double LV = 50;
     private final Scalar BLUE_UPPER_BOUND = new Scalar(120,255,255);
     private final Scalar BLUE_LOWER_BOUND = new Scalar(105,110,80);
-//    private final Scalar BLUE_UPPER_BOUND = new Scalar(UH,US,UV);
-//    private final Scalar BLUE_LOWER_BOUND = new Scalar(LH,LS,LV);
 
     private static final int ERODE_NUMBER = 10;
     private Mat processedMat = new Mat();
