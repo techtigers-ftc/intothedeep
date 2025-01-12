@@ -26,7 +26,12 @@ public class DriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.002,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -51,7 +56,12 @@ public class DriveStateConfigurator {
      * @param state The DriveToFirstSampleIntakeState to configure
      */
     public static void configFirstSampleIntake(DriveToIntakeState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.004,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()

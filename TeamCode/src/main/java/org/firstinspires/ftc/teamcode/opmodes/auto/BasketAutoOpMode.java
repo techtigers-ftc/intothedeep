@@ -40,6 +40,9 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = dashboard.getTelemetry();
+
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
 
@@ -164,7 +167,7 @@ public class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveBasketPreload, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveIntakeFirstSample, AutoState.SAMPLE_0_DROP_COMPLETE)
-                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.DRIVE_END)
+//                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.DRIVE_END)
                 .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveBasketFirstSample, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveIntakeSecondSample, AutoState.SAMPLE_1_DROP_COMPLETE)
@@ -184,6 +187,9 @@ public class BasketAutoOpMode extends BaseOpMode {
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry, dropper);
+
+        update();
+        telemetry.update();
     }
 
     @Override

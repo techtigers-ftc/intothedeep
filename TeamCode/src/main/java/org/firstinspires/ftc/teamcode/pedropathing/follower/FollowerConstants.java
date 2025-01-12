@@ -93,7 +93,7 @@ public class FollowerConstants {
     /** Translational PIDF coefficients (don't use integral)
      * @value Default Value: new CustomPIDFCoefficients(0.1,0,0,0); */
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.15,
+            0.1,
             0,
             0.01,
             0);
@@ -127,9 +127,9 @@ public class FollowerConstants {
     /** Drive PIDF coefficients
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.025,0,0.00001,0.6,0); */
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.005,
+            0.002,
             0,
-            0.0001,
+            0.00035,
             0.6,
             0);
 
@@ -260,9 +260,9 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @value Default Value: new CustomPIDFCoefficients(0.3, 0, 0.01, 0) */
     public static CustomPIDFCoefficients secondaryTranslationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.001,
+            0.15,
             0,
-            0.001,
+            0.01,
             0);
 
     /** Secondary translational Integral value.
@@ -291,14 +291,14 @@ public class FollowerConstants {
     public static CustomPIDFCoefficients secondaryHeadingPIDFCoefficients = new CustomPIDFCoefficients(
             1,
             0,
-            0.1,
-            0.1);
+            0.06,
+            0);
 
     /** Feed forward constant added on to the secondary heading PIDF.
      * @see #useSecondaryHeadingPID
      * @see #secondaryHeadingPIDFCoefficients
      * @value Default Value: 0.01 */
-    public static double secondaryHeadingPIDFFeedForward = 0.01;
+    public static double secondaryHeadingPIDFFeedForward = 0;
 
     /** The limit at which the heading PIDF switches between the main and secondary drive PIDFs.
      * @see #useSecondaryDrivePID
@@ -309,9 +309,9 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
     public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.005,
+            0.003,
             0,
-            0.000015,
+            0.0002,
             0.6,
             0);
 
