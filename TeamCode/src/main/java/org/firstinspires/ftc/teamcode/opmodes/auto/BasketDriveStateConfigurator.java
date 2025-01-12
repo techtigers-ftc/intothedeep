@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 /**
  * A class used to configure DriveStates.
  */
-public class DriveStateConfigurator {
+public class BasketDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 3;
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     private static final double SMALL_TOLERANCE = 1.5;
