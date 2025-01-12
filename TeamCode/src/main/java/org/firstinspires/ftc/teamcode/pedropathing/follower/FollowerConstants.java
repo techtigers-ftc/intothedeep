@@ -238,17 +238,17 @@ public class FollowerConstants {
     /** This activates/deactivates the secondary translational PIDF. It takes over at a certain translational error
      * @see #translationalPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryTranslationalPID = false;
+    public static boolean useSecondaryTranslationalPID = true;
 
     /** Use the secondary heading PIDF. It takes over at a certain heading error
      * @see #headingPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryHeadingPID = false;
+    public static boolean useSecondaryHeadingPID = true;
 
     /** Use the secondary drive PIDF. It takes over at a certain drive error
      * @see #drivePIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryDrivePID = false;
+    public static boolean useSecondaryDrivePID = true;
 
     /** The limit at which the translational PIDF switches between the main and secondary translational PIDFs,
      * if the secondary PID is active.
@@ -260,9 +260,9 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @value Default Value: new CustomPIDFCoefficients(0.3, 0, 0.01, 0) */
     public static CustomPIDFCoefficients secondaryTranslationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.01,
             0,
-            0.01,
+            0,
+            0,
             0);
 
     /** Secondary translational Integral value.
@@ -289,10 +289,10 @@ public class FollowerConstants {
      * @see #useSecondaryHeadingPID
      * @value Default Value: new CustomPIDFCoefficients(5, 0, 0.08, 0) */
     public static CustomPIDFCoefficients secondaryHeadingPIDFCoefficients = new CustomPIDFCoefficients(
-            1,
             0,
-            0.1,
-            0.1);
+            0,
+            0,
+            0);
 
     /** Feed forward constant added on to the secondary heading PIDF.
      * @see #useSecondaryHeadingPID

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
@@ -63,6 +64,10 @@ public class AutoDriveCommand extends CommandBase {
         follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
         follower.setHeadingPIDF(headingPIDF.getCoefficients());
         follower.setDrivePIDF(drivePIDF.getCoefficients());
+
+//        follower.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients);
+//        follower.setDrivePIDF(FollowerConstants.drivePIDFCoefficients);
+//        follower.setHeadingPIDF(FollowerConstants.headingPIDFCoefficients);
 
         Path finalPath = pathChain.getPath(pathChain.size()-1);
         Waypoint target =

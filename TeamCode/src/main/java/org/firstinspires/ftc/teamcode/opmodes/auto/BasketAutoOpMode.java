@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
@@ -23,9 +26,12 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Config
 @Autonomous
 public class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -184,5 +190,13 @@ public class BasketAutoOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
         telemetry.addData("Final Pose", robotState.getRobotFinalPose());
+        telemetry.addLine();
+        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());
+        telemetry.addLine();
+        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+        telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
     }
 }

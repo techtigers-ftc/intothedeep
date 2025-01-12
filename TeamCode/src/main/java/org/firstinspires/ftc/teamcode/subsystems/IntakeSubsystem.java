@@ -436,10 +436,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(colorSensorTimer.milliseconds() > 1000){
-            updateBlockColor();
-            colorSensorTimer.reset();
-        }
+//        if(colorSensorTimer.milliseconds() > 1000){
+//            updateBlockColor();
+//            colorSensorTimer.reset();
+//        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
