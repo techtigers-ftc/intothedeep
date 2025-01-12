@@ -246,8 +246,8 @@ public class DriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(12, 12),
-                                        new Point(14.82, 54.67),
-                                        new Point(49.42, 61.35)
+                                        new Point(11, 58),
+                                        new Point(51, 61.35)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
