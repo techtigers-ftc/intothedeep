@@ -30,8 +30,6 @@ import team.techtigers.core.paths.Waypoint;
 @Autonomous
 public class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -40,9 +38,6 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = dashboard.getTelemetry();
-
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
 
@@ -187,16 +182,10 @@ public class BasketAutoOpMode extends BaseOpMode {
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry, dropper);
-
-        update();
-        telemetry.update();
     }
 
     @Override
     public void update() {
-        telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
-        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
-        telemetry.addLine();
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());

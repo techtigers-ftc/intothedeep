@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ * A localizer that uses the RobotState to localize the robot.
+ */
 public class RobotStateLocalizer extends Localizer {
     private RobotState robotState;
     private Pose currentPose;
@@ -16,6 +19,11 @@ public class RobotStateLocalizer extends Localizer {
     private double totalHeading;
     private Pose currentVelocity;
 
+    /**
+     * Constructs a new RobotStateLocalizer.
+     *
+     * @param robotState The robot state
+     */
     public RobotStateLocalizer(RobotState robotState) {
         super();
         this.robotState = robotState;
@@ -65,6 +73,9 @@ public class RobotStateLocalizer extends Localizer {
         RobotLog.dd("Pinpoint", "Pose: %s", currentPose);
     }
 
+    /**
+     * This updates the total heading of the robot. The Pinpoint handles all other updates itself.
+     */
     @Override
     public double getTotalHeading() {
         return totalHeading;

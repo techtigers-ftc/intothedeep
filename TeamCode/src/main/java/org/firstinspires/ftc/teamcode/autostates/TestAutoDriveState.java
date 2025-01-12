@@ -8,6 +8,13 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 public class TestAutoDriveState extends DriveStateBase{
 
+    /**
+     * Constructor for the TestAutoDriveState
+     *
+     * @param name The name of the state
+     * @param drive The drive subsystem
+     * @param robotState The robot state
+     */
     public TestAutoDriveState(String name, DriveSubsystem drive, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(

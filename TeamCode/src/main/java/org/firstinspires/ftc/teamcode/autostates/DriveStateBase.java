@@ -131,7 +131,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the secondaru drive PIDF coefficients for the drive command.
+     * Sets the secondary drive PIDF coefficients for the drive command.
      *
      * @param p the proportional coefficient
      * @param i the integral coefficient
@@ -146,7 +146,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     /**
      * Sets the primary PIDF coefficients to the defaults from follower constants
      */
-    public void setPrimaryPIDSToFollowerConstants() {
+    public void setPrimaryPIDSToDefaultValues() {
         autoDriveCommand.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients.P,
                 FollowerConstants.translationalPIDFCoefficients.I,
                 FollowerConstants.translationalPIDFCoefficients.D,
@@ -165,7 +165,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     /**
      * Sets the secondary PIDF coefficients to the defaults from follower constants
      */
-    public void setSecondaryPIDSToFollowerConstants() {
+    public void setSecondaryPIDSToDefaultValues() {
         autoDriveCommand.setSecondaryTranslationalPIDF(FollowerConstants.secondaryTranslationalPIDFCoefficients.P,
                 FollowerConstants.secondaryTranslationalPIDFCoefficients.I,
                 FollowerConstants.secondaryTranslationalPIDFCoefficients.D,
@@ -184,9 +184,9 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     /**
      * Sets the primary and secondary PIDF coefficients to the defaults from follower constants
      */
-    public void setPIDSToFollowerConstants() {
-        setPrimaryPIDSToFollowerConstants();
-        setSecondaryPIDSToFollowerConstants();
+    public void setPIDSToDefaultValues() {
+        setPrimaryPIDSToDefaultValues();
+        setSecondaryPIDSToDefaultValues();
     }
 
     /**

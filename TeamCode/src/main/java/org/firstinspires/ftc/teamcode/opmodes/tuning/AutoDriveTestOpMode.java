@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.autostates.TestAutoDriveState;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -17,6 +17,7 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Disabled
 @Autonomous(name = "Auto Test Drive OpMode")
 public class AutoDriveTestOpMode extends BaseOpMode {
     private RobotState robotState;
@@ -33,7 +34,7 @@ public class AutoDriveTestOpMode extends BaseOpMode {
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
 
         TestAutoDriveState testAutoDrive = new TestAutoDriveState("testAutoDrive", drive, robotState);
-        testAutoDrive.setPIDSToFollowerConstants();
+        testAutoDrive.setPIDSToDefaultValues();
         testAutoDrive.setTranslationalPIDF(0.1,0,0.01,0);
         testAutoDrive.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
         testAutoDrive.setHeadingPIDF(1,0,0.03,0);
@@ -54,7 +55,7 @@ public class AutoDriveTestOpMode extends BaseOpMode {
                 );
 
         TestAutoDriveState secondTestAutoDrive = new TestAutoDriveState("secondTestAutoDrive", drive, robotState);
-        secondTestAutoDrive.setPIDSToFollowerConstants();
+        secondTestAutoDrive.setPIDSToDefaultValues();
         secondTestAutoDrive.setTolerance(1);
         secondTestAutoDrive.setAngleTolerance(Math.toRadians(1));
         secondTestAutoDrive

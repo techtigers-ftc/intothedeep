@@ -56,7 +56,7 @@ public class AutoDriveCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        // Makes sure that all primaru PIDF coefficients are set
+        // Makes sure that all primary PIDF coefficients are set
         if (translationalPIDF == null) {
             throw new IllegalArgumentException("Translational PIDF coefficients not set");
         }
@@ -88,10 +88,6 @@ public class AutoDriveCommand extends CommandBase {
         if(secondaryDrivePIDF != null) {
             follower.setSecondaryDrivePIDF(secondaryDrivePIDF.getCoefficients());
         }
-
-//        follower.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients);
-//        follower.setDrivePIDF(FollowerConstants.drivePIDFCoefficients);
-//        follower.setHeadingPIDF(FollowerConstants.headingPIDFCoefficients);
 
         // Finds the final waypoint in the path chain
         Path finalPath = pathChain.getPath(pathChain.size()-1);
