@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
 /**
  * This is the BezierCurveCoefficients class. This class handles holding the coefficients for each

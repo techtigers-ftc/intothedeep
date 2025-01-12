@@ -356,10 +356,10 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(colorSensorTimer.milliseconds() > 1000){
-            updateBlockColor();
-            colorSensorTimer.reset();
-        }
+//        if(colorSensorTimer.milliseconds() > 1000){
+//            updateBlockColor();
+//            colorSensorTimer.reset();
+//        }
 
 
         RobotLog.dd(tag, "Current: %f Target %f",

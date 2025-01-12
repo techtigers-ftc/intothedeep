@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
-import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 
 import java.util.ArrayList;
 
@@ -170,6 +170,15 @@ public class Path {
     }
 
     /**
+     * Returns if the path is being followed in reverse
+     *
+     * @return returns if reverse tangential heading is being used.
+     */
+    public boolean isReversed() {
+        return followTangentReversed;
+    }
+
+    /**
      * This sets the heading interpolation to tangential.
      */
     public void setTangentHeadingInterpolation() {
@@ -269,6 +278,13 @@ public class Path {
     }
 
     /**
+     * @return returns the end heading.
+     */
+    public double getEndHeading() {
+        return endHeading;
+    }
+
+    /**
      * This gets the heading goal at a specified t-value.
      *
      * @param t the specified t-value.
@@ -340,15 +356,6 @@ public class Path {
      */
     public Point getSecondToLastControlPoint() {
         return curve.getSecondToLastControlPoint();
-    }
-
-    /**
-     * Returns the end heading for this Path.
-     *
-     * @return This returns the end heading.
-     */
-    public double getEndHeading() {
-        return endHeading;
     }
 
     /**

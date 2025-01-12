@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing.util;
 
+import androidx.annotation.NonNull;
+
 import kotlin.jvm.JvmField;
 
 /**
@@ -9,12 +11,15 @@ import kotlin.jvm.JvmField;
  * @author Anyi Lin - 10158 Scott's Bots
  * @version 1.0, 7/15/2024
  */
+
+
+
 public class CustomFilteredPIDFCoefficients {
-    @JvmField public double P;
-    @JvmField public double I;
-    @JvmField public double D;
-    @JvmField public double T;
-    @JvmField public double F;
+    public double P;
+    public double I;
+    public double D;
+    public double T;
+    public double F;
 
     public FeedForwardConstant feedForwardConstantEquation;
 
@@ -66,5 +71,19 @@ public class CustomFilteredPIDFCoefficients {
     public double getCoefficient(double input) {
         if (!usingEquation) return F;
         return feedForwardConstantEquation.getConstant(input);
+    }
+
+    public void setCoefficients(double p, double i, double d, double t, double f) {
+        P = p;
+        I = i;
+        D = d;
+        T = t;
+        F = f;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "P: " + P + ", I: " + I + ", D: " + D + ", T: " + T + ", F: " + F;
     }
 }
