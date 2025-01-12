@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
@@ -31,8 +33,13 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperBackwardCarryNoTransferAction(dropper, robotState),
-                new IntakeTuckAction(intake, robotState)
+                new ParallelCommandGroup(
+                        new DropperBackwardCarryNoTransferAction(dropper, robotState),
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                new IntakeTuckAction(intake, robotState)
+                        )
+                )
         );
     }
 
