@@ -178,7 +178,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.DRIVE_END)
                 .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
-//                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
+                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
                 .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
 
                 .setCurrentState(driveBasketPreload);
