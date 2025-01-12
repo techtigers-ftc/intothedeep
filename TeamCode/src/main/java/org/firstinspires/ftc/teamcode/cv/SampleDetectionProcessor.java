@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.cv;
 
 import android.graphics.Canvas;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
@@ -23,12 +27,15 @@ import java.util.List;
 /**
  * Processor for using the extension camera to detect blocks
  */
+@Config
 public class SampleDetectionProcessor implements VisionProcessor {
     private static final double CAMERA_VIEWING_VERTICAL_DIST = 5.25; // inches
     private static final double CAMERA_VIEWING_HORIZONTAL_DIST = 7.5; // inches
     private static final double CAMERA_VIEWING_VERTICAL_OVERLAP = 2.25; // inches
     public static final int WIDTH_RESOLUTION = 640;
     public static final int HEIGHT_RESOLUTION = 480;
+    public static final int CAMERA_ANGLE_HEIGHT_CENTER = 280;
+    private static final Translation2d center = new Translation2d(WIDTH_RESOLUTION/2., CAMERA_ANGLE_HEIGHT_CENTER);
     //    Yellow:
     private final Scalar YELLOW_UPPER_BOUND = new Scalar(40,255,255);
     private final Scalar YELLOW_LOWER_BOUND = new Scalar(10,50,70);
@@ -36,12 +43,12 @@ public class SampleDetectionProcessor implements VisionProcessor {
     private final Scalar RED_UPPER_BOUND = new Scalar(10,255,255);
     private final Scalar RED_LOWER_BOUND = new Scalar(0,50,50);
     //    Blue
-    private final Scalar BLUE_UPPER_BOUND = new Scalar(130,255,255);
-    private final Scalar BLUE_LOWER_BOUND = new Scalar(100,50,50);
+    private final Scalar BLUE_UPPER_BOUND = new Scalar(120,255,255);
+    private final Scalar BLUE_LOWER_BOUND = new Scalar(105,110,80);
 
     private static final int ERODE_NUMBER = 10;
-    private Mat processedMat = new Mat();
-    private RobotState robotState;
+    private final Mat processedMat = new Mat();
+    private final RobotState robotState;
 
     /**
      * Construct a SampleDetectionProcessor
@@ -80,8 +87,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
         switch (robotState.getBlockColorPreference()) {
             case ALLIANCE:
-                // TODO: fix below to be if alliance color is blue
-                if (true) {
+                if (robotState.isBlue()) {
                     Core.inRange(processedMat, this.BLUE_LOWER_BOUND, this.BLUE_UPPER_BOUND, masked);
                 } else {
                     Core.inRange(processedMat, this.RED_LOWER_BOUND, this.RED_UPPER_BOUND, masked);
@@ -91,10 +97,9 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 Core.inRange(processedMat, this.YELLOW_LOWER_BOUND, this.YELLOW_UPPER_BOUND, masked);
                 break;
             case ANY:
-                // TODO: fix below to be if alliance color is blue
                 Mat allianceMask = new Mat();
                 Mat yellowMask = new Mat();
-                if (true) {
+                if (robotState.isBlue()) {
                     Core.inRange(processedMat, this.BLUE_LOWER_BOUND, this.BLUE_UPPER_BOUND, allianceMask);
 
                 } else {
@@ -105,6 +110,8 @@ public class SampleDetectionProcessor implements VisionProcessor {
         }
 
         List<MatOfPoint> contours = getCanny(masked);
+        ArrayList<Pose2d> blockPoses = new ArrayList<>();
+
         for (MatOfPoint contour : contours) {
 
             MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
@@ -138,7 +145,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
                         new Point[]{rectPoints[1], rectPoints[2]};
                 // Find the slope of the long side
                 double slope = (longSidePoints[1].y - longSidePoints[0].y) / (longSidePoints[1].x - longSidePoints[0].x);
-                RobotLog.dd("Vision", String.valueOf(slope));
+
                 // Find out which sides are the short sides of the rectangle
                 Point[] shortSidePoints = Math.hypot(rectPoints[0].x - rectPoints[1].x, rectPoints[0].y - rectPoints[1].y)
                         < Math.hypot(rectPoints[1].x - rectPoints[2].x, rectPoints[1].y - rectPoints[2].y) ?
@@ -151,22 +158,39 @@ public class SampleDetectionProcessor implements VisionProcessor {
                 Imgproc.line(frame, shortMidpoint1, shortMidpoint2, new Scalar(0, 0, 255), 2);
                 // Adding information from the sample to eventually be added to robotState
                 double orientation = Math.atan(slope);
-                robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
-                robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION/2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
-                robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
-                break;
+                blockPoses.add(new Pose2d(new Translation2d(avgX, avgY), new Rotation2d(orientation)));
+                RobotLog.dd("Vision", avgX + " " + avgY + " " + orientation);
+                MatOfPoint2f approxCurve = new MatOfPoint2f();
+                double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
+                Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
+
+                // Convert back the polygon approximation to MatOfPoint
+                MatOfPoint points = new MatOfPoint(approxCurve.toArray());
+
+                // Draw the polygon on the image
+                Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
             }
-            // Approximate the contour to a polygon
-            MatOfPoint2f approxCurve = new MatOfPoint2f();
-            double epsilon = 0.04 * Imgproc.arcLength(contour2f, true);
-            Imgproc.approxPolyDP(contour2f, approxCurve, epsilon, true);
-
-            // Convert back the polygon approximation to MatOfPoint
-            MatOfPoint points = new MatOfPoint(approxCurve.toArray());
-
-            // Draw the polygon on the image
-            Imgproc.polylines(frame, List.of(points), true, new Scalar(0, 255, 0), 2);
         }
+        Pose2d bestBlock;
+        try {
+            bestBlock = blockPoses.get(0);
+        } catch (Exception e) {
+//            throw new RuntimeException(blockPoses.toString());
+            return processedMat;
+        }
+
+        for (Pose2d pose : blockPoses) {
+            if (pose.getTranslation().getDistance(center) > bestBlock.getTranslation().getDistance(center)) {
+                bestBlock = pose;
+            }
+        }
+        double avgY = bestBlock.getY();
+        double avgX = bestBlock.getX();
+        double orientation = bestBlock.getHeading();
+        robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
+        robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION/2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
+        robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
+
         return processedMat;
     }
 

@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPush;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.SlapState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.FirstPush;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -24,12 +26,12 @@ public class SpecimenAutoOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
-        robotState = new RobotState();
+        robotState = new RobotState(true, true);
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(77, 7.25, Math.toRadians(90)));
+                robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
@@ -40,33 +42,44 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 robotState);
-        SpecimenStateConfigurator.configPreloadDrop(driveChamberPreload);
+        SpecimenDriveStateConfigurator.configPreloadDrop(driveChamberPreload);
 
-//        GeneralDriveToPush firstDriveToPush = new GeneralDriveToPush(
-//                "driveToPush",
-//                drive,
-//                robotState);
-//        SpecimenStateConfigurator.configFirstPushDrive(firstDriveToPush);
+        DropSpecimenState dropSampleSpecimen = new DropSpecimenState(
+                "drop",
+                dropper,
+                robotState);
 
-        SlapState slapAction = new SlapState("slap", dropper, robotState);
+        DriveToFirstPush driveToFirstPush = new DriveToFirstPush(
+                "driveToFirstPush",
+                drive,
+                dropper,
+                intake,
+                robotState);
+        SpecimenDriveStateConfigurator.configDriveToFirstPush(driveToFirstPush);
 
-        EndState endState = new EndState("end");
+        FirstPush firstPush = new FirstPush(
+                "driveToFirstPush",
+                drive,
+                robotState);
+        SpecimenDriveStateConfigurator.configFirstPush(firstPush);
+
+        EndState endState = new EndState(
+                "end",
+                dropper);
 
 
-
+        // Create the state machine
         stateMachine
                 .addState(driveChamberPreload)
-                .addState(slapAction)
+                .addState(dropSampleSpecimen)
+                .addState(driveToFirstPush)
+                .addState(firstPush)
                 .addState(endState)
-//                .addState(firstDriveToPush)
 
-                .addTransition(driveChamberPreload, slapAction , AutoState.DRIVE_END)
-                .addTransition(slapAction, endState, AutoState.SAMPLE_0_DROP_COMPLETE)
-
-                .setCurrentState(driveChamberPreload);
-
-
-
+                .addTransition(driveChamberPreload, dropSampleSpecimen, AutoState.DRIVE_END)
+                .addTransition(dropSampleSpecimen, driveToFirstPush, AutoState.SPECIMEN_1_DROP_COMPLETE)
+                .addTransition(driveToFirstPush, firstPush, AutoState.DRIVE_END)
+                .addTransition(firstPush, endState, AutoState.DRIVE_END);
 
 
         // Register subsystems + Create state machine subsystem
@@ -75,8 +88,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
     }
 
     @Override
-    public void update(){
-        telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
-        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
+    public void update() {
+        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());
+        telemetry.addLine();
+        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+        telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
     }
 }

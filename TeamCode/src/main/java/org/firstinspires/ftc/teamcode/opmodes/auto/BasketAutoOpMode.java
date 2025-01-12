@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -35,7 +35,7 @@ public class BasketAutoOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
-        robotState = new RobotState();
+        robotState = new RobotState(true, true);
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -51,7 +51,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configPreloadDrop(driveBasketPreload);
+        BasketDriveStateConfigurator.configPreloadDrop(driveBasketPreload);
 
         DropState dropSample = new DropState(
                 "drop",
@@ -62,11 +62,12 @@ public class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
+        BasketDriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
 
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -77,18 +78,19 @@ public class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
+        BasketDriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
 
         DriveToIntakeState driveIntakeSecondSample = new DriveToIntakeState(
                 "driveToIntakeSecondSample",
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configSecondSampleIntake(driveIntakeSecondSample);
+        BasketDriveStateConfigurator.configSecondSampleIntake(driveIntakeSecondSample);
 
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -99,18 +101,19 @@ public class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
+        BasketDriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
 
         DriveToIntakeState driveIntakeThirdSample = new DriveToIntakeState(
                 "driveToIntakeThirdSample",
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configThirdSampleIntake(driveIntakeThirdSample);
+        BasketDriveStateConfigurator.configThirdSampleIntake(driveIntakeThirdSample);
 
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(3, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -121,7 +124,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
+        BasketDriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
 
         DriveToSubmersible driveToSubmersible = new DriveToSubmersible(
                 "driveToSubmersible",
@@ -130,7 +133,7 @@ public class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 robotState
         );
-        DriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
+        BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
         FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
                 "firstLevelAscent",
@@ -179,7 +182,12 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
-        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
+        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());
+        telemetry.addLine();
+        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+        telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
     }
 }

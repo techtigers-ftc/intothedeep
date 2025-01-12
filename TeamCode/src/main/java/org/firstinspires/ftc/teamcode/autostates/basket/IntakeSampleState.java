@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -31,11 +32,12 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      *
      * @param name The name of the state
      * @param intake The intake subsystem
+     * @param dropper The dropper subsystem
      * @param robotState The robot state
      * @param targetSlidePos The target slide position
      * @param targetClawRotation The target claw rotation
      */
-    public IntakeSampleState(String name, IntakeSubsystem intake,
+    public IntakeSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
                              RobotState robotState, DoubleSupplier targetSlidePos,
                              DoubleSupplier targetClawRotation) {
         super(name);
@@ -43,10 +45,10 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         slidePos = targetSlidePos;
         clawPos = targetClawRotation;
         addCommands(
-                new IntakePrepareToPickupAction(intake, robotState, targetSlidePos),
+                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
-                new IntakePrepareToTransferAction(intake, robotState),
+                new IntakePrepareToTransferAction(intake, dropper, robotState),
                 new IntakeReadyToTransferAction(intake, robotState)
         );
     }

@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,13 +26,8 @@ public class DriveToPreloadDropStateSpecimen extends DriveStateBase {
     public DriveToPreloadDropStateSpecimen(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
-                new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                                autoDriveCommand,
-                                new DropperForwardCarryNoTransferAction(dropper, robotState)
-                        ),
-                        new DropperFrontSlapAction(dropper, robotState)
-                )
+                autoDriveCommand,
+                new DropperForwardCarryNoTransferAction(dropper, robotState)
         );
     }
 
@@ -46,7 +37,6 @@ public class DriveToPreloadDropStateSpecimen extends DriveStateBase {
                 robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             return AutoState.DRIVE_END;
         }
-
         return AutoState.RUNNING;
     }
 }

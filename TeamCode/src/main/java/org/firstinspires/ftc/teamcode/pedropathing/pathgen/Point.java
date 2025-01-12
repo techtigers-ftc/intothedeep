@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 
 /**
  * This is the Point class. This class handles storing information about the location of points in
@@ -58,11 +58,11 @@ public class Point {
     /**
      * This creates a new Point from a X and Y value.
      *
-     * @param x the X value.
-     * @param y the Y value.
+     * @param setX the X value.
+     * @param setY the Y value.
      */
-    public Point(double x, double y) {
-        setCoordinates(x, y, CARTESIAN);
+    public Point(double setX, double setY) {
+        setCoordinates(setX, setY, CARTESIAN);
     }
 
     /**

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
 /**
  * This is the Point class. This class handles storing information about vectors, which are

@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
-import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 
 /**
  * This is the MathFunctions class. This contains many useful math related methods that I use in

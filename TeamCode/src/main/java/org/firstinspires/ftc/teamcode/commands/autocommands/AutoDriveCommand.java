@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Path;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
@@ -26,9 +28,16 @@ public class AutoDriveCommand extends CommandBase {
     private final RobotState robotState;
     private final Follower follower;
     private PathChain pathChain;
+
+    // Primary PIDF Controllers
     private PIDFController translationalPIDF;
     private PIDFController headingPIDF;
     private FilteredPIDFController drivePIDF;
+
+    // Secondary PIDF Controllers
+    private PIDFController secondaryTranslationalPIDF;
+    private PIDFController secondaryHeadingPIDF;
+    private FilteredPIDFController secondaryDrivePIDF;
 
     /**
      * Constructs a new AutoDriveCommand.
@@ -40,12 +49,14 @@ public class AutoDriveCommand extends CommandBase {
                             RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
-        follower = new Follower(robotState);
+        RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
+        follower = new Follower(localizer);
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
+        // Makes sure that all primary PIDF coefficients are set
         if (translationalPIDF == null) {
             throw new IllegalArgumentException("Translational PIDF coefficients not set");
         }
@@ -55,18 +66,36 @@ public class AutoDriveCommand extends CommandBase {
         if (drivePIDF == null) {
             throw new IllegalArgumentException("Drive PIDF coefficients not set");
         }
+
+        // Makes sure that a path chain is set
         if (pathChain == null) {
             throw new IllegalArgumentException("Path chain not set");
         }
-        follower.setTranslationalPIDF(translationalPIDF.P(), translationalPIDF.I(), translationalPIDF.D(), translationalPIDF.F());
-        follower.setHeadingPIDF(headingPIDF.P(), headingPIDF.I(), headingPIDF.D(), headingPIDF.F());
-        follower.setDrivePIDF(drivePIDF.P(), drivePIDF.I(), drivePIDF.D(), drivePIDF.T(), drivePIDF.F());
 
+        // Sets the primary PIDF coefficients
+        follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
+        follower.setHeadingPIDF(headingPIDF.getCoefficients());
+        follower.setDrivePIDF(drivePIDF.getCoefficients());
+
+        // Sets the secondary PIDF coefficients in the follower only if they have been configured
+        // in the command
+        if(secondaryTranslationalPIDF != null) {
+            follower.setSecondaryTranslationalPIDF(secondaryTranslationalPIDF.getCoefficients());
+        }
+        if(secondaryHeadingPIDF != null) {
+            follower.setSecondaryHeadingPIDF(secondaryHeadingPIDF.getCoefficients());
+        }
+        if(secondaryDrivePIDF != null) {
+            follower.setSecondaryDrivePIDF(secondaryDrivePIDF.getCoefficients());
+        }
+
+        // Finds the final waypoint in the path chain
         Path finalPath = pathChain.getPath(pathChain.size()-1);
         Waypoint target =
                 PoseTranslator.pointToWaypoint(finalPath.getLastControlPoint());
         target = new Waypoint(target.getX(), target.getY(), finalPath.getEndHeading());
 
+        // Sets the robot's final pose to the final waypoint found
         robotState.setRobotFinalPose(target);
         follower.followPath(pathChain, true);
     }
@@ -103,6 +132,18 @@ public class AutoDriveCommand extends CommandBase {
     }
 
     /**
+     * Sets the secondary translational PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryTranslationalPIDF(double p, double i, double d, double f) {
+        secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
+    }
+
+    /**
      * Sets the heading PIDF coefficients for the command.
      *
      * @param p the proportional coefficient
@@ -112,6 +153,18 @@ public class AutoDriveCommand extends CommandBase {
      */
     public void setHeadingPIDF(double p, double i, double d, double f) {
         headingPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
+    }
+
+    /**
+     * Sets the secondary heading PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
+        secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(p, i, d, f));
     }
 
     /**
@@ -125,5 +178,18 @@ public class AutoDriveCommand extends CommandBase {
      */
     public void setDrivePIDF(double p, double i, double d, double t, double f) {
         drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
+    }
+
+    /**
+     * Sets the secondary drive PIDF coefficients for the command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param t the time constant
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryDrivePIDF(double p, double i, double d, double t, double f) {
+        secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(p, i, d, t, f));
     }
 }
