@@ -260,9 +260,9 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @value Default Value: new CustomPIDFCoefficients(0.3, 0, 0.01, 0) */
     public static CustomPIDFCoefficients secondaryTranslationalPIDFCoefficients = new CustomPIDFCoefficients(
+            0.001,
             0,
-            0,
-            0,
+            0.001,
             0);
 
     /** Secondary translational Integral value.
@@ -278,7 +278,7 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @see #secondaryTranslationalPIDFCoefficients
      * @value Default Value: 0.015 */
-    public static double secondaryTranslationalPIDFFeedForward = 0;
+    public static double secondaryTranslationalPIDFFeedForward = 0.015;
 
     /** The limit at which the heading PIDF switches between the main and secondary heading PIDFs.
      * @see #useSecondaryHeadingPID
@@ -289,16 +289,16 @@ public class FollowerConstants {
      * @see #useSecondaryHeadingPID
      * @value Default Value: new CustomPIDFCoefficients(5, 0, 0.08, 0) */
     public static CustomPIDFCoefficients secondaryHeadingPIDFCoefficients = new CustomPIDFCoefficients(
+            1,
             0,
-            0,
-            0,
-            0);
+            0.1,
+            0.1);
 
     /** Feed forward constant added on to the secondary heading PIDF.
      * @see #useSecondaryHeadingPID
      * @see #secondaryHeadingPIDFCoefficients
      * @value Default Value: 0.01 */
-    public static double secondaryHeadingPIDFFeedForward = 0;
+    public static double secondaryHeadingPIDFFeedForward = 0.01;
 
     /** The limit at which the heading PIDF switches between the main and secondary drive PIDFs.
      * @see #useSecondaryDrivePID
@@ -309,9 +309,9 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
     public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
+            0.005,
             0,
-            0,
-            0,
+            0.000015,
             0.6,
             0);
 
