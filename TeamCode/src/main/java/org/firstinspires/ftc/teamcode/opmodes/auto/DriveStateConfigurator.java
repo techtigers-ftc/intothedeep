@@ -239,7 +239,7 @@ public class DriveStateConfigurator {
         state.setHeadingPIDF(1, 0, 0.03, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
         state.setDrivePIDF(0.005, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.005, 0, 0.0002, 0.6, 0);
+        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -247,7 +247,7 @@ public class DriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(12, 12),
                                         new Point(11, 58),
-                                        new Point(51, 61.35)
+                                        new Point(47, 61.35)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -255,7 +255,7 @@ public class DriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 }
