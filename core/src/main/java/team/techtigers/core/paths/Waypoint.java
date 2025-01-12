@@ -1,5 +1,7 @@
 package team.techtigers.core.paths;
 
+import java.io.Serializable;
+
 import team.techtigers.core.paths.geometry.Point;
 
 
@@ -7,7 +9,7 @@ import team.techtigers.core.paths.geometry.Point;
  * Represents a waypoint in a trajectory. A waypoint is a point in a trajectory that the robot must
  * pass through.
  */
-public class Waypoint {
+public class Waypoint implements Serializable {
     private final Point point;
     private final double heading;
 

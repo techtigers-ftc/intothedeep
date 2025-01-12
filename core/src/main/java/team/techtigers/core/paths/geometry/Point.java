@@ -1,9 +1,11 @@
 package team.techtigers.core.paths.geometry;
 
+import java.io.Serializable;
+
 /**
  * A two dimensional point
  */
-public class Point {
+public class Point implements Serializable {
     /**
      * The x and y coordinates
      */
