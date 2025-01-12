@@ -506,7 +506,9 @@ public class Follower {
     }
 
     /**
-     * @return The powers to set all the motors to
+     * A function which updates the follower and returns the current drive vectors
+     *
+     * @return The drive vectors
      */
     public DriveVectors getCurrentDriveVectors() {
         update();
