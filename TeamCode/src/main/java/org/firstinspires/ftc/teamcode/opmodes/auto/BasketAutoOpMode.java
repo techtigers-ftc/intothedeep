@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -26,7 +23,6 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
-@Config
 @Autonomous
 public class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
