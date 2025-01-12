@@ -93,7 +93,7 @@ public abstract class BaseOpMode extends CommandOpMode {
         } finally {
             if (serialization) {
                 String filename = "states.json";
-                String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/"+"cache";
+                String directoryPath = Environment.getExternalStorageDirectory().getPath()+"/"+"robotStates";
                 File directory = new File(directoryPath);
                 //noinspection ResultOfMethodCallIgnored
                 directory.mkdir();
