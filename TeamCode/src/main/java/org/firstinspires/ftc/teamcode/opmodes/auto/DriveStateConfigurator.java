@@ -60,7 +60,7 @@ public class DriveStateConfigurator {
         state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
         state.setHeadingPIDF(1,0,0.03,0);
         state.setSecondaryHeadingPIDF(1,0,0.06,0);
-        state.setDrivePIDF(0.004,0,0.00035,0.6,0);
+        state.setDrivePIDF(0.005,0,0.00035,0.6,0);
         state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
@@ -86,7 +86,12 @@ public class DriveStateConfigurator {
      * @param state The FirstSampleDrop to configure
      */
     public static void configFirstSampleDrop(DriveToGeneralDropState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.002,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -111,7 +116,12 @@ public class DriveStateConfigurator {
      * @param state The SecondSampleIntake to configure
      */
     public static void configSecondSampleIntake(DriveToIntakeState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.005,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -136,7 +146,12 @@ public class DriveStateConfigurator {
      * @param state The SecondSampleDrop to configure
      */
     public static void configSecondSampleDrop(DriveToGeneralDropState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.002,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -161,14 +176,19 @@ public class DriveStateConfigurator {
      * @param state The ThirdSampleIntake to configure
      */
     public static void configThirdSampleIntake(DriveToIntakeState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.005,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(12, 12),
-                                        new Point(13.5, 22.75)
+                                        new Point(12, 22.75)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -186,7 +206,12 @@ public class DriveStateConfigurator {
      * @param state The ThirdSampleDrop to configure
      */
     public static void configThirdSampleDrop(DriveToGeneralDropState state) {
-        state.setPIDSToFollowerConstants();
+        state.setTranslationalPIDF(0.1,0,0.01,0);
+        state.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
+        state.setHeadingPIDF(1,0,0.03,0);
+        state.setSecondaryHeadingPIDF(1,0,0.06,0);
+        state.setDrivePIDF(0.002,0,0.00035,0.6,0);
+        state.setSecondaryDrivePIDF(0.003,0,0.0002,0.6,0);
 
         state.setPathChain(
                 new PathBuilder()
