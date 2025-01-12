@@ -238,17 +238,17 @@ public class FollowerConstants {
     /** This activates/deactivates the secondary translational PIDF. It takes over at a certain translational error
      * @see #translationalPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryTranslationalPID = true;
+    public static boolean useSecondaryTranslationalPID = false;
 
     /** Use the secondary heading PIDF. It takes over at a certain heading error
      * @see #headingPIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryHeadingPID = true;
+    public static boolean useSecondaryHeadingPID = false;
 
     /** Use the secondary drive PIDF. It takes over at a certain drive error
      * @see #drivePIDFSwitch
      * @value Default Value: false */
-    public static boolean useSecondaryDrivePID = true;
+    public static boolean useSecondaryDrivePID = false;
 
     /** The limit at which the translational PIDF switches between the main and secondary translational PIDFs,
      * if the secondary PID is active.
