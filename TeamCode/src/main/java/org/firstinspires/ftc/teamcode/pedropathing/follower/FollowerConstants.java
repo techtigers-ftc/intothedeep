@@ -278,7 +278,7 @@ public class FollowerConstants {
      * @see #useSecondaryTranslationalPID
      * @see #secondaryTranslationalPIDFCoefficients
      * @value Default Value: 0.015 */
-    public static double secondaryTranslationalPIDFFeedForward = 0.015;
+    public static double secondaryTranslationalPIDFFeedForward = 0;
 
     /** The limit at which the heading PIDF switches between the main and secondary heading PIDFs.
      * @see #useSecondaryHeadingPID
@@ -298,7 +298,7 @@ public class FollowerConstants {
      * @see #useSecondaryHeadingPID
      * @see #secondaryHeadingPIDFCoefficients
      * @value Default Value: 0.01 */
-    public static double secondaryHeadingPIDFFeedForward = 0.01;
+    public static double secondaryHeadingPIDFFeedForward = 0;
 
     /** The limit at which the heading PIDF switches between the main and secondary drive PIDFs.
      * @see #useSecondaryDrivePID
@@ -309,9 +309,9 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
     public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.005,
             0,
-            0.000015,
+            0,
+            0,
             0.6,
             0);
 
