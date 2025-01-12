@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -9,8 +7,6 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-
-import team.techtigers.core.paths.Waypoint;
 
 /**
  * Drive state that drives the robot to a sample drop from an intake
@@ -22,15 +18,14 @@ public class DriveToGeneralDropState extends DriveStateBase {
     /**
      * Constructor for the DriveToGeneralDropState
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @param intake The intake subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
+     * @param intake     The intake subsystem
      * @param robotState The robot state
      */
     public DriveToGeneralDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
-
         addCommands(
                 autoDriveCommand,
                 new DropperHighBasketAction(dropper, intake, robotState)
