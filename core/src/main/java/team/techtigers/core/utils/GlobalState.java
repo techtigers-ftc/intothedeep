@@ -46,7 +46,6 @@ public class GlobalState implements Serializable, Cloneable {
     }
 
     public void write(ObjectOutputStream out) throws IOException {
-//        Gson gson = new Gson();
-//        out.writeChars(gson.toJson(this));
+        out.writeObject(this);
     }
 }
