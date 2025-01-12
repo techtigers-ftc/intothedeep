@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -35,7 +36,7 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 @SuppressWarnings("unused")
 public class RegularTeleOpMode extends BaseOpMode {
-    private static final double INTAKE_CAMERA_OFFSET = 3;
+    private static final double INTAKE_CAMERA_OFFSET = 2;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -43,7 +44,8 @@ public class RegularTeleOpMode extends BaseOpMode {
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
-        robotState = new RobotState(true, false);
+        robotState = new RobotState(false, false);
+        robotState.setBlockColorPreference(BlockColorPreference.ANY);
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
@@ -64,18 +66,18 @@ public class RegularTeleOpMode extends BaseOpMode {
         // Commands
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
-                intake, robotState, 10);
+                intake, dropper, robotState, 10);
         IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
-                intake, robotState, () -> robotState.getBlockForwardCoarse());
+                intake, dropper, robotState, () -> robotState.getBlockForwardCoarse());
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
-                intake, robotState, () -> intake.getCurrentSlidePositionInches());
+                intake, dropper, robotState, () -> intake.getCurrentSlidePositionInches());
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine()-INTAKE_CAMERA_OFFSET,
                 () -> (robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
-                intake, robotState);
+                intake, dropper, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
 
@@ -98,13 +100,14 @@ public class RegularTeleOpMode extends BaseOpMode {
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
+        manualRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
         manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake).whenActive(tuck);
         manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
-        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToTransfer).whenActive(prepareToPickupNoSlides);
 
-        // TODO: Change to Prepare to pickup auto
+        // TODO: Change to Prepare to pickup auto for both
         autoRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
+        autoRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
         // Extend Trigger Bindings
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
