@@ -4,14 +4,19 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -24,10 +29,13 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    public static final double FORWARD_KP = 0.025;
-    public static final double FORWARD_KI = 0.0;
-    public static final double FORWARD_KD = 0.0;
-    public static final double FORWARD_KF = 0.0;
+    public static double minMagnitude = 1;
+    public static double minBlue = 0.53;
+    public static double minRed = 0.43;
+    public static double FORWARD_KP = 0.00675;
+    public static double FORWARD_KI = 0.0;
+    public static double FORWARD_KD = 0.0;
+    public static double FORWARD_KF = 0.05;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -36,22 +44,37 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.0;
-    private static final double CLAW_MIDDLE_POSITION = 0.4;
+    private static final double CLAW_OPEN_POSITION = 0.25;
+    private static final double CLAW_MIDDLE_POSITION = 0.55;
+    private static final double CLAW_LOOSE_POSITION = 0.75;
+    private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
-    public static final double WRIST_PITCH_PICKUP_POSITION = 45;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 40;
-    public static final double WRIST_PITCH_PECK_POSITION = 90;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 10;
-    public static final double WRIST_ROTATION_PICKUP_POSITION = 175;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    private static final double SLIDES_MAX = 19;
+
+    public static final double WRIST_PITCH_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double CLAW_CLOSED_POSITION = 0.9;
+
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
+
+    public static final double WRIST_PITCH_PECK_POSITION = 90;
+
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+
+
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
     private final DcMotor encoderMotor;
-    private final DcMotorEx currentMotor;
+    private final DcMotorEx currentMotorRight;
+    private final DcMotorEx currentMotorLeft;
     private final Servo leftWrist;
     private final Servo rightWrist;
     private final Servo leftClaw;
@@ -59,8 +82,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
-
-
+    private final SlidingAverageCalculator leftSlideCurrentAverage;
+    private final SlidingAverageCalculator rightSlideCurrentAverage;
+    private final NormalizedColorSensor colorSensor;
+    private final ElapsedTime colorSensorTimer;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -79,15 +104,19 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
+        rightSlideCurrentAverage = new SlidingAverageCalculator(10);
+        leftSlideCurrentAverage = new SlidingAverageCalculator(10);
 
         //Assuming that the encoder is connected to the leftSlideMotor
-        encoderMotor = leftSlideMotor;
+        encoderMotor = rightSlideMotor;
         resetSlides();
-        currentMotor = (DcMotorEx) encoderMotor;
+        currentMotorRight = (DcMotorEx) rightSlideMotor;
+        currentMotorLeft = (DcMotorEx) leftSlideMotor;
 
         //Configure Motors
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -98,8 +127,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.REVERSE);
-        leftClaw.setDirection(Servo.Direction.FORWARD);
+        rightClaw.setDirection(Servo.Direction.FORWARD);
+        leftClaw.setDirection(Servo.Direction.REVERSE);
 
 //        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
 //        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
@@ -107,12 +136,12 @@ public class IntakeSubsystem extends CloseableSubsystem {
         // Pitch init is in the transfer position
         //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
-        setWristAbsolute(WRIST_PITCH_TRANSFER_POSITION, WRIST_ROTATION_TRANSFER_POSITION);
-        setClawRotationAbsolute(CLAW_ROTATION_TRANSFER_POSITION);
-        openClaw();
+        setWristAbsolute(WRIST_PITCH_TUCK_POSITION, WRIST_ROTATION_TUCK_POSITION);
+        setClawRotationAbsolute(CLAW_ROTATION_TUCK_POSITION);
+        closeClaw();
+        colorSensorTimer = new ElapsedTime();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
-        resetSlides();
     }
 
     /**
@@ -156,7 +185,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesAbsolute(double distance) {
-        slideController.moveToInches(distance);
+        slideController.moveToInches(Range.clip(distance, 0, SLIDES_MAX));
     }
 
     /**
@@ -165,7 +194,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @param distance The distance you want to move in inches
      */
     public void moveSlidesRelative(double distance) {
-        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
+        moveSlidesAbsolute(getCurrentSlidePositionInches() + distance);
     }
 
     /**
@@ -175,6 +204,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         moveSlidesAbsolute(0);
+    }
+
+    /**
+     * @return the target position of the slides in inches
+     */
+    public double getTargetPositionInches() {
+        return slideController.targetTicks * MOTOR_TICKS_PER_INCH;
     }
 
     /**
@@ -190,7 +226,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Opens The Intake Claw
      */
     public void openClaw() {
-        if (getPitch() <= 90) {
+        if (getPitch() <= IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION - 5) {
             leftClaw.setPosition(CLAW_MIDDLE_POSITION);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
@@ -206,6 +242,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public void closeClaw() {
         leftClaw.setPosition(CLAW_CLOSED_POSITION);
         rightClaw.setPosition(CLAW_CLOSED_POSITION);
+        robotState.setIntakeClawState(ClawState.CLOSED);
+    }
+
+    /**
+     * Loosens the intake claw
+     */
+    public void loosenClaw() {
+        leftClaw.setPosition(CLAW_LOOSE_POSITION);
+        rightClaw.setPosition(CLAW_LOOSE_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
@@ -286,7 +331,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Toggles the rotation of the wrist between 0 and 90
      */
     public void togglePerpendicularRotation() {
-        if (getRotation() == 90) {
+        if (getClawRotation() == 90) {
             setClawRotationAbsolute(0);
         } else {
             setClawRotationAbsolute(90);
@@ -312,10 +357,65 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * @return the current draw of the slide motors
+     * @return the current draw of the right slide motor
      */
-    public double getSlideCurrent() {
-        return currentMotor.getCurrent(CurrentUnit.AMPS);
+    public double getSlideCurrentRight(){
+        return rightSlideCurrentAverage.getAverage();
+    }
+
+    /**
+     * @return the current draw of the left slide motor
+     */
+    public double getSlideCurrentLeft(){
+        return leftSlideCurrentAverage.getAverage();
+    }
+
+    /**
+     * Updates the block color of the color sensor
+     */
+    private void updateBlockColor() {
+        double sensorRed = getSensorRed();
+        double sensorGreen = getSensorGreen();
+        double sensorBlue = getSensorBlue();
+        double colorsSum = sensorRed + sensorGreen + sensorBlue;
+        double normalizedBlue = sensorBlue / colorsSum;
+        double normalizedGreen = sensorGreen / colorsSum;
+        double normalizedRed = sensorRed / colorsSum;
+        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+
+        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
+        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
+
+        if (magnitude < minMagnitude) {
+            robotState.setIntakeBlockColor(BlockColor.NONE);
+        } else if (normalizedBlue > minBlue) {
+            robotState.setIntakeBlockColor(BlockColor.BLUE);
+        } else if (normalizedRed > minRed) {
+            robotState.setIntakeBlockColor(BlockColor.RED);
+        } else if (normalizedBlue < 0.165) {
+            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+        }
+    }
+
+    /**
+     * @return the blue value of the color sensor
+     */
+    public double getSensorBlue() {
+        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
+    }
+
+    /**
+     * @return the red value of the color sensor
+     */
+    public double getSensorRed() {
+        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
+    }
+
+    /**
+     * @return the green value of the color sensor
+     */
+    public double getSensorGreen() {
+        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
     }
 
     /**
@@ -331,14 +431,23 @@ public class IntakeSubsystem extends CloseableSubsystem {
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
         double[] wristPositions = differentialController.calculateServoPositions(wristAngles[0], wristAngles[1]);
 
+        leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
+        rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
 
-//        if(getSlideCurrent() > 3.5){
-//            moveSlidesRelative(0);
+        robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
+
+//        if(colorSensorTimer.milliseconds() > 1000){
+//            updateBlockColor();
+//            colorSensorTimer.reset();
 //        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
         RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
         RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
+        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
+        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
+
+        RobotLog.dd(tag, "Intake Block Color: %s", robotState.getIntakeBlockColor().toString());
     }
 }

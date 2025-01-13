@@ -7,15 +7,15 @@ package team.techtigers.base.statemachine;
  */
 public class Transition<T> {
     private final T endCondition;
-    private final String nextState;
+    private final State<T> nextState;
 
     /**
      * Initializes a new Transition
      *
      * @param endCondition the condition where a state should transition
-     * @param nextState    the name of the next state
+     * @param nextState    the next state to transition to
      */
-    public Transition(T endCondition, String nextState) {
+    public Transition(T endCondition, State<T> nextState) {
         this.endCondition = endCondition;
         this.nextState = nextState;
     }
@@ -24,14 +24,14 @@ public class Transition<T> {
      * @param currentCondition the current condition of the state
      * @return if the condition is met
      */
-    public boolean isFinished(T currentCondition) {
+    public boolean meetsCondition(T currentCondition) {
         return endCondition == currentCondition;
     }
 
     /**
-     * @return the name of the next state
+     * @return the next state to transition to
      */
-    public String getNextState() {
+    public State<T> getNextState() {
         return nextState;
     }
 }

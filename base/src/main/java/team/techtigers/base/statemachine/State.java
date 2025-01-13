@@ -1,33 +1,20 @@
 package team.techtigers.base.statemachine;
 
-import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.Command;
 
 /**
- * Base class for all states, which are used to run a step of the state machine
+ * Interface for all states, which are used to run a step of the state machine
  *
  * @param <T> The type of the condition, usually an enum
  */
-public abstract class State<T> extends CommandBase {
-    private final String name;
+public interface State<T> extends Command {
+    /**
+     * Returns the current condition of the state every update cycle
+     */
+    T getCurrentCondition();
 
     /**
-     * Initializes a new state
-     * @param name the name of the state
+     * Returns the name of the state
      */
-    public State(String name) {
-        super();
-        this.name = name;
-    }
-
-    /**
-     * @return The current condition of the state, usually an enum
-     */
-    public abstract T getCurrentCondition();
-
-    /**
-     * @return the name of the state
-     */
-    public String getName() {
-        return name;
-    }
+    String getName();
 }

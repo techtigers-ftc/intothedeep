@@ -356,8 +356,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      */
     public Waypoint setPosition(Waypoint pos){
         writeByteArray(Register.X_POSITION,(floatToByteArray((float) pos.getX(), ByteOrder.LITTLE_ENDIAN)));
-        writeByteArray(Register.Y_POSITION,(floatToByteArray((float) pos.getY(),ByteOrder.LITTLE_ENDIAN)));
-        writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) pos.getHeading(),ByteOrder.LITTLE_ENDIAN)));
+        writeByteArray(Register.Y_POSITION,(floatToByteArray((float) pos.getY(), ByteOrder.LITTLE_ENDIAN)));
+        writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) pos.getHeading(), ByteOrder.LITTLE_ENDIAN)));
         return pos;
     }
 

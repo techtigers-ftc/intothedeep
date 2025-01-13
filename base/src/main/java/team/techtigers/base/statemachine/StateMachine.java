@@ -1,25 +1,32 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * State machine that runs a series of states and transitions between them based on conditions
+ *
+ * @param <T> the type of the conditions used by the machine to transition
+ *            between states
  */
-public class StateMachine {
-    private final HashMap<String, State> states;
-    private final HashMap<String, ArrayList<Transition>> conditions;
-    private String currentState;
+public class StateMachine<T> {
+    private final ArrayList<State<T>> stateList;
+    private final HashMap<String, ArrayList<Transition<T>>> transitionMap;
+    private State<T> currentState;
+    private ArrayList<Transition<T>> currentTransitions;
 
     /**
      * Initializes a new StateMachine
      */
     public StateMachine() {
-        states = new HashMap<>();
-        conditions = new HashMap<>();
+        stateList = new ArrayList<>();
+        transitionMap = new HashMap<>();
         currentState = null;
+        currentTransitions = null;
     }
 
     /**
@@ -28,8 +35,12 @@ public class StateMachine {
      * @param state the state for the state
      * @return the state machine to allow for method chaining
      */
-    public StateMachine addState(State state) {
-        states.put(state.getName(), state);
+    public StateMachine<T> addState(State<T> state) {
+        if (transitionMap.containsKey(state.getName())) {
+            throw new IllegalArgumentException("State: " + state.getName() + " already exists");
+        }
+        stateList.add(state);
+        transitionMap.put(state.getName(), new ArrayList<>());
 
         return this;
     }
@@ -37,40 +48,58 @@ public class StateMachine {
     /**
      * Adds a transition to the state machine
      *
-     * @param currentState the name of the current state
+     * @param currentState the current state
      * @return the transition builder to allow for method chaining
      */
-    public TransitionBuilder from(String currentState) {
-        return new TransitionBuilder(this, currentState);
+    public TransitionBuilder<T> from(State<T> currentState) {
+        return new TransitionBuilder<>(this, currentState);
     }
 
     /**
      * Adds a condition to the state machine. This should only be
      * used in the TransitionBuilder, other users should use the from method.
      *
-     * @param currentState the name of the condition
-     * @return the state machine to allow for method chaining
+     * @param currentState the current state
+     * @param transition   the transition to add
      */
-    void addCondition(String currentState, Transition transition) {
-        if (!conditions.containsKey(currentState)) {
-            conditions.put(currentState, new ArrayList<>());
+    void addCondition(State<T> currentState, Transition<T> transition) {
+        if (!stateList.contains(currentState)) {
+            throw new IllegalArgumentException("State: " + currentState + " does not exist");
         }
-        conditions.get(currentState).add(transition);
+        if (!stateList.contains(transition.getNextState())) {
+            throw new IllegalArgumentException("State: " + transition.getNextState() + " does not exist");
+        }
+
+        Objects.requireNonNull(transitionMap.get(currentState.getName())).add(transition);
     }
 
     /**
-     * Sets the first state of the state machine that will be run
+     * Single line utility method to add a transition to the state machine.
      *
-     * @param stateName the name of the first state
+     * @param fromState the state to transition from
+     * @param toState   the state to transition to
+     * @param condition the condition that must be met for the transition
      * @return the state machine to allow for method chaining
      */
-    public StateMachine setFirstState(String stateName) {
-        currentState = stateName;
-        if (!states.containsKey(stateName)) {
-            throw new IllegalArgumentException("State: " + stateName + " does not exist");
+    public StateMachine<T> addTransition(State<T> fromState, State<T> toState,
+                                         T condition) {
+        addCondition(fromState, new Transition<>(condition, toState));
+        return this;
+    }
+
+    /**
+     * Sets the current state of the state machine that will be run.
+     * Note: In the opmode, this should be the last call in the chain
+     *
+     * @param state the state to be set as the running state
+     */
+    public void setCurrentState(State<T> state) {
+        if (!stateList.contains(state)) {
+            throw new IllegalArgumentException("State: " + state + " does not exist");
         }
 
-        return this;
+        currentState = state;
+        currentTransitions = transitionMap.get(currentState.getName());
     }
 
     /**
@@ -81,27 +110,32 @@ public class StateMachine {
             throw new IllegalStateException("No first state set");
         }
 
-        CommandScheduler.getInstance().schedule(states.get(currentState));
+        CommandScheduler.getInstance().schedule(currentState);
     }
 
     /**
      * Updates the state machine
      */
     public void update() {
-        if (conditions.get(currentState) != null) {
-            State stateExecutor = states.get(currentState);
-            for (Transition transition : conditions.get(currentState)) {
-                if (transition.isFinished(stateExecutor.getCurrentCondition())) {
-                    CommandScheduler.getInstance().cancel(states.get(currentState));
+        if (currentState == null) {
+            throw new IllegalStateException("No current state set");
+        }
+        if (currentTransitions == null) {
+            throw new IllegalStateException("No transitions set for state: " + this.currentState);
+        }
+        T currentCondition = currentState.getCurrentCondition();
 
-                    currentState = transition.getNextState();
-                    if (!states.containsKey(currentState)) {
-                        throw new IllegalArgumentException("State: " + currentState + " does not exist");
-                    }
+        RobotLog.dd("StateMachine", "Current State %s is in condition %s",
+                currentState.getName(), currentCondition);
 
-                    CommandScheduler.getInstance().schedule(states.get(currentState));
-                    break;
-                }
+        for (Transition<T> transition : currentTransitions) {
+            if (transition.meetsCondition(currentCondition)) {
+                RobotLog.ii("StateMachine", "Ending %s state", currentState.getName());
+                CommandScheduler.getInstance().cancel(currentState);
+                setCurrentState(transition.getNextState());
+                CommandScheduler.getInstance().schedule(currentState);
+                RobotLog.ii("StateMachine", "Switching to %s state", currentState.getName());
+                break;
             }
         }
     }

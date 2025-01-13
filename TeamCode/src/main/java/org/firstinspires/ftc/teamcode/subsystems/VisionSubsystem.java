@@ -1,49 +1,62 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static android.os.SystemClock.sleep;
+
+import android.util.Size;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+
+import java.util.concurrent.TimeUnit;
 
 import team.techtigers.base.CloseableSubsystem;
 
+/**
+ * A subsystem for using the intake camera
+ */
 public class VisionSubsystem extends CloseableSubsystem {
-    private final RobotState robotState;
-    private final WebcamName webcam;
-    private final SampleDetectionProcessor processor;
+    private final WebcamName camera;
     private final VisionPortal visionPortal;
-
+    public static int EXPOSURE = 16;
+    public static int GAIN = 0;
 
     /**
-     * Creates a new VisionSubsystem.
-     *
-     * @param hardwareMap The hardware map to get the camera from
-     * @param robotState  The robot State to update values to
+     * Construct a VisionSubsystem
+     * @param hardwareMap The HardwareMap
+     * @param robotState The RobotState
      */
     public VisionSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        super();
-        this.robotState = robotState;
-        webcam = hardwareMap.get(WebcamName.class, "camera");
-        this.processor = new SampleDetectionProcessor();
+        camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
-                .setCamera(webcam)
-                .addProcessors(processor)
+                .setCamera(camera)
+                .setCameraResolution(new Size(SampleDetectionProcessor.WIDTH_RESOLUTION, SampleDetectionProcessor.HEIGHT_RESOLUTION))
+                .addProcessor(new SampleDetectionProcessor(robotState))
                 .build();
     }
-
     @Override
-    public void periodic() {
-        double[] foundSample = processor.getFoundSample();
-//        RobotLog.dd(tag, "is block detected: %f", processor.isBlockDetected());
-        if (processor.isBlockDetected()) {
-            robotState.setBlockLateralFine(foundSample[0]);
-            robotState.setBlockForwardFine(foundSample[1]);
-//            robotState.setBlockOrientation(foundSample[2]);
-            RobotLog.dd(tag, "Block Lateral: %f, Block Forward: %f, Block Orientation: %f", foundSample[0], foundSample[1], foundSample[2]);
+    public void init() {
+        visionPortal.stopLiveView();
+        setExposure();
+    }
+
+    private void setExposure() {
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            sleep(50);
         }
+        exposureControl.setExposure(EXPOSURE, TimeUnit.MILLISECONDS);
+        sleep(20);
+        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+        sleep(20);
+        gainControl.setGain(GAIN);
+
     }
 
     @Override

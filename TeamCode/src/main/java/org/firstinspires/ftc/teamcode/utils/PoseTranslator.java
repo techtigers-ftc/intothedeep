@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Vector;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 
 import team.techtigers.core.paths.Waypoint;
 
@@ -36,6 +37,36 @@ public class PoseTranslator {
      * @return the pedro pathing vector
      */
     public static Vector waypointToVector(Waypoint waypoint) {
+        return new Vector(waypoint.getX(), waypoint.getY());
+    }
+
+    /**
+     * Converts a pedro pathing point to a waypoint
+     *
+     * @param point the pedro pathing point to convert
+     * @return the waypoint
+     */
+    public static Waypoint pointToWaypoint(Point point) {
+        return new Waypoint(point.getX(), point.getY(), 0);
+    }
+
+    /**
+     * Converts a waypoint to a pedro pathing pose
+     *
+     * @param waypoint the waypoint to convert
+     * @return the pedro pathing pose
+     */
+    public static Pose waypointToPedroPose(Waypoint waypoint) {
+        return new Pose(waypoint.getX(), waypoint.getY(), waypoint.getHeading());
+    }
+
+    /**
+     * Converts a waypoint to a pedro pathing vector
+     *
+     * @param waypoint the waypoint to convert
+     * @return the pedro pathing vector
+     */
+    public static Vector waypointToPedroVector(Waypoint waypoint) {
         return new Vector(waypoint.getX(), waypoint.getY());
     }
 }

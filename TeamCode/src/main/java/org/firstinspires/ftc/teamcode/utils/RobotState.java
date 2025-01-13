@@ -4,10 +4,11 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotErrors;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -18,55 +19,72 @@ import team.techtigers.core.utils.GlobalState;
 public class RobotState extends GlobalState {
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
+    private Waypoint robotFinalPose;
     private BlockColorPreference blockColorPreference;
     private BlockDetectionState blockDetectionState;
     private double blockLateralCoarse;
     private double blockOrientation;
     private double blockForwardCoarse;
-    private BlockColor blockColor;
+    private BlockColor intakeBlockColor;
+    private BlockColor dropperBlockColor;
     private double blockForwardFine;
     private double blockLateralFine;
     private boolean isHorizontalExtended;
     private ClawState intakeClawState;
     private double intakeClawRotation;
     private double intakeClawPitch;
-    private IntakeState intakeState;
     private RobotBlockPosition blockPosition;
     private boolean isAscending;
     private boolean isVerticalExtended;
+    private boolean isManualIntakeSelected;
     private double dropperClawPitch;
     private double dropperClawRotation;
+    private double driverCurrent;
+    private double intakeCurrent;
+    private double dropperCurrent;
     private ClawState dropperClawState;
     private DropperState dropperState;
-    private int robotErrors;
+    private DriveGears driveGears;
+    private IntakeState intakeState;
+    private int robotError;
+    private final boolean isBlue;
+    private final boolean isAuto;
 
     /**
      * Initializes a new RobotState
      */
-    public RobotState() {
+    public RobotState(boolean isBlue, boolean isAuto) {
         robotCurrentPose = new Waypoint(0, 0, 0);
         robotVelocity = new Waypoint(0, 0, 0);
+        robotFinalPose = new Waypoint(0, 0, 0);
         blockColorPreference = BlockColorPreference.ANY;
         blockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
         blockOrientation = 0;
         blockForwardCoarse = 0;
-        blockColor = BlockColor.NONE;
+        intakeBlockColor = BlockColor.NONE;
+        dropperBlockColor = BlockColor.NONE;
         blockForwardFine = 0;
         blockLateralFine = 0;
         isHorizontalExtended = false;
         intakeClawState = ClawState.OPEN;
         intakeClawRotation = 0;
         intakeClawPitch = 0;
-        intakeState = IntakeState.TRANSFER;
         blockPosition = RobotBlockPosition.NONE;
         isAscending = false;
         isVerticalExtended = false;
+        isManualIntakeSelected = false;
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
-        dropperState = DropperState.TRANSFER;
-        robotErrors = 0;
+        dropperState = DropperState.PRE_TRANSFER;
+        driveGears = DriveGears.NOT_ENGAGED;
+        intakeState = IntakeState.TUCK;
+        driverCurrent = 0;
+        intakeCurrent = 0;
+        dropperCurrent = 0;
+        this.isBlue = isBlue;
+        this.isAuto = isAuto;
     }
 
     /**
@@ -78,6 +96,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the dropper
+     *
      * @param dropperState the state of the dropper
      */
     public void setDropperState(DropperState dropperState) {
@@ -93,6 +112,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the dropper claw
+     *
      * @param dropperClawState the state of the dropper claw
      */
     public void setDropperClawState(ClawState dropperClawState) {
@@ -108,6 +128,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current pitch of the dropper claw
+     *
      * @param dropperClawRotation the pitch of the dropper claw in degrees
      */
     public void setDropperClawRotation(double dropperClawRotation) {
@@ -123,6 +144,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the dropper claw
+     *
      * @param dropperClawPitch the orientation of the dropper claw in degrees
      */
     public void setDropperClawPitch(double dropperClawPitch) {
@@ -138,6 +160,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the vertical extension
+     *
      * @param verticalExtended is the vertical extension extended
      */
     public void setVerticalExtended(boolean verticalExtended) {
@@ -153,6 +176,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's ascending
+     *
      * @param isAscending is the robot ascending
      */
     public void setIsAscending(boolean isAscending) {
@@ -168,25 +192,11 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current position of the robot's block
+     *
      * @param hasBlock the position of the robot's block
      */
     public void setBlockPosition(RobotBlockPosition hasBlock) {
         this.blockPosition = hasBlock;
-    }
-
-    /**
-     * @return the current state of the robot's intake
-     */
-    public IntakeState getIntakeState() {
-        return intakeState;
-    }
-
-    /**
-     * Sets the current state of the robot's intake
-     * @param intakeState the state of the robot's intake
-     */
-    public void setIntakeState(IntakeState intakeState) {
-        this.intakeState = intakeState;
     }
 
     /**
@@ -198,6 +208,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current pitch of the robot's intake claw
+     *
      * @param intakeClawPitch the pitch of the robot's intake claw in degrees
      */
     public void setIntakeClawPitch(double intakeClawPitch) {
@@ -213,6 +224,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the robot's intake claw
+     *
      * @param intakeClawRotation the orientation of the robot's intake claw in degrees
      */
     public void setIntakeClawRotation(double intakeClawRotation) {
@@ -228,6 +240,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's intake claw
+     *
      * @param intakeClawState the state of the robot's intake claw
      */
     public void setIntakeClawState(ClawState intakeClawState) {
@@ -243,6 +256,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of the robot's horizontal extension
+     *
      * @param horizontalExtended is the horizontal extension extended
      */
     public void setHorizontalExtended(boolean horizontalExtended) {
@@ -257,14 +271,8 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current fine forward position of the block from the robot
-     */
-    public double getBlockForwardFine() {
-        return blockForwardFine;
-    }
-
-    /**
      * Sets the current fine forward position of the block
+     *
      * @param blockLateralFine the fine forward position of the block from the robot
      */
     public void setBlockLateralFine(double blockLateralFine) {
@@ -272,7 +280,15 @@ public class RobotState extends GlobalState {
     }
 
     /**
+     * @return the current fine forward position of the block from the robot
+     */
+    public double getBlockForwardFine() {
+        return blockForwardFine;
+    }
+
+    /**
      * Sets the current fine lateral position of the block
+     *
      * @param blockForwardFine the fine lateral position of the block from the robot
      */
     public void setBlockForwardFine(double blockForwardFine) {
@@ -280,18 +296,35 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current color of the block in the robot
+     * @return the current color of the block the intake is detecting
      */
-    public BlockColor getBlockColor() {
-        return blockColor;
+    public BlockColor getIntakeBlockColor() {
+        return intakeBlockColor;
     }
 
     /**
-     * Sets the current color of the block in the robot
+     * Sets the current color of the block the intake is detecting
+     *
      * @param blockColor the color of the block
      */
-    public void setBlockColor(BlockColor blockColor) {
-        this.blockColor = blockColor;
+    public void setIntakeBlockColor(BlockColor blockColor) {
+        this.intakeBlockColor = blockColor;
+    }
+
+    /**
+     * @return the current color of the block the dropper is detecting
+     */
+    public BlockColor getDropperBlockColor() {
+        return dropperBlockColor;
+    }
+
+    /**
+     * Sets the current color of the block the dropper is detecting
+     *
+     * @param blockColor the color of the block
+     */
+    public void setDropperBlockColor(BlockColor blockColor) {
+        this.dropperBlockColor = blockColor;
     }
 
     /**
@@ -303,6 +336,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current coarse lateral position of the block
+     *
      * @param blockForwardCoarse the coarse lateral position of the block from the robot
      */
     public void setBlockForwardCoarse(double blockForwardCoarse) {
@@ -318,6 +352,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current orientation of the block
+     *
      * @param blockOrientation the orientation of the block in degrees
      */
     public void setBlockOrientation(double blockOrientation) {
@@ -333,6 +368,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current coarse lateral position of the block
+     *
      * @param blockLateralCoarse the coarse lateral position of the block from the robot
      */
     public void setBlockLateralCoarse(double blockLateralCoarse) {
@@ -348,6 +384,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current state of block detection
+     *
      * @param blockDetectionState the state of block detection
      */
     public void setBlockDetectionState(BlockDetectionState blockDetectionState) {
@@ -363,6 +400,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current color preference of the block
+     *
      * @param blockColorPreference the color preference of the block
      */
     public void setBlockColorPreference(BlockColorPreference blockColorPreference) {
@@ -402,27 +440,154 @@ public class RobotState extends GlobalState {
     }
 
     /**
+     * @return the current gear of the robot
+     */
+    public DriveGears getCurrentGear() {
+        return driveGears;
+    }
+
+    /**
+     * Sets the current gear of the robot
+     *
+     * @param gear the gear of the robot
+     */
+    public void setCurrentGear(DriveGears gear) {
+        this.driveGears = gear;
+    }
+
+    /**
+     * @return the current state of the intake
+     */
+    public IntakeState getIntakeState() {
+        return intakeState;
+    }
+
+    /**
+     * Sets the current intake state of the robot
+     *
+     * @param intakeState the state of the intake
+     */
+    public void setIntakeState(IntakeState intakeState) {
+        this.intakeState = intakeState;
+    }
+
+    /**
      * Sets a particular robot error to true
+     *
      * @param error the error to set
      */
-    public void setError(RobotErrors error) {
-        this.robotErrors |= error.code;
+    public void setError(RobotError error) {
+        this.robotError |= error.code;
     }
 
     /**
      * Clears a particular robot error
+     *
      * @param error the error to clear
      */
-    public void clearError(RobotErrors error) {
-        this.robotErrors &= ~error.code;
+    public void clearError(RobotError error) {
+        this.robotError &= ~error.code;
     }
 
     /**
      * Checks if a particular robot error is set
+     *
      * @param error the error to check
      * @return true if the error is set, false otherwise
      */
-    public boolean hasError(RobotErrors error) {
-        return (this.robotErrors & error.code) != 0;
+    public boolean hasError(RobotError error) {
+        return (this.robotError & error.code) != 0;
+    }
+
+    /**
+     * @return the current driver current
+     */
+    public double getDriverCurrent() {
+        return driverCurrent;
+    }
+
+    /**
+     * Sets the current driver current
+     * @param driverCurrent the current driver current
+     */
+    public void setDriverCurrent(double driverCurrent) {
+        this.driverCurrent = driverCurrent;
+    }
+
+    /**
+     * @return the current intake current
+     */
+    public double getIntakeCurrent() {
+        return intakeCurrent;
+    }
+
+    /**
+     * Sets the current intake current
+     * @param intakeCurrent the current intake current
+     */
+    public void setIntakeCurrent(double intakeCurrent) {
+        this.intakeCurrent = intakeCurrent;
+    }
+
+    /**
+     * @return the current dropper current
+     */
+    public double getDropperCurrent() {
+        return dropperCurrent;
+    }
+
+    /**
+     * Sets the current dropper current
+     * @param dropperCurrent the current dropper current
+     */
+    public void setDropperCurrent(double dropperCurrent) {
+        this.dropperCurrent = dropperCurrent;
+    }
+
+    /**
+     * @return if the manual intake is selected
+     */
+    public boolean isManualIntakeSelected() {
+        return isManualIntakeSelected;
+    }
+
+    /**
+     * Sets intake control to be manual or autonomous (with vision)
+     * @param manualIntakeSelected Whether the intake should be manual or not
+     */
+    public void setManualIntakeSelected(boolean manualIntakeSelected) {
+        isManualIntakeSelected = manualIntakeSelected;
+    }
+
+    /**
+     * Get the alliance color
+     * @return Is alliance blue?
+     */
+    public boolean isBlue() {
+        return this.isBlue;
+    }
+
+    /**
+     * Get the opmode mode
+     * @return Is mode auto?
+     */
+    public boolean isAuto() {
+        return this.isAuto;
+    }
+
+    /**
+     * @return the final pose of the robot in a trajectory
+     */
+    public Waypoint getRobotFinalPose() {
+        return robotFinalPose;
+    }
+
+    /**
+     * Sets the final pose of the robot in a trajectory
+     *
+     * @param robotFinalPose the final pose of the robot
+     */
+    public void setRobotFinalPose(Waypoint robotFinalPose) {
+        this.robotFinalPose = robotFinalPose;
     }
 }

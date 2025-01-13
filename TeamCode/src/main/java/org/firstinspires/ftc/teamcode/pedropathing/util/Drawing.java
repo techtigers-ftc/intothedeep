@@ -5,11 +5,12 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.MathFunctions;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Path;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Point;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Vector;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 
 /**
  * This is the Drawing class. It handles the drawing of stuff on FTC Dashboard, like the robot.
