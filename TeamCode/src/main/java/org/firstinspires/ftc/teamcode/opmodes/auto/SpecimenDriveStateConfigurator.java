@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
-import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**
  * A class used to configure DriveStates.
@@ -43,7 +42,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configDriveToFirstPush(DriveToFirstPush state) {
+    public static void configDriveToIntake(DriveToFirstPush state) {
         state.setPIDSToDefaultValues();
         state.setDrivePIDF(0.008, 0, 0.00035, 0.6, 0);
         state.setTranslationalPIDF(0.35, 0, 0.01, 0);
@@ -53,13 +52,10 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(74, 40.25),
-                                        new Point(95, 19),
-                                        new Point(105, 19),
-                                        new Point(106, 72),
-                                        new Point(115, 60)
+                                        new Point(101, 33)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(190))
                         .build()
         );
 
@@ -67,18 +63,99 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configFirstPush(FirstPush state) {
+    public static void configFirstPlace(FirstPush state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(120, 60),
-                                        new Point(120, 12)
+                                        new Point(101, 33),
+                                        new Point(101, 33)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .setLinearHeadingInterpolation(Math.toRadians(190),
+                                Math.toRadians(110))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configSecondIntake(FirstPush state) {
+        state.setPIDSToDefaultValues();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(101, 33),
+                                        new Point(91, 33)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(190),
+                                Math.toRadians(110))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configSecondPlace(FirstPush state) {
+        state.setPIDSToDefaultValues();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(91, 33),
+                                        new Point(91, 33)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(190),
+                                Math.toRadians(110))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configThirdIntake(FirstPush state) {
+        state.setPIDSToDefaultValues();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(91, 33),
+                                        new Point(81, 33)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(190),
+                                Math.toRadians(110))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configThirdPlace(FirstPush state) {
+        state.setPIDSToDefaultValues();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(81, 33),
+                                        new Point(81, 33)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(190),
+                                Math.toRadians(110))
                         .build()
         );
 

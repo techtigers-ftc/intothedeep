@@ -55,13 +55,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        SpecimenDriveStateConfigurator.configDriveToFirstPush(driveToFirstPush);
+        SpecimenDriveStateConfigurator.configDriveToIntake(driveToFirstPush);
 
         FirstPush firstPush = new FirstPush(
                 "firstPush",
                 drive,
                 robotState);
-        SpecimenDriveStateConfigurator.configFirstPush(firstPush);
+        SpecimenDriveStateConfigurator.configFirstPlace(firstPush);
 
         EndState endState = new EndState(
                 "end",
