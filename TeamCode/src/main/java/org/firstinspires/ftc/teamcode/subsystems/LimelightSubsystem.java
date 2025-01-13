@@ -22,14 +22,6 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int NEURAL_DETECTOR_PIPELINE = 5;
-    // Logistic function parameters
-    private static final double FLOOR = 0.00221939;
-    private static final double CAP = 0.0725463 + FLOOR;
-    private static final double H_STRETCH = 4.40165;
-    private static final double RATE = 0.0902167;
-    // Block values
-    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
-    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
     public static double TARGET_POINT_X = 450;
     public static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
@@ -76,10 +68,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return Math.sqrt(Math.pow(x - TARGET_POINT_X, 2) + Math.pow(y - TARGET_POINT_Y, 2));
     }
 
-    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    }
-
     /**
      * Determines if a detection is the preferred color based on the robot's current block color preference
      *
@@ -106,37 +94,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return false;
     }
 
-    /**
-     * Gets the coordinates, in pixels, of the top left and bottom right corners of the
-     * neural detection that is closest to the center of the limelight frame
-     *
-     * @param detections The list of neural detections to check
-     * @return The top left and bottom right corners of the best neural detection
-     */
-    private double[] getNeuralDetectorCorners(List<LLResultTypes.DetectorResult> detections) {
-        // Initializes a few variables to be used for comparison of the different detections
-        double topLeftX = 0;
-        double topLeftY = 0;
-        double bottomRightX = 0;
-        double bottomRightY = 0;
-        for (LLResultTypes.DetectorResult detection : detections) {
-            // Gets the values for the detection to check
-            double newTopLeftX = detection.getTargetCorners().get(0).get(0);
-            double newTopLeftY = detection.getTargetCorners().get(0).get(1);
-            // Determines whether a detection is closer to the center of the limelight
-            // than a detection that has already been made
-            if ((distanceFromExtensionPoint(newTopLeftX, newTopLeftY) <
-                    distanceFromExtensionPoint(topLeftX, topLeftY)) &&
-                    isDetectionPreferredColor(detection)) {
-                topLeftX = newTopLeftX;
-                topLeftY = newTopLeftY;
-                bottomRightX = detection.getTargetCorners().get(2).get(0);
-                bottomRightY = detection.getTargetCorners().get(2).get(1);
-            }
-        }
-        return new double[]{topLeftX, topLeftY, bottomRightX, bottomRightY};
-    }
-
     private double[] getCenterCoordinates(LLResultTypes.DetectorResult detection) {
         double topLeftX = detection.getTargetCorners().get(0).get(0);
         double topLeftY = detection.getTargetCorners().get(0).get(1);
@@ -145,18 +102,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
-    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
-        // Width is the distance between the top right and bottom right corners of the detection
-        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
-                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
-    }
-
     /**
-     * Gets the target x degrees, y degrees, and coarse orientation of the neural detector detection
+     * Gets the target x and target y degrees of the neural detector detection
      * that is closest to the extension point of the limelight frame
      *
      * @param detections The list of detections of the neural detector
-     * @return the target x degrees, y degrees, and coarse orientation of the best neural detection
+     * @return the target x and target y degrees of the best neural detection
      */
     private double[] getNeuralDetectorAttributes(List<LLResultTypes.DetectorResult> detections) {
         // Initializes a few variables to be used for comparison of the different detections
@@ -164,7 +115,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double centerY = 0;
         double targetXDegrees = 0;
         double targetYDegrees = 0;
-        double orientation = 0;
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newCenterX = getCenterCoordinates(detection)[0];
@@ -179,7 +129,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
-                orientation = getClawAngle(detection); // TODO: Get everything here to use the updated block distance values using the rational function
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
@@ -187,27 +136,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         } else {
             robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
         }
-        return new double[]{targetXDegrees, targetYDegrees, orientation};
-    }
-
-    /**
-     * Returns the angle the intake claw should go to in order to pick up the block
-     *
-     * @param detection The detected block
-     * @return The angle the claw should go to in order to pick up the block
-     */
-    private double getClawAngle(LLResultTypes.DetectorResult detection) {
-        double blockWidth = getBlockWidth(detection);
-        RobotLog.dd(tag, "block width detection:%f", blockWidth);
-        double distance = robotState.getBlockForwardCoarse();
-        double widthScalar = (CAP / (1 + H_STRETCH * Math.pow(Math.E, -RATE * distance))) + FLOOR;
-        double normalizedBlockWidth = blockWidth * widthScalar;
-        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
-        if (normalizedBlockWidth > 2.4) {
-            return 0;
-        } else {
-            return 90;
-        }
+        return new double[]{targetXDegrees, targetYDegrees};
     }
 
     @Override
@@ -222,7 +151,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
             robotState.setBlockForwardCoarse(finalYDist);
             robotState.setBlockLateralCoarse(xDist);
-            robotState.setBlockOrientation(angularValues[2]);
             RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, finalYDist);
         }
     }
