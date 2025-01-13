@@ -5,12 +5,14 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -36,6 +38,11 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
                         new DriveCoarseAlignAction(drive, robotState, 0.1)
                 ),
+                new IntakeReadyToPickupAction(intake, robotState,
+                        () -> intake.getCurrentSlidePositionInches()
+                            + robotState.getBlockForwardFine()
+                            - VisionSubsystem.INTAKE_CAMERA_OFFSET,
+                        robotState::getBlockOrientation),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 350),
                 new IntakeCloseAction(intake, 250),
                 // MOVE INTAKE TO PICKUP POSITION
