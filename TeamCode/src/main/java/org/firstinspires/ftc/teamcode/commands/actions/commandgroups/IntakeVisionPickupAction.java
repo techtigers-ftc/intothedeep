@@ -3,19 +3,19 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * A command group that automatically picks up a specimen using the vision system and limelight
@@ -29,34 +29,26 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeVisionPickupAction(IntakeSubsystem intake, DriveSubsystem drive, RobotState robotState) {
+    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake, drive);
+        DoubleSupplier slideSupplier = robotState::getBlockForwardCoarse;
         addCommands(
-                // MOVE SERVOS TO PICKUP AND RUNS COARSE ALIGNMENT
+                // MOVES INTAKE TO PREPARE FOR PICKUP AND RUNS COARSE ALIGNMENT
                 new ParallelCommandGroup(
-                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PICKUP_POSITION, 350),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PICKUP_POSITION, 200),
-                        new IntakeOpenAction(intake),
-                        new DriveCoarseAlignAction(drive, robotState, 0.1),
-                        new IntakeCoarseAlignAction(intake, robotState, 0.2, 5)
+                        new IntakePrepareToPickupAction(intake, dropper, robotState, slideSupplier),
+                        new DriveCoarseAlignAction(drive, robotState, 0.1)
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 350),
-                new IntakeCloseAction(intake, 500),
+                new IntakeCloseAction(intake, 250),
                 // MOVE INTAKE TO PICKUP POSITION
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 250),
-                new ParallelCommandGroup(
-                        new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
-                        new IntakeClawRotationAction(intake, IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 300)
-//                        new IntakeSlidesAbsoluteAction(intake, 0, 0.25)
-                )
+                new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setIntakeState(IntakeState.TRANSFER);
+        robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
         robotState.setBlockPosition(RobotBlockPosition.INTAKE);
     }
 }

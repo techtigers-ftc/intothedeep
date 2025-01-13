@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.CoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
@@ -31,18 +31,18 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        GlobalConstants.initialize(false, true);
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
-        robotState = new RobotState();
+        robotState = new RobotState(false, false);
 
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         // TODO: input values to global constants
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
         // TODO: Test the following Limelight offsets: 10.5, 4.2, 10, 25
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap);
-        registerSubsystems(limelight, intake, drive, odometry);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        registerSubsystems(limelight, intake, dropper, drive, odometry);
 
         // DRIVER
 
@@ -50,14 +50,7 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 
         // MANIPULATOR
-
-        CoarseAlignAction coarseAlignAction = new CoarseAlignAction(intake, drive, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(coarseAlignAction);
-
-        IntakeCoarseAlignAction intakeCoarseAlignAction = new IntakeCoarseAlignAction(intake, robotState, 0.5, 5);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(intakeCoarseAlignAction);
-
-        IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, drive, robotState);
+        IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, dropper, drive, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeVisionPickupAction);
 
         // Toggles the intake claw between open and closed positions
