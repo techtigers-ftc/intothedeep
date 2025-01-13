@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPush;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
-import org.firstinspires.ftc.teamcode.autostates.specimen.FirstPush;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -42,10 +42,8 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configDriveToIntake(DriveToFirstPush state) {
+    public static void configFirstIntake(DriveToPlace state) {
         state.setPIDSToDefaultValues();
-        state.setDrivePIDF(0.008, 0, 0.00035, 0.6, 0);
-        state.setTranslationalPIDF(0.35, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -63,7 +61,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configFirstPlace(FirstPush state) {
+    public static void configFirstDrop(DriveToPlace state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
@@ -83,7 +81,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configSecondIntake(FirstPush state) {
+    public static void configSecondIntake(DriveToPlace state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
@@ -103,7 +101,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configSecondPlace(FirstPush state) {
+    public static void configSecondDrop(DriveToPlace state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
@@ -123,7 +121,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configThirdIntake(FirstPush state) {
+    public static void configThirdIntake(DriveToPlace state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
@@ -143,7 +141,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configThirdPlace(FirstPush state) {
+    public static void configThirdDrop(DriveToPlace state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
