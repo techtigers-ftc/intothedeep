@@ -1,19 +1,27 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.Robot;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
+import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to drop a block
  */
-public class DropSpecimenState extends ParallelCommandGroupState<AutoState> {
+public class DropSpecimenState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             DropSpecimenState.class.getSimpleName();
     private int runCounter;
+    private RobotState robotState;
 
     /**
      * Constructor for the DropState
@@ -23,9 +31,11 @@ public class DropSpecimenState extends ParallelCommandGroupState<AutoState> {
      */
     public DropSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
         super(name);
+        this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new DropperFrontSlapAction(dropper, robotState)
+                new DropperFrontSlapAction(dropper, robotState),
+                new DropperOpenAction(dropper)
         );
     }
 
@@ -44,7 +54,7 @@ public class DropSpecimenState extends ParallelCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (isFinished()) {
+        if (robotState.getDropperClawState() == ClawState.OPEN) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_DROP_COMPLETE;
             } else if (runCounter == 2) {

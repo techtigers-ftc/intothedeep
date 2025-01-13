@@ -31,7 +31,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
+                robotState, new Waypoint(77, 7.25, Math.toRadians(90)));
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
@@ -58,7 +58,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         SpecimenDriveStateConfigurator.configDriveToFirstPush(driveToFirstPush);
 
         FirstPush firstPush = new FirstPush(
-                "driveToFirstPush",
+                "firstPush",
                 drive,
                 robotState);
         SpecimenDriveStateConfigurator.configFirstPush(firstPush);
@@ -78,8 +78,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveChamberPreload, dropSampleSpecimen, AutoState.DRIVE_END)
                 .addTransition(dropSampleSpecimen, driveToFirstPush, AutoState.SPECIMEN_1_DROP_COMPLETE)
-                .addTransition(driveToFirstPush, firstPush, AutoState.DRIVE_END)
-                .addTransition(firstPush, endState, AutoState.DRIVE_END);
+                .addTransition(driveToFirstPush, endState, AutoState.DRIVE_END)
+//                .addTransition(firstPush, endState, AutoState.DRIVE_END)
+
+                .setCurrentState(driveChamberPreload);
 
 
         // Register subsystems + Create state machine subsystem

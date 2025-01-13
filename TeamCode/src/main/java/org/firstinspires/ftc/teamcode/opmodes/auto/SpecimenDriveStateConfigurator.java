@@ -24,22 +24,18 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropStateSpecimen state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        //state.setSecondaryTranslationalPIDF(TuningConstants.translationalD, TuningConstants.S, TuningConstants.SECONDARY_TRANSLATIONAL_D, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        //state.setSecondaryHeadingPIDF(TuningConstants.SECONDARY_HEADING_P, TuningConstants.SECONDARY_HEADING_I, TuningConstants.SECONDARY_HEADING_D, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, TuningConstants.driveT, TuningConstants.driveF);
-        //state.setSecondaryDrivePIDF(TuningConstants.SECONDARY_DRIVE_P, TuningConstants.SECONDARY_DRIVE_I, TuningConstants.SECONDARY_DRIVE_D, TuningConstants.SECONDARY_DRIVE_F, 0);
+        state.setPIDSToDefaultValues();
+        state.setDrivePIDF(0.006, 0, 0.0004, 0.6, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(9.75, 77),
-                                        new Point(44, 77)
+                                        new Point(77, 7.25),
+                                        new Point(74, 40.25)
                                 )
                         )
-                        .setConstantHeadingInterpolation(90)
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -48,23 +44,22 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configDriveToFirstPush(DriveToFirstPush state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        //state.setSecondaryTranslationalPIDF(TuningConstants.translationalD, TuningConstants.S, TuningConstants.SECONDARY_TRANSLATIONAL_D, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        //state.setSecondaryHeadingPIDF(TuningConstants.SECONDARY_HEADING_P, TuningConstants.SECONDARY_HEADING_I, TuningConstants.SECONDARY_HEADING_D, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, TuningConstants.driveT, TuningConstants.driveF);
-        //state.setSecondaryDrivePIDF(TuningConstants.SECONDARY_DRIVE_P, TuningConstants.SECONDARY_DRIVE_I, TuningConstants.SECONDARY_DRIVE_D, TuningConstants.SECONDARY_DRIVE_F, 0);
+        state.setPIDSToDefaultValues();
+        state.setDrivePIDF(0.008, 0, 0.00035, 0.6, 0);
+        state.setTranslationalPIDF(0.35, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(44, 77),
-                                        new Point(35, 104),
-                                        new Point(60, 120)
+                                        new Point(74, 40.25),
+                                        new Point(95, 19),
+                                        new Point(105, 19),
+                                        new Point(106, 72),
+                                        new Point(115, 60)
                                 )
                         )
-                        .setConstantHeadingInterpolation(90)
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -73,22 +68,17 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstPush(FirstPush state) {
-        state.setTranslationalPIDF(TuningConstants.translationalP, TuningConstants.translationalI, TuningConstants.translationalD, 0);
-        //state.setSecondaryTranslationalPIDF(TuningConstants.translationalD, TuningConstants.S, TuningConstants.SECONDARY_TRANSLATIONAL_D, 0);
-        state.setHeadingPIDF(TuningConstants.headingP, TuningConstants.headingI, TuningConstants.headingD, 0);
-        //state.setSecondaryHeadingPIDF(TuningConstants.SECONDARY_HEADING_P, TuningConstants.SECONDARY_HEADING_I, TuningConstants.SECONDARY_HEADING_D, 0);
-        state.setDrivePIDF(TuningConstants.driveP, TuningConstants.driveI, TuningConstants.driveD, TuningConstants.driveT, TuningConstants.driveF);
-        //state.setSecondaryDrivePIDF(TuningConstants.SECONDARY_DRIVE_P, TuningConstants.SECONDARY_DRIVE_I, TuningConstants.SECONDARY_DRIVE_D, TuningConstants.SECONDARY_DRIVE_F, 0);
+        state.setPIDSToDefaultValues();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(60, 120),
-                                        new Point(12, 120)
+                                        new Point(120, 60),
+                                        new Point(120, 12)
                                 )
                         )
-                        .setConstantHeadingInterpolation(90)
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
