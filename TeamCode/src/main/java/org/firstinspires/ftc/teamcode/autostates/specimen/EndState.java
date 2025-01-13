@@ -17,9 +17,8 @@ public class EndState extends ParallelCommandGroupState<AutoState> {
      * Constructor for the DropState
      *
      * @param name The name of the state
-     * @param dropper The dropper subsystem
      */
-    public EndState(String name, DropperSubsystem dropper) {
+    public EndState(String name) {
         super(name);
     }
 
