@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
@@ -19,12 +21,13 @@ import team.techtigers.base.BaseOpMode;
  * Test opmode for running just the LimelightSubsystem
  */
 @TeleOp
+@Config
 @SuppressWarnings("unused")
 public class IntakeAlignTestOpMode extends BaseOpMode {
     private RobotState robotState;
-    public static double Y_OFFSET = 5.5;
+    public static double Y_OFFSET = 7.2;
     public static double Y_HEIGHT = 10.5;
-    public static double X_OFFSET = 4.9;
+    public static double X_OFFSET = 2.9;
     public static double DOWNWARDS_ANGLE = 25;
 
     @Override
@@ -40,7 +43,8 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        registerSubsystems(limelight, intake, dropper, drive, odometry);
+        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
+        registerSubsystems(limelight, intake, dropper, drive, odometry, vision);
 
         // DRIVER
 
