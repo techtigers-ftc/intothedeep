@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -31,7 +30,8 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(77, 7.25),
-                                        new Point(74, 40.25)
+//                                        new Point(74, 40.25)
+                                        new Point(101, 33)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -42,18 +42,34 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configFirstIntake(DriveToPlace state) {
+    public static void configFirstIntake(DriveToPreloadDropStateSpecimen state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
                 new PathBuilder()
+//                        .addPath(
+//                                new BezierLine(
+//                                        new Point(74, 40.25),
+//                                        new Point(47, 33)
+//                                )
+//                        )
                         .addPath(
-                                new BezierCurve(
+                                new BezierLine(
                                         new Point(74, 40.25),
                                         new Point(101, 33)
                                 )
                         )
+
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(190))
+//                                new BezierCurve(
+//                                        new Point(74, 40.25),
+//                                        new Point(95, 19),
+//                                        new Point(105, 19),
+//                                        new Point(106, 72),
+//                                        new Point(115, 60)
+//                                )
+//                        )
+//                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
