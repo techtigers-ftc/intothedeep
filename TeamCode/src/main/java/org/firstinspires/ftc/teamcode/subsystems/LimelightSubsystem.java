@@ -78,7 +78,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the current block color preference
         BlockColorPreference colorPreference = robotState.getBlockColorPreference();
         // Gets the color of the alliance block, based on the global constants boolean
-        String allianceBlock = GlobalConstants.getInstance().isRed ? "redsample" : "bluesample";
+        String allianceBlock = robotState.isBlue() ? "bluesample" : "redsample";
         // Gets the color of the detection
         String detectionColor = detection.getClassName();
         // If you detect a yellow sample
