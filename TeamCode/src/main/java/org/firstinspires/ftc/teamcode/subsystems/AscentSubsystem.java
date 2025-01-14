@@ -36,7 +36,7 @@ public class AscentSubsystem extends CloseableSubsystem {
     }
 
     public void engageAscent() {
-        changingTransmission.setPosition(0.61);
+        changingTransmission.setPosition(0.36);
         robotState.setIsAscending(true);
     }
 
