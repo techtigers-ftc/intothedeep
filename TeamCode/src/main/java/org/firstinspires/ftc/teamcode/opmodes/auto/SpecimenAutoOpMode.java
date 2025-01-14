@@ -58,9 +58,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState);
 
-        DriveToPlace driveToFirstIntake = new DriveToPlace(
+        DriveToPreloadDropStateSpecimen driveToFirstIntake = new DriveToPreloadDropStateSpecimen(
                 "driveToFirstIntake",
                 drive,
+                dropper,
                 robotState);
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
 
