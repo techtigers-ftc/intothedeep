@@ -38,7 +38,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @param robotState    Used to set limelight values in robotstate
      * @param height        How high the limelight is off the ground
      * @param xOffset       Lateral distance of limelight from robot's center
-     * @param yOffset       Distance from the limelight to the front of the slides
+     * @param yOffset       Distance from the limelight to the optimal position of the
+     *                      fine camera to read values
      * @param downwardAngle The angle the limelight is facing, in degrees
      */
     public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double height, double xOffset, double yOffset, double downwardAngle) {
