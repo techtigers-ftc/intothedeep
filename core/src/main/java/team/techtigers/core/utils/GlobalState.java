@@ -7,6 +7,12 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import team.techtigers.core.paths.Waypoint;
 
 /**
  * A class to store information that is global to the entire robot. This is
@@ -38,14 +44,43 @@ public class GlobalState implements Serializable, Cloneable {
     }
 
     @Override
-    public GlobalState clone() {
-        GlobalState clone = new GlobalState();
+    public GlobalState clone() throws CloneNotSupportedException {
+        GlobalState clone = (GlobalState) super.clone();
         clone.startTime = this.startTime;
 
         return clone;
     }
 
-    public void write(ObjectOutputStream out) throws IOException {
-        out.writeObject(this);
+    protected int extractValues(HashMap<Integer, String> values) throws IllegalAccessException {
+        values.put(0, String.valueOf(this.startTime));
+        values.put(1, String.valueOf(System.currentTimeMillis()));
+        return 2;
     }
+
+    protected String convertToString(Object obj) {
+        if(obj.getClass() == Waypoint.class) {
+            return String.format("{x: %f, y: %f, heading: %f}", ((Waypoint) obj).getX(), ((Waypoint) obj).getY(), ((Waypoint) obj).getHeading());
+        } else {
+            return obj.toString();
+        }
+    }
+
+    public String toJson() throws IllegalAccessException {
+        HashMap<Integer, String> values = new HashMap<>();
+        extractValues(values);
+        //Make json like string out of dictionary
+        StringBuilder jsonString = new StringBuilder("{");
+        for (Map.Entry<Integer, String> entry : values.entrySet()) {
+            jsonString.append("\"").append(entry.getKey()).append(":\"")
+                    .append(entry.getValue()).append("\",");
+        }
+        // Remove the trailing comma and close the JSON string
+        if (jsonString.length() > 1) {
+            jsonString.setLength(jsonString.length() - 2);
+        }
+        jsonString.append("}");
+
+        return jsonString.toString();
+    }
+
 }

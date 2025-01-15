@@ -10,9 +10,10 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Objects;
 
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -563,7 +564,7 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
      * @return a clone of the current RobotState
      */
     @Override
-    public RobotState clone() {
+    public RobotState clone() throws CloneNotSupportedException {
         RobotState clone = (RobotState) super.clone();
         clone.robotCurrentPose = robotCurrentPose;
         clone.robotVelocity = robotVelocity;
@@ -612,5 +613,17 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
      */
     public void setRobotFinalPose(Waypoint robotFinalPose) {
         this.robotFinalPose = robotFinalPose;
+    }
+
+    protected int extractValues(HashMap<Integer, String> values) throws IllegalAccessException {
+        int index = super.extractValues(values);
+        for(Field field : this.getClass().getDeclaredFields()){
+            String value;
+            field.setAccessible(true);
+            value = convertToString(Objects.requireNonNull(field.get(this)));
+            values.put(index, value);
+            index++;
+        }
+        return index;
     }
 }
