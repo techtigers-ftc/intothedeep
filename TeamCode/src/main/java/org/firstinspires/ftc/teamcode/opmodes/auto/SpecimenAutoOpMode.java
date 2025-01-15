@@ -26,6 +26,7 @@ import team.techtigers.core.paths.Waypoint;
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
+    private IntakeSubsystem intake;
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -43,7 +44,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState, new Waypoint(77, 7.25, Math.toRadians(90)));
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        intake = new IntakeSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropStateSpecimen driveChamberPreload = new DriveToPreloadDropStateSpecimen(
@@ -70,8 +71,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(23, 45)),
-                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
+                distToIntakeTarget(robotState, new Waypoint(119.5, 45)),
+                () -> 45
         );
 
         DriveToPlace driveToFirstDropoff = new DriveToPlace(
@@ -147,12 +148,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveChamberPreload)
                 .addState(clipSpecimen)
                 .addState(driveToFirstIntake)
+                .addState(grabFirstSample)
                 .addState(endState)
 
                 .addTransition(driveChamberPreload, clipSpecimen, AutoState.DRIVE_END)
                 .addTransition(clipSpecimen, driveToFirstIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
-                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
-//                .addTransition(firstPush, endState, AutoState.DRIVE_END)
+                .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
+                .addTransition(grabFirstSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
 
                 .setCurrentState(driveChamberPreload);
 
@@ -171,5 +173,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
     }
 }

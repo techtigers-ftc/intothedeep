@@ -52,13 +52,14 @@ public class GrabSampleState extends SequentialCommandGroupState<AutoState> {
                 new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
-                new IntakeCloseAction(intake, 150),
-                new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100),
-                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 100)
-                )
+//                new IntakeWristPitchAction(intake,
+//                        IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
+//                new IntakeCloseAction(intake, 150),
+//                new ParallelCommandGroup(
+//                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100),
+//                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 100)
+//                )
+                new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }
 
