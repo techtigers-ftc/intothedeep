@@ -127,7 +127,7 @@ public class FollowerConstants {
     /** Drive PIDF coefficients
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.025,0,0.00001,0.6,0); */
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.002,
+            0.006,
             0,
             0.00035,
             0.6,
@@ -309,7 +309,7 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
     public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.003,
+            0.004,
             0,
             0.0002,
             0.6,
