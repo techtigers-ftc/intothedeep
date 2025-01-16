@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -25,9 +27,9 @@ import team.techtigers.base.BaseOpMode;
 @SuppressWarnings("unused")
 public class IntakeAlignTestOpMode extends BaseOpMode {
     private RobotState robotState;
-    public static double Y_OFFSET = 7.2;
+    public static double Y_OFFSET = 7.4;
     public static double Y_HEIGHT = 10.5;
-    public static double X_OFFSET = 2.9;
+    public static double X_OFFSET = 2.5;
     public static double DOWNWARDS_ANGLE = 25;
 
     @Override
@@ -55,6 +57,9 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, dropper, drive, robotState);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeVisionPickupAction);
 
+        IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(intakePrepareToPickupAction);
+
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
     }
@@ -63,7 +68,9 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("color preference", robotState.getBlockColorPreference());
         telemetry.addData("block forward coarse", robotState.getBlockForwardCoarse());
+        telemetry.addData("block forward fine", robotState.getBlockForwardFine());
         telemetry.addData("block lateral coarse", robotState.getBlockLateralCoarse());
+        telemetry.addData("block lateral fine", robotState.getBlockLateralFine());
         telemetry.addData("block orientation", robotState.getBlockOrientation());
     }
 }
