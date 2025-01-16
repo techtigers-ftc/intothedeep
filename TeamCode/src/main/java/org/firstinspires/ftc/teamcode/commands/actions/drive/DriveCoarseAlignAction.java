@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -33,9 +34,9 @@ public class DriveCoarseAlignAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(1.1, 0, 0.05, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.05, 0));
-        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.00006, 0 ,0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.3, 0, 0.02, 0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(1, 0, 0.03, 0));
+        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.002, 0, 0.00035, 0.6 ,0));
 
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
         targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
