@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -31,8 +32,9 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 // MOVES INTAKE TO PREPARE FOR PICKUP AND RUNS COARSE ALIGNMENT
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
-                        new DriveCoarseAlignAction(drive, robotState, 0.1)
+                        new DriveCoarseAlignAction(drive, robotState, 0.3)
                 ),
+                new WaitCommand(300),
                 new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
                         + robotState.getBlockForwardFine()
                         - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
