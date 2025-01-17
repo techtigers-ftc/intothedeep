@@ -21,7 +21,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem for using the intake camera
  */
 public class VisionSubsystem extends CloseableSubsystem {
-    public static final double INTAKE_CAMERA_OFFSET = 2;
+    public static final double INTAKE_CAMERA_OFFSET = 1.5;
     private final WebcamName camera;
     private final VisionPortal visionPortal;
     public static int EXPOSURE = 16;
