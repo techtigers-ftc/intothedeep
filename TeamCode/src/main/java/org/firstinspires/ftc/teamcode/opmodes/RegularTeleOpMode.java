@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
@@ -24,7 +25,9 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
@@ -52,7 +55,10 @@ public class RegularTeleOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
-        registerSubsystems(intake, drive, dropper, smallCamera);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
+        //TODO: add start pose
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        registerSubsystems(intake, drive, dropper, smallCamera, limelight, odometry);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
@@ -163,6 +169,10 @@ public class RegularTeleOpMode extends BaseOpMode {
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake)
                 .whenActive(intake::togglePerpendicularRotation);
 
+        // Changing Color Preference
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(changeBlockColorPreferenceCommand);
+
         // Dropper TODO: Split into a different method
 
         // Dropper State Transitions
@@ -224,5 +234,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
+        telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
+        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
     }
 }
