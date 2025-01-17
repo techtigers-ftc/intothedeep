@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -31,28 +32,44 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(intake, drive);
+        addRequirements(intake, dropper, drive);
         addCommands(
                 // MOVES INTAKE TO PREPARE FOR PICKUP AND RUNS COARSE ALIGNMENT
                 new ParallelCommandGroup(
-                        new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
+                        new SequentialCommandGroup(
+                                new ParallelCommandGroup(
+                                        new IntakeSlidesAbsoluteAction(intake, robotState::getBlockForwardCoarse, 1),
+                                        new IntakeWristRotationAction(intake,
+                                                IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 200),
+                                        new IntakeClawRotationAction(intake,
+                                                () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
+                                        new IntakeWristPitchAction(intake,
+                                                IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200)
+                                ),
+                                new ParallelCommandGroup(
+                                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION, 50),
+                                        new IntakeOpenAction(intake)
+                                )),
                         new DriveCoarseAlignAction(drive, robotState, 0.1)
                 ),
-                new IntakeReadyToPickupAction(intake, robotState,
-                        () -> intake.getCurrentSlidePositionInches()
-                            + robotState.getBlockForwardFine()
-                            - VisionSubsystem.INTAKE_CAMERA_OFFSET,
-                        robotState::getBlockOrientation),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 350),
-                new IntakeCloseAction(intake, 250),
-                // MOVE INTAKE TO PICKUP POSITION
-                new IntakePrepareToTransferAction(intake, dropper, robotState)
+                new IntakeSlidesAbsoluteAction(intake, () -> intake.getCurrentSlidePositionInches()
+                        + robotState.getBlockForwardFine()
+                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, 0.5),
+                new ParallelCommandGroup(
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 100),
+                        new IntakeClawRotationAction(intake,
+                                robotState::getBlockOrientation, 100),
+                        new IntakeWristPitchAction(intake,
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100)
+                ),
+                new IntakeOpenAction(intake, 0)
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
+        robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
         robotState.setBlockPosition(RobotBlockPosition.INTAKE);
     }
 }
