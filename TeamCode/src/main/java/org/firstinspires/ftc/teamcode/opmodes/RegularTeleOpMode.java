@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
@@ -27,6 +28,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -79,6 +81,8 @@ public class RegularTeleOpMode extends BaseOpMode {
                 intake, dropper, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
+        IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
+                intake, dropper, drive, robotState);
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
@@ -96,6 +100,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         Trigger inReadyToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
+        Trigger blockDetected = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
@@ -104,8 +109,9 @@ public class RegularTeleOpMode extends BaseOpMode {
         manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake).whenActive(tuck);
         manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
 
-        // TODO: Change to Prepare to pickup auto for both
-        autoRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
+        // Uses the full vision pickup if the block is detected, runs the manual one if not
+        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
+        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(prepareToPickupManual);
         autoRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
         // Extend Trigger Bindings
@@ -115,8 +121,10 @@ public class RegularTeleOpMode extends BaseOpMode {
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToIntake).whenActive(prepareToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(readyToTransfer);
 
-        // TODO: Change to Prepare to pickup auto
-        autoExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
+        // Uses the full vision pickup if the block is detected, runs the manual one if not
+        autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
+        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(prepareToPickupManual);
+
         autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
