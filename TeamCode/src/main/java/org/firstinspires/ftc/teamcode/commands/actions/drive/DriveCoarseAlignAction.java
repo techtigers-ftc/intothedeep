@@ -38,6 +38,10 @@ public class DriveCoarseAlignAction extends CommandBase {
         follower.setHeadingPIDF(new CustomPIDFCoefficients(1, 0, 0.03, 0));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.002, 0, 0.00035, 0.6 ,0));
 
+//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(FollowerConstants.translationalPIDFCoefficients.P, FollowerConstants.translationalPIDFCoefficients.I, FollowerConstants.translationalPIDFCoefficients.D, FollowerConstants.translationalPIDFCoefficients.F));
+//        follower.setHeadingPIDF(new CustomPIDFCoefficients(FollowerConstants.headingPIDFCoefficients.P, FollowerConstants.headingPIDFCoefficients.I, FollowerConstants.headingPIDFCoefficients.D, FollowerConstants.headingPIDFCoefficients.F));
+//        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(FollowerConstants.drivePIDFCoefficients.P, FollowerConstants.drivePIDFCoefficients.I, FollowerConstants.drivePIDFCoefficients.D, FollowerConstants.drivePIDFCoefficients.T, FollowerConstants.drivePIDFCoefficients.F));
+
         Pose currentPose = PoseTranslator.waypointToPose(robotState.getRobotCurrentPose());
         targetPosition = currentPose.getY() - robotState.getBlockLateralCoarse();
         follower.holdPoint(new Point(currentPose.getX(), targetPosition), 0);
