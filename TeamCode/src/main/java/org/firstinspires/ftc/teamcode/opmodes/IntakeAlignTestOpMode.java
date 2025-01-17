@@ -56,10 +56,10 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
         // MANIPULATOR
         //TODO: Model trigger behavior in normal tele opmode
-        Trigger blockReadyToPickUp = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.READY_TO_GRAB);
+        Trigger blockDetected = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.DETECTED);
 
         IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, dropper, drive, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).and(blockReadyToPickUp).whenActive(intakeVisionPickupAction);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).and(blockDetected).whenActive(intakeVisionPickupAction);
 
         IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(intakePrepareToPickupAction);
