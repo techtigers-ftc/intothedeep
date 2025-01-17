@@ -1,5 +1,7 @@
 package team.techtigers.core.utils;
 
+import android.os.DropBoxManager;
+
 import androidx.annotation.NonNull;
 
 //import com.google.gson.Gson;
@@ -72,6 +74,26 @@ public class GlobalState implements Serializable, Cloneable {
     public String toJson() throws IllegalAccessException {
         HashMap<Integer, String> values = new HashMap<>();
         extractValues(values);
+
+        //Make json like string out of dictionary
+        StringBuilder jsonString = new StringBuilder("{");
+        for (Map.Entry<Integer, String> entry : values.entrySet()) {
+            jsonString.append("\"").append(entry.getKey()).append(":\"")
+                    .append(entry.getValue()).append("\",");
+        }
+        // Remove the trailing comma and close the JSON string
+        if (jsonString.length() > 1) {
+            jsonString.setLength(jsonString.length() - 2);
+        }
+        jsonString.append("}");
+
+        return jsonString.toString();
+    }
+
+    public String toJson(GlobalState previousState) throws IllegalAccessException {
+        HashMap<Integer, String> values = new HashMap<>();
+        extractValues(values, previousState);
+
         //Make json like string out of dictionary
         StringBuilder jsonString = new StringBuilder("{");
         for (Map.Entry<Integer, String> entry : values.entrySet()) {

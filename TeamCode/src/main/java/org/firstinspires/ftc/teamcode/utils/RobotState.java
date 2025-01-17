@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -559,7 +561,6 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
         isManualIntakeSelected = manualIntakeSelected;
     }
-
     /**
      * @return a clone of the current RobotState
      */
@@ -627,12 +628,16 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         return index;
     }
     protected int extractValues(HashMap<Integer, String> values, RobotState previousState) throws IllegalAccessException {
-        int index = super.extractValues(values);
+        int index = super.extractValues(values, previousState);
         for(Field field : this.getClass().getDeclaredFields()){
             String value;
             field.setAccessible(true);
-            value = convertToString(Objects.requireNonNull(field.get(this)));
-            values.put(index, value);
+
+            if(field.get(this) != field.get(previousState)){
+                RobotLog.dd("Serialization", "%s", field.get(previousState));
+                value = convertToString(Objects.requireNonNull(field.get(this)));
+                values.put(index, value);
+            }
             index++;
         }
         return index;

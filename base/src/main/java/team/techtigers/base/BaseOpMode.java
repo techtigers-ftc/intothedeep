@@ -84,7 +84,7 @@ public abstract class BaseOpMode extends CommandOpMode {
             }
             justAfterStart();
 
-            for(int i = 0; i < 2000; i++){
+            for(int i = 0; i < 90000; i++){
                 sampleStates.add(robotState.clone());
             }
             robotStates.add(robotState.clone());
@@ -118,9 +118,13 @@ public abstract class BaseOpMode extends CommandOpMode {
                 RobotLog.dd("Serialization", "Preparing to write " +sampleStates.size() + " robot states to file %s", filename);
                 try {
                     FileWriter jsonFile = new FileWriter(directoryPath+"/"+filename);
-                    StringBuilder jsonString = new StringBuilder("[\n");
-                    for (GlobalState state : sampleStates) {
-                        jsonString.append(state.toJson()).append(",\n");
+                    StringBuilder jsonString = new StringBuilder("[");
+                    for (int i = 0; i < sampleStates.size(); i++) {
+                        if(i == 0){
+                            jsonString.append(sampleStates.get(i).toJson()).append(",");
+                        } else {
+                            jsonString.append(sampleStates.get(i).toJson(sampleStates.get(i-1))).append(",");
+                        }
                     }
                     jsonString.append("]");
                     jsonFile.write(jsonString.toString());
