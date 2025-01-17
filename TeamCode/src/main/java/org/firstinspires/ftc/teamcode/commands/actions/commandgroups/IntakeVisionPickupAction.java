@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.DriveCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.HoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -29,12 +29,29 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake, dropper, drive);
         addCommands(
-                // MOVES INTAKE TO PREPARE FOR PICKUP AND RUNS COARSE ALIGNMENT
+                // Aligns the robot to a heading of 0
+                new HoldPointAction(drive, robotState,
+                        () -> robotState.getRobotCurrentPose().getX(),
+                        () -> robotState.getRobotCurrentPose().getY(),
+                        () -> 0,
+                        0.3, Math.toRadians(2)
+                ),
+                // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
-                        new DriveCoarseAlignAction(drive, robotState, 0.3)
+                        new HoldPointAction(drive, robotState,
+                                () -> robotState.getRobotCurrentPose().getX(),
+                                () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralCoarse(),
+                                () -> 0, 0.3, Math.toRadians(2)
+                                )
                 ),
+                // Waits, then runs the fine camera alignment
                 new WaitCommand(300),
+//                new HoldPointAction(drive, robotState,
+//                        () -> robotState.getRobotCurrentPose().getX(),
+//                        () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralFine(),
+//                        () -> 0, 0.3, Math.toRadians(2)
+//                ),
                 new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
                         + robotState.getBlockForwardFine()
                         - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
