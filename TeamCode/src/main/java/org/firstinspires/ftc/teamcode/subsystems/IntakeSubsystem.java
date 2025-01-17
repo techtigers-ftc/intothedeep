@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -31,10 +32,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    private static final double FORWARD_KP = 0.00675;
-    private static final double FORWARD_KI = 0.0;
-    private static final double FORWARD_KD = 0.0;
-    private static final double FORWARD_KF = 0.0;
+    public static double FORWARD_KP = 0.00675;
+    public static double FORWARD_KI = 0.0;
+    public static double FORWARD_KD = 0.0;
+    public static double FORWARD_KF = 0.05;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -51,20 +52,22 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SLIDES_MAX = 19;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 7;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
-    public static final double CLAW_ROTATION_READY_TO_PICKUP_POSITION = 90;
-
-    public static final double WRIST_PITCH_PICKUP_POSITION = 42;
-
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 7;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double WRIST_PITCH_PECK_POSITION = 90;
+
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+
 
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
@@ -82,6 +85,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private final ElapsedTime colorSensorTimer;
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -135,6 +139,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         setWristAbsolute(WRIST_PITCH_TUCK_POSITION, WRIST_ROTATION_TUCK_POSITION);
         setClawRotationAbsolute(CLAW_ROTATION_TUCK_POSITION);
         closeClaw();
+        colorSensorTimer = new ElapsedTime();
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -431,8 +436,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        // TODO: Add debounce
-//        updateBlockColor();
+//        if(colorSensorTimer.milliseconds() > 1000){
+//            updateBlockColor();
+//            colorSensorTimer.reset();
+//        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());

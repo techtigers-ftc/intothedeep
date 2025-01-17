@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.base.BaseOpMode;
@@ -24,7 +23,7 @@ public class DropperTuningOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        robotState = new RobotState();
+        robotState = new RobotState(true, false);
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);
         registerSubsystems(dropperSubsystem);
 

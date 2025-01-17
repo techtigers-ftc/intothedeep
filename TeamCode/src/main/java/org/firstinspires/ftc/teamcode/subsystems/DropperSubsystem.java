@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -29,8 +30,8 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_FIRST_LEVEL_ASCENT = 93;
-    public static final double PITCH_PRE_TRANSFER_POSITION = 37;
-    public static final double PITCH_TRANSFER_POSITION = 20;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 39;
+    public static final double PITCH_TRANSFER_POSITION = 28;
     public static final double PITCH_BASKET_POSITION = 210;
     public static final double PITCH_CHAMBER_POSITION = 175;
     public static final double PITCH_FRONT_SLAP_POSITION = 105;
@@ -69,6 +70,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private final ElapsedTime colorSensorTimer;
 
     /**
      * Initializes dropper subsystem
@@ -111,6 +113,8 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         closeClaw();
+
+        colorSensorTimer = new ElapsedTime();
     }
 
     /**
@@ -352,8 +356,10 @@ public class DropperSubsystem extends CloseableSubsystem {
 
         robotState.setDropperCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        // TODO: Add debounce
-//        updateBlockColor();
+//        if(colorSensorTimer.milliseconds() > 1000){
+//            updateBlockColor();
+//            colorSensorTimer.reset();
+//        }
 
 
         RobotLog.dd(tag, "Current: %f Target %f",

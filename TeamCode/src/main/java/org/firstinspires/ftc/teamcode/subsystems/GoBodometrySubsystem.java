@@ -112,9 +112,6 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         Waypoint robotVelocity = new Waypoint(odo.getVelX()/25.4,
                 odo.getVelY()/25.4, headingVelocity);
         robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
-        robotVelocity = new Waypoint(robotVelocity.getX() + startPose.getX(),
-                robotVelocity.getY() + startPose.getY(),
-                robotVelocity.getHeading() + startPose.getHeading());
 
         robotState.setRobotPose(robotPose);
         robotState.setRobotVelocity(robotVelocity);

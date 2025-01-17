@@ -54,11 +54,13 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
     private DriveGears driveGears;
     private IntakeState intakeState;
     private int robotError;
+    private final boolean isBlue;
+    private final boolean isAuto;
 
     /**
      * Initializes a new RobotState
      */
-    public RobotState() {
+    public RobotState(boolean isBlue, boolean isAuto) {
         robotCurrentPose = new Waypoint(0, 0, 0);
         robotVelocity = new Waypoint(0, 0, 0);
         robotFinalPose = new Waypoint(0, 0, 0);
@@ -88,6 +90,8 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         driverCurrent = 0;
         intakeCurrent = 0;
         dropperCurrent = 0;
+        this.isBlue = isBlue;
+        this.isAuto = isAuto;
     }
 
     /**
@@ -598,6 +602,22 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         clone.intakeState = intakeState;
 
         return clone;
+    }
+
+    /**
+     * Get the alliance color
+     * @return Is alliance blue?
+     */
+    public boolean isBlue() {
+        return this.isBlue;
+    }
+
+    /**
+     * Get the opmode mode
+     * @return Is mode auto?
+     */
+    public boolean isAuto() {
+        return this.isAuto;
     }
 
     /**

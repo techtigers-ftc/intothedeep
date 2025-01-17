@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.pedropathing.util;
 
-import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
+
+import java.util.ArrayList;
 
 /**
  * This is the DashboardPoseTracker class. This tracks the pose history of the robot through a
@@ -13,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 public class DashboardPoseTracker {
     private double[] xPositions;
     private double[] yPositions;
-    private final RobotState robotState;
+    private PoseUpdater poseUpdater;
     private long lastUpdateTime;
     private final int TRACKING_LENGTH = 1500;
     private final long UPDATE_TIME = 50;
@@ -22,16 +25,16 @@ public class DashboardPoseTracker {
     /**
      * This creates a new DashboardPoseTracker from a PoseUpdater.
      *
-     * @param robotState the robotState to get the pose from
+     * @param poseUpdater the PoseUpdater
      */
-    public DashboardPoseTracker(RobotState robotState) {
-        this.robotState = robotState;
+    public DashboardPoseTracker(PoseUpdater poseUpdater) {
+        this.poseUpdater = poseUpdater;
         xPositions = new double[TRACKING_SIZE];
         yPositions = new double[TRACKING_SIZE];
 
         for (int i = 0; i < TRACKING_SIZE; i++) {
-            xPositions[i] = robotState.getRobotCurrentPose().getX();
-            yPositions[i] = robotState.getRobotCurrentPose().getY();
+            xPositions[i] = poseUpdater.getPose().getX();
+            yPositions[i] = poseUpdater.getPose().getY();
         }
 
         lastUpdateTime = System.currentTimeMillis() - UPDATE_TIME;
@@ -48,8 +51,8 @@ public class DashboardPoseTracker {
                 xPositions[i] = xPositions[i - 1];
                 yPositions[i] = yPositions[i - 1];
             }
-            xPositions[0] = robotState.getRobotCurrentPose().getX();
-            yPositions[0] = robotState.getRobotCurrentPose().getY();
+            xPositions[0] = poseUpdater.getPose().getX();
+            yPositions[0] = poseUpdater.getPose().getY();
         }
     }
 

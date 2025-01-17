@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.DropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -35,7 +35,7 @@ public class BasketAutoOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
-        robotState = new RobotState();
+        robotState = new RobotState(true, true);
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -67,6 +67,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -89,6 +90,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -111,6 +113,7 @@ public class BasketAutoOpMode extends BaseOpMode {
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
                 intake,
+                dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(3, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -179,7 +182,12 @@ public class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Current Pose", robotState.getRobotCurrentPose());
-        telemetry.addData("Final Pose", robotState.getRobotFinalPose());
+        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());
+        telemetry.addLine();
+        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+        telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
     }
 }

@@ -65,6 +65,7 @@ public class SlideController {
      */
     public double calculateMotorPowers(double currentTicks) {
         double currentPower = pidfController.calculate(currentTicks, targetTicks);
-        return currentPower + kF;
+        int sign = (int) (Math.abs(currentPower) / currentPower);
+        return (Math.abs(currentPower) + Math.abs(kF)) * sign;
     }
 }
