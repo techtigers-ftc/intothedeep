@@ -149,9 +149,16 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double yDist = height * (1 / Math.tan(Math.toRadians(ty)));
             double finalYDist = yDist - yOffset;
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
-            robotState.setBlockForwardCoarse(finalYDist);
-            robotState.setBlockLateralCoarse(xDist);
-            RobotLog.dd("x and y dist", "x dist:%f, y dist:%f", xDist, finalYDist);
+            if(xDist == -xOffset) {
+                robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+            } else if(finalYDist > IntakeSubsystem.SLIDES_MAX) {
+                robotState.setBlockDetectionState(BlockDetectionState.TOO_FAR);
+            } else {
+                robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+                robotState.setBlockForwardCoarse(finalYDist);
+                robotState.setBlockLateralCoarse(xDist);
+            }
+            RobotLog.dd(tag, "x dist:%f, y dist:%f", xDist, finalYDist);
         }
     }
 

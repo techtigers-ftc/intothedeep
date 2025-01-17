@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -54,8 +56,11 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 
         // MANIPULATOR
+        //TODO: Model trigger behavior in normal tele opmode
+        Trigger blockReadyToPickUp = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.READY_TO_GRAB);
+
         IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, dropper, drive, robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakeVisionPickupAction);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).and(blockReadyToPickUp).whenActive(intakeVisionPickupAction);
 
         IntakePrepareToPickupAction intakePrepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(intakePrepareToPickupAction);
