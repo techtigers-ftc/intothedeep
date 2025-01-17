@@ -1,10 +1,17 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.autocommands.AutoIntakeDropInObservation;
+import org.firstinspires.ftc.teamcode.commands.autocommands.AutoIntakeSample;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
@@ -23,18 +30,19 @@ public class OpenIntakeState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      * @param intakeSubsystem The intake subsystem
      */
-    public OpenIntakeState(String name, RobotState robotState, IntakeSubsystem intakeSubsystem) {
+    public OpenIntakeState(String name, RobotState robotState, IntakeSubsystem intakeSubsystem, DropperSubsystem dropper) {
         super(name);
         this.robotState = robotState;
         addCommands(
-                new IntakeOpenAction(intakeSubsystem)
+                new AutoIntakeDropInObservation(intakeSubsystem, dropper, robotState)
         );
     }
 
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getIntakeClawState() == ClawState.OPEN) {
-            return AutoState.SAMPLE_1_DROP_COMPLETE;
+        if (robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP &&
+                robotState.getBlockPosition() == RobotBlockPosition.NONE) {
+            return AutoState.SPECIMEN_1_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
     }

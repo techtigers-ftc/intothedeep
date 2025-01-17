@@ -19,9 +19,9 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 /**
  * A state to grab a sample to be dropped off later
  */
-public class GrabSampleState extends SequentialCommandGroupState<AutoState> {
+public class GrabFirstSampleState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            GrabSampleState.class.getSimpleName();
+            GrabFirstSampleState.class.getSimpleName();
     private final RobotState robotState;
     private DoubleSupplier slidePos;
     private DoubleSupplier clawPos;
@@ -33,15 +33,32 @@ public class GrabSampleState extends SequentialCommandGroupState<AutoState> {
      * @param intake The intake subsystem
      * @param dropper The dropper subsystem
      * @param robotState The robot state
-
+     * @param targetSlidePos The target slide position
+     * @param targetClawRotation The target claw rotation
      */
-    public GrabSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                           RobotState robotState) {
+    public GrabFirstSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
+                                RobotState robotState, DoubleSupplier targetSlidePos,
+                                DoubleSupplier targetClawRotation) {
         super(name);
         this.robotState = robotState;
+        slidePos = targetSlidePos;
+        clawPos = targetClawRotation;
         addCommands(
+                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
+                new IntakeReadyToPickupAction(intake, robotState,
+                        targetSlidePos, targetClawRotation),
                 new AutoIntakeSample(intake, dropper, robotState)
         );
+    }
+
+    /**
+     * Get the current condition of the robot
+     */
+    @Override
+    public void initialize() {
+        super.initialize();
+        RobotLog.dd(LOG_TAG, "Target slide pos: %s Target Claw pos %s",
+                slidePos.getAsDouble(), clawPos.getAsDouble());
     }
 
     /**

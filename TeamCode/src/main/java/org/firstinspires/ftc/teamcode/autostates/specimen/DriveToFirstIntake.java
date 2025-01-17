@@ -15,18 +15,18 @@ public class DriveToFirstIntake extends DriveStateBase {
             DriveToFirstIntake.class.getSimpleName();
     private static final double TOLERANCE = 1.5;
     private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
+    private RobotState robotState;
 
     /**
      * Constructor for the DriveToSubmersible
      *
      * @param name The name of the state
      * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @param intake The intake subsystem
      * @param robotState The robot state
      */
-    public DriveToFirstIntake(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToFirstIntake(String name, DriveSubsystem drive, RobotState robotState) {
         super(name, drive, robotState);
+        this.robotState = robotState;
         addCommands(
                 autoDriveCommand
         );
