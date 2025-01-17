@@ -7,11 +7,11 @@ import android.util.Size;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,16 +21,17 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem for using the intake camera
  */
 public class VisionSubsystem extends CloseableSubsystem {
-    public static final double INTAKE_CAMERA_OFFSET = 1.5;
-    private final WebcamName camera;
-    private final VisionPortal visionPortal;
+    public static final double INTAKE_CAMERA_OFFSET = 2;
     public static int EXPOSURE = 16;
     public static int GAIN = 0;
+    private final WebcamName camera;
+    private final VisionPortal visionPortal;
 
     /**
      * Construct a VisionSubsystem
+     *
      * @param hardwareMap The HardwareMap
-     * @param robotState The RobotState
+     * @param robotState  The RobotState
      */
     public VisionSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         camera = hardwareMap.get(WebcamName.class, "camera");
@@ -40,6 +41,7 @@ public class VisionSubsystem extends CloseableSubsystem {
                 .addProcessor(new SampleDetectionProcessor(robotState))
                 .build();
     }
+
     @Override
     public void init() {
         visionPortal.stopLiveView();
