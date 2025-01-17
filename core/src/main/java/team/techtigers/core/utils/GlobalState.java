@@ -56,6 +56,10 @@ public class GlobalState implements Serializable, Cloneable {
         values.put(1, String.valueOf(System.currentTimeMillis()));
         return 2;
     }
+    protected int extractValues(HashMap<Integer, String> values, GlobalState previousState) throws IllegalAccessException {
+        values.put(1, String.valueOf(System.currentTimeMillis()));
+        return 2;
+    }
 
     protected String convertToString(Object obj) {
         if(obj.getClass() == Waypoint.class) {

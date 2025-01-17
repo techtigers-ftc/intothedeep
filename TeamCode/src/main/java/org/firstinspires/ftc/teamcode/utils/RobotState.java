@@ -626,4 +626,15 @@ public class RobotState extends GlobalState implements Cloneable, Serializable {
         }
         return index;
     }
+    protected int extractValues(HashMap<Integer, String> values, RobotState previousState) throws IllegalAccessException {
+        int index = super.extractValues(values);
+        for(Field field : this.getClass().getDeclaredFields()){
+            String value;
+            field.setAccessible(true);
+            value = convertToString(Objects.requireNonNull(field.get(this)));
+            values.put(index, value);
+            index++;
+        }
+        return index;
+    }
 }
