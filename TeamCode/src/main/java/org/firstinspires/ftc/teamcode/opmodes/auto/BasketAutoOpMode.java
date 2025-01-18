@@ -24,9 +24,10 @@ import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
-@Autonomous
-public class BasketAutoOpMode extends BaseOpMode {
+public abstract class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
+
+    protected abstract boolean isBlue();
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -36,7 +37,7 @@ public class BasketAutoOpMode extends BaseOpMode {
     @Override
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
-        robotState = new RobotState(true, true);
+        robotState = new RobotState(isBlue(), true);
 
         RobotSaveState.reset();
 

@@ -36,18 +36,19 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
-@TeleOp
 @SuppressWarnings("unused")
-public class RegularTeleOpMode extends BaseOpMode {
+public abstract class BaseTeleOpMode extends BaseOpMode {
     private static final double INTAKE_CAMERA_OFFSET = 2;
     private RobotState robotState;
     private IntakeSubsystem intake;
+
+    protected abstract boolean isBlue();
 
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
-        robotState = new RobotState(false, false);
+        robotState = new RobotState(isBlue(), false);
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
