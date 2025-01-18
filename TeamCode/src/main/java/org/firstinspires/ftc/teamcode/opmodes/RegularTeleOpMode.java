@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -32,6 +33,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.BaseOpMode;
+import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.utils.RobotSaveState;
 
 @TeleOp
 @SuppressWarnings("unused")
@@ -51,6 +54,8 @@ public class RegularTeleOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
+
         registerSubsystems(intake, drive, dropper, smallCamera);
 
         // DRIVER TODO: Split into a different method
