@@ -61,8 +61,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         registerSubsystems(intake, drive, dropper, smallCamera);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
-        //TODO: add start pose
-        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         registerSubsystems(intake, drive, dropper, smallCamera, limelight, odometry);
 
         // DRIVER TODO: Split into a different method
