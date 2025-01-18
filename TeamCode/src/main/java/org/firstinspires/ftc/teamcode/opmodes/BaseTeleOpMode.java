@@ -36,6 +36,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.BaseOpMode;
+import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.utils.RobotSaveState;
 
 @SuppressWarnings("unused")
 public abstract class BaseTeleOpMode extends BaseOpMode {
@@ -55,6 +57,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
+
+        registerSubsystems(intake, drive, dropper, smallCamera);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
         //TODO: add start pose
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
