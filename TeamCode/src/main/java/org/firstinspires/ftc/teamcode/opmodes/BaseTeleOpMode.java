@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -40,7 +39,6 @@ import team.techtigers.base.BaseOpMode;
 
 @SuppressWarnings("unused")
 public abstract class BaseTeleOpMode extends BaseOpMode {
-    private static final double INTAKE_CAMERA_OFFSET = 2;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -83,7 +81,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
-                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine()-VisionSubsystem.INTAKE_CAMERA_OFFSET,
+                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
                 () -> (robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
                 intake, dropper, robotState);
