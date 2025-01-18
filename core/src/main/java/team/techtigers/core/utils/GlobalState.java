@@ -78,8 +78,8 @@ public class GlobalState implements Serializable, Cloneable {
         //Make json like string out of dictionary
         StringBuilder jsonString = new StringBuilder("{");
         for (Map.Entry<Integer, String> entry : values.entrySet()) {
-            jsonString.append("\"").append(entry.getKey()).append(":\"")
-                    .append(entry.getValue()).append("\",");
+            jsonString.append(entry.getKey()).append(":")
+                    .append(entry.getValue()).append(",");
         }
         // Remove the trailing comma and close the JSON string
         if (jsonString.length() > 1) {
@@ -97,8 +97,8 @@ public class GlobalState implements Serializable, Cloneable {
         //Make json like string out of dictionary
         StringBuilder jsonString = new StringBuilder("{");
         for (Map.Entry<Integer, String> entry : values.entrySet()) {
-            jsonString.append("\"").append(entry.getKey()).append(":\"")
-                    .append(entry.getValue()).append("\",");
+            jsonString.append(entry.getKey()).append(":")
+                    .append(entry.getValue()).append(",");
         }
         // Remove the trailing comma and close the JSON string
         if (jsonString.length() > 1) {
