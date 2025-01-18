@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import androidx.annotation.Nullable;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -31,13 +29,18 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    public static double minMagnitude = 1;
-    public static double minBlue = 0.53;
-    public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.00675;
-    public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.0;
-    public static double FORWARD_KF = 0.05;
+    public static final double WRIST_PITCH_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
+    public static final double WRIST_PITCH_PECK_POSITION = 90;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -52,25 +55,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     private static final double SLIDES_MAX = 19;
-
-    public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
-
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
-
-    public static final double WRIST_PITCH_PECK_POSITION = 90;
-
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
-
-
+    public static double minMagnitude = 1;
+    public static double minBlue = 0.53;
+    public static double minRed = 0.43;
+    public static double FORWARD_KP = 0.00675;
+    public static double FORWARD_KI = 0.0;
+    public static double FORWARD_KD = 0.0;
+    public static double FORWARD_KF = 0.05;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -88,6 +79,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
     private final ElapsedTime colorSensorTimer;
+
     /**
      * Initializes a new IntakeSubsystem
      *
@@ -133,7 +125,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftClaw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
 
-        if(robotState.isAuto()){
+        if (robotState.isAuto()) {
             init();
         }
 
@@ -365,14 +357,14 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the right slide motor
      */
-    public double getSlideCurrentRight(){
+    public double getSlideCurrentRight() {
         return rightSlideCurrentAverage.getAverage();
     }
 
     /**
      * @return the current draw of the left slide motor
      */
-    public double getSlideCurrentLeft(){
+    public double getSlideCurrentLeft() {
         return leftSlideCurrentAverage.getAverage();
     }
 
