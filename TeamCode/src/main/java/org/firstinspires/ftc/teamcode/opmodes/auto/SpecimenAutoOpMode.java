@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabFirstSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.GrabSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.GrabRestOfSamplesState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.OpenIntakeState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -96,11 +96,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenDriveStateConfigurator.configSecondIntake(driveToSecondIntake);
 
-        GrabSampleState grabSecondSample = new GrabSampleState(
+        GrabRestOfSamplesState grabSecondSample = new GrabRestOfSamplesState(
                 "grabSecondSample",
                 intake,
                 dropper,
-                robotState
+                robotState,
+                distToIntakeTarget(robotState, new Waypoint(129.5, 45)),
+                () -> 45
         );
 
         DriveToPlace driveToSecondDropoff = new DriveToPlace(
@@ -122,11 +124,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenDriveStateConfigurator.configThirdIntake(driveToThirdIntake);
 
-        GrabSampleState grabThirdSample = new GrabSampleState(
+        GrabRestOfSamplesState grabThirdSample = new GrabRestOfSamplesState(
                 "grabThirdSample",
                 intake,
                 dropper,
-                robotState
+                robotState,
+                distToIntakeTarget(robotState, new Waypoint(139.5, 45)),
+                () -> 45
         );
 
         DriveToPlace driveToThirdDropoff = new DriveToPlace(
@@ -173,8 +177,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToSecondDropoff, dropSecondSample,AutoState.DRIVE_END)
                 .addTransition(dropSecondSample, driveToThirdIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 .addTransition(driveToThirdIntake, grabThirdSample, AutoState.DRIVE_END)
-                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_1_DROP_COMPLETE)
-                .addTransition(driveToThirdDropoff, dropSecondSample, AutoState.DRIVE_END)
+                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveToThirdDropoff, endState, AutoState.DRIVE_END)
 
 
                 .setCurrentState(driveChamberPreload);
