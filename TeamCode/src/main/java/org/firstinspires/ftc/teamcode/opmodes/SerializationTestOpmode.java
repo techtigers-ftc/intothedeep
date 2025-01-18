@@ -11,6 +11,6 @@ public class SerializationTestOpmode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        robotState = new RobotState();
+        robotState = new RobotState(false, false);
     }
 }
