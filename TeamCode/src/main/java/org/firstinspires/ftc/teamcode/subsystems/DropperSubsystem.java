@@ -111,10 +111,21 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        closeClaw();
+        if (robotState.isAuto()) {
+            init();
+        }
 
         colorSensorTimer = new ElapsedTime();
+    }
+
+    @Override
+    public void init() {
+        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        if (robotState.isAuto()) {
+            closeClaw();
+        } else {
+            openClaw();
+        }
     }
 
     /**
@@ -287,14 +298,14 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the right slide motor
      */
-    public double getSlideCurrentRight(){
+    public double getSlideCurrentRight() {
         return rightSlideCurrentAverage.getAverage();
     }
 
     /**
      * @return the current draw of the right slide motor
      */
-    public double getSlideCurrentLeft(){
+    public double getSlideCurrentLeft() {
         return leftSlideCurrentAverage.getAverage();
     }
 

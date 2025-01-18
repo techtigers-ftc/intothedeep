@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.Nullable;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -129,19 +131,23 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         rightClaw.setDirection(Servo.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.REVERSE);
+        colorSensorTimer = new ElapsedTime();
 
-//        rightClaw.setPosition(CLAW_MIDDLE_POSITION);
-//        leftClaw.setPosition(CLAW_MIDDLE_POSITION);
+        if(robotState.isAuto()){
+            init();
+        }
 
+        RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
+    }
+
+    @Override
+    public void init() {
         // Pitch init is in the transfer position
         //Rotation init is in the transfer position
         // Rotation zero is pointing parallel to the robot
         setWristAbsolute(WRIST_PITCH_TUCK_POSITION, WRIST_ROTATION_TUCK_POSITION);
         setClawRotationAbsolute(CLAW_ROTATION_TUCK_POSITION);
         closeClaw();
-        colorSensorTimer = new ElapsedTime();
-
-        RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
 
     /**
