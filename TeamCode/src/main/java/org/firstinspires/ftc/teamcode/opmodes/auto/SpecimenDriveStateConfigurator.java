@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
+import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -96,7 +97,7 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(105, 27),
-                                        new Point(112.5, 27)
+                                        new Point(113.5, 27)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(-40),
@@ -108,7 +109,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
-    public static void configSecondDrop(DriveToPlace state) {
+    public static void configSecondDrop(SecondDropOff state) {
         state.setPIDSToDefaultValues();
         state.setHeadingPIDF(0.5, 0,0.03,0);
 
@@ -116,8 +117,8 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(112.5, 27),
-                                        new Point(115, 27)
+                                        new Point(113.5, 27),
+                                        new Point(114, 27)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(55),
@@ -129,20 +130,20 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configThirdIntake(DriveToPlace state) {
+    public static void configThirdIntake(SecondDropOff state) {
         state.setPIDSToDefaultValues();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(115, 27),
-                                        new Point(110, 24),
-                                        new Point(119, 29)
+                                        new Point(114, 27),
+//                                        new Point(110, 24),
+                                        new Point(121, 32)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(-40),
-                                Math.toRadians(35))
+                                Math.toRadians(39))
                         .build()
         );
 
@@ -158,7 +159,7 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(119, 29),
-                                        new Point(110, 24),
+//                                        new Point(110, 24),
                                         new Point(110, 27)
                                 )
                         )

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabFirstSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabRestOfSamplesState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.OpenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -73,7 +74,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(119.5, 45)),
-                () -> 45
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
         DriveToPlace driveToFirstDropoff = new DriveToPlace(
@@ -102,13 +103,16 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState,
                 distToIntakeTarget(robotState, new Waypoint(129.5, 45)),
-                () -> 45
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
-        DriveToPlace driveToSecondDropoff = new DriveToPlace(
+        SecondDropOff driveToSecondDropoff = new SecondDropOff(
                 "driveToSecondDropoff",
                 drive,
-                robotState);
+                robotState,
+                intake,
+                () -> 8
+        );
         SpecimenDriveStateConfigurator.configSecondDrop(driveToSecondDropoff);
 
         OpenIntakeState dropSecondSample = new OpenIntakeState(
@@ -118,10 +122,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper
         );
 
-        DriveToPlace driveToThirdIntake = new DriveToPlace(
+        SecondDropOff driveToThirdIntake = new SecondDropOff(
                 "driveToThirdIntake",
                 drive,
-                robotState);
+                robotState,
+                intake,
+                () -> 12
+                );
         SpecimenDriveStateConfigurator.configThirdIntake(driveToThirdIntake);
 
         GrabRestOfSamplesState grabThirdSample = new GrabRestOfSamplesState(
@@ -129,14 +136,15 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(139.5, 45)),
-                () -> 45
+                distToIntakeTarget(robotState, new Waypoint(121, 32)),
+                () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
         DriveToPlace driveToThirdDropoff = new DriveToPlace(
                 "driveToThirdDropoff",
                 drive,
-                robotState);
+                robotState
+                );
         SpecimenDriveStateConfigurator.configThirdDrop(driveToThirdDropoff);
 
         OpenIntakeState dropThirdSample = new OpenIntakeState(
@@ -176,9 +184,9 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(grabSecondSample, driveToSecondDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveToSecondDropoff, dropSecondSample,AutoState.DRIVE_END)
                 .addTransition(dropSecondSample, driveToThirdIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
-                .addTransition(driveToThirdIntake, grabThirdSample, AutoState.DRIVE_END)
-                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToThirdDropoff, endState, AutoState.DRIVE_END)
+                .addTransition(driveToThirdIntake, endState, AutoState.DRIVE_END)
+//                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToThirdDropoff, endState, AutoState.DRIVE_END)
 
 
                 .setCurrentState(driveChamberPreload);
