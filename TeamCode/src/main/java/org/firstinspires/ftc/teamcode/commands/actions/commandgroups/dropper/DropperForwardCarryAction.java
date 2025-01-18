@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
@@ -15,8 +17,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * upside down, ready to be clipped downwards onto the high chamber
  */
 public class DropperForwardCarryAction extends SequentialCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = DropperForwardCarryAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new DropperForwardCarryAction
@@ -30,10 +32,16 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperTransferAction(dropper, intake, robotState),
-                new DropperForwardCarryNoTransferAction(dropper, robotState),
-                new IntakeTuckAction(intake, robotState)
+                new ParallelCommandGroup(
+                        new DropperForwardCarryNoTransferAction(dropper, robotState),
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                new IntakeTuckAction(intake, robotState)
+                        )
+                )
         );
     }
+
     @Override
     public void initialize() {
         RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
