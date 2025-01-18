@@ -40,8 +40,8 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
                         new HoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX(),
-                                () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralCoarse(),
+                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading())*robotState.getBlockLateralCoarse(),
+                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading())*robotState.getBlockLateralCoarse(),
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
