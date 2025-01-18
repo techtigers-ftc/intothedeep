@@ -13,11 +13,12 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * A command group that automatically picks up a specimen using the vision system and limelight
  */
 public class IntakeVisionPickupAction extends SequentialCommandGroup {
-    private final RobotState robotState;
 
     /**
      * Creates a new IntakeVisionPickupAction
@@ -25,15 +26,14 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
-        this.robotState = robotState;
+    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, DoubleSupplier headingSupplier) {
         addRequirements(intake, dropper, drive);
         addCommands(
                 // Aligns the robot to a heading of 0
                 new HoldPointAction(drive, robotState,
                         () -> robotState.getRobotCurrentPose().getX(),
                         () -> robotState.getRobotCurrentPose().getY(),
-                        () -> 0,
+                        headingSupplier,
                         0.3, Math.toRadians(2)
                 ),
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
@@ -42,19 +42,27 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new HoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),
                                 () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralCoarse(),
-                                () -> 0, 0.3, Math.toRadians(2)
-                                )
+                                headingSupplier, 0.3, Math.toRadians(2)
+                        )
                 ),
-                // Waits, then runs the fine camera alignment
+                // Waits, then runs the fine camera orientation and forward movement alignment
                 new WaitCommand(300),
-//                new HoldPointAction(drive, robotState,
-//                        () -> robotState.getRobotCurrentPose().getX(),
-//                        () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralFine(),
-//                        () -> 0, 0.3, Math.toRadians(2)
-//                ),
                 new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
                         + robotState.getBlockForwardFine()
                         - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
         );
+    }
+
+    /**
+     * Overload constructor for intake vision pickup action
+     *
+     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param drive the drive subsystem
+     * @param robotState the robot state
+     * @param heading the heading value
+     */
+    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, double heading) {
+        this(intake, dropper, drive, robotState, () -> heading);
     }
 }

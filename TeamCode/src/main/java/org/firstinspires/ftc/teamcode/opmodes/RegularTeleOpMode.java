@@ -88,7 +88,7 @@ public class RegularTeleOpMode extends BaseOpMode {
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState);
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
