@@ -126,7 +126,7 @@ public class DriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(12, 12),
-                                        new Point(12, 21)
+                                        new Point(12.5, 21)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -247,7 +247,7 @@ public class DriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(12, 12),
                                         new Point(11, 58),
-                                        new Point(47, 61.35)
+                                        new Point(49, 61.35)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -255,7 +255,7 @@ public class DriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 }

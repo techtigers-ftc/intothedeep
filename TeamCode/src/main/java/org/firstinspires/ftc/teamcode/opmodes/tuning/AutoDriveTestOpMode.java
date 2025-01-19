@@ -34,7 +34,7 @@ public class AutoDriveTestOpMode extends BaseOpMode {
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
 
         TestAutoDriveState testAutoDrive = new TestAutoDriveState("testAutoDrive", drive, robotState);
-        testAutoDrive.setPIDSToDefaultValues();
+        testAutoDrive.setPIDSToTuning();
         testAutoDrive.setTranslationalPIDF(0.1,0,0.01,0);
         testAutoDrive.setSecondaryTranslationalPIDF(0.15,0,0.01,0);
         testAutoDrive.setHeadingPIDF(1,0,0.03,0);
@@ -55,7 +55,7 @@ public class AutoDriveTestOpMode extends BaseOpMode {
                 );
 
         TestAutoDriveState secondTestAutoDrive = new TestAutoDriveState("secondTestAutoDrive", drive, robotState);
-        secondTestAutoDrive.setPIDSToDefaultValues();
+        secondTestAutoDrive.setPIDSToTuning();
         secondTestAutoDrive.setTolerance(1);
         secondTestAutoDrive.setAngleTolerance(Math.toRadians(1));
         secondTestAutoDrive
@@ -69,7 +69,6 @@ public class AutoDriveTestOpMode extends BaseOpMode {
 
 //                .addTransition(testAutoDrive, secondTestAutoDrive, AutoState.DRIVE_END)
                 .setCurrentState(testAutoDrive);
-        ;
 
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry);

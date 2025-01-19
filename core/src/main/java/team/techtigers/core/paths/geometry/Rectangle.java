@@ -6,12 +6,12 @@ import java.util.Arrays;
  * A rectangle
  */
 public class Rectangle {
+    public Point center;
     /**
      * Top right, bottom left, and center
      */
     private Point topRight;
     private Point bottomLeft;
-    public Point center;
 
 
     /**
@@ -67,5 +67,4 @@ public class Rectangle {
         bottomLeft = bottomLeft.multiply(factor);
         center = center.multiply(factor);
     }
-
 }

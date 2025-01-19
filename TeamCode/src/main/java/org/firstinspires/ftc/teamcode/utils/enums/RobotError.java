@@ -17,7 +17,12 @@ public enum RobotError {
     /**
      * Attempting to transition to a dropper position from an invalid start position
      */
-    INVALID_DROPPER_POSITION(2);
+    INVALID_DROPPER_POSITION(2),
+
+    /**
+     * Attempting to extend the intake slides past their extension limit
+     */
+    EXTENDING_SLIDES_TOO_FAR(3);
 
     /**
      * The error code associated with the error
