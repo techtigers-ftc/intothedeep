@@ -28,7 +28,7 @@ public class DriveStateConfigurator {
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
 
         state.setPathChain(
@@ -70,7 +70,7 @@ public class DriveStateConfigurator {
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(71))
+                                Math.toRadians(70))
                         .build()
         );
 
