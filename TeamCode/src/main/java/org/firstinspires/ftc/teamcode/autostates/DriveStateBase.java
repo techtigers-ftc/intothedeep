@@ -144,7 +144,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the primary PIDF coefficients to the calues from tuning constants for tuning purposes ONLY
+     * Sets the primary PIDF coefficients to the values from tuning constants for tuning purposes ONLY
      * Make sure to hard code values in configurators after tuning
      */
     public void setPrimaryPIDSToTuning() {
@@ -160,7 +160,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the secondary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Sets the secondary PIDF coefficients to the values from tuning constants for tuning purposes ONLY
      * Make sure to hard code values in configurators after tuning
      */
     public void setSecondaryPIDSToTuning() {
