@@ -29,7 +29,20 @@ public class HoldPointAction extends CommandBase {
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
 
-    public HoldPointAction(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
+    /**
+     * Creates a new HoldPointAction
+     *
+     * @param drive           the drive subsystem
+     * @param robotState      the robot state
+     * @param xSupplier       a supplier which gives x values for the target position
+     * @param ySupplier       a supplier which gives x values for the target position
+     * @param headingSupplier a supplier which gives heading values for the target position
+     * @param tolerance       the tolerance for the distance to the target
+     * @param angleTolerance  the tolerance for the angle to the target
+     */
+    public HoldPointAction(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier,
+                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                           double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
         this.xSupplier = xSupplier;
@@ -38,6 +51,23 @@ public class HoldPointAction extends CommandBase {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
+    }
+
+    /**
+     * Creates a new HoldPointAction (overload constructor)
+     *
+     * @param drive          the drive subsystem
+     * @param robotState     the robot state
+     * @param x              the x value for the target
+     * @param y              the y value for the target
+     * @param heading        the heading value for the target
+     * @param tolerance      the tolerance for the distance to the target
+     * @param angleTolerance the tolerance for the angle to the target
+     */
+    public HoldPointAction(DriveSubsystem drive, RobotState robotState, double x,
+                           double y, double heading,
+                           double tolerance, double angleTolerance) {
+        this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
     /**
@@ -69,11 +99,6 @@ public class HoldPointAction extends CommandBase {
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.03, 0));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.002, 0, 0.00035, 0.6, 0));
 
-//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(FollowerConstants.translationalPIDFCoefficients.P, FollowerConstants.translationalPIDFCoefficients.I, FollowerConstants.translationalPIDFCoefficients.D, FollowerConstants.translationalPIDFCoefficients.F));
-//        follower.setHeadingPIDF(new CustomPIDFCoefficients(FollowerConstants.headingPIDFCoefficients.P, FollowerConstants.headingPIDFCoefficients.I, FollowerConstants.headingPIDFCoefficients.D, FollowerConstants.headingPIDFCoefficients.F));
-//        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(FollowerConstants.drivePIDFCoefficients.P, FollowerConstants.drivePIDFCoefficients.I, FollowerConstants.drivePIDFCoefficients.D, FollowerConstants.drivePIDFCoefficients.T, FollowerConstants.drivePIDFCoefficients.F));
-
-
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
         follower.holdPoint(PoseTranslator.waypointToPose(target));
@@ -81,8 +106,7 @@ public class HoldPointAction extends CommandBase {
 
     @Override
     public void execute() {
-        // TODO: add for the edge case where the block is moved by an outside force
-        //maybe track the difference in the limelight lateral value
+        // TODO: try to run the hold path in the execute method
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 

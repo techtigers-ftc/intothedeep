@@ -24,12 +24,15 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * Creates a new IntakeVisionPickupAction
      *
      * @param intake     the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param drive the drive subsystem
      * @param robotState the robot state
+     * @param headingSupplier the heading supplier
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, DoubleSupplier headingSupplier) {
         addRequirements(intake, dropper, drive);
         addCommands(
-                // Aligns the robot to a heading of 0
+                // Aligns the robot to the heading given by the heading supplier
                 new HoldPointAction(drive, robotState,
                         () -> robotState.getRobotCurrentPose().getX(),
                         () -> robotState.getRobotCurrentPose().getY(),

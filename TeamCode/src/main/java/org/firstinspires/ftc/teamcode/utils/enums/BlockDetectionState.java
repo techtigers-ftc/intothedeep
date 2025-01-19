@@ -6,6 +6,5 @@ package org.firstinspires.ftc.teamcode.utils.enums;
 public enum BlockDetectionState {
     DETECTED,
     TOO_FAR,
-    READY_TO_GRAB,
     NOT_DETECTED
 }
