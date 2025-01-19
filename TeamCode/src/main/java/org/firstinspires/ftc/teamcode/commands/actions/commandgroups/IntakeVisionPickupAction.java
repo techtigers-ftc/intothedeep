@@ -27,7 +27,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param dropper the dropper subsystem
      * @param drive the drive subsystem
      * @param robotState the robot state
-     * @param headingSupplier the heading supplier
+     * @param headingSupplier the heading supplier that supplier the heading values to the target position
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, DoubleSupplier headingSupplier) {
         addRequirements(intake, dropper, drive);
