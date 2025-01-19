@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
@@ -149,7 +150,43 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configSecondSpecimenIntake(DriveToPlace state) {
+    public static void configFirstSpecimenIntake(DriveToPlace state) {
+        state.setPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addBezierLine(
+                                new Point(121, 32),
+                                new Point(95, 23)
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                                Math.toRadians(315))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
+        state.setPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addBezierLine(
+                                new Point(121, 32),
+                                new Point(95, 23)
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                                Math.toRadians(315))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configSecondSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
         state.setPIDSToTuning();
 
         state.setPathChain(
@@ -257,25 +294,7 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configFifthSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
-        state.setPIDSToTuning();
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
-                                Math.toRadians(315))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
-    }
-
-    public static void configFifthSpecimenDrop(DriveToGeneralSpecimenDropState state) {
+    public static void configDriveToPark(DriveToPark state) {
         state.setPIDSToTuning();
 
         state.setPathChain(
