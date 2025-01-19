@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoIntakeSample;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -47,7 +48,8 @@ public class GrabFirstSampleState extends SequentialCommandGroupState<AutoState>
                 new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
-                new AutoIntakeSample(intake, dropper, robotState)
+//                new AutoIntakeSample(intake, dropper, robotState),
+                new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }
 

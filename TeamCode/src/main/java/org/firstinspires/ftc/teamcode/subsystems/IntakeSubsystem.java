@@ -35,7 +35,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double FORWARD_KP = 0.00475;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0.0001;
-    public static double FORWARD_KF = 0.05;
+    public static double FORWARD_KF = 0.06;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;

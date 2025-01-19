@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabFirstSampleState;
@@ -73,23 +74,17 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(119.5, 45)),
+                distToIntakeTarget(robotState, new Waypoint(119.5, 46)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
-        DriveToPlace driveToFirstDropoff = new DriveToPlace(
-                "driveToFirstDropoff",
-                drive,
-                robotState);
-        SpecimenDriveStateConfigurator.configFirstDrop(driveToFirstDropoff);
-
-
-        OpenIntakeState dropFirstSample = new OpenIntakeState(
+        DropSampleState dropFirstSample = new DropSampleState(
                 "dropFirstSample",
-                robotState,
                 intake,
-                dropper
+                dropper,
+                robotState
         );
+
 
         DriveToPlace driveToSecondIntake = new DriveToPlace(
                 "driveToSecondIntake",
@@ -162,7 +157,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(clipSpecimen)
                 .addState(driveToFirstIntake)
                 .addState(grabFirstSample)
-                .addState(driveToFirstDropoff)
                 .addState(dropFirstSample)
                 .addState(driveToSecondIntake)
                 .addState(grabSecondSample)
@@ -177,13 +171,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveChamberPreload, clipSpecimen, AutoState.DRIVE_END)
                 .addTransition(clipSpecimen, driveToFirstIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
-                .addTransition(grabFirstSample, driveToFirstDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToFirstDropoff, dropFirstSample, AutoState.DRIVE_END)
-               .addTransition(dropFirstSample, driveToSecondIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
-                .addTransition(driveToSecondIntake, grabSecondSample, AutoState.DRIVE_END)
-                .addTransition(grabSecondSample, driveToSecondDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToSecondDropoff, dropSecondSample, AutoState.DRIVE_END)
-                .addTransition(dropSecondSample, endState, AutoState.SPECIMEN_1_DROP_COMPLETE)
+                .addTransition(grabFirstSample, dropFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToFirstDropoff, dropFirstSample, AutoState.DRIVE_END)
+//               .addTransition(dropFirstSample, driveToSecondIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
+//                .addTransition(driveToSecondIntake, grabSecondSample, AutoState.DRIVE_END)
+//                .addTransition(grabSecondSample, driveToSecondDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToSecondDropoff, dropSecondSample, AutoState.DRIVE_END)
+//                .addTransition(dropSecondSample, endState, AutoState.SPECIMEN_1_DROP_COMPLETE)
 //                .addTransition(dropSecondSample, driveToThirdIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
 //                .addTransition(driveToThirdIntake, grabThirdSample, AutoState.DRIVE_END)
 //                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
