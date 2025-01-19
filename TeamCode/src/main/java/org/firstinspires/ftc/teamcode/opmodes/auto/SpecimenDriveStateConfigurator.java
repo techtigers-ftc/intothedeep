@@ -164,8 +164,8 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
@@ -174,16 +174,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(95, 23),
+                                new Point(71,40.25)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
-                                Math.toRadians(315))
+                        .setLinearHeadingInterpolation(Math.toRadians(315),
+                                Math.toRadians(270))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configSecondSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
@@ -192,16 +192,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(71, 40.25),
+                                new Point(100.5, 18)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                        .setLinearHeadingInterpolation(Math.toRadians(270),
                                 Math.toRadians(315))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configSecondSpecimenDrop(DriveToGeneralSpecimenDropState state) {
@@ -210,16 +210,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(100.5, 18),
+                                new Point(68,40.25)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
-                                Math.toRadians(315))
+                        .setLinearHeadingInterpolation(Math.toRadians(315),
+                                Math.toRadians(270))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configThirdSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
@@ -228,16 +228,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(68, 40.25),
+                                new Point(100.5, 18)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                        .setLinearHeadingInterpolation(Math.toRadians(270),
                                 Math.toRadians(315))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configThirdSpecimenDrop(DriveToGeneralSpecimenDropState state) {
@@ -246,16 +246,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(100.5, 18),
+                                new Point(65,40.25)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
-                                Math.toRadians(315))
+                        .setLinearHeadingInterpolation(Math.toRadians(315),
+                                Math.toRadians(270))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configFourthSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
@@ -264,16 +264,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(65, 40.25),
+                                new Point(100.5, 18)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                        .setLinearHeadingInterpolation(Math.toRadians(270),
                                 Math.toRadians(315))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configFourthSpecimenDrop(DriveToGeneralSpecimenDropState state) {
@@ -282,16 +282,16 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
-                                new Point(95, 23)
+                                new Point(100.5, 18),
+                                new Point(62,40.25)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
-                                Math.toRadians(315))
+                        .setLinearHeadingInterpolation(Math.toRadians(315),
+                                Math.toRadians(270))
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     public static void configDriveToPark(DriveToPark state) {
@@ -300,10 +300,10 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
+                                new Point(62, 40.25),
                                 new Point(95, 23)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                        .setLinearHeadingInterpolation(Math.toRadians(270),
                                 Math.toRadians(315))
                         .build()
         );
