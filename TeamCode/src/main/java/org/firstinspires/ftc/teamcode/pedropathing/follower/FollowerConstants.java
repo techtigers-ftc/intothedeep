@@ -93,9 +93,9 @@ public class FollowerConstants {
     /** Translational PIDF coefficients (don't use integral)
      * @value Default Value: new CustomPIDFCoefficients(0.1,0,0,0); */
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.1,
+            0.3,
             0,
-            0.01,
+            0.02,
             0);
 
     /** Translational Integral
@@ -114,7 +114,7 @@ public class FollowerConstants {
     /** Heading error PIDF coefficients
      * @value Default Value: new CustomPIDFCoefficients(1,0,0,0); */
     public static CustomPIDFCoefficients headingPIDFCoefficients = new CustomPIDFCoefficients(
-            1,
+            3,
             0,
             0.03,
             0);
