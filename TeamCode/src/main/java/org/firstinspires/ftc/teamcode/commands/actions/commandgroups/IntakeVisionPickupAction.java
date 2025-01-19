@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.HoldPointActionTele;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -33,7 +33,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
         addRequirements(intake, dropper, drive);
         addCommands(
                 // Aligns the robot to the heading given by the heading supplier
-                new HoldPointActionTele(drive, robotState,
+                new TeleHoldPointCommand(drive, robotState,
                         () -> robotState.getRobotCurrentPose().getX(),
                         () -> robotState.getRobotCurrentPose().getY(),
                         headingSupplier,
@@ -42,7 +42,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
-                        new HoldPointActionTele(drive, robotState,
+                        new TeleHoldPointCommand(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 headingSupplier, 0.3, Math.toRadians(2)
