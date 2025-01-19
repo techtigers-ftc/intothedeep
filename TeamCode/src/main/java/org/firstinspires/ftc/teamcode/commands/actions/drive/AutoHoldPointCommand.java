@@ -40,7 +40,7 @@ public class AutoHoldPointCommand extends CommandBase {
     private Pose targetPosition;
 
     /**
-     * Creates a new AutoHoldPointAction
+     * Creates a new AutoHoldPointCommand
      *
      * @param drive           the drive subsystem
      * @param robotState      the robot state

@@ -33,7 +33,7 @@ public class TeleHoldPointCommand extends CommandBase {
     private Pose targetPosition;
 
     /**
-     * Creates a new AutoHoldPointAction
+     * Creates a new TeleHoldPointCommand
      *
      * @param drive           the drive subsystem
      * @param robotState      the robot state
