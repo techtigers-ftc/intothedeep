@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedropathing.pathGeneration;
+package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
 import org.firstinspires.ftc.teamcode.pedropathing.util.SingleRunAction;
 

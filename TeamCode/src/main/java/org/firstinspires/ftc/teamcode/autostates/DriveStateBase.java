@@ -3,15 +3,13 @@ package org.firstinspires.ftc.teamcode.autostates;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
-import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
-import team.techtigers.base.statemachine.SequentialCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
@@ -27,8 +25,8 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     /**
      * Constructor for the SequentialCommandGroupState
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
      * @param robotState The robot state
      */
     public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
@@ -55,7 +53,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * Calculate the angle distance to the target
      *
      * @param currentHeading current heading
-     * @param targetHeading target heading
+     * @param targetHeading  target heading
      * @return the angle distance to the target
      */
     protected double angleDistance(double currentHeading, double targetHeading) {
@@ -84,6 +82,18 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
+     * Sets the secondary translational PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryTranslationalPIDF(double p, double i, double d, double f) {
+        autoDriveCommand.setSecondaryTranslationalPIDF(p, i, d, f);
+    }
+
+    /**
      * Sets the heading PIDF coefficients for the drive command.
      *
      * @param p the proportional coefficient
@@ -92,6 +102,18 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * @param f the feedforward coefficient
      */
     public void setHeadingPIDF(double p, double i, double d, double f) {
+        autoDriveCommand.setHeadingPIDF(p, i, d, f);
+    }
+
+    /**
+     * Sets the secondary heading PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
         autoDriveCommand.setHeadingPIDF(p, i, d, f);
     }
 
@@ -106,6 +128,68 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      */
     public void setDrivePIDF(double p, double i, double d, double t, double f) {
         autoDriveCommand.setDrivePIDF(p, i, d, t, f);
+    }
+
+    /**
+     * Sets the secondary drive PIDF coefficients for the drive command.
+     *
+     * @param p the proportional coefficient
+     * @param i the integral coefficient
+     * @param d the derivative coefficient
+     * @param t the time constant
+     * @param f the feedforward coefficient
+     */
+    public void setSecondaryDrivePIDF(double p, double i, double d, double t, double f) {
+        autoDriveCommand.setSecondaryDrivePIDF(p, i, d, t, f);
+    }
+
+    /**
+     * Sets the primary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
+     */
+    public void setPrimaryPIDSToTuning() {
+        autoDriveCommand.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients.P,
+                FollowerConstants.translationalPIDFCoefficients.I,
+                FollowerConstants.translationalPIDFCoefficients.D,
+                FollowerConstants.translationalPIDFCoefficients.F);
+        autoDriveCommand.setHeadingPIDF(FollowerConstants.headingPIDFCoefficients.P,
+                FollowerConstants.headingPIDFCoefficients.I,
+                FollowerConstants.headingPIDFCoefficients.D,
+                FollowerConstants.headingPIDFCoefficients.F);
+        autoDriveCommand.setDrivePIDF(FollowerConstants.drivePIDFCoefficients.P,
+                FollowerConstants.drivePIDFCoefficients.I,
+                FollowerConstants.drivePIDFCoefficients.D,
+                FollowerConstants.drivePIDFCoefficients.T,
+                FollowerConstants.drivePIDFCoefficients.F);
+    }
+
+    /**
+     * Sets the secondary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
+     */
+    public void setSecondaryPIDSToTuning() {
+        autoDriveCommand.setSecondaryTranslationalPIDF(FollowerConstants.secondaryTranslationalPIDFCoefficients.P,
+                FollowerConstants.secondaryTranslationalPIDFCoefficients.I,
+                FollowerConstants.secondaryTranslationalPIDFCoefficients.D,
+                FollowerConstants.secondaryTranslationalPIDFCoefficients.F);
+        autoDriveCommand.setSecondaryHeadingPIDF(FollowerConstants.secondaryHeadingPIDFCoefficients.P,
+                FollowerConstants.secondaryHeadingPIDFCoefficients.I,
+                FollowerConstants.secondaryHeadingPIDFCoefficients.D,
+                FollowerConstants.secondaryHeadingPIDFCoefficients.F);
+        autoDriveCommand.setSecondaryDrivePIDF(FollowerConstants.secondaryDrivePIDFCoefficients.P,
+                FollowerConstants.secondaryDrivePIDFCoefficients.I,
+                FollowerConstants.secondaryDrivePIDFCoefficients.D,
+                FollowerConstants.secondaryDrivePIDFCoefficients.T,
+                FollowerConstants.secondaryDrivePIDFCoefficients.F);
+    }
+
+    /**
+     * Sets the primary and secondary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
+     */
+    public void setPIDSToTuning() {
+        setPrimaryPIDSToTuning();
+        setSecondaryPIDSToTuning();
     }
 
     /**

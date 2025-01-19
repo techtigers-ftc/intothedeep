@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.pedropathing;
+package org.firstinspires.ftc.teamcode.pedropathing.util;
 
-import org.firstinspires.ftc.teamcode.pedropathing.pathGeneration.Vector;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 
 /**
  * Class for holding the pedro pathing drive vectors to be used to drive the motors
