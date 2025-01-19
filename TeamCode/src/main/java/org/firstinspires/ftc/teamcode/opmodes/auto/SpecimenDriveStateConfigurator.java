@@ -17,6 +17,8 @@ public class SpecimenDriveStateConfigurator {
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     private static final double SMALL_TOLERANCE = 1.5;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
+    private static final double MINISCULE_TOLERANCE = 0.85;
+    private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(2);
 
     /**
      * Configures the DriveToPreloadDropState.
@@ -24,8 +26,13 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropStateSpecimen state) {
-        state.setPIDSToDefaultValues();
+        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setDrivePIDF(0.006, 0, 0.0004, 0.6, 0);
+        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+
 
         state.setPathChain(
                 new PathBuilder()
@@ -44,17 +51,19 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstIntake(DriveToFirstIntake state) {
-        state.setPIDSToDefaultValues();
-        state.setDrivePIDF(0.004,0,0.00035,0.6,0);
+        state.setDrivePIDF(0.003,0,0.00035,0.6,0);
         state.setTranslationalPIDF(0.2,0,0.01,0);
-        state.setHeadingPIDF(1.1, 0,0.3,0);
+        state.setHeadingPIDF(1.4, 0,0.3,0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(74, 40.25),
-                                        new Point(102.5, 27)
+                                        new Point(106.5, 27.5)
                                 )
                         )
 
@@ -62,19 +71,24 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
     public static void configFirstDrop(DriveToPlace state) {
         state.setPIDSToDefaultValues();
-        state.setHeadingPIDF(0.5, 0,0.03,0);
+        state.setDrivePIDF(0.003,0,0.00035,0.6,0);
+        state.setTranslationalPIDF(0.2,0,0.01,0);
+        state.setHeadingPIDF(0.35, 0,0.02,0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(0.35, 0, 0.02, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(102.5, 27),
+                                        new Point(106.5, 27.5),
                                         new Point(105, 27)
                                 )
                         )
@@ -90,14 +104,17 @@ public class SpecimenDriveStateConfigurator {
         state.setPIDSToDefaultValues();
         state.setDrivePIDF(0.004,0,0.00035,0.6,0);
         state.setTranslationalPIDF(0.2,0,0.01,0);
-        state.setHeadingPIDF(0.5, 0,0.3,0);
+        state.setHeadingPIDF(0.5, 0,0.1,0);
+        state.setSecondaryDrivePIDF(0.005, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(0.7, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.2, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(105, 27),
-                                        new Point(113.5, 27)
+                                        new Point(117, 27.5)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(-40),
@@ -105,19 +122,24 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
     public static void configSecondDrop(SecondDropOff state) {
         state.setPIDSToDefaultValues();
-        state.setHeadingPIDF(0.5, 0,0.03,0);
+        state.setDrivePIDF(0.003,0,0.00035,0.6,0);
+        state.setTranslationalPIDF(0.2,0,0.01,0);
+        state.setHeadingPIDF(0.35, 0,0.02,0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(0.35, 0, 0.02, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(113.5, 27),
+                                        new Point(117, 27.5),
                                         new Point(114, 27)
                                 )
                         )

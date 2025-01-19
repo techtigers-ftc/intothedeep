@@ -111,7 +111,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 drive,
                 robotState,
                 intake,
-                () -> 8
+                () -> 6
         );
         SpecimenDriveStateConfigurator.configSecondDrop(driveToSecondDropoff);
 
@@ -179,12 +179,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
                 .addTransition(grabFirstSample, driveToFirstDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveToFirstDropoff, dropFirstSample, AutoState.DRIVE_END)
-                .addTransition(dropFirstSample, driveToSecondIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
+               .addTransition(dropFirstSample, driveToSecondIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 .addTransition(driveToSecondIntake, grabSecondSample, AutoState.DRIVE_END)
                 .addTransition(grabSecondSample, driveToSecondDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToSecondDropoff, dropSecondSample,AutoState.DRIVE_END)
-                .addTransition(dropSecondSample, driveToThirdIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
-                .addTransition(driveToThirdIntake, endState, AutoState.DRIVE_END)
+                .addTransition(driveToSecondDropoff, dropSecondSample, AutoState.DRIVE_END)
+                .addTransition(dropSecondSample, endState, AutoState.SPECIMEN_1_DROP_COMPLETE)
+//                .addTransition(dropSecondSample, driveToThirdIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
+//                .addTransition(driveToThirdIntake, grabThirdSample, AutoState.DRIVE_END)
 //                .addTransition(grabThirdSample, driveToThirdDropoff, AutoState.SAMPLE_INTAKE_COMPLETE)
 //                .addTransition(driveToThirdDropoff, endState, AutoState.DRIVE_END)
 
