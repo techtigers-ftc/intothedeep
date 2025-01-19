@@ -41,7 +41,7 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         // TODO: input values to global constants
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, Y_HEIGHT, X_OFFSET, Y_OFFSET, DOWNWARDS_ANGLE);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         // TODO: Test the following Limelight offsets: 10.5, 4.2, 10, 25
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
