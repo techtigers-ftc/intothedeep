@@ -21,17 +21,28 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class TeleHoldPointCommand extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointCommand.class.getSimpleName();
-    private double tolerance;
-    private double angleTolerance;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
+    private double tolerance;
+    private double angleTolerance;
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
 
     private Pose targetPosition;
 
+    /**
+     * Creates a new AutoHoldPointAction
+     *
+     * @param drive           the drive subsystem
+     * @param robotState      the robot state
+     * @param xSupplier       the x supplier
+     * @param ySupplier       the y supplier
+     * @param headingSupplier the heading supplier
+     * @param tolerance       the tolerance
+     * @param angleTolerance  the angle tolerance
+     */
     public TeleHoldPointCommand(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
