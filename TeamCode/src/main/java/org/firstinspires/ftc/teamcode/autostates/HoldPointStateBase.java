@@ -60,6 +60,13 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
         return Math.abs(currentHeading - targetHeading);
     }
 
+    /**
+     * Sets the target position for the drive command
+     *
+     * @param x       the x position
+     * @param y       the y position
+     * @param heading the heading
+     */
     public void setTargetPosition(double x, double y, double heading) {
         holdPointCommand.setTargetPosition(x, y, heading);
     }
@@ -109,7 +116,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
-        holdPointCommand.setHeadingPIDF(p, i, d, f);
+        holdPointCommand.setSecondaryHeadingPIDF(p, i, d, f);
     }
 
     /**
