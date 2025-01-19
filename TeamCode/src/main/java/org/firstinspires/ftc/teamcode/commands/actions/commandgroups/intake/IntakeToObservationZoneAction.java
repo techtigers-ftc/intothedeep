@@ -40,11 +40,11 @@ public class IntakeToObservationZoneAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake, () -> 10, 1),
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 300),
+                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
                         new IntakeClawRotationAction(intake,
-                                () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 300),
+                                () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 300)
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
                 ),
                 new IntakeOpenAction(intake, 100)
 

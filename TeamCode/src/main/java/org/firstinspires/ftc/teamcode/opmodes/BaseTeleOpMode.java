@@ -77,7 +77,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Intake TODO: Split into a different method
 
         // Commands
-        IntakeToObservationZoneAction intakeToObservation = new IntakeToObservationZoneAction(intake, robotState);
+        IntakeReadyToPickupAction intakeToObservation =
+                new IntakeReadyToPickupAction(intake, robotState,
+                        () -> 10, () -> 90);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 10);

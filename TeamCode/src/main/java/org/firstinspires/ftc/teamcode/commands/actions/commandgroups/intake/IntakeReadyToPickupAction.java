@@ -36,8 +36,8 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
                 new ParallelCommandGroup(
+                        new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 100),
                         new IntakeClawRotationAction(intake,
@@ -64,7 +64,7 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP) {
+        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER) {
             RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
