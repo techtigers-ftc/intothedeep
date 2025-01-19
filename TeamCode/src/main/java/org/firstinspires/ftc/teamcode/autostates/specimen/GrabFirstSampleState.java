@@ -48,7 +48,6 @@ public class GrabFirstSampleState extends SequentialCommandGroupState<AutoState>
                 new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
-//                new AutoIntakeSample(intake, dropper, robotState),
                 new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }

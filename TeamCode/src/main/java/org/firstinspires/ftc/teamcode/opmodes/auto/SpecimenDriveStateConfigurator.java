@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DropSecondAndThirdSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**
  * A class used to configure DriveStates.
@@ -51,7 +54,6 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstIntake(DriveToFirstIntake state) {
-        state.setPIDSToTuning();
         state.setDrivePIDF(0.0025,0,0.0003,0.6,0);
         state.setTranslationalPIDF(0.3,0,0.01,0);
         state.setHeadingPIDF(1.5, 0,0.3,0);
@@ -76,28 +78,25 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
-    public static void configFirstDrop(DriveToPlace state) {
-        state.setDrivePIDF(0.003,0,0.00035,0.6,0);
-        state.setTranslationalPIDF(0.2,0,0.01,0);
-        state.setHeadingPIDF(0.35, 0,0.02,0);
-        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-        state.setSecondaryHeadingPIDF(0.35, 0, 0.02, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+    public static void configureFirstHoldPoint(DropSampleState state){
+        state.setTolerance(0.5);
+        state.setAngleTolerance(Math.toRadians(1));
+        state.setPIDSToTuning();
+        state.setTargetPosition(128, 23.5, Math.toRadians(90));
+    }
 
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierLine(
-                                        new Point(106.5, 27.5),
-                                        new Point(105, 27)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(55), Math.toRadians(-40))
-                        .build()
-        );
+    public static void configureSecondHoldPoint(DropSecondAndThirdSampleState state){
+        state.setTolerance(0.5);
+        state.setAngleTolerance(Math.toRadians(1));
+        state.setPIDSToTuning();
+        state.setTargetPosition(130, 23.5, Math.toRadians(90));
+    }
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    public static void configureThirdHoldPoint(DropSecondAndThirdSampleState state){
+        state.setTolerance(0.5);
+        state.setAngleTolerance(Math.toRadians(1));
+        state.setPIDSToTuning();
+        state.setTargetPosition(130, 23.5, Math.toRadians(90));
     }
 
     public static void configSecondIntake(DriveToPlace state) {
@@ -124,73 +123,5 @@ public class SpecimenDriveStateConfigurator {
 
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
-    }
-
-    public static void configSecondDrop(SecondDropOff state) {
-        state.setPIDSToTuning();
-        state.setDrivePIDF(0.003,0,0.00035,0.6,0);
-        state.setTranslationalPIDF(0.2,0,0.01,0);
-        state.setHeadingPIDF(0.35, 0,0.02,0);
-        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-        state.setSecondaryHeadingPIDF(0.35, 0, 0.02, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierLine(
-                                        new Point(117, 27.5),
-                                        new Point(114, 27)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(55),
-                                Math.toRadians(-40))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
-    }
-
-    public static void configThirdIntake(SecondDropOff state) {
-        state.setPIDSToTuning();
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierCurve(
-                                        new Point(114, 27),
-//                                        new Point(110, 24),
-                                        new Point(121, 32)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(-40),
-                                Math.toRadians(39))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
-    }
-
-    public static void configThirdDrop(DriveToPlace state) {
-        state.setPIDSToTuning();
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierCurve(
-                                        new Point(119, 29),
-//                                        new Point(110, 24),
-                                        new Point(110, 27)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(35),
-                                Math.toRadians(-40))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 }

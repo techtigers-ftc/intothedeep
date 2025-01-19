@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.autocommands.AutoIntakeSample;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -19,9 +19,9 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 /**
  * A state to grab a sample to be dropped off later
  */
-public class GrabRestOfSamplesState extends SequentialCommandGroupState<AutoState> {
+public class GrabOtherSampleState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            GrabRestOfSamplesState.class.getSimpleName();
+            GrabOtherSampleState.class.getSimpleName();
     private final RobotState robotState;
     private DoubleSupplier slidePos;
     private DoubleSupplier clawPos;
@@ -36,9 +36,9 @@ public class GrabRestOfSamplesState extends SequentialCommandGroupState<AutoStat
      * @param targetSlidePos The target slide position
      * @param targetClawRotation The target claw rotation
      */
-    public GrabRestOfSamplesState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                                  RobotState robotState, DoubleSupplier targetSlidePos,
-                                  DoubleSupplier targetClawRotation) {
+    public GrabOtherSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
+                                RobotState robotState, DoubleSupplier targetSlidePos,
+                                DoubleSupplier targetClawRotation) {
         super(name);
         this.robotState = robotState;
         slidePos = targetSlidePos;
@@ -46,7 +46,7 @@ public class GrabRestOfSamplesState extends SequentialCommandGroupState<AutoStat
         addCommands(
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
-                new AutoIntakeSample(intake, dropper, robotState)
+                new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }
 
