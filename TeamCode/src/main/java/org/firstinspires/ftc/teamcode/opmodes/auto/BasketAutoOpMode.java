@@ -22,6 +22,7 @@ import java.util.function.DoubleSupplier;
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.utils.RobotSaveState;
 
 public abstract class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
@@ -37,6 +38,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(isBlue(), true);
+
+        RobotSaveState.reset();
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -190,5 +193,10 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
+    }
+
+    @Override
+    public void end() {
+        RobotSaveState.getInstance().setState("robotCurrentPose", robotState.getRobotCurrentPose());
     }
 }

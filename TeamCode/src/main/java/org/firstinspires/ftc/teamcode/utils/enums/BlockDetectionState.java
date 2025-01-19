@@ -5,8 +5,6 @@ package org.firstinspires.ftc.teamcode.utils.enums;
  */
 public enum BlockDetectionState {
     DETECTED,
-    TRACKING,
-    READY_TO_GRAB,
+    TOO_FAR,
     NOT_DETECTED
-
-    }
+}
