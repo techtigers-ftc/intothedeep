@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.autostates.specimen;
+package org.firstinspires.ftc.teamcode.autostates;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.AutoHoldPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -21,7 +20,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
     private double angleTolerance;
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Constructor for the HoldPointStateBase
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
