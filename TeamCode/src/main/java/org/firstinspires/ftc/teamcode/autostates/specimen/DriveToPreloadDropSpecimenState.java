@@ -11,9 +11,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * Drives to Preload Drop
  */
-public class DriveToPreloadDropStateSpecimen extends DriveStateBase {
+public class DriveToPreloadDropSpecimenState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToPreloadDropStateSpecimen.class.getSimpleName();
+            DriveToPreloadDropSpecimenState.class.getSimpleName();
 
     /**
      * Constructor for the DriveToPreloadDropState
@@ -23,7 +23,7 @@ public class DriveToPreloadDropStateSpecimen extends DriveStateBase {
      * @param dropper The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToPreloadDropStateSpecimen(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToPreloadDropSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
