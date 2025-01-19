@@ -82,7 +82,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 "dropFirstSample",
                 intake,
                 dropper,
-                robotState
+                robotState,
+                drive
         );
 
 

@@ -1,21 +1,31 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.HoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
+import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to grab a sample to be dropped off later
  */
-public class DropSampleState extends SequentialCommandGroupState<AutoState> {
+public class DropSampleState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             DropSampleState.class.getSimpleName();
     private final RobotState robotState;
@@ -30,13 +40,17 @@ public class DropSampleState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public DropSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                           RobotState robotState) {
+                           RobotState robotState, DriveSubsystem drive) {
         super(name);
         this.robotState = robotState;
         addCommands(
-                new IntakeReadyToTransferAction(intake, robotState),
-                new DropperBackwardCarryAction(dropper, intake, robotState),
-                new DropperBackSlapAction(dropper, robotState)
+                new HoldPointAction(drive, robotState, 128, 23.5, Math.toRadians(90), 0, Math.toRadians(0)),
+                new SequentialCommandGroup(
+                        new IntakeReadyToTransferAction(intake, robotState),
+                        new DropperTransferAction(dropper, intake, robotState),
+                        new DropperPitchAction(dropper, 300, 500),
+                        new DropperOpenAction(dropper, 100)
+                )
         );
     }
 
@@ -47,7 +61,7 @@ public class DropSampleState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperState() == DropperState.BACK_SLAP) {
+        if (robotState.getDropperClawState() == ClawState.OPEN) {
             return AutoState.SAMPLE_0_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
