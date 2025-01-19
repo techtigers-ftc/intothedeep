@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
+/**
+ * An abstract class for holding to a point
+ */
 public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoState> {
 
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
