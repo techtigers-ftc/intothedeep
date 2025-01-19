@@ -144,9 +144,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the primary PIDF coefficients to the defaults from follower constants
+     * Sets the primary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
      */
-    public void setPrimaryPIDSToDefaultValues() {
+    public void setPrimaryPIDSToTuning() {
         autoDriveCommand.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients.P,
                 FollowerConstants.translationalPIDFCoefficients.I,
                 FollowerConstants.translationalPIDFCoefficients.D,
@@ -163,9 +164,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the secondary PIDF coefficients to the defaults from follower constants
+     * Sets the secondary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
      */
-    public void setSecondaryPIDSToDefaultValues() {
+    public void setSecondaryPIDSToTuning() {
         autoDriveCommand.setSecondaryTranslationalPIDF(FollowerConstants.secondaryTranslationalPIDFCoefficients.P,
                 FollowerConstants.secondaryTranslationalPIDFCoefficients.I,
                 FollowerConstants.secondaryTranslationalPIDFCoefficients.D,
@@ -182,11 +184,12 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the primary and secondary PIDF coefficients to the defaults from follower constants
+     * Sets the primary and secondary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Make sure to hard code values in configurators after tuning
      */
-    public void setPIDSToDefaultValues() {
-        setPrimaryPIDSToDefaultValues();
-        setSecondaryPIDSToDefaultValues();
+    public void setPIDSToTuning() {
+        setPrimaryPIDSToTuning();
+        setSecondaryPIDSToTuning();
     }
 
     /**
