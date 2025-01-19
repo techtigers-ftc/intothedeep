@@ -17,13 +17,14 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp
 public class AscentTestOpMode extends BaseOpMode {
     private RobotState robotState;
+    private AscentSubsystem ascent;
 
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         robotState = new RobotState(true, false);
 
-        AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
+        ascent = new AscentSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         registerSubsystems(drive, ascent, dropper);
@@ -52,16 +53,16 @@ public class AscentTestOpMode extends BaseOpMode {
                     gamepad1.runRumbleEffect(ascentDisengagementRumble);
                 },
                 () -> {
-                    ascent.disengageAscent();
+//                    ascent.disengageAscent();
                     gamepad1.runRumbleEffect(ascentEngagementRumble);
                 }
         );
 
         // Ascent and drive and dropper
         Trigger ascentTrigger = new Trigger(() -> robotState.getIsAscending());
-//
+
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
-        ascentTrigger.negate().whenActive(manualDriveCommand);
+        ascentTrigger.negate().whileActiveOnce(manualDriveCommand);
 
         AscentCommand ascentCommand = new AscentCommand(ascent, driverGamepad);
         ascentTrigger.whileActiveContinuous(ascentCommand);
@@ -78,5 +79,6 @@ public class AscentTestOpMode extends BaseOpMode {
     @Override
     public void update() {
         telemetry.addData("Is Ascending", robotState.getIsAscending());
+//        telemetry.addData("Dropper height", ascent.getCurrentSlidePositionInches());
     }
 }

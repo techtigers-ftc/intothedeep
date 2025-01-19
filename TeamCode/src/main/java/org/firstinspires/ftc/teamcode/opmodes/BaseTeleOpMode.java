@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.commands.AscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
@@ -23,6 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
+import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -57,10 +60,31 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
-        registerSubsystems(intake, drive, dropper, smallCamera, limelight, odometry);
+        registerSubsystems(intake, drive, dropper, smallCamera, limelight,
+                odometry, ascent);
+
+        // ASCENT
+        Trigger startAscentTrigger =
+                new Trigger(() -> gamepad1.touchpad_finger_2);
+        Trigger ascentHeightTrigger = new Trigger(() -> dropper.getCurrentSlidePositionInches() > AscentSubsystem.ASCENT_INITIAL_HEIGHT);
+        Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
+
+        AscentCommand ascentCommand = new AscentCommand(robotState,
+                manipulatorGamepad::getLeftY, ascent, dropper, drive);
+
+        startAscentTrigger.and(ascentHeightTrigger).whenActive(ascentCommand);
+        startAscentTrigger.and(ascentHeightTrigger.negate()).whenActive(() -> {
+            Gamepad.RumbleEffect ascentBadRumble =
+                    new Gamepad.RumbleEffect.Builder()
+                            .addStep(0.5, 0.5, 1000)
+                            .build();
+            gamepad1.runRumbleEffect(ascentBadRumble);
+            gamepad2.runRumbleEffect(ascentBadRumble);
+        });
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
@@ -70,6 +94,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
+
 
         // MANIPULATOR
 
@@ -227,7 +252,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getRightY() != 0
         );
-        dropperSlidesTrigger.whileActiveContinuous(() ->
+        dropperSlidesTrigger.and(isAscending).whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
                         -manipulatorGamepad.getRightY() * 2.5)
         );

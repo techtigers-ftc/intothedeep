@@ -1,72 +1,99 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.CloseableSubsystem;
 
+/**
+ * A subsystem that controls the ascent mechanism.
+ */
 public class AscentSubsystem extends CloseableSubsystem {
+    public static final double ASCENT_INITIAL_HEIGHT = 12;
+    public static final double JACKS_DISENGAGE_HEIGHT = 9;
     private final Servo changingTransmission;
-    private final DcMotor leftVerticalSlide;
-    private final DcMotor rightVerticalSlide;
-    private final DcMotor leftBack;
-    private final DcMotor rightBack;
+    private final Servo leftJackServo;
+    private final Servo rightJackServo;
     private final RobotState robotState;
+    private boolean jacksEngaged;
 
+    /**
+     * Constructs a new AscentSubsystem.
+     *
+     * @param hardwareMap The hardware map, used to get hardware references
+     * @param robotState  The state of the robot
+     */
     public AscentSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
         changingTransmission = hardwareMap.get(Servo.class,
                 "transmission_switch");
-        leftVerticalSlide = hardwareMap.get(DcMotor.class, "left_dropper_slide");
-        rightVerticalSlide = hardwareMap.get(DcMotor.class, "right_dropper_slide");
-        leftBack = hardwareMap.get(DcMotor.class, "left_back");
-        rightBack = hardwareMap.get(DcMotor.class, "right_back");
+        leftJackServo = hardwareMap.get(Servo.class, "left_jack");
+        rightJackServo = hardwareMap.get(Servo.class, "right_jack");
 
-        leftVerticalSlide.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightVerticalSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightJackServo.setDirection(Servo.Direction.REVERSE);
 
-        disengageAscent();
-    }
+        jacksEngaged = false;
 
-    public void engageAscent() {
-        changingTransmission.setPosition(0.36);
-        robotState.setIsAscending(true);
-    }
-
-    public void disengageAscent() {
         changingTransmission.setPosition(0.5);
         robotState.setIsAscending(false);
+        disengageJacks();
     }
 
+    /**
+     * Disengages the jacks that lift the robot
+     */
+    public void disengageJacks() {
+        leftJackServo.setPosition(0);
+        rightJackServo.setPosition(0);
+        jacksEngaged = false;
+    }
+
+    /**
+     * Engages the jacks that lift the robot
+     */
+    public void engageJacks() {
+        leftJackServo.setPosition(1);
+        rightJackServo.setPosition(1);
+        jacksEngaged = true;
+    }
+
+    /**
+     * Engages the switching transmission and the jacks
+     */
+    public void engageAscent() {
+        changingTransmission.setPosition(0.69);
+        robotState.setIsAscending(true);
+        engageJacks();
+    }
+
+    /**
+     * Gets if the jacks are engaged
+     * @return if the jacks are engaged
+     */
+    public boolean areJacksEngaged() {
+        return jacksEngaged;
+    }
+
+    /**
+     * Sets the position of the changing transmission servo. Used for testing
+     * @param position the position to set the servo to
+     */
     public void setChangingTransmissionPosition(double position) {
         changingTransmission.setPosition(position);
     }
 
+    /**
+     * Gets the position of the changing transmission servo. Used for testing
+     * @return the position of the changing transmission servo
+     */
     public double getChangingTransmissionPosition() {
         return changingTransmission.getPosition();
     }
 
-    public void powerAscent(double power) {
-        leftVerticalSlide.setPower(power);
-        rightVerticalSlide.setPower(power);
-        leftBack.setPower(power);
-        rightBack.setPower(power);
-    }
-
-    @Override
-    public void periodic(){
-        RobotLog.dd("AscentSubsystem", "Changing Transmission Position: %f", getChangingTransmissionPosition());
-    }
-
     @Override
     public void close() {
-        disengageAscent();
+        disengageJacks();
     }
 }
