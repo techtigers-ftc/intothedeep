@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -23,9 +22,9 @@ import java.util.function.DoubleSupplier;
 /**
  * A state to grab a sample to be dropped off later
  */
-public class DropSampleState extends HoldPointStateBase {
+public class DropSecondAndThirdSampleState extends HoldPointStateBase {
     private static final String LOG_TAG =
-            DropSampleState.class.getSimpleName();
+            DropSecondAndThirdSampleState.class.getSimpleName();
     private final RobotState robotState;
 
 
@@ -37,8 +36,8 @@ public class DropSampleState extends HoldPointStateBase {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public DropSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                           RobotState robotState, DriveSubsystem drive) {
+    public DropSecondAndThirdSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
+                                         RobotState robotState, DriveSubsystem drive, DoubleSupplier targetSlidePos) {
         super(name, drive, robotState);
         this.robotState = robotState;
         addCommands(
@@ -51,7 +50,8 @@ public class DropSampleState extends HoldPointStateBase {
                                         new DropperPitchAction(dropper, 300, 500),
                                         new WaitCommand(100),
                                         new DropperOpenAction(dropper, 100)
-                                )
+                                ),
+                                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos)
                         )
                 )
         );

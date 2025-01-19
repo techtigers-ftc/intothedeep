@@ -4,9 +4,12 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -18,10 +21,10 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
-public class HoldPointAction extends CommandBase {
-    private static final String LOG_TAG = HoldPointAction.class.getSimpleName();
-    private final double tolerance;
-    private final double angleTolerance;
+public class HoldPointActionTele extends CommandBase {
+    private static final String LOG_TAG = HoldPointActionTele.class.getSimpleName();
+    private double tolerance;
+    private double angleTolerance;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
@@ -29,45 +32,15 @@ public class HoldPointAction extends CommandBase {
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
 
-    /**
-     * Creates a new HoldPointAction
-     *
-     * @param drive           the drive subsystem
-     * @param robotState      the robot state
-     * @param xSupplier       a supplier which gives x values for the target position
-     * @param ySupplier       a supplier which gives x values for the target position
-     * @param headingSupplier a supplier which gives heading values for the target position
-     * @param tolerance       the tolerance for the distance to the target
-     * @param angleTolerance  the tolerance for the angle to the target
-     */
-    public HoldPointAction(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier,
-                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
-                           double tolerance, double angleTolerance) {
+    private Pose targetPosition;
+
+    public HoldPointActionTele(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
+        this.follower = new Follower(new RobotStateLocalizer(robotState));
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
         this.headingSupplier = headingSupplier;
-        this.tolerance = tolerance;
-        this.angleTolerance = angleTolerance;
-        follower = new Follower(new RobotStateLocalizer(robotState));
-    }
-
-    /**
-     * Creates a new HoldPointAction (overload constructor)
-     *
-     * @param drive          the drive subsystem
-     * @param robotState     the robot state
-     * @param x              the x value for the target
-     * @param y              the y value for the target
-     * @param heading        the heading value for the target
-     * @param tolerance      the tolerance for the distance to the target
-     * @param angleTolerance the tolerance for the angle to the target
-     */
-    public HoldPointAction(DriveSubsystem drive, RobotState robotState, double x,
-                           double y, double heading,
-                           double tolerance, double angleTolerance) {
-        this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
     /**
@@ -99,9 +72,10 @@ public class HoldPointAction extends CommandBase {
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.03, 0));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.002, 0, 0.00035, 0.6, 0));
 
-        Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
+        targetPosition = new Pose(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
+        Waypoint target = PoseTranslator.poseToWaypoint(targetPosition);
         robotState.setRobotFinalPose(target);
-        follower.holdPoint(PoseTranslator.waypointToPose(target));
+        follower.holdPoint(targetPosition);
     }
 
     @Override
