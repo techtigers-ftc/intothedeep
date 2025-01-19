@@ -100,7 +100,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState,
                 drive,
-                () -> 8
+                distToIntakeTarget(robotState, new Waypoint(139.5, 46))
         );
         SpecimenDriveStateConfigurator.configureSecondHoldPoint(dropSecondSample);
 
@@ -109,7 +109,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(129.5, 46)),
+                distToIntakeTarget(robotState, new Waypoint(139.5, 46)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -119,7 +119,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState,
                 drive,
-                () -> 8
+                () -> 0
         );
         SpecimenDriveStateConfigurator.configureSecondHoldPoint(dropSecondSample);
 
