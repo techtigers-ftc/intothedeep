@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.AutoHoldPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
@@ -16,7 +15,7 @@ import team.techtigers.core.paths.Waypoint;
 public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoState> {
 
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
-    protected final AutoDriveCommand autoDriveCommand;
+    protected final AutoHoldPointCommand holdPointCommand;
     protected final RobotState robotState;
     private double tolerance;
     private double angleTolerance;
@@ -27,11 +26,11 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
-     */
+     **/
     public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState) {
         super(name);
         this.robotState = robotState;
-        autoDriveCommand = new AutoDriveCommand(drive, robotState);
+        holdPointCommand = new AutoHoldPointCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
     }
@@ -59,13 +58,8 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
         return Math.abs(currentHeading - targetHeading);
     }
 
-    /**
-     * Sets the path chain for the drive command.
-     *
-     * @param pathChain the path chain to run
-     */
-    public void setPathChain(PathChain pathChain) {
-        autoDriveCommand.setPathChain(pathChain);
+    public void setTargetPosition(double x, double y, double heading) {
+        holdPointCommand.setTargetPosition(x, y, heading);
     }
 
     /**
@@ -77,7 +71,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setTranslationalPIDF(double p, double i, double d, double f) {
-        autoDriveCommand.setTranslationalPIDF(p, i, d, f);
+        holdPointCommand.setTranslationalPIDF(p, i, d, f);
     }
 
     /**
@@ -89,7 +83,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setSecondaryTranslationalPIDF(double p, double i, double d, double f) {
-        autoDriveCommand.setSecondaryTranslationalPIDF(p, i, d, f);
+        holdPointCommand.setSecondaryTranslationalPIDF(p, i, d, f);
     }
 
     /**
@@ -101,7 +95,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setHeadingPIDF(double p, double i, double d, double f) {
-        autoDriveCommand.setHeadingPIDF(p, i, d, f);
+        holdPointCommand.setHeadingPIDF(p, i, d, f);
     }
 
     /**
@@ -113,7 +107,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
-        autoDriveCommand.setHeadingPIDF(p, i, d, f);
+        holdPointCommand.setHeadingPIDF(p, i, d, f);
     }
 
     /**
@@ -126,7 +120,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setDrivePIDF(double p, double i, double d, double t, double f) {
-        autoDriveCommand.setDrivePIDF(p, i, d, t, f);
+        holdPointCommand.setDrivePIDF(p, i, d, t, f);
     }
 
     /**
@@ -139,7 +133,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param f the feedforward coefficient
      */
     public void setSecondaryDrivePIDF(double p, double i, double d, double t, double f) {
-        autoDriveCommand.setSecondaryDrivePIDF(p, i, d, t, f);
+        holdPointCommand.setSecondaryDrivePIDF(p, i, d, t, f);
     }
 
     /**
@@ -147,13 +141,13 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * Make sure to hard code values in configurators after tuning
      */
     public void setPrimaryPIDSToTuning() {
-        autoDriveCommand.setTranslationalPIDF(
+        holdPointCommand.setTranslationalPIDF(
                 TuningConstants.aTranslationalP, 0,
                 TuningConstants.bTranslationalD, 0);
-        autoDriveCommand.setHeadingPIDF(
+        holdPointCommand.setHeadingPIDF(
                 TuningConstants.eHeadingP, 0,
                 TuningConstants.fHeadingD, 0);
-        autoDriveCommand.setDrivePIDF(
+        holdPointCommand.setDrivePIDF(
                 TuningConstants.cDriveP, 0,
                 TuningConstants.dDriveD, 0.6, 0);
     }
@@ -163,13 +157,13 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * Make sure to hard code values in configurators after tuning
      */
     public void setSecondaryPIDSToTuning() {
-        autoDriveCommand.setSecondaryTranslationalPIDF(
+        holdPointCommand.setSecondaryTranslationalPIDF(
                 TuningConstants.gSecondaryTranslationalP, 0,
                 TuningConstants.hSecondaryTranslationalD, 0);
-        autoDriveCommand.setSecondaryHeadingPIDF(
+        holdPointCommand.setSecondaryHeadingPIDF(
                 TuningConstants.kSecondaryHeadingP, 0,
                 TuningConstants.lSecondaryHeadingD, 0);
-        autoDriveCommand.setSecondaryDrivePIDF(
+        holdPointCommand.setSecondaryDrivePIDF(
                 TuningConstants.iSecondaryDriveP, 0,
                 TuningConstants.jSecondaryDriveD, 0.6, 0);
     }

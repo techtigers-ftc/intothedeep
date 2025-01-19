@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.HoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.AutoHoldPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -61,12 +61,12 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
         IntakeVisionPickupAction intakeVisionPickupAction = new IntakeVisionPickupAction(intake, dropper, drive, robotState, 0);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).and(blockDetected).whenActive(intakeVisionPickupAction);
 
-        HoldPointAction holdPointAction = new HoldPointAction(drive, robotState,
-                () -> robotState.getRobotCurrentPose().getX(),
-                () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralCoarse(),
-                () -> 0, 0.3, 2
-        );
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(holdPointAction);
+//        AutoHoldPointCommand autoHoldPointCommand = new AutoHoldPointCommand(drive, robotState,
+//                () -> robotState.getRobotCurrentPose().getX(),
+//                () -> robotState.getRobotCurrentPose().getY() - robotState.getBlockLateralCoarse(),
+//                () -> 0, 0.3, 2
+//        );
+//        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(autoHoldPointCommand);
 
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);

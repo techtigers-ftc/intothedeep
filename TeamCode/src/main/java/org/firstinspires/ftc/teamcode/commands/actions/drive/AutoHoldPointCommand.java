@@ -4,8 +4,8 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
@@ -21,16 +21,11 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
-public class HoldPointAction extends CommandBase {
-    private static final String LOG_TAG = HoldPointAction.class.getSimpleName();
-    private final double tolerance;
-    private final double angleTolerance;
+public class AutoHoldPointCommand extends CommandBase {
+    private static final String LOG_TAG = AutoHoldPointCommand.class.getSimpleName();
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
-    private DoubleSupplier xSupplier;
-    private DoubleSupplier ySupplier;
-    private DoubleSupplier headingSupplier;
 
     // Primary PIDF Controllers
     private PIDFController translationalPIDF;
@@ -42,45 +37,18 @@ public class HoldPointAction extends CommandBase {
     private PIDFController secondaryHeadingPIDF;
     private FilteredPIDFController secondaryDrivePIDF;
 
+    private Pose targetPosition;
+
     /**
      * Creates a new HoldPointAction
      *
      * @param drive           the drive subsystem
      * @param robotState      the robot state
-     * @param xSupplier       a supplier which gives x values for the target position
-     * @param ySupplier       a supplier which gives x values for the target position
-     * @param headingSupplier a supplier which gives heading values for the target position
-     * @param tolerance       the tolerance for the distance to the target
-     * @param angleTolerance  the tolerance for the angle to the target
      */
-    public HoldPointAction(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier,
-                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
-                           double tolerance, double angleTolerance) {
+    public AutoHoldPointCommand(DriveSubsystem drive, RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
-        this.xSupplier = xSupplier;
-        this.ySupplier = ySupplier;
-        this.headingSupplier = headingSupplier;
-        this.tolerance = tolerance;
-        this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
-    }
-
-    /**
-     * Creates a new HoldPointAction (overload constructor)
-     *
-     * @param drive          the drive subsystem
-     * @param robotState     the robot state
-     * @param x              the x value for the target
-     * @param y              the y value for the target
-     * @param heading        the heading value for the target
-     * @param tolerance      the tolerance for the distance to the target
-     * @param angleTolerance the tolerance for the angle to the target
-     */
-    public HoldPointAction(DriveSubsystem drive, RobotState robotState, double x,
-                           double y, double heading,
-                           double tolerance, double angleTolerance) {
-        this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
     /**
@@ -121,6 +89,9 @@ public class HoldPointAction extends CommandBase {
         if (drivePIDF == null) {
             throw new IllegalArgumentException("Drive PIDF coefficients not set");
         }
+        if (targetPosition == null) {
+            throw new IllegalArgumentException("Target position not set");
+        }
 
         // Sets the primary PIDF coefficients
         follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
@@ -139,9 +110,9 @@ public class HoldPointAction extends CommandBase {
             follower.setSecondaryDrivePIDF(secondaryDrivePIDF.getCoefficients());
         }
 
-        Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
+        Waypoint target = PoseTranslator.poseToWaypoint(targetPosition);
         robotState.setRobotFinalPose(target);
-        follower.holdPoint(PoseTranslator.waypointToPose(target));
+        follower.holdPoint(targetPosition);
     }
 
     @Override
@@ -151,24 +122,31 @@ public class HoldPointAction extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() {
-        Waypoint current = robotState.getRobotCurrentPose();
-        Waypoint target = robotState.getRobotFinalPose();
-
-        RobotLog.dd(LOG_TAG, "Current Position: %s", current.toString());
-        RobotLog.dd(LOG_TAG, "Final Position: %s", target.toString());
-        RobotLog.dd(LOG_TAG, "Distance to Target: %f", distToTarget(current, target));
-        RobotLog.dd(LOG_TAG, "Distance to Angle Target: %f", angleDistance(current.getHeading(), target.getHeading()));
-
-
-        return distToTarget(current, target) < tolerance && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance;
-    }
-
-    @Override
     public void end(boolean interrupted) {
         drive.driveRobotCentric(0, 0, 0);
     }
 
+    /**
+     * Sets the target position for the robot to hold to
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param heading the heading
+     */
+    public void setTargetPosition(DoubleSupplier x, DoubleSupplier y, DoubleSupplier heading) {
+        targetPosition = new Pose(x.getAsDouble(), y.getAsDouble(), heading.getAsDouble());
+    }
+
+    /**
+     * Sets the target position for the robot to hold to (overload constructor)
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param heading the heading
+     */
+    public void setTargetPosition(double x, double y, double heading) {
+        setTargetPosition(() -> x, () -> y, () -> heading);
+    }
 
     /**
      * Sets the translational PIDF coefficients for the command.
