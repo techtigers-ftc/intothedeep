@@ -59,7 +59,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, drive, dropper, smallCamera, limelight, odometry);
 
         // DRIVER TODO: Split into a different method
