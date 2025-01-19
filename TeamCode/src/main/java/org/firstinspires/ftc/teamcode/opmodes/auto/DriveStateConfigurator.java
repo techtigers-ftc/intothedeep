@@ -75,7 +75,7 @@ public class DriveStateConfigurator {
         );
 
         state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setAngleTolerance(Math.toRadians(2));
     }
 
     /**
@@ -174,9 +174,10 @@ public class DriveStateConfigurator {
      * @param state The ThirdSampleIntake to configure
      */
     public static void configThirdSampleIntake(DriveToIntakeState state) {
+        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setHeadingPIDF(0.85, 0, 0.03, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
         state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
         state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
@@ -190,7 +191,7 @@ public class DriveStateConfigurator {
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(122))
+                                Math.toRadians(120))
                         .build()
         );
 
@@ -234,11 +235,11 @@ public class DriveStateConfigurator {
      * @param state The DriveToSubmersible to configure
      */
     public static void configDriveToSubmersible(DriveToSubmersible state) {
-        state.setTranslationalPIDF(0.25, 0, 0.01, 0);
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.005, 0, 0.00035, 0.6, 0);
+        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
         state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
 
         state.setPathChain(

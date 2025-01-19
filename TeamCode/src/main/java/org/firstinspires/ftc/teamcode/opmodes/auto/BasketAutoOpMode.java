@@ -144,6 +144,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 dropper
         );
 
+
         // Create the state machine
         stateMachine
                 .addState(driveBasketPreload)
@@ -163,18 +164,18 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveBasketPreload, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveIntakeFirstSample, AutoState.SAMPLE_0_DROP_COMPLETE)
                 .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.DRIVE_END)
-//                .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-//                .addTransition(driveBasketFirstSample, dropSample, AutoState.DRIVE_END)
-//                .addTransition(dropSample, driveIntakeSecondSample, AutoState.SAMPLE_1_DROP_COMPLETE)
-//                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.DRIVE_END)
-//                .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-//                .addTransition(driveBasketSecondSample, dropSample, AutoState.DRIVE_END)
-//                .addTransition(dropSample, driveIntakeThirdSample, AutoState.SAMPLE_2_DROP_COMPLETE)
-//                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.DRIVE_END)
-//                .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-//                .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
-//                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
-//                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
+                .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketFirstSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, driveIntakeSecondSample, AutoState.SAMPLE_1_DROP_COMPLETE)
+                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketSecondSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, driveIntakeThirdSample, AutoState.SAMPLE_2_DROP_COMPLETE)
+                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.DRIVE_END)
+                .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
+                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
 
                 .setCurrentState(driveBasketPreload);
 

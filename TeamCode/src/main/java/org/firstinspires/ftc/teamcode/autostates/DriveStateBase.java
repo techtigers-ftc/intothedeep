@@ -114,7 +114,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * @param f the feedforward coefficient
      */
     public void setSecondaryHeadingPIDF(double p, double i, double d, double f) {
-        autoDriveCommand.setHeadingPIDF(p, i, d, f);
+        autoDriveCommand.setSecondaryHeadingPIDF(p, i, d, f);
     }
 
     /**
