@@ -7,18 +7,14 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSecondAndThirdSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabFirstSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.GrabRestOfSamplesState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.OpenIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
-import org.firstinspires.ftc.teamcode.autostates.specimen.VisionIntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabOtherSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.VisionIntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -134,9 +130,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 drive,
                 () -> 0
         );
-        SpecimenDriveStateConfigurator.configureSecondHoldPoint(dropSecondSample);
-
-
+        SpecimenDriveStateConfigurator.configureThirdHoldPoint(dropSecondSample);
 
         VisionIntakeSpecimenState visionIntakeSpecimen = new VisionIntakeSpecimenState(
                 "visionIntakeSpecimen",
@@ -217,7 +211,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 drive,
                 dropper,
-                distToIntakeTarget(robotState, new Waypoint(114,9)),
+                distToIntakeTarget(robotState, new Waypoint(114, 9)),
                 robotState
         );
         SpecimenDriveStateConfigurator.configDriveToPark(driveToPark);
@@ -254,8 +248,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(grabSecondSample, dropSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(dropSecondSample, grabThirdSample, AutoState.SAMPLE_0_DROP_COMPLETE)
                 .addTransition(grabThirdSample, dropThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-
-
                 .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
                 .addTransition(driveToFirstSpecimenIntake, visionIntakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(visionIntakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)

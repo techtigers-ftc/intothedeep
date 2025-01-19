@@ -6,15 +6,11 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimen
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropStateSpecimen;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSecondAndThirdSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.SecondDropOff;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
-import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 /**
  * A class used to configure DriveStates.
@@ -58,9 +54,9 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstIntake(DriveToFirstIntake state) {
-        state.setDrivePIDF(0.0025,0,0.0003,0.6,0);
-        state.setTranslationalPIDF(0.3,0,0.01,0);
-        state.setHeadingPIDF(1.5, 0,0.3,0);
+        state.setDrivePIDF(0.0025, 0, 0.0003, 0.6, 0);
+        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setHeadingPIDF(1.5, 0, 0.3, 0);
         state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
         state.setSecondaryTranslationalPIDF(0.2, 0, 0.01, 0);
@@ -82,72 +78,25 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
-    public static void configureFirstHoldPoint(DropSampleState state){
+    public static void configureFirstHoldPoint(DropSampleState state) {
         state.setTolerance(0.5);
         state.setAngleTolerance(Math.toRadians(1));
         state.setPIDSToTuning();
         state.setTargetPosition(128, 23.5, Math.toRadians(90));
     }
 
-    public static void configureSecondHoldPoint(DropSecondAndThirdSampleState state){
+    public static void configureSecondHoldPoint(DropSecondAndThirdSampleState state) {
         state.setTolerance(0.5);
         state.setAngleTolerance(Math.toRadians(1));
         state.setPIDSToTuning();
         state.setTargetPosition(130, 23.5, Math.toRadians(90));
     }
 
-    public static void configureThirdHoldPoint(DropSecondAndThirdSampleState state){
+    public static void configureThirdHoldPoint(DropSecondAndThirdSampleState state) {
         state.setTolerance(0.5);
         state.setAngleTolerance(Math.toRadians(1));
         state.setPIDSToTuning();
         state.setTargetPosition(130, 23.5, Math.toRadians(90));
-    }
-
-    public static void configSecondIntake(DriveToPlace state) {
-        state.setPIDSToTuning();
-        state.setDrivePIDF(0.004,0,0.00035,0.6,0);
-        state.setTranslationalPIDF(0.2,0,0.01,0);
-        state.setHeadingPIDF(0.5, 0,0.1,0);
-        state.setSecondaryDrivePIDF(0.005, 0, 0.0002, 0.6, 0);
-        state.setSecondaryHeadingPIDF(0.7, 0, 0.06, 0);
-        state.setSecondaryTranslationalPIDF(0.2, 0, 0.01, 0);
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierLine(
-                                        new Point(105, 27),
-                                        new Point(117, 27.5)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(-40),
-                                Math.toRadians(55))
-                        .build()
-        );
-
-        state.setTolerance(MINISCULE_TOLERANCE);
-        state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
-    }
-
-    public static void configThirdIntake(SecondDropOff state) {
-        state.setPIDSToTuning();
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierCurve(
-                                        new Point(114, 27),
-//                                        new Point(110, 24),
-                                        new Point(121, 32)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(-40),
-                                Math.toRadians(39))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
     public static void configFirstSpecimenIntake(DriveToPlace state) {
@@ -175,7 +124,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(95, 23),
-                                new Point(71,40.25)
+                                new Point(71, 40.25)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(315),
                                 Math.toRadians(270))
@@ -211,7 +160,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(100.5, 18),
-                                new Point(68,40.25)
+                                new Point(68, 40.25)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(315),
                                 Math.toRadians(270))
@@ -247,7 +196,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(100.5, 18),
-                                new Point(65,40.25)
+                                new Point(65, 40.25)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(315),
                                 Math.toRadians(270))
@@ -283,7 +232,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(100.5, 18),
-                                new Point(62,40.25)
+                                new Point(62, 40.25)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(315),
                                 Math.toRadians(270))
