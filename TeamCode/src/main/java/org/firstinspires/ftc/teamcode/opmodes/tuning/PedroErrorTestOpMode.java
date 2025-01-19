@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.core.paths.Waypoint;
@@ -44,33 +45,25 @@ public class PedroErrorTestOpMode extends BaseOpMode {
         registerSubsystems(drive, odometry);
 
         driveToPlace = new AutoDriveCommand(drive, robotState);
-        driveToPlace.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients.P,
-                FollowerConstants.translationalPIDFCoefficients.I,
-                FollowerConstants.translationalPIDFCoefficients.D,
-                FollowerConstants.translationalPIDFCoefficients.F);
-        driveToPlace.setHeadingPIDF(FollowerConstants.headingPIDFCoefficients.P,
-                FollowerConstants.headingPIDFCoefficients.I,
-                FollowerConstants.headingPIDFCoefficients.D,
-                FollowerConstants.headingPIDFCoefficients.F);
-        driveToPlace.setDrivePIDF(FollowerConstants.drivePIDFCoefficients.P,
-                FollowerConstants.drivePIDFCoefficients.I,
-                FollowerConstants.drivePIDFCoefficients.D,
-                FollowerConstants.drivePIDFCoefficients.T,
-                FollowerConstants.drivePIDFCoefficients.F);
+        driveToPlace.setTranslationalPIDF(
+                TuningConstants.aTranslationalP, 0,
+                TuningConstants.bTranslationalD, 0);
+        driveToPlace.setHeadingPIDF(
+                TuningConstants.eHeadingP, 0,
+                TuningConstants.fHeadingD, 0);
+        driveToPlace.setDrivePIDF(
+                TuningConstants.cDriveP, 0,
+                TuningConstants.dDriveD, 0.6, 0);
 
-        driveToPlace.setSecondaryTranslationalPIDF(FollowerConstants.secondaryTranslationalPIDFCoefficients.P,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.I,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.D,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.F);
-        driveToPlace.setSecondaryHeadingPIDF(FollowerConstants.secondaryHeadingPIDFCoefficients.P,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.I,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.D,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.F);
-        driveToPlace.setSecondaryDrivePIDF(FollowerConstants.secondaryDrivePIDFCoefficients.P,
-                FollowerConstants.secondaryDrivePIDFCoefficients.I,
-                FollowerConstants.secondaryDrivePIDFCoefficients.D,
-                FollowerConstants.secondaryDrivePIDFCoefficients.T,
-                FollowerConstants.secondaryDrivePIDFCoefficients.F);
+        driveToPlace.setSecondaryTranslationalPIDF(
+                TuningConstants.gSecondaryTranslationalP, 0,
+                TuningConstants.hSecondaryTranslationalD, 0);
+        driveToPlace.setSecondaryHeadingPIDF(
+                TuningConstants.kSecondaryHeadingP, 0,
+                TuningConstants.lSecondaryHeadingD, 0);
+        driveToPlace.setSecondaryDrivePIDF(
+                TuningConstants.iSecondaryDriveP, 0,
+                TuningConstants.jSecondaryDriveD, 0.6, 0);
 
         driveToPlace.setPathChain(new PathBuilder().addBezierLine(
                         new Point(0+xScale,0+yScale),
