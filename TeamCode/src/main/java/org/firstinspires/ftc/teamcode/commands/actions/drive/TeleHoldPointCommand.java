@@ -8,8 +8,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
-import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -21,8 +19,8 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
-public class HoldPointActionTele extends CommandBase {
-    private static final String LOG_TAG = HoldPointActionTele.class.getSimpleName();
+public class TeleHoldPointCommand extends CommandBase {
+    private static final String LOG_TAG = TeleHoldPointCommand.class.getSimpleName();
     private double tolerance;
     private double angleTolerance;
     private final DriveSubsystem drive;
@@ -34,12 +32,14 @@ public class HoldPointActionTele extends CommandBase {
 
     private Pose targetPosition;
 
-    public HoldPointActionTele(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
+    public TeleHoldPointCommand(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
         this.follower = new Follower(new RobotStateLocalizer(robotState));
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
+        this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
         this.headingSupplier = headingSupplier;
     }
 
