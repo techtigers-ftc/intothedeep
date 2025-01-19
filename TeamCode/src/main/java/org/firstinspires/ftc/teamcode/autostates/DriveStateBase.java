@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
@@ -144,23 +145,19 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     /**
-     * Sets the primary PIDF coefficients to the defaults from follower constants for tuning purposes ONLY
+     * Sets the primary PIDF coefficients to the calues from tuning constants for tuning purposes ONLY
      * Make sure to hard code values in configurators after tuning
      */
     public void setPrimaryPIDSToTuning() {
-        autoDriveCommand.setTranslationalPIDF(FollowerConstants.translationalPIDFCoefficients.P,
-                FollowerConstants.translationalPIDFCoefficients.I,
-                FollowerConstants.translationalPIDFCoefficients.D,
-                FollowerConstants.translationalPIDFCoefficients.F);
-        autoDriveCommand.setHeadingPIDF(FollowerConstants.headingPIDFCoefficients.P,
-                FollowerConstants.headingPIDFCoefficients.I,
-                FollowerConstants.headingPIDFCoefficients.D,
-                FollowerConstants.headingPIDFCoefficients.F);
-        autoDriveCommand.setDrivePIDF(FollowerConstants.drivePIDFCoefficients.P,
-                FollowerConstants.drivePIDFCoefficients.I,
-                FollowerConstants.drivePIDFCoefficients.D,
-                FollowerConstants.drivePIDFCoefficients.T,
-                FollowerConstants.drivePIDFCoefficients.F);
+        autoDriveCommand.setTranslationalPIDF(
+                TuningConstants.aTranslationalP, 0,
+                TuningConstants.bTranslationalD, 0);
+        autoDriveCommand.setHeadingPIDF(
+                TuningConstants.eHeadingP, 0,
+                TuningConstants.fHeadingD, 0);
+        autoDriveCommand.setDrivePIDF(
+                TuningConstants.cDriveP, 0,
+                TuningConstants.dDriveD, 0.6, 0);
     }
 
     /**
@@ -168,19 +165,15 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * Make sure to hard code values in configurators after tuning
      */
     public void setSecondaryPIDSToTuning() {
-        autoDriveCommand.setSecondaryTranslationalPIDF(FollowerConstants.secondaryTranslationalPIDFCoefficients.P,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.I,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.D,
-                FollowerConstants.secondaryTranslationalPIDFCoefficients.F);
-        autoDriveCommand.setSecondaryHeadingPIDF(FollowerConstants.secondaryHeadingPIDFCoefficients.P,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.I,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.D,
-                FollowerConstants.secondaryHeadingPIDFCoefficients.F);
-        autoDriveCommand.setSecondaryDrivePIDF(FollowerConstants.secondaryDrivePIDFCoefficients.P,
-                FollowerConstants.secondaryDrivePIDFCoefficients.I,
-                FollowerConstants.secondaryDrivePIDFCoefficients.D,
-                FollowerConstants.secondaryDrivePIDFCoefficients.T,
-                FollowerConstants.secondaryDrivePIDFCoefficients.F);
+        autoDriveCommand.setSecondaryTranslationalPIDF(
+                TuningConstants.gSecondaryTranslationalP, 0,
+                TuningConstants.hSecondaryTranslationalD, 0);
+        autoDriveCommand.setSecondaryHeadingPIDF(
+                TuningConstants.kSecondaryHeadingP, 0,
+                TuningConstants.lSecondaryHeadingD, 0);
+        autoDriveCommand.setSecondaryDrivePIDF(
+                TuningConstants.iSecondaryDriveP, 0,
+                TuningConstants.jSecondaryDriveD, 0.6, 0);
     }
 
     /**

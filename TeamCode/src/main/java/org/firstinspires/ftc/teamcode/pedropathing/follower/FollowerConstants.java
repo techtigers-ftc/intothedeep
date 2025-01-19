@@ -23,7 +23,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilterParameters;
  * @version 1.0, 3/4/2024
  */
 
-@Config
 public class FollowerConstants {
 
     /** The Localizer that the Follower & Pose Updater will use
@@ -45,24 +44,6 @@ public class FollowerConstants {
     /** The name of the right rear motor
      * @value Default Value: "rightRear" */
     public static String rightRearMotorName = "right_back";
-
-    /** The direction of the left front motor
-     * @value Default Value: DcMotorSimple.Direction.REVERSE */
-    public static DcMotorSimple.Direction leftFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
-
-    /** The direction of the right front motor
-     * @value Default Value: DcMotorSimple.Direction.REVERSE */
-    public static DcMotorSimple.Direction rightFrontMotorDirection =
-            DcMotorSimple.Direction.FORWARD;
-
-    /** The direction of the left rear motor
-     * @value Default Value: DcMotorSimple.Direction.FORWARD */
-    public static DcMotorSimple.Direction leftRearMotorDirection =
-            DcMotorSimple.Direction.REVERSE;
-
-    /** The direction of the right rear motor
-     * @value Default Value: DcMotorSimple.Direction.FORWARD */
-    public static DcMotorSimple.Direction rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
     /** The motor caching threshold
      * @value Default Value: 0.01 */
@@ -89,15 +70,6 @@ public class FollowerConstants {
      * @value Default Value: 1 */
     public static double maxPower = 1;
 
-
-    /** Translational PIDF coefficients (don't use integral)
-     * @value Default Value: new CustomPIDFCoefficients(0.1,0,0,0); */
-    public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.3,
-            0,
-            0.02,
-            0);
-
     /** Translational Integral
      * @value Default Value: new CustomPIDFCoefficients(0,0,0,0); */
     public static CustomPIDFCoefficients translationalIntegral = new CustomPIDFCoefficients(
@@ -110,28 +82,9 @@ public class FollowerConstants {
      * @value Default Value: 0.015 */
     public static double translationalPIDFFeedForward = 0.015;
 
-
-    /** Heading error PIDF coefficients
-     * @value Default Value: new CustomPIDFCoefficients(1,0,0,0); */
-    public static CustomPIDFCoefficients headingPIDFCoefficients = new CustomPIDFCoefficients(
-            3,
-            0,
-            0.03,
-            0);
-
     /** Feed forward constant added on to the heading PIDF
      * @value Default Value: 0.01 */
     public static double headingPIDFFeedForward = 0.01;
-
-
-    /** Drive PIDF coefficients
-     * @value Default Value: new CustomFilteredPIDFCoefficients(0.025,0,0.00001,0.6,0); */
-    public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.002,
-            0,
-            0.00035,
-            0.6,
-            0);
 
     /** Feed forward constant added on to the drive PIDF
      * @value Default Value: 0.01 */
@@ -256,15 +209,6 @@ public class FollowerConstants {
      * @value Default Value: 3 */
     public static double translationalPIDFSwitch = 3;
 
-    /** Secondary translational PIDF coefficients (don't use integral).
-     * @see #useSecondaryTranslationalPID
-     * @value Default Value: new CustomPIDFCoefficients(0.3, 0, 0.01, 0) */
-    public static CustomPIDFCoefficients secondaryTranslationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.15,
-            0,
-            0.01,
-            0);
-
     /** Secondary translational Integral value.
      * @see #useSecondaryTranslationalPID
      * @value Default Value: new CustomPIDFCoefficients(0, 0, 0, 0) */
@@ -276,7 +220,6 @@ public class FollowerConstants {
 
     /** Feed forward constant added on to the small translational PIDF.
      * @see #useSecondaryTranslationalPID
-     * @see #secondaryTranslationalPIDFCoefficients
      * @value Default Value: 0.015 */
     public static double secondaryTranslationalPIDFFeedForward = 0.015;
 
@@ -285,18 +228,8 @@ public class FollowerConstants {
      * @value Default Value: Math.PI / 20 */
     public static double headingPIDFSwitch = Math.PI / 20;
 
-    /** Secondary heading error PIDF coefficients.
-     * @see #useSecondaryHeadingPID
-     * @value Default Value: new CustomPIDFCoefficients(5, 0, 0.08, 0) */
-    public static CustomPIDFCoefficients secondaryHeadingPIDFCoefficients = new CustomPIDFCoefficients(
-            1,
-            0,
-            0.06,
-            0);
-
     /** Feed forward constant added on to the secondary heading PIDF.
      * @see #useSecondaryHeadingPID
-     * @see #secondaryHeadingPIDFCoefficients
      * @value Default Value: 0.01 */
     public static double secondaryHeadingPIDFFeedForward = 0;
 
@@ -304,16 +237,6 @@ public class FollowerConstants {
      * @see #useSecondaryDrivePID
      * @value Default Value: 20 */
     public static double drivePIDFSwitch = 20;
-
-    /** Secondary drive PIDF coefficients.
-     * @see #useSecondaryDrivePID
-     * @value Default Value: new CustomFilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0) */
-    public static CustomFilteredPIDFCoefficients secondaryDrivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.003,
-            0,
-            0.0002,
-            0.6,
-            0);
 
     /** Feed forward constant added on to the secondary drive PIDF.
      * @see #useSecondaryDrivePID

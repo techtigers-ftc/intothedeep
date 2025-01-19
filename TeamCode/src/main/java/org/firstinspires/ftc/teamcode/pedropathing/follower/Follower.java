@@ -96,14 +96,14 @@ public class Follower {
     private Vector translationalIntegralVector;
     private Vector teleopDriveVector;
     private Vector teleopHeadingVector;
-    private PIDFController secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
+    private PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
     private PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-    private PIDFController translationalPIDF = new PIDFController(FollowerConstants.translationalPIDFCoefficients);
+    private PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
     private PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-    private PIDFController secondaryHeadingPIDF = new PIDFController(FollowerConstants.secondaryHeadingPIDFCoefficients);
-    private PIDFController headingPIDF = new PIDFController(FollowerConstants.headingPIDFCoefficients);
-    private FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(FollowerConstants.secondaryDrivePIDFCoefficients);
-    private FilteredPIDFController drivePIDF = new FilteredPIDFController(FollowerConstants.drivePIDFCoefficients);
+    private PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+    private PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+    private FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+    private FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
     private KalmanFilter driveKalmanFilter = new KalmanFilter(FollowerConstants.driveKalmanFilterParameters);
     private double[] driveErrors;
     private double rawDriveError;
@@ -140,16 +140,8 @@ public class Follower {
         useSecondaryTranslationalPID = true;
     }
 
-    public void setSecondaryTranslationalIntegral(CustomPIDFCoefficients coefficients) {
-        secondaryTranslationalIntegral.setCoefficients(coefficients);
-    }
-
     public void setTranslationalPIDF(CustomPIDFCoefficients coefficients) {
         translationalPIDF.setCoefficients(coefficients);
-    }
-
-    public void setTranslationalIntegral(CustomPIDFCoefficients coefficients) {
-        translationalIntegral.setCoefficients(coefficients);
     }
 
     public void setSecondaryHeadingPIDF(CustomPIDFCoefficients coefficients) {
