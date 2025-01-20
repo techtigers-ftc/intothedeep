@@ -144,6 +144,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 dropper
         );
 
+
         // Create the state machine
         stateMachine
                 .addState(driveBasketPreload)
@@ -188,11 +189,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Current Heading", robotState.getRobotCurrentPose().getHeading());
+        telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
         telemetry.addLine();
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
-        telemetry.addData("Expected Heading", robotState.getRobotFinalPose().getHeading());
+        telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
     }
 
     @Override

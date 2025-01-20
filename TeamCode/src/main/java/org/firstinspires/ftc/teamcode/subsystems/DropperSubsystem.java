@@ -30,9 +30,9 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_FIRST_LEVEL_ASCENT = 94;
-    public static final double PITCH_PRE_TRANSFER_POSITION = 39;
-    public static final double PITCH_TRANSFER_POSITION = 32;
-    public static final double PITCH_BASKET_POSITION = 210;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 35;
+    public static final double PITCH_TRANSFER_POSITION = 28;
+    public static final double PITCH_BASKET_POSITION = 200;
     public static final double PITCH_CHAMBER_POSITION = 175;
     public static final double PITCH_FRONT_SLAP_POSITION = 105;
     public static final double PITCH_BACK_SLAP_POSITION = 245;
@@ -111,10 +111,21 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        closeClaw();
+        if (robotState.isAuto()) {
+            init();
+        }
 
         colorSensorTimer = new ElapsedTime();
+    }
+
+    @Override
+    public void init() {
+        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        if (robotState.isAuto()) {
+            closeClaw();
+        } else {
+            openClaw();
+        }
     }
 
     /**
@@ -287,14 +298,14 @@ public class DropperSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the right slide motor
      */
-    public double getSlideCurrentRight(){
+    public double getSlideCurrentRight() {
         return rightSlideCurrentAverage.getAverage();
     }
 
     /**
      * @return the current draw of the right slide motor
      */
-    public double getSlideCurrentLeft(){
+    public double getSlideCurrentLeft() {
         return leftSlideCurrentAverage.getAverage();
     }
 
