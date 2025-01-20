@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
@@ -32,7 +31,7 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperTransferAction(dropper, intake, robotState),
+                new TransferAction(dropper, intake, robotState),
                 new ParallelCommandGroup(
                         new DropperBackwardCarryNoTransferAction(dropper, robotState),
                         new SequentialCommandGroup(

@@ -30,7 +30,7 @@ public class DropperHighBasketAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperTransferAction(dropper, intake, robotState),
+                new TransferAction(dropper, intake, robotState),
                 new ParallelCommandGroup(
                         new DropperHighBasketNoTransferAction(dropper, robotState),
                         new SequentialCommandGroup(
