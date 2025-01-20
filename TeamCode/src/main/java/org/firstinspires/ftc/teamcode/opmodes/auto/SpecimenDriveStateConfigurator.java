@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DropSecondAndThirdSampleState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -21,7 +20,7 @@ public class SpecimenDriveStateConfigurator {
     private static final double SMALL_TOLERANCE = 1.5;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
     private static final double MINISCULE_TOLERANCE = 0.85;
-    private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(2);
+    private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
 
     /**
      * Configures the DriveToPreloadDropState.
@@ -55,19 +54,19 @@ public class SpecimenDriveStateConfigurator {
 
     public static void configFirstIntake(DriveToFirstIntake state) {
 //        state.setPIDSToTuning();
-        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
         state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryTranslationalPIDF(0.175, 0, 0.025, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(74, 40.25),
-                                        new Point(130, 23.5)
+                                        new Point(130, 26.5)
                                 )
                         )
 
@@ -80,24 +79,27 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configureFirstHoldPoint(DropSampleState state) {
-        state.setTolerance(0.5);
-        state.setAngleTolerance(Math.toRadians(1));
-        state.setPIDSToTuning();
-        state.setTargetPosition(128, 23.5, Math.toRadians(90));
+        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
+        state.setHeadingPIDF(2, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(2.5, 0, 0.03, 0);
+        state.setTargetPosition(129, 23.5, Math.toRadians(90));
     }
 
-    public static void configureSecondHoldPoint(DropSecondAndThirdSampleState state) {
-        state.setTolerance(0.5);
-        state.setAngleTolerance(Math.toRadians(1));
-        state.setPIDSToTuning();
-        state.setTargetPosition(130, 23.5, Math.toRadians(90));
-    }
-
-    public static void configureThirdHoldPoint(DropSecondAndThirdSampleState state) {
-        state.setTolerance(0.5);
-        state.setAngleTolerance(Math.toRadians(1));
-        state.setPIDSToTuning();
-        state.setTargetPosition(130, 23.5, Math.toRadians(90));
+    public static void configureSecondHoldPoint(DropSampleState state) {
+        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
+        state.setHeadingPIDF(2, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(2.5, 0, 0.03, 0);
+        state.setTargetPosition(129, 23.5, Math.toRadians(65));
     }
 
     public static void configFirstSpecimenIntake(DriveToPlace state) {
