@@ -54,12 +54,13 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstIntake(DriveToFirstIntake state) {
-        state.setDrivePIDF(0.0025, 0, 0.0003, 0.6, 0);
+//        state.setPIDSToTuning();
+        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
         state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryTranslationalPIDF(0.2, 0, 0.01, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.025, 0);
 
         state.setPathChain(
                 new PathBuilder()

@@ -130,7 +130,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 drive,
                 () -> 0
         );
-        SpecimenDriveStateConfigurator.configureThirdHoldPoint(dropSecondSample);
+        SpecimenDriveStateConfigurator.configureThirdHoldPoint(dropThirdSample);
 
         VisionIntakeSpecimenState visionIntakeSpecimen = new VisionIntakeSpecimenState(
                 "visionIntakeSpecimen",
@@ -245,11 +245,11 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(clipSpecimen, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
                 .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
                 .addTransition(grabFirstSample, dropFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(dropFirstSample, grabSecondSample, AutoState.SAMPLE_0_DROP_COMPLETE)
+//                .addTransition(dropFirstSample, grabSecondSample, AutoState.SAMPLE_DROP_COMPLETE)
                 .addTransition(grabSecondSample, dropSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(dropSecondSample, grabThirdSample, AutoState.SAMPLE_0_DROP_COMPLETE)
+                .addTransition(dropSecondSample, grabThirdSample, AutoState.SAMPLE_DROP_COMPLETE)
                 .addTransition(grabThirdSample, dropThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
+                .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_DROP_COMPLETE)
                 .addTransition(driveToFirstSpecimenIntake, visionIntakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(visionIntakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
                 .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)

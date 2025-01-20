@@ -5,8 +5,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -16,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import java.util.function.DoubleSupplier;
 
@@ -64,8 +63,10 @@ public class DropSecondAndThirdSampleState extends HoldPointStateBase {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.OPEN) {
-            return AutoState.SAMPLE_0_DROP_COMPLETE;
+        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
+                robotState.getDropperClawState() == ClawState.OPEN &&
+                robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
+            return AutoState.SAMPLE_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
     }
