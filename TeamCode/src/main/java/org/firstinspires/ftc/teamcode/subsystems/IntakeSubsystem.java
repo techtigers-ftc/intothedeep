@@ -49,7 +49,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.75;
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
-    public static final double SLIDES_MAX = 19;
+    public static final double SLIDES_MAX = 18.75;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
     public static final double WRIST_ROTATION_TUCK_POSITION = 0;
