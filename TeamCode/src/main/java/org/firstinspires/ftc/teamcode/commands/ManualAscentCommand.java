@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -14,7 +13,7 @@ import java.util.function.DoubleSupplier;
 /**
  * A command used to ascend the robot
  */
-public class AscentCommand extends CommandBase {
+public class ManualAscentCommand extends CommandBase {
     private final RobotState robotState;
     private final DoubleSupplier powerSupplier;
     private final AscentSubsystem ascent;
@@ -22,7 +21,7 @@ public class AscentCommand extends CommandBase {
     private final DriveSubsystem drive;
 
     /**
-     * Constructs a new AscentCommand
+     * Constructs a new ManualAscentCommand
      *
      * @param robotState the state of the robot
      * @param powerSupplier the supplier for the power to ascend
@@ -30,10 +29,10 @@ public class AscentCommand extends CommandBase {
      * @param dropper the dropper subsystem, to move the slides
      * @param drive the drive subsystem, to move the drive motors
      */
-    public AscentCommand(RobotState robotState,
-                         DoubleSupplier powerSupplier,
-                         AscentSubsystem ascent, DropperSubsystem dropper,
-                         DriveSubsystem drive) {
+    public ManualAscentCommand(RobotState robotState,
+                               DoubleSupplier powerSupplier,
+                               AscentSubsystem ascent, DropperSubsystem dropper,
+                               DriveSubsystem drive) {
         this.robotState = robotState;
         this.powerSupplier = powerSupplier;
         this.ascent = ascent;

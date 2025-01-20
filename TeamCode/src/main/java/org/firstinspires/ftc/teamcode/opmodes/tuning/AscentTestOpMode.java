@@ -63,7 +63,7 @@ public class AscentTestOpMode extends BaseOpMode {
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         ascentTrigger.negate().whileActiveOnce(manualDriveCommand);
 
-//        AscentCommand ascentCommand = new AscentCommand(ascent, driverGamepad);
+//        ManualAscentCommand ascentCommand = new ManualAscentCommand(ascent, driverGamepad);
 //        ascentTrigger.whileActiveContinuous(ascentCommand);
 
         Trigger dropperSlidesTrigger = new Trigger(() ->

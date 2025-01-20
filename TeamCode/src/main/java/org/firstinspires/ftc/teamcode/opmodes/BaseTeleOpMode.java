@@ -1,15 +1,17 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.commands.AscentCommand;
+import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.EngageAscentAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
@@ -70,21 +72,17 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // ASCENT
         Trigger startAscentTrigger =
                 new Trigger(() -> gamepad1.touchpad_finger_2);
-        Trigger ascentHeightTrigger = new Trigger(() -> dropper.getCurrentSlidePositionInches() > AscentSubsystem.ASCENT_INITIAL_HEIGHT);
         Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
 
-        AscentCommand ascentCommand = new AscentCommand(robotState,
+        ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
+        EngageAscentAction engageAscentAction = new EngageAscentAction(robotState, ascent, dropper);
 
-        startAscentTrigger.and(ascentHeightTrigger).whenActive(ascentCommand);
-        startAscentTrigger.and(ascentHeightTrigger.negate()).whenActive(() -> {
-            Gamepad.RumbleEffect ascentBadRumble =
-                    new Gamepad.RumbleEffect.Builder()
-                            .addStep(0.5, 0.5, 1000)
-                            .build();
-            gamepad1.runRumbleEffect(ascentBadRumble);
-            gamepad2.runRumbleEffect(ascentBadRumble);
-        });
+        startAscentTrigger.whenActive(engageAscentAction);
+
+        Trigger runningEngageAscent =
+                new Trigger(() -> CommandScheduler.getInstance().isScheduled(engageAscentAction));
+        isAscending.and(runningEngageAscent.negate()).whileActiveOnce(manualAscentCommand);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
