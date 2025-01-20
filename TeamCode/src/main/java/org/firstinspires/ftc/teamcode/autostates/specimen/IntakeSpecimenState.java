@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.autostates.HoldPointStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -18,12 +16,10 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import java.util.function.DoubleSupplier;
 
-import team.techtigers.base.statemachine.SequentialCommandGroupState;
-
 /**
  * A state to pick up a specimen from the observation zone using the vision
  */
-public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> {
+public class IntakeSpecimenState extends HoldPointStateBase {
     private static final String LOG_TAG =
             IntakeSpecimenState.class.getSimpleName();
     private final RobotState robotState;
@@ -40,15 +36,18 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      * @param robotState            The robot state
      */
     public IntakeSpecimenState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, DoubleSupplier slidePositionSupplier,
-                                     RobotState robotState) {
-        super(name);
+                               RobotState robotState) {
+        super(name, drive, robotState);
         this.robotState = robotState;
         runCounter = 0;
         DoubleSupplier firstMoveSupplier = () -> slidePositionSupplier.getAsDouble() - 8;
         addCommands(
-                new IntakeReadyToPickupAction(intake, robotState, firstMoveSupplier, ()-> 90),
-                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
-                new IntakePrepareToTransferAction(intake, dropper, robotState)
+                holdPointCommand,
+                new SequentialCommandGroup(
+                        new IntakeReadyToPickupAction(intake, robotState, firstMoveSupplier, () -> 90),
+                        new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
+                        new IntakePrepareToTransferAction(intake, dropper, robotState)
+                )
         );
     }
 

@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimen
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -122,6 +123,18 @@ public class SpecimenDriveStateConfigurator {
 
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
+    }
+
+    public static void configSpecimenIntake(IntakeSpecimenState state) {
+        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
+        state.setHeadingPIDF(2, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(2.5, 0, 0.03, 0);
+        state.setTargetPosition(93.5, 26, Math.toRadians(-45));
     }
 
     public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
