@@ -53,7 +53,6 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstIntake(DriveToFirstIntake state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -103,15 +102,20 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configFirstSpecimenIntake(DriveToPlace state) {
-        state.setPIDSToTuning();
+        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
+        state.setHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
+        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(121, 32),
+                                new Point(129, 23.5),
                                 new Point(95, 23)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(39),
+                        .setLinearHeadingInterpolation(Math.toRadians(90),
                                 Math.toRadians(315))
                         .build()
         );
