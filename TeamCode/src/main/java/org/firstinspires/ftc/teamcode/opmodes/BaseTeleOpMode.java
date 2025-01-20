@@ -74,7 +74,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
 
         AscentCommand ascentCommand = new AscentCommand(robotState,
-                manipulatorGamepad::getLeftY, ascent, dropper, drive);
+                () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
 
         startAscentTrigger.and(ascentHeightTrigger).whenActive(ascentCommand);
         startAscentTrigger.and(ascentHeightTrigger.negate()).whenActive(() -> {
@@ -252,7 +252,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getRightY() != 0
         );
-        dropperSlidesTrigger.and(isAscending).whileActiveContinuous(() ->
+        dropperSlidesTrigger.and(isAscending.negate()).whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
                         -manipulatorGamepad.getRightY() * 2.5)
         );

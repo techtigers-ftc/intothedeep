@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.AscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -64,8 +63,8 @@ public class AscentTestOpMode extends BaseOpMode {
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
         ascentTrigger.negate().whileActiveOnce(manualDriveCommand);
 
-        AscentCommand ascentCommand = new AscentCommand(ascent, driverGamepad);
-        ascentTrigger.whileActiveContinuous(ascentCommand);
+//        AscentCommand ascentCommand = new AscentCommand(ascent, driverGamepad);
+//        ascentTrigger.whileActiveContinuous(ascentCommand);
 
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 driverGamepad.getRightY() != 0
