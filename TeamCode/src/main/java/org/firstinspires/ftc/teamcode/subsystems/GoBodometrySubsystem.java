@@ -5,8 +5,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.base.CloseableSubsystem;
 import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.paths.geometry.Point;
+import team.techtigers.core.paths.geometry.Rectangle;
 
 /**
  * The odometry subsystem, using the localizer from Roadrunner.
@@ -15,6 +19,17 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
     private final GoBildaPinpointDriver odo;
     private final RobotState robotState;
     private Waypoint startPose;
+
+    //Defines the points and rectangle for the long submersible zone
+    private static final Point LONG_SUBMERSIBLE_TR = new Point(56, 47);
+    private static final Point LONG_SUBMERSIBLE_BL = new Point(47, 93);
+    private static final Rectangle LONG_SUBMERSIBLE_ZONE = new Rectangle(LONG_SUBMERSIBLE_TR, LONG_SUBMERSIBLE_BL);
+
+    // Defines the points and rectangle for the short submersible zone
+    private static final Point SHORT_SUBMERSIBLE_TR = new Point(84, 47);
+    private static final Point SHORT_SUBMERSIBLE_BL = new Point(58, 32);
+    private static final Rectangle SHORT_SUBMERSIBLE_ZONE = new Rectangle(SHORT_SUBMERSIBLE_TR, SHORT_SUBMERSIBLE_BL);
+
 
     /**
      * Initializes a new RoadometrySubsystem.
@@ -95,6 +110,17 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         return new Waypoint(x * cos - y * sin, x * sin + y * cos, waypoint.getHeading());
     }
 
+    private DoubleSupplier getVisionIntakeHeading(Waypoint robotCurrentPose) {
+        Point robotCurrentPoint = new Point(robotCurrentPose.getX(), robotCurrentPose.getY());
+        if(LONG_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
+            return () -> Math.toRadians(0);
+        } else if(SHORT_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
+            return () -> Math.toRadians(0);
+        } else{
+            return robotCurrentPose::getHeading;
+        }
+    }
+
     @Override
     public void periodic() {
         odo.update();
@@ -113,6 +139,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
                 odo.getVelY()/25.4, headingVelocity);
         robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
 
+        robotState.setVisionIntakeHeadingSupplier(getVisionIntakeHeading(robotPose));
         robotState.setRobotPose(robotPose);
         robotState.setRobotVelocity(robotVelocity);
     }
