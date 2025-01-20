@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.autostates.HoldPointStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
@@ -40,15 +41,11 @@ public class DropSampleState extends HoldPointStateBase {
         addCommands(
                 holdPointCommand,
                 new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, robotState),
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new DropperTransferAction(dropper, intake, robotState),
-                                        new DropperPitchAction(dropper, 300, 500),
-                                        new WaitCommand(100),
-                                        new DropperOpenAction(dropper, 100)
-                                )
-                        )
+                    new IntakeReadyToTransferAction(intake, robotState),
+                    new DropperTransferAction(dropper, intake, robotState),
+                    new DropperPitchAction(dropper, 300, 200),
+                    new WaitCommand(100),
+                    new DropperOpenAction(dropper, 100)
                 )
         );
     }
