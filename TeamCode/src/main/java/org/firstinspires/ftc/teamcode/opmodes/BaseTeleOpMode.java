@@ -4,14 +4,13 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.EngageAscentAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.StartAscentAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
@@ -76,12 +75,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
-        EngageAscentAction engageAscentAction = new EngageAscentAction(robotState, ascent, dropper);
+        StartAscentAction startAscentAction = new StartAscentAction(robotState, ascent, dropper);
 
-        startAscentTrigger.whenActive(engageAscentAction);
+        startAscentTrigger.whenActive(startAscentAction);
 
         Trigger runningEngageAscent =
-                new Trigger(() -> CommandScheduler.getInstance().isScheduled(engageAscentAction));
+                new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentAction));
         isAscending.and(runningEngageAscent.negate()).whileActiveOnce(manualAscentCommand);
 
         // DRIVER TODO: Split into a different method

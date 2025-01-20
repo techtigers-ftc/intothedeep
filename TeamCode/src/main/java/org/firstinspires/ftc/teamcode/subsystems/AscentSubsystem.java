@@ -70,6 +70,7 @@ public class AscentSubsystem extends CloseableSubsystem {
 
     /**
      * Gets if the jacks are engaged
+     *
      * @return if the jacks are engaged
      */
     public boolean areJacksEngaged() {
@@ -77,19 +78,21 @@ public class AscentSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Sets the position of the changing transmission servo. Used for testing
-     * @param position the position to set the servo to
-     */
-    public void setChangingTransmissionPosition(double position) {
-        changingTransmission.setPosition(position);
-    }
-
-    /**
      * Gets the position of the changing transmission servo. Used for testing
+     *
      * @return the position of the changing transmission servo
      */
     public double getChangingTransmissionPosition() {
         return changingTransmission.getPosition();
+    }
+
+    /**
+     * Sets the position of the changing transmission servo. Used for testing
+     *
+     * @param position the position to set the servo to
+     */
+    public void setChangingTransmissionPosition(double position) {
+        changingTransmission.setPosition(position);
     }
 
     @Override

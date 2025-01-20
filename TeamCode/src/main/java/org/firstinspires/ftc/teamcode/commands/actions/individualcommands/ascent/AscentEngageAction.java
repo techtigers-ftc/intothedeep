@@ -5,11 +5,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 
+/**
+ * Engages the ascent
+ */
 public class AscentEngageAction extends CommandBase {
     private final AscentSubsystem ascent;
     private final ElapsedTime timer;
     private final double waitTime;
 
+    /**
+     * Constructs a new AscentEngageAction
+     *
+     * @param ascent the ascent subsystem
+     * @param waitTime the time to wait before finishing
+     */
     public AscentEngageAction(AscentSubsystem ascent, double waitTime) {
         this.waitTime = waitTime;
         this.ascent = ascent;
