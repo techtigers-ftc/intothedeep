@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
@@ -30,10 +34,12 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -44,6 +50,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
     public void initialize() {
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
+        telemetry = dashboard.getTelemetry();
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -80,7 +87,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(119.5, 45.625)),
+                distToIntakeTarget(robotState, new Waypoint(119.5, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -98,7 +105,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(129.5, 46)),
+                distToIntakeTarget(robotState, new Waypoint(129.5, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -116,7 +123,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(139.5, 46)),
+                distToIntakeTarget(robotState, new Waypoint(139.5, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -280,6 +287,15 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry, dropper, intake, limelight, vision);
+        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+        telemetry.addLine();
+        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+        telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.update();
     }
 
     @Override

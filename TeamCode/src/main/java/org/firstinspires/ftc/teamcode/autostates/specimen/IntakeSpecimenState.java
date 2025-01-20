@@ -44,13 +44,11 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
         super(name);
         this.robotState = robotState;
         runCounter = 0;
-        DoubleSupplier firstMoveSupplier = () -> slidePositionSupplier.getAsDouble() - 5;
+        DoubleSupplier firstMoveSupplier = () -> slidePositionSupplier.getAsDouble() - 8;
         addCommands(
                 new IntakeReadyToPickupAction(intake, robotState, firstMoveSupplier, ()-> 90),
-                new WaitCommand(250),
                 new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
-                new IntakePrepareToTransferAction(intake, dropper, robotState),
-                new IntakeReadyToTransferAction(intake, robotState)
+                new IntakePrepareToTransferAction(intake, dropper, robotState)
         );
     }
 
@@ -70,7 +68,7 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER
+        if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER
                 && robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;

@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -20,17 +22,20 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     /**
      * Constructor for the DriveToGeneralSpecimenIntakeState
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @oaram intake The intake subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
      * @param robotState The robot state
+     * @oaram intake The intake subsystem
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
-                new DropperBackwardCarryAction(dropper, intake, robotState)
+                new SequentialCommandGroup(
+                        new IntakeReadyToTransferAction(intake, robotState),
+                        new DropperBackwardCarryAction(dropper, intake, robotState)
+                )
         );
     }
 

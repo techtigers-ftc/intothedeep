@@ -42,8 +42,8 @@ public class DropSampleState extends HoldPointStateBase {
                 new SequentialCommandGroup(
                         new IntakeReadyToTransferAction(intake, robotState),
                         new TransferAction(dropper, intake, robotState),
-                        new DropperPitchAction(dropper, 300, 300),
-                        new WaitCommand(180),
+                        new DropperPitchAction(dropper, 300, 500),
+                        new WaitCommand(150),
                         new DropperOpenAction(dropper, 100)
                 )
         );
