@@ -44,6 +44,7 @@ public class GrabOtherSampleState extends SequentialCommandGroupState<AutoState>
         slidePos = targetSlidePos;
         clawPos = targetClawRotation;
         addCommands(
+                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
                 new IntakeReadyToPickupAction(intake, robotState,
                         targetSlidePos, targetClawRotation),
                 new IntakePrepareToTransferAction(intake, dropper, robotState)

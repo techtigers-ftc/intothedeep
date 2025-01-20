@@ -50,8 +50,8 @@ public class DropSecondAndThirdSampleState extends HoldPointStateBase {
                                         new DropperPitchAction(dropper, 300, 500),
                                         new WaitCommand(100),
                                         new DropperOpenAction(dropper, 100)
-                                ),
-                                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos)
+                                )
+//                                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos)
                         )
                 )
         );

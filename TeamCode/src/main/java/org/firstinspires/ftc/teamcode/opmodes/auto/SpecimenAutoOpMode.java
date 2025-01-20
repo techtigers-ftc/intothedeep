@@ -238,6 +238,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToThirdSpecimenDrop)
                 .addState(driveToFourthSpecimenIntake)
                 .addState(driveToFourthSpecimenDrop)
+                .addState(driveToPark)
                 .addState(endState)
 
                 .addTransition(driveChamberPreload, clipSpecimen, AutoState.DRIVE_END)
