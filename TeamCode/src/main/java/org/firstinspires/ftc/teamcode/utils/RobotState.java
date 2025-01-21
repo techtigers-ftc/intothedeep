@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -49,6 +51,7 @@ public class RobotState extends GlobalState {
     private int robotError;
     private final boolean isBlue;
     private final boolean isAuto;
+    private DoubleSupplier visionIntakeHeadingSupplier;
 
     /**
      * Initializes a new RobotState
@@ -85,6 +88,7 @@ public class RobotState extends GlobalState {
         dropperCurrent = 0;
         this.isBlue = isBlue;
         this.isAuto = isAuto;
+        visionIntakeHeadingSupplier = () -> Math.toRadians(0);
     }
 
     /**
@@ -589,5 +593,20 @@ public class RobotState extends GlobalState {
      */
     public void setRobotFinalPose(Waypoint robotFinalPose) {
         this.robotFinalPose = robotFinalPose;
+    }
+
+    /**
+     * @return The supplier for the vision intake heading to use
+     */
+    public DoubleSupplier getVisionIntakeHeadingSupplier() {
+        return visionIntakeHeadingSupplier;
+    }
+
+    /**
+     * Sets the supplier for the vision intake heading to use
+     * @param visionIntakeHeadingSupplier the supplier for the vision intake heading to use
+     */
+    public void setVisionIntakeHeadingSupplier(DoubleSupplier visionIntakeHeadingSupplier) {
+        this.visionIntakeHeadingSupplier = visionIntakeHeadingSupplier;
     }
 }
