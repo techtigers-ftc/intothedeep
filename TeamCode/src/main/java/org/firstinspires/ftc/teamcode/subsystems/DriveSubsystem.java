@@ -193,6 +193,9 @@ public class DriveSubsystem extends CloseableSubsystem {
         backRight.setPower(br);
     }
 
+    /**
+     * Toggles the drive gears between engaged and not engaged.
+     */
     public void toggleDriveGears() {
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
             robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -9,6 +10,8 @@ import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
+import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.StartAscentAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
@@ -147,7 +150,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
         manualRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
-        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake).whenActive(tuck);
+        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake.or(inTuck)).whenActive(tuck);
         manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
@@ -177,20 +180,20 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 () -> robotState.setManualIntakeSelected(false)
         );
 
-        // Reset the intake slide encoders
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
-                intake::resetSlides
-        );
-
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
         // Controls intake slides
+        UnsafeIntakeSlidesCommand unsafeIntakeSlidesCommand = new UnsafeIntakeSlidesCommand(intake, manipulatorGamepad);
+
+        Trigger unsafeIntake = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON);
         Trigger intakeSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getLeftY() != 0
         );
-        intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 2));
+
+        intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
+                manipulatorGamepad.getLeftY() * 4));
+        intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
 
         // Manual intake rotation
         IntakeManualRotationCommand intakeManualRotationCommand =
@@ -245,23 +248,24 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryNoTransferAction);
 
         //Manual Dropper Stuff
-        // Reset the dropper slide encoders
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
-                dropper::resetSlides
-        );
 
         // Toggles the dropper claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 dropper::toggleClaw
         );
 
+        Trigger unsafeDropper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON);
+        UnsafeDropperSlidesCommand unsafeDropperSlidesCommand = new UnsafeDropperSlidesCommand(dropper, manipulatorGamepad);
+
         Trigger dropperSlidesTrigger = new Trigger(() ->
                 manipulatorGamepad.getRightY() != 0
         );
-        dropperSlidesTrigger.and(isAscending.negate()).whileActiveContinuous(() ->
+        dropperSlidesTrigger.and(unsafeDropper.negate()).and(isAscending.negate()).whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
                         -manipulatorGamepad.getRightY() * 2.5)
         );
+
+        unsafeDropper.whileActiveOnce(unsafeDropperSlidesCommand);
     }
 
     @Override

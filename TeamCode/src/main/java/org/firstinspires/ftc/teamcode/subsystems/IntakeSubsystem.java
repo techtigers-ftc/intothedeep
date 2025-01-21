@@ -115,7 +115,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
-        resetSlides();
         currentMotorRight = (DcMotorEx) rightSlideMotor;
         currentMotorLeft = (DcMotorEx) leftSlideMotor;
 
@@ -134,6 +133,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         if (robotState.isAuto()) {
             init();
+            resetSlides();
         }
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
@@ -200,6 +200,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesRelative(double distance) {
         moveSlidesAbsolute(getCurrentSlidePositionInches() + distance);
+    }
+
+    /**
+     * Moves the Slides relatively, but with no restriction on movement
+     *
+     * @param distance The distance you want to move in inches
+     */
+    public void moveSlidesRelativeUnsafe(double distance) {
+        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
     }
 
     /**
