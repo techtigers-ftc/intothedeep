@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
+import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
@@ -70,7 +69,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         GoBodometrySubsystem odometry;
         try {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
-        } catch (Exception e){
+        } catch (Exception e) {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         }
         registerSubsystems(intake, drive, dropper, smallCamera, limelight,
@@ -155,7 +154,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
         autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
-        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(prepareToPickupManual);
+        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(
+                () -> {
+                    prepareToPickupManual.schedule();
+                    gamepad2.rumbleBlips(3);
+                }
+        );
+
         autoRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
         // Extend Trigger Bindings
@@ -168,7 +173,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
         autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
-        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(prepareToPickupManual);
+        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(
+                () -> {
+                    prepareToPickupManual.schedule();
+                    gamepad2.rumbleBlips(3);
+                }
+        );
 
         autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
 
