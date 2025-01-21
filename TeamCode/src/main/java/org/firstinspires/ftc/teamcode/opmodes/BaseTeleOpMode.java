@@ -5,9 +5,9 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
+import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.StartAscentAction;
@@ -64,7 +64,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         registerSubsystems(intake, drive, dropper, smallCamera, limelight,
                 odometry, ascent);
 

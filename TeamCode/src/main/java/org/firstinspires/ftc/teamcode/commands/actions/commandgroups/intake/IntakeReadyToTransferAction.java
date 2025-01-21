@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -28,7 +27,7 @@ public class IntakeReadyToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 0.75)
+                new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 0.4)
         );
     }
 

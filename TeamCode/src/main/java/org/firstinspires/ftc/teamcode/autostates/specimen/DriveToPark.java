@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
@@ -31,7 +34,10 @@ public class DriveToPark extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new IntakeSlidesAbsoluteAction(intake, targetSlidePos, 0.5),
-                new DropperPreTransferAction(dropper, robotState)
+                new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        new DropperPreTransferAction(dropper, robotState)
+                )
         );
     }
 }

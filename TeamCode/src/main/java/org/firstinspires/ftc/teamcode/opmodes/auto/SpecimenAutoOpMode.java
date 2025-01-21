@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
@@ -37,9 +36,10 @@ import team.techtigers.core.paths.Waypoint;
 @Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
+    FtcDashboard dashboard = FtcDashboard.getInstance();
     private RobotState robotState;
     private IntakeSubsystem intake;
-    FtcDashboard dashboard = FtcDashboard.getInstance();
+    private VoltageSensor voltageSensor;
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -48,6 +48,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
         telemetry = dashboard.getTelemetry();
@@ -296,6 +297,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Instantaneous Voltage", voltageSensor.getVoltage());
         telemetry.update();
     }
 
@@ -309,5 +311,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Instantaneous Voltage", voltageSensor.getVoltage());
     }
 }
