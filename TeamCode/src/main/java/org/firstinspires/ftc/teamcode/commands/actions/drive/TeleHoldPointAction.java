@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
@@ -22,6 +23,7 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class TeleHoldPointAction extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
+    private static final double TIMEOUT = 2;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
@@ -30,6 +32,7 @@ public class TeleHoldPointAction extends CommandBase {
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
+    private final ElapsedTime timer;
 
     /**
      * Creates a new HoldPointAction
@@ -54,6 +57,7 @@ public class TeleHoldPointAction extends CommandBase {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
+        timer = new ElapsedTime();
     }
 
     /**
@@ -112,6 +116,7 @@ public class TeleHoldPointAction extends CommandBase {
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
         follower.holdPoint(PoseTranslator.waypointToPose(target));
+        timer.reset();
     }
 
     @Override
@@ -133,7 +138,10 @@ public class TeleHoldPointAction extends CommandBase {
                 tolerance, angleTolerance);
 
 
-        return distToTarget(current, target) < tolerance && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance;
+        return
+                (distToTarget(current, target) < tolerance
+                        && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance)
+                || timer.seconds() > TIMEOUT;
     }
 
     @Override
