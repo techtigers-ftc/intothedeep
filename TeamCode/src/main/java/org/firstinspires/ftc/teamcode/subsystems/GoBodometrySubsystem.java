@@ -5,8 +5,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.base.CloseableSubsystem;
 import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.paths.geometry.Point;
+import team.techtigers.core.paths.geometry.Rectangle;
 
 /**
  * The odometry subsystem, using the localizer from Roadrunner.
@@ -15,6 +19,31 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
     private final GoBildaPinpointDriver odo;
     private final RobotState robotState;
     private Waypoint startPose;
+
+    //Defines the points and rectangle for the ascent zone submersible zone on red side
+    private static final Point ASCENT_SUBMERSIBLE_TR_ALLIANCE = new Point(56, 47);
+    private static final Point ASCENT_SUBMERSIBLE_BL_ALLIANCE = new Point(47, 93);
+    private static final Rectangle ASCENT_SUBMERSIBLE_ZONE_ALLIANCE = new Rectangle(ASCENT_SUBMERSIBLE_TR_ALLIANCE, ASCENT_SUBMERSIBLE_BL_ALLIANCE);
+    private static final double ASCENT_SUBMERSIBLE_ZONE_ALLIANCE_HEADING = Math.toRadians(0);
+
+    // Defines the points and rectangle for the chamber zone submersible zone on red side
+    private static final Point CHAMBER_SUBMERSIBLE_TR_ALLIANCE = new Point(84, 47);
+    private static final Point CHAMBER_SUBMERSIBLE_BL_ALLIANCE = new Point(58, 32);
+    private static final Rectangle CHAMBER_SUBMERSIBLE_ZONE_ALLIANCE = new Rectangle(CHAMBER_SUBMERSIBLE_TR_ALLIANCE, CHAMBER_SUBMERSIBLE_BL_ALLIANCE);
+    private static final double CHAMBER_SUBMERSIBLE_ZONE_ALLIANCE_HEADING = Math.toRadians(90);
+
+    //Defines the points and rectangle for the ascent zone submersible zone on blue side
+    private static final Point ASCENT_SUBMERSIBLE_TR_OPPONENT = new Point(85.25, 94.25);
+    private static final Point ASCENT_SUBMERSIBLE_BL_OPPONENT = new Point(94.25, 48.25);
+    private static final Rectangle ASCENT_SUBMERSIBLE_ZONE_OPPONENT = new Rectangle(ASCENT_SUBMERSIBLE_TR_OPPONENT, ASCENT_SUBMERSIBLE_BL_OPPONENT);
+    private static final double ASCENT_SUBMERSIBLE_ZONE_OPPONENT_HEADING = Math.toRadians(180);
+
+    // Defines the points and rectangle for the chamber zone submersible zone on blue side
+    private static final Point CHAMBER_SUBMERSIBLE_TR_OPPONENT = new Point(57.25, 94.25);
+    private static final Point CHAMBER_SUBMERSIBLE_BL_OPPONENT = new Point(83.25, 109.25);
+    private static final Rectangle CHAMBER_SUBMERSIBLE_ZONE_OPPONENT = new Rectangle(CHAMBER_SUBMERSIBLE_TR_OPPONENT, CHAMBER_SUBMERSIBLE_BL_OPPONENT);
+    private static final double CHAMBER_SUBMERSIBLE_ZONE_OPPONENT_HEADING = Math.toRadians(270);
+
 
     /**
      * Initializes a new RoadometrySubsystem.
@@ -95,6 +124,21 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         return new Waypoint(x * cos - y * sin, x * sin + y * cos, waypoint.getHeading());
     }
 
+    private DoubleSupplier getVisionIntakeHeading(Waypoint robotCurrentPose) {
+        Point robotCurrentPoint = new Point(robotCurrentPose.getX(), robotCurrentPose.getY());
+        if(ASCENT_SUBMERSIBLE_ZONE_ALLIANCE.contains(robotCurrentPoint)) {
+            return () -> ASCENT_SUBMERSIBLE_ZONE_ALLIANCE_HEADING;
+        } else if(CHAMBER_SUBMERSIBLE_ZONE_ALLIANCE.contains(robotCurrentPoint)) {
+            return () -> CHAMBER_SUBMERSIBLE_ZONE_ALLIANCE_HEADING;
+        } else if(ASCENT_SUBMERSIBLE_ZONE_OPPONENT.contains(robotCurrentPoint)) {
+            return () -> ASCENT_SUBMERSIBLE_ZONE_OPPONENT_HEADING;
+        } else if(CHAMBER_SUBMERSIBLE_ZONE_OPPONENT.contains(robotCurrentPoint)) {
+            return () -> CHAMBER_SUBMERSIBLE_ZONE_OPPONENT_HEADING;
+        } else {
+            return robotCurrentPose::getHeading;
+        }
+    }
+
     @Override
     public void periodic() {
         odo.update();
@@ -113,6 +157,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
                 odo.getVelY()/25.4, headingVelocity);
         robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
 
+        robotState.setVisionIntakeHeadingSupplier(getVisionIntakeHeading(robotPose));
         robotState.setRobotPose(robotPose);
         robotState.setRobotVelocity(robotVelocity);
     }
