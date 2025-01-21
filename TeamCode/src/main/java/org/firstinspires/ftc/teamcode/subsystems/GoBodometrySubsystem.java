@@ -20,15 +20,15 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
     private final RobotState robotState;
     private Waypoint startPose;
 
-    //Defines the points and rectangle for the long submersible zone
-    private static final Point LONG_SUBMERSIBLE_TR = new Point(56, 47);
-    private static final Point LONG_SUBMERSIBLE_BL = new Point(47, 93);
-    private static final Rectangle LONG_SUBMERSIBLE_ZONE = new Rectangle(LONG_SUBMERSIBLE_TR, LONG_SUBMERSIBLE_BL);
+    //Defines the points and rectangle for the ascent zone submersible zone
+    private static final Point ASCENT_SUBMERSIBLE_TR = new Point(56, 47);
+    private static final Point ASCENT_SUBMERSIBLE_BL = new Point(47, 93);
+    private static final Rectangle ASCENT_SUBMERSIBLE_ZONE = new Rectangle(ASCENT_SUBMERSIBLE_TR, ASCENT_SUBMERSIBLE_BL);
 
-    // Defines the points and rectangle for the short submersible zone
-    private static final Point SHORT_SUBMERSIBLE_TR = new Point(84, 47);
-    private static final Point SHORT_SUBMERSIBLE_BL = new Point(58, 32);
-    private static final Rectangle SHORT_SUBMERSIBLE_ZONE = new Rectangle(SHORT_SUBMERSIBLE_TR, SHORT_SUBMERSIBLE_BL);
+    // Defines the points and rectangle for the chamber zone submersible zone
+    private static final Point CHAMBER_SUBMERSIBLE_TR = new Point(84, 47);
+    private static final Point CHAMBER_SUBMERSIBLE_BL = new Point(58, 32);
+    private static final Rectangle CHAMBER_SUBMERSIBLE_ZONE = new Rectangle(CHAMBER_SUBMERSIBLE_TR, CHAMBER_SUBMERSIBLE_BL);
 
 
     /**
@@ -112,9 +112,9 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
 
     private DoubleSupplier getVisionIntakeHeading(Waypoint robotCurrentPose) {
         Point robotCurrentPoint = new Point(robotCurrentPose.getX(), robotCurrentPose.getY());
-        if(LONG_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
+        if(ASCENT_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
             return () -> Math.toRadians(0);
-        } else if(SHORT_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
+        } else if(CHAMBER_SUBMERSIBLE_ZONE.contains(robotCurrentPoint)) {
             return () -> Math.toRadians(0);
         } else{
             return robotCurrentPose::getHeading;
