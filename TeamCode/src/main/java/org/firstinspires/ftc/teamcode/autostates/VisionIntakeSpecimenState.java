@@ -36,7 +36,10 @@ public class VisionIntakeSpecimenState extends SequentialCommandGroupState<AutoS
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading()),
+                new IntakeVisionPickupAction(intake, dropper, drive,
+                        robotState,
+                        () -> robotState.getRobotCurrentPose().getHeading(),
+                        null),
                 new IntakePrepareToTransferAction(intake, dropper, robotState),
                 new IntakeReadyToTransferAction(intake, robotState)
         );

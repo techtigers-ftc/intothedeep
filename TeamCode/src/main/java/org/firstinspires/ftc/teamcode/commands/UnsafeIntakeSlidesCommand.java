@@ -31,7 +31,7 @@ public class UnsafeIntakeSlidesCommand extends CommandBase {
         intake.moveSlidesRelativeUnsafe(gamepad.getLeftY()*4);
         if (!gamepad.gamepad.isRumbling()) {
             gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder().addStep(
-                    1, 0, 100
+                    1, 0, 10000
             ).build());
         }
     }
@@ -39,5 +39,6 @@ public class UnsafeIntakeSlidesCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         intake.resetSlides();
+        gamepad.gamepad.stopRumble();
     }
 }

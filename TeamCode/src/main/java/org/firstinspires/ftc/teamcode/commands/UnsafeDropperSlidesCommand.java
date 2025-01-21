@@ -32,7 +32,7 @@ public class UnsafeDropperSlidesCommand extends CommandBase {
         dropper.moveSlidesRelativeUnsafe(-gamepad.getRightY() * 2.5);
         if (!gamepad.gamepad.isRumbling()) {
             gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder().addStep(
-                    0, 1, 100
+                    0, 1, 10000
             ).build());
         }
     }

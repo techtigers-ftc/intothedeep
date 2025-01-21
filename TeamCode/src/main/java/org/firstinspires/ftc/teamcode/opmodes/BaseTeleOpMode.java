@@ -126,7 +126,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, robotState::getVisionIntakeHeading);
+                intake, dropper, drive, robotState, robotState::getVisionIntakeHeading, driverGamepad);
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
