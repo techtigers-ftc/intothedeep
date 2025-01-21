@@ -596,7 +596,7 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the supplier for the vision intake heading to use
+     * @return The supplier for the vision intake heading to use
      */
     public DoubleSupplier getVisionIntakeHeadingSupplier() {
         return visionIntakeHeadingSupplier;
