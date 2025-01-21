@@ -4,13 +4,14 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import java.util.function.DoubleSupplier;
 
@@ -19,39 +20,58 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
-public class TeleHoldPointCommand extends CommandBase {
-    private static final String LOG_TAG = TeleHoldPointCommand.class.getSimpleName();
+public class TeleHoldPointAction extends CommandBase {
+    private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
+    private final double tolerance;
+    private final double angleTolerance;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
-    private double tolerance;
-    private double angleTolerance;
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
 
-    private Pose targetPosition;
-
     /**
-     * Creates a new TeleHoldPointCommand
+     * Creates a new HoldPointAction
      *
      * @param drive           the drive subsystem
      * @param robotState      the robot state
-     * @param xSupplier       the x supplier
-     * @param ySupplier       the y supplier
-     * @param headingSupplier the heading supplier
-     * @param tolerance       the tolerance
-     * @param angleTolerance  the angle tolerance
+     * @param xSupplier       a supplier which gives x values for the target position
+     * @param ySupplier       a supplier which gives x values for the target position
+     * @param headingSupplier a supplier which gives heading values for the target position
+     * @param tolerance       the tolerance for the distance to the target
+     * @param angleTolerance  the tolerance for the angle to the target
      */
-    public TeleHoldPointCommand(DriveSubsystem drive, RobotState robotState, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier headingSupplier, double tolerance, double angleTolerance) {
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                            DoubleSupplier xSupplier,
+                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                           double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
-        this.follower = new Follower(new RobotStateLocalizer(robotState));
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
+        this.headingSupplier = headingSupplier;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
-        this.headingSupplier = headingSupplier;
+        follower = new Follower(new RobotStateLocalizer(robotState));
+    }
+
+    /**
+     * Creates a new HoldPointAction (overload constructor)
+     *
+     * @param drive          the drive subsystem
+     * @param robotState     the robot state
+     * @param x              the x value for the target
+     * @param y              the y value for the target
+     * @param heading        the heading value for the target
+     * @param tolerance      the tolerance for the distance to the target
+     * @param angleTolerance the tolerance for the angle to the target
+     */
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                            double x,
+                           double y, double heading,
+                           double tolerance, double angleTolerance) {
+        this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
     /**
@@ -73,20 +93,25 @@ public class TeleHoldPointCommand extends CommandBase {
      * @return the angle distance to the target
      */
     protected double angleDistance(double currentHeading, double targetHeading) {
-        return Math.abs(currentHeading - targetHeading);
+        return Math.abs(currentHeading - targetHeading) % Math.toRadians(360);
     }
 
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.6, 0, 0.02, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.03, 0));
-        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.002, 0, 0.00035, 0.6, 0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(3, 0, 0.02,
+                0));
+        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.00055, 0.6, 0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
+        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.3, 0, 0.03, 0));
+        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.004
+                , 0, 0.002, 0.6, 0));
+        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(3.5, 0,
+                0, 0));
 
-        targetPosition = new Pose(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
-        Waypoint target = PoseTranslator.poseToWaypoint(targetPosition);
+        Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
-        follower.holdPoint(targetPosition);
+        follower.holdPoint(PoseTranslator.waypointToPose(target));
     }
 
     @Override
@@ -104,6 +129,8 @@ public class TeleHoldPointCommand extends CommandBase {
         RobotLog.dd(LOG_TAG, "Final Position: %s", target.toString());
         RobotLog.dd(LOG_TAG, "Distance to Target: %f", distToTarget(current, target));
         RobotLog.dd(LOG_TAG, "Distance to Angle Target: %f", angleDistance(current.getHeading(), target.getHeading()));
+        RobotLog.dd(LOG_TAG, "Tolerance: %f, Angle tolerance: %f",
+                tolerance, angleTolerance);
 
 
         return distToTarget(current, target) < tolerance && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance;

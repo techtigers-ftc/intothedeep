@@ -69,9 +69,4 @@ public class ManualAscentCommand extends CommandBase {
             ascent.disengageJacks();
         }
     }
-
-    @Override
-    public void end(boolean interrupted) {
-        ascent.disengageJacks();
-    }
 }
