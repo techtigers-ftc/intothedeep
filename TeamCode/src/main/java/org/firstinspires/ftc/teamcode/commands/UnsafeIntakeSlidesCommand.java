@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -28,6 +29,11 @@ public class UnsafeIntakeSlidesCommand extends CommandBase {
     @Override
     public void execute() {
         intake.moveSlidesRelativeUnsafe(gamepad.getLeftY()*4);
+        if (!gamepad.gamepad.isRumbling()) {
+            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder().addStep(
+                    1, 0, 100
+            ).build());
+        }
     }
 
     @Override

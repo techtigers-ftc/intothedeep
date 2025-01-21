@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -28,7 +29,12 @@ public class UnsafeDropperSlidesCommand extends CommandBase {
 
     @Override
     public void execute() {
-        dropper.moveSlidesRelativeUnsafe(-gamepad.getRightY()*2.5);
+        dropper.moveSlidesRelativeUnsafe(-gamepad.getRightY() * 2.5);
+        if (!gamepad.gamepad.isRumbling()) {
+            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder().addStep(
+                    0, 1, 100
+            ).build());
+        }
     }
 
     @Override
