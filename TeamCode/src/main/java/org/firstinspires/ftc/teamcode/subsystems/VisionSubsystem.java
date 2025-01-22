@@ -49,7 +49,16 @@ public class VisionSubsystem extends CloseableSubsystem {
     }
 
     private void setExposure() {
-        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        ExposureControl exposureControl;
+        // Running this to catch any IllegalStateExceptions thrown by
+        // starting the opmode too fast
+        try {
+            exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        } catch (IllegalStateException e) {
+            sleep(100);
+            setExposure();
+            return;
+        }
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
             exposureControl.setMode(ExposureControl.Mode.Manual);
             sleep(50);
