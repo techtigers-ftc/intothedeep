@@ -46,7 +46,7 @@ public class IntakeSpecimenState extends HoldPointStateBase {
                 new SequentialCommandGroup(
                         new IntakeReadyToPickupAction(intake, robotState, firstMoveSupplier, () -> 90),
                         new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
-                        new IntakePrepareToTransferAction(intake, dropper, robotState)
+                        new IntakePrepareToTransferAction(intake, dropper, () -> 5, robotState)
                 )
         );
     }
