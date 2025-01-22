@@ -21,6 +21,7 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int NEURAL_DETECTOR_PIPELINE = 5;
+    private static final int BLOCK_CACHE_LIMIT = 3;
     public static double TARGET_POINT_X = 450;
     public static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
@@ -29,6 +30,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final double xOffset;
     private final double yOffset;
     private final double downwardAngle;
+    private double framesCached;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -48,6 +50,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.downwardAngle = downwardAngle;
+        framesCached = 1;
     }
 
     @Override
@@ -131,12 +134,19 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 targetYDegrees = detection.getTargetYDegrees();
             }
         }
-        if (targetXDegrees == 0 && targetYDegrees == 0) {
-            robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-        } else {
-            robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
-        }
         return new double[]{targetXDegrees, targetYDegrees};
+    }
+
+    private void replaceCache(BlockDetectionState state) {
+        boolean unCache = framesCached > BLOCK_CACHE_LIMIT
+                || robotState.getRobotVelocity().getPoint().magnitude() > 1
+                || robotState.getRobotVelocity().getHeading() > Math.toRadians(3);
+        if (unCache) {
+            robotState.setBlockDetectionState(state);
+            framesCached = 1;
+        } else {
+            framesCached++;
+        }
     }
 
     @Override
@@ -150,9 +160,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double finalYDist = yDist - yOffset;
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
             if(xDist == -xOffset) {
-                robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+                replaceCache(BlockDetectionState.NOT_DETECTED);
             } else if(finalYDist > IntakeSubsystem.SLIDES_MAX + VisionSubsystem.INTAKE_CAMERA_OFFSET - 0.5) {
-                robotState.setBlockDetectionState(BlockDetectionState.TOO_FAR);
+                replaceCache(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
                 robotState.setBlockForwardCoarse(finalYDist);

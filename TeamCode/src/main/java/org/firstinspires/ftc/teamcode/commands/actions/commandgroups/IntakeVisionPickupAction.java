@@ -44,8 +44,8 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     GamepadEx gamepad) {
         addRequirements(intake, dropper, drive);
         addCommands(
-                new ParallelDeadlineGroup(
-                        new SequentialCommandGroup(
+//                new ParallelDeadlineGroup(
+//                        new SequentialCommandGroup(
                                 // Aligns the robot to the heading given by the heading supplier
                                 new TeleHoldPointAction(drive, robotState,
                                         () -> robotState.getRobotCurrentPose().getX(),
@@ -68,9 +68,9 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                         + robotState.getBlockForwardFine()
                                         - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
 
-                        ),
-                        new TakeoverRumbleAction(gamepad)
-                    )
+//                        )
+//                        new TakeoverRumbleAction(gamepad)
+//                    )
         );
     }
 

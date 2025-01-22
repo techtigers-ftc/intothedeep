@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -99,7 +100,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(drive::toggleDriveGears);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                () -> robotState.setCurrentGear(DriveGears.ENGAGED));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
+                () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED));
 
 
         // MANIPULATOR
@@ -204,7 +208,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 4));
+                manipulatorGamepad.getLeftY() * 2));
         intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
 
         // Manual intake rotation
@@ -298,6 +302,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad1.runRumbleEffect(endgameRumbleEffect);
             gamepad2.runRumbleEffect(endgameRumbleEffect);
         }));
+
+        Trigger finalRumble = new Trigger(() -> robotState.getRunTime() > 115000);
+
+        endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
+            gamepad1.rumbleBlips(5);
+            gamepad2.rumbleBlips(5);
+        }));
     }
 
     @Override
@@ -309,12 +320,16 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
+//        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
         telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
-        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
+//        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
+        telemetry.addLine();
+        telemetry.addData("Velocity: ", robotState.getRobotVelocity().getPoint().magnitude());
+        telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
+        telemetry.addLine();
         telemetry.addData("Runtime: ", robotState.getRunTime());
     }
 }
