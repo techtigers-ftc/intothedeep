@@ -88,7 +88,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(119.5, 45)),
+                distToIntakeTarget(robotState, new Waypoint(119.5, 45.5)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -106,7 +106,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(129.5, 45)),
+                distToIntakeTarget(robotState, new Waypoint(129.5, 45.5)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -124,7 +124,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(139.5, 45)),
+                distToIntakeTarget(robotState, new Waypoint(139.5, 45.5)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())
         );
 
@@ -276,10 +276,12 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(intakeSpecimen, driveToThirdSpecimenDrop, AutoState.SPECIMEN_3_INTAKE_COMPLETE)
                 .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+
 //                .addTransition(clipSpecimen, driveToFourthSpecimenIntake, AutoState.SPECIMEN_3_DROP_COMPLETE)
 //                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
 //                .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
 //                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+
                 .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_3_DROP_COMPLETE)
                 .addTransition(driveToPark, endState, AutoState.DRIVE_END)
 
