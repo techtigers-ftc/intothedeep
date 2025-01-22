@@ -320,7 +320,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
-//        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
         telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
