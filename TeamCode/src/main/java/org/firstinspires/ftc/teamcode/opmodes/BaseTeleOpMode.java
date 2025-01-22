@@ -192,8 +192,14 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Toggles manual intake mode
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
-                () -> robotState.setManualIntakeSelected(true),
-                () -> robotState.setManualIntakeSelected(false)
+                () -> {
+                    robotState.setManualIntakeSelected(true);
+                    gamepad2.rumbleBlips(1);
+                },
+                () -> {
+                    robotState.setManualIntakeSelected(false);
+                    gamepad2.rumbleBlips(2);
+                }
         );
 
         // Toggles the intake claw between open and closed positions
@@ -225,8 +231,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 .whenActive(intake::togglePerpendicularRotation);
 
         // Changing Color Preference
-        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(changeBlockColorPreferenceCommand);
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
+                new ChangeBlockColorPreferenceCommand(robotState, manipulatorGamepad);
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                    changeBlockColorPreferenceCommand);
 
         // Dropper TODO: Split into a different method
 

@@ -51,7 +51,8 @@ public class IntakeAlignTestOpMode extends BaseOpMode {
 
         // DRIVER
 
-        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand = new ChangeBlockColorPreferenceCommand(robotState);
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
+                new ChangeBlockColorPreferenceCommand(robotState, driverGamepad);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(changeBlockColorPreferenceCommand);
 
         // MANIPULATOR
