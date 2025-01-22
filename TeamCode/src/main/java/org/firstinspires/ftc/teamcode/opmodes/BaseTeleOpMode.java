@@ -113,10 +113,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Commands
         IntakeReadyToPickupAction intakeToObservation =
                 new IntakeReadyToPickupAction(intake, robotState,
-                        () -> 10, () -> 90);
+                        () -> 5, () -> 90);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, 10);
+                intake, dropper, robotState, 5);
         IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, () -> robotState.getBlockForwardCoarse());
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
