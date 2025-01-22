@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -22,7 +21,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
     /**
      * Constructor for the DropState
      *
-     * @param name The name of the state
+     * @param name    The name of the state
      * @param dropper The dropper subsystem
      */
     public ClipSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
@@ -46,6 +45,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
 
     /**
      * Get the current condition of the state
+     *
      * @return the current condition of the state based on run counter
      */
     @Override
@@ -55,7 +55,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
                 return AutoState.SPECIMEN_1_DROP_COMPLETE;
             } else if (runCounter == 2) {
                 return AutoState.SPECIMEN_2_DROP_COMPLETE;
-            } else if(runCounter == 3) {
+            } else if (runCounter == 3) {
                 return AutoState.SPECIMEN_3_DROP_COMPLETE;
             }
             return AutoState.SPECIMEN_4_DROP_COMPLETE;
