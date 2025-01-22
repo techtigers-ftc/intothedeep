@@ -23,7 +23,7 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class TeleHoldPointAction extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
-    private static final double TIMEOUT = 2;
+    private static final double TIMEOUT = 1;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
