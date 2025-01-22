@@ -27,7 +27,7 @@ public class IntakeReadyToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 0.4)
+                new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 0.75)
         );
     }
 
