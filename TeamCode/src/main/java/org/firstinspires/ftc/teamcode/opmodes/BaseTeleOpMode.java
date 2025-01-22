@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -276,6 +278,31 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         unsafeDropper.whileActiveOnce(unsafeDropperSlidesCommand);
+
+        // Endgame RUMBLE
+
+        Trigger endgameRumbleTrigger = new Trigger(() -> robotState.getRunTime() > 90000);
+
+        endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
+            Gamepad.RumbleEffect endgameRumbleEffect = new Gamepad.RumbleEffect.Builder()
+                    .addStep(
+                        1, 1, 1000
+                    )
+                    .addStep(
+                            0, 0, 500
+                    )
+                    .addStep(
+                            1, 1, 1000
+                    )
+                    .build();
+            gamepad1.runRumbleEffect(endgameRumbleEffect);
+            gamepad2.runRumbleEffect(endgameRumbleEffect);
+        }));
+    }
+
+    @Override
+    public void justAfterStart() {
+        robotState.resetTimer();
     }
 
     @Override
@@ -288,5 +315,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
         telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
+        telemetry.addData("Runtime: ", robotState.getRunTime());
     }
 }
