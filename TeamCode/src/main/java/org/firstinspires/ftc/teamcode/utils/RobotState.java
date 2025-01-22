@@ -51,7 +51,7 @@ public class RobotState extends GlobalState {
     private int robotError;
     private final boolean isBlue;
     private final boolean isAuto;
-    private DoubleSupplier visionIntakeHeadingSupplier;
+    private double visionIntakeHeading;
 
     /**
      * Initializes a new RobotState
@@ -88,7 +88,7 @@ public class RobotState extends GlobalState {
         dropperCurrent = 0;
         this.isBlue = isBlue;
         this.isAuto = isAuto;
-        visionIntakeHeadingSupplier = () -> Math.toRadians(0);
+        visionIntakeHeading = Math.toRadians(0);
     }
 
     /**
@@ -596,17 +596,17 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return The supplier for the vision intake heading to use
+     * @return The vision intake heading to use
      */
-    public DoubleSupplier getVisionIntakeHeadingSupplier() {
-        return visionIntakeHeadingSupplier;
+    public double getVisionIntakeHeading() {
+        return visionIntakeHeading;
     }
 
     /**
-     * Sets the supplier for the vision intake heading to use
-     * @param visionIntakeHeadingSupplier the supplier for the vision intake heading to use
+     * Sets the vision intake heading to use
+     * @param visionIntakeHeading the supplier for the vision intake heading to use
      */
-    public void setVisionIntakeHeadingSupplier(DoubleSupplier visionIntakeHeadingSupplier) {
-        this.visionIntakeHeadingSupplier = visionIntakeHeadingSupplier;
+    public void setVisionIntakeHeading(double visionIntakeHeading) {
+        this.visionIntakeHeading = visionIntakeHeading;
     }
 }

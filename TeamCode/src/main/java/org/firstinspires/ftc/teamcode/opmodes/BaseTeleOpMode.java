@@ -63,8 +63,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
-        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState, 10.5, 2.9, 6, 25);
+        GoBodometrySubsystem odometry;
+        try {
+            odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
+        } catch (Exception e){
+            odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        }
         registerSubsystems(intake, drive, dropper, smallCamera, limelight,
                 odometry, ascent);
 
@@ -98,6 +103,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Intake TODO: Split into a different method
 
         // Commands
+        IntakeReadyToPickupAction intakeToObservation =
+                new IntakeReadyToPickupAction(intake, robotState,
+                        () -> 10, () -> 90);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 10);
@@ -115,7 +123,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, robotState.getVisionIntakeHeadingSupplier());
+                intake, dropper, drive, robotState, robotState::getVisionIntakeHeading);
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
@@ -153,6 +161,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToIntake).whenActive(prepareToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(readyToTransfer);
+        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
         autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
@@ -263,5 +272,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
         telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
+        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
+        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
     }
 }
