@@ -142,7 +142,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
             if(xDist == -LIMELIGHT_X_OFFSET) {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-            } else if(finalYDist > IntakeSubsystem.SLIDES_MAX) {
+            } else if(finalYDist > IntakeSubsystem.SLIDES_MAX + VisionSubsystem.INTAKE_CAMERA_OFFSET - 0.5) {
                 robotState.setBlockDetectionState(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
