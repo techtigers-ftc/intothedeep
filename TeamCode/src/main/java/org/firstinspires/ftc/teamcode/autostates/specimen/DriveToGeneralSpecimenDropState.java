@@ -20,13 +20,13 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
             DriveToGeneralSpecimenDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToGeneralSpecimenIntakeState
+     * Constructor for the DriveToGeneralSpecimenDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
-     * @param intake The intake subsystem
+     * @param intake    The intake subsystem
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
