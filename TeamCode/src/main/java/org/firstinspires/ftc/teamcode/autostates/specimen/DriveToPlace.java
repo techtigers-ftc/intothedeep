@@ -6,16 +6,14 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 /**
- * A State to drive to the submersible position
+ * A state to drive to a general location
  */
 public class DriveToPlace extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToPlace.class.getSimpleName();
-    private static final double TOLERANCE = 1.5;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
 
     /**
-     * Constructor for the DriveToSubmersible
+     * Constructor for a DriveToPlace state
      *
      * @param name The name of the state
      * @param drive The drive subsystem

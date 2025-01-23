@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.HoldPointStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.TransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * A state to grab a sample to be dropped off later
+ * A state to drop a sample onto the floor to be picked up later
  */
 public class DropSampleState extends HoldPointStateBase {
     private static final String LOG_TAG =
@@ -26,7 +26,7 @@ public class DropSampleState extends HoldPointStateBase {
 
 
     /**
-     * Constructor for the GrabSampleState
+     * Constructor for the DropSampleState
      *
      * @param name       The name of the state
      * @param intake     The intake subsystem

@@ -17,16 +17,16 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import java.util.function.DoubleSupplier;
 
 /**
- * A state to pick up a specimen from the observation zone using the vision
+ * A state to pick up the three samples on the floor while holding the robot position
  */
-public class IntakeSpecimenState extends HoldPointStateBase {
+public class IntakeSpecimenHoldPoint extends HoldPointStateBase {
     private static final String LOG_TAG =
-            IntakeSpecimenState.class.getSimpleName();
+            IntakeSpecimenHoldPoint.class.getSimpleName();
     private final RobotState robotState;
     private int runCounter;
 
     /**
-     * Constructor for the IntakeSpecimenState
+     * Constructor for the IntakeSpecimenHoldPoint state
      *
      * @param name                  The name of the state
      * @param intake                The intake subsystem
@@ -35,8 +35,8 @@ public class IntakeSpecimenState extends HoldPointStateBase {
      * @param slidePositionSupplier the supplier for slide position
      * @param robotState            The robot state
      */
-    public IntakeSpecimenState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, DoubleSupplier slidePositionSupplier,
-                               RobotState robotState) {
+    public IntakeSpecimenHoldPoint(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, DoubleSupplier slidePositionSupplier,
+                                   RobotState robotState) {
         super(name, drive, robotState);
         this.robotState = robotState;
         runCounter = 0;

@@ -19,9 +19,9 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 /**
  * A state to grab a sample to be dropped off later
  */
-public class GrabOtherSampleState extends SequentialCommandGroupState<AutoState> {
+public class GrabSampleState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            GrabOtherSampleState.class.getSimpleName();
+            GrabSampleState.class.getSimpleName();
     private final RobotState robotState;
     private DoubleSupplier slidePos;
     private DoubleSupplier clawPos;
@@ -36,9 +36,9 @@ public class GrabOtherSampleState extends SequentialCommandGroupState<AutoState>
      * @param targetSlidePos The target slide position
      * @param targetClawRotation The target claw rotation
      */
-    public GrabOtherSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                                RobotState robotState, DoubleSupplier targetSlidePos,
-                                DoubleSupplier targetClawRotation) {
+    public GrabSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
+                           RobotState robotState, DoubleSupplier targetSlidePos,
+                           DoubleSupplier targetClawRotation) {
         super(name);
         this.robotState = robotState;
         slidePos = targetSlidePos;

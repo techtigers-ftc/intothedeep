@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * Drives to Preload Drop
+ * Drives to the chamber and clips the preload specimen for the beginning of the specimen auto
  */
 public class DriveToPreloadDropSpecimenState extends DriveStateBase {
     private static final String LOG_TAG =

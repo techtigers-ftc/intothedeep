@@ -26,7 +26,7 @@ public class AutoDriveCommand extends CommandBase {
 
     private final DriveSubsystem drive;
     private final RobotState robotState;
-    public final Follower follower;
+    private final Follower follower;
     private PathChain pathChain;
 
     // Primary PIDF Controllers

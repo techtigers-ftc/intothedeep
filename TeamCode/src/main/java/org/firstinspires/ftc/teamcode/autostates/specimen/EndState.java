@@ -1,20 +1,17 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
 /**
- * A state to drop a block
+ * An end state for the state machine to end the autonomous
  */
 public class EndState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             EndState.class.getSimpleName();
 
     /**
-     * Constructor for the DropState
+     * Constructor for the EndState
      *
      * @param name The name of the state
      */

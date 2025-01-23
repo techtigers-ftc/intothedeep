@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPoint;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -52,7 +52,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
-    public static void configFirstIntake(DriveToFirstIntake state) {
+    /**
+     * Configures the first intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
+    public static void configFirstIntake(DriveToPlace state) {
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -77,6 +82,11 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the first hold point with PIDF coefficients and a target position
+     *
+     * @param state the state to configure
+     */
     public static void configureFirstHoldPoint(DropSampleState state) {
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
@@ -89,6 +99,11 @@ public class SpecimenDriveStateConfigurator {
         state.setTargetPosition(129, 23.5, Math.toRadians(90));
     }
 
+    /**
+     * Configures the second hold point with PIDF coefficients and a target position
+     *
+     * @param state the state to configure
+     */
     public static void configureSecondHoldPoint(DropSampleState state) {
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
@@ -101,8 +116,12 @@ public class SpecimenDriveStateConfigurator {
         state.setTargetPosition(129, 23.5, Math.toRadians(65));
     }
 
+    /**
+     * Configures the first specimen intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configFirstSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -125,7 +144,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
-    public static void configSpecimenIntake(IntakeSpecimenState state) {
+    /**
+     * Configures the specimen intake (hold point) state with PIDF coefficients and a target position
+     *
+     * @param state the state to configure
+     */
+    public static void configSpecimenIntakeHoldPoint(IntakeSpecimenHoldPoint state) {
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
@@ -137,8 +161,12 @@ public class SpecimenDriveStateConfigurator {
         state.setTargetPosition(93.5, 26, Math.toRadians(-45));
     }
 
+    /**
+     * Configures the first specimen drop state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.005, 0, 0.0007, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -161,8 +189,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the second specimen intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configSecondSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.02, 0);
         state.setDrivePIDF(0.004, 0, 0.00065, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -185,8 +217,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the second specimen drop state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configSecondSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.005, 0, 0.0007, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -209,8 +245,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the third specimen intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configThirdSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.02, 0);
         state.setDrivePIDF(0.004, 0, 0.00065, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -233,8 +273,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the third specimen drop state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configThirdSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.005, 0, 0.0007, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -257,8 +301,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the fourth specimen intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configFourthSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.02, 0);
         state.setDrivePIDF(0.004, 0, 0.00065, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -281,8 +329,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the fourth specimen drop state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configFourthSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.005, 0, 0.0007, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -305,8 +357,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
+    /**
+     * Configures the drive to park state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
     public static void configDriveToPark(DriveToPark state) {
-//        state.setPIDSToTuning();
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.005, 0, 0.0006, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);

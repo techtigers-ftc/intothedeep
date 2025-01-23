@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to drop a block
+ * A state to clip a specimen onto the chamber
  */
 public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
@@ -19,10 +19,11 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
     private RobotState robotState;
 
     /**
-     * Constructor for the DropState
+     * Constructor for the ClipSpecimenState
      *
      * @param name    The name of the state
      * @param dropper The dropper subsystem
+     * @param robotState The robot state
      */
     public ClipSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
         super(name);

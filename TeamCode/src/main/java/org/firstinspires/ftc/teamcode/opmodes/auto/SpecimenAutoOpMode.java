@@ -1,22 +1,19 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntake;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.GrabFirstSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.GrabOtherSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.GrabSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPoint;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -33,13 +30,10 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
-@Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
-    FtcDashboard dashboard = FtcDashboard.getInstance();
     private RobotState robotState;
     private IntakeSubsystem intake;
-    private VoltageSensor voltageSensor;
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -48,7 +42,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        FtcDashboard dashboard = FtcDashboard.getInstance();
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
         telemetry = dashboard.getTelemetry();
@@ -76,14 +70,14 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState);
 
-        DriveToFirstIntake driveToFirstIntake = new DriveToFirstIntake(
+        DriveToPlace driveToFirstIntake = new DriveToPlace(
                 "driveToFirstIntake",
                 drive,
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
 
-        GrabFirstSampleState grabFirstSample = new GrabFirstSampleState(
+        GrabSampleState grabFirstSample = new GrabSampleState(
                 "grabFirstSample",
                 intake,
                 dropper,
@@ -101,7 +95,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configureFirstHoldPoint(dropFirstSample);
 
-        GrabOtherSampleState grabSecondSample = new GrabOtherSampleState(
+        GrabSampleState grabSecondSample = new GrabSampleState(
                 "grabSecondSample",
                 intake,
                 dropper,
@@ -119,7 +113,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configureSecondHoldPoint(dropSecondSample);
 
-        GrabOtherSampleState grabThirdSample = new GrabOtherSampleState(
+        GrabSampleState grabThirdSample = new GrabSampleState(
                 "grabThirdSample",
                 intake,
                 dropper,
@@ -137,7 +131,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configureFirstHoldPoint(dropThirdSample);
 
-        IntakeSpecimenState intakeSpecimen = new IntakeSpecimenState(
+        IntakeSpecimenHoldPoint intakeSpecimen = new IntakeSpecimenHoldPoint(
                 "intakeSpecimen",
                 intake,
                 dropper,
@@ -145,7 +139,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 distToIntakeTarget(robotState, new Waypoint(111.5, 6)),
                 robotState
         );
-        SpecimenDriveStateConfigurator.configSpecimenIntake(intakeSpecimen);
+        SpecimenDriveStateConfigurator.configSpecimenIntakeHoldPoint(intakeSpecimen);
 
         DriveToGeneralSpecimenIntakeState driveToFirstSpecimenIntake = new DriveToGeneralSpecimenIntakeState(
                 "driveToFirstSpecimenIntake",
@@ -299,7 +293,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
-        telemetry.addData("Instantaneous Voltage", voltageSensor.getVoltage());
         telemetry.update();
     }
 
@@ -313,6 +306,5 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
-        telemetry.addData("Instantaneous Voltage", voltageSensor.getVoltage());
     }
 }
