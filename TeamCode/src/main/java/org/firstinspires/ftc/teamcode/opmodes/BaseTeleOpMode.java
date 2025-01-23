@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -53,11 +56,16 @@ import team.techtigers.core.utils.RobotSaveState;
 public abstract class BaseTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    private VoltageSensor voltage;
+
 
     protected abstract boolean isBlue();
 
     @Override
     public void initialize() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        voltage = hardwareMap.voltageSensor.iterator().next();
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         robotState = new RobotState(isBlue(), false);
@@ -317,6 +325,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad1.rumbleBlips(5);
             gamepad2.rumbleBlips(5);
         }));
+
+        telemetry.addData("Voltage: ", voltage.getVoltage());
+        telemetry.update();
     }
 
     @Override
@@ -339,5 +350,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
         telemetry.addLine();
         telemetry.addData("Runtime: ", robotState.getRunTime());
+        telemetry.addData("Voltage: ", voltage.getVoltage());
     }
 }
