@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import java.util.function.DoubleSupplier;
 
 /**
- * A state to pick up the a specimen on the floor while holding the robot position
+ * A state to pick up a specimen on the floor while holding the robot position
  */
 public class IntakeSpecimenHoldPointState extends HoldPointStateBase {
     private static final String LOG_TAG =
@@ -26,7 +26,7 @@ public class IntakeSpecimenHoldPointState extends HoldPointStateBase {
     private int runCounter;
 
     /**
-     * Constructor for the IntakeSpecimenHoldPoint state
+     * Constructor for the IntakeSpecimenHoldPointState
      *
      * @param name                  The name of the state
      * @param intake                The intake subsystem
