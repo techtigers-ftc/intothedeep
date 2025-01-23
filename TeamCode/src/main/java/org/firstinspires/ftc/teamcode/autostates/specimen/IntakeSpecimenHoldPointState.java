@@ -19,9 +19,9 @@ import java.util.function.DoubleSupplier;
 /**
  * A state to pick up the three samples on the floor while holding the robot position
  */
-public class IntakeSpecimenHoldPoint extends HoldPointStateBase {
+public class IntakeSpecimenHoldPointState extends HoldPointStateBase {
     private static final String LOG_TAG =
-            IntakeSpecimenHoldPoint.class.getSimpleName();
+            IntakeSpecimenHoldPointState.class.getSimpleName();
     private final RobotState robotState;
     private int runCounter;
 
@@ -35,8 +35,8 @@ public class IntakeSpecimenHoldPoint extends HoldPointStateBase {
      * @param slidePositionSupplier the supplier for slide position
      * @param robotState            The robot state
      */
-    public IntakeSpecimenHoldPoint(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, DoubleSupplier slidePositionSupplier,
-                                   RobotState robotState) {
+    public IntakeSpecimenHoldPointState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, DoubleSupplier slidePositionSupplier,
+                                        RobotState robotState) {
         super(name, drive, robotState);
         this.robotState = robotState;
         runCounter = 0;

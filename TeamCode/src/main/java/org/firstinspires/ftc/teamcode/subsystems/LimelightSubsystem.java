@@ -20,13 +20,13 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
-    private static final int NEURAL_DETECTOR_PIPELINE = 5;
-    public static double TARGET_POINT_X = 450;
-    public static double TARGET_POINT_Y = 360;
+    private final static int NEURAL_DETECTOR_PIPELINE = 5;
+    private final static double TARGET_POINT_X = 450;
+    private final static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
     private final Limelight3A limelight;
-    public static final double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
-    public static final double LIMELIGHT_X_OFFSET = 2.9;
+    private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
+    private final static double LIMELIGHT_X_OFFSET = 2.9;
     private final double LIMELIGHT_Y_OFFSET = 6;
     private final double LIMELIGHT_DOWNWARD_ANGLE = 25;
 

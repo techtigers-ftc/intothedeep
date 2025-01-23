@@ -16,7 +16,7 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
             DriveToPreloadDropSpecimenState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToPreloadDropState
+     * Constructor for the DriveToPreloadDropSpecimenState
      *
      * @param name The name of the state
      * @param drive The drive subsystem

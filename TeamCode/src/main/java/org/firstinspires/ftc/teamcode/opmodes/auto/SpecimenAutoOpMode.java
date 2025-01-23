@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.GrabSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPoint;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPointState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -70,7 +70,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState);
 
-        DriveToPlace driveToFirstIntake = new DriveToPlace(
+        DriveToPoseState driveToFirstIntake = new DriveToPoseState(
                 "driveToFirstIntake",
                 drive,
                 robotState
@@ -129,9 +129,9 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState,
                 drive
         );
-        SpecimenDriveStateConfigurator.configureFirstHoldPoint(dropThirdSample);
+        SpecimenDriveStateConfigurator.configureThirdHoldPoint(dropThirdSample);
 
-        IntakeSpecimenHoldPoint intakeSpecimen = new IntakeSpecimenHoldPoint(
+        IntakeSpecimenHoldPointState intakeSpecimen = new IntakeSpecimenHoldPointState(
                 "intakeSpecimen",
                 intake,
                 dropper,

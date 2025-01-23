@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 
 /**
- * A class used to configure DriveStates.
+ * A class used to configure BasketDriveStates.
  */
 public class BasketDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 3;
@@ -19,7 +19,7 @@ public class BasketDriveStateConfigurator {
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
 
     /**
-     * Configures the DriveToPreloadDropState.
+     * Configures the DriveToPreloadDropState
      *
      * @param state The DriveToPreloadDropState to configure
      */

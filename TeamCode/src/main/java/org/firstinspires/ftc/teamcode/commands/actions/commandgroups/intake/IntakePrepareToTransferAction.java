@@ -59,6 +59,13 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
         );
     }
 
+    /**
+     * Overloaded constructor which sets the slide position to 5 automatically
+     *
+     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param robotState the robot state
+     */
     public IntakePrepareToTransferAction(IntakeSubsystem intake,
                                          DropperSubsystem dropper,
                                          RobotState robotState) {

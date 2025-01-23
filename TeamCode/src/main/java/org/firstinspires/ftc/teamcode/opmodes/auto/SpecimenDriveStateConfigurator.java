@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPlace;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPoint;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPointState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 
 /**
- * A class used to configure DriveStates.
+ * A class used to configure Specimen Drive States.
  */
 public class SpecimenDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 3;
@@ -57,7 +57,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configFirstIntake(DriveToPlace state) {
+    public static void configFirstIntake(DriveToPoseState state) {
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);
         state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.06, 0);
@@ -117,6 +117,15 @@ public class SpecimenDriveStateConfigurator {
     }
 
     /**
+     * Configures the third hold point with PIDF coefficients and a target position
+     *
+     * @param state the state to configure
+     */
+    public static void configureThirdHoldPoint(DropSampleState state) {
+       configureFirstHoldPoint(state);
+    }
+
+    /**
      * Configures the first specimen intake state with PIDF coefficients and a path
      *
      * @param state the state to configure
@@ -149,7 +158,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configSpecimenIntakeHoldPoint(IntakeSpecimenHoldPoint state) {
+    public static void configSpecimenIntakeHoldPoint(IntakeSpecimenHoldPointState state) {
         state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
         state.setTranslationalPIDF(0.3, 0, 0.01, 0);

@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 /**
  * A state to drive to a general location
  */
-public class DriveToPlace extends DriveStateBase {
+public class DriveToPoseState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToPlace.class.getSimpleName();
+            DriveToPoseState.class.getSimpleName();
 
     /**
      * Constructor for a DriveToPlace state
@@ -19,7 +18,7 @@ public class DriveToPlace extends DriveStateBase {
      * @param drive The drive subsystem
      * @param robotState The robot state
      */
-    public DriveToPlace(String name, DriveSubsystem drive, RobotState robotState) {
+    public DriveToPoseState(String name, DriveSubsystem drive, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand

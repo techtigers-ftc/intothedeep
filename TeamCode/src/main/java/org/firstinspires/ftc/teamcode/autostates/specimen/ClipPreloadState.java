@@ -10,15 +10,15 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to drop a block
+ * A state to clip a block to the chamber
  */
 public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipPreloadState.class.getSimpleName();
-    private RobotState robotState;
+    private final RobotState robotState;
 
     /**
-     * Constructor for the DropState
+     * Constructor for the ClipPreloadState
      *
      * @param name The name of the state
      * @param dropper The dropper subsystem
@@ -32,10 +32,6 @@ public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
         );
     }
 
-    /**
-     * Get the current condition of the state
-     * @return the current condition of the state based on run counter
-     */
     @Override
     public AutoState getCurrentCondition() {
         if (robotState.getDropperClawState() == ClawState.OPEN) {

@@ -19,10 +19,6 @@ public class EndState extends ParallelCommandGroupState<AutoState> {
         super(name);
     }
 
-    /**
-     * Get the current condition of the state
-     * @return the current condition of the state based on run counter
-     */
     @Override
     public AutoState getCurrentCondition() {
         return AutoState.RUNNING;
