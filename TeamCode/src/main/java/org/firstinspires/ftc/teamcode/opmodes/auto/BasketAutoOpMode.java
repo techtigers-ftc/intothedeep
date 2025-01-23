@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.autostates.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToPreloadDropState;
-import org.firstinspires.ftc.teamcode.autostates.DriveToSubmersible;
-import org.firstinspires.ftc.teamcode.autostates.DropState;
-import org.firstinspires.ftc.teamcode.autostates.FirstLevelAscent;
-import org.firstinspires.ftc.teamcode.autostates.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
+import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscent;
+import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -55,7 +55,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configPreloadDrop(driveBasketPreload);
+        BasketDriveStateConfigurator.configPreloadDrop(driveBasketPreload);
 
         DropState dropSample = new DropState(
                 "drop",
@@ -66,7 +66,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
+        BasketDriveStateConfigurator.configFirstSampleIntake(driveIntakeFirstSample);
 
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
@@ -82,14 +82,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
+        BasketDriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
 
         DriveToIntakeState driveIntakeSecondSample = new DriveToIntakeState(
                 "driveToIntakeSecondSample",
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configSecondSampleIntake(driveIntakeSecondSample);
+        BasketDriveStateConfigurator.configSecondSampleIntake(driveIntakeSecondSample);
 
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
@@ -105,14 +105,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
+        BasketDriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
 
         DriveToIntakeState driveIntakeThirdSample = new DriveToIntakeState(
                 "driveToIntakeThirdSample",
                 drive,
                 dropper,
                 robotState);
-        DriveStateConfigurator.configThirdSampleIntake(driveIntakeThirdSample);
+        BasketDriveStateConfigurator.configThirdSampleIntake(driveIntakeThirdSample);
 
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
@@ -128,7 +128,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 dropper,
                 intake,
                 robotState);
-        DriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
+        BasketDriveStateConfigurator.configThirdSampleDrop(driveBasketThirdSample);
 
         DriveToSubmersible driveToSubmersible = new DriveToSubmersible(
                 "driveToSubmersible",
@@ -137,7 +137,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 robotState
         );
-        DriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
+        BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
         FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
                 "firstLevelAscent",

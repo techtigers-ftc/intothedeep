@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -17,24 +16,26 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * A command group that transfers a block from the intake to the dropper.
  */
-public class DropperTransferAction extends ParallelCommandGroup {
+public class TransferAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = TransferAction.class.getSimpleName();
     private final RobotState robotState;
-    private static final String LOG_TAG = DropperTransferAction.class.getSimpleName();
 
     /**
      * Creates a new DropperTransferAction.
      *
-     * @param dropper The dropper subsystem.
-     * @param intake The intake subsystem.
+     * @param dropper    The dropper subsystem.
+     * @param intake     The intake subsystem.
      * @param robotState The robot state.
      */
-    public DropperTransferAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public TransferAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
                 new DropperCloseAction(dropper, 150),
-                new IntakeOpenAction(intake, 150),
-                new IntakeWristPitchAction(intake, 70, 150)
+                new ParallelCommandGroup(
+                        new IntakeOpenAction(intake, 150),
+                        new IntakeWristPitchAction(intake, 70, 150)
+                )
         );
     }
 

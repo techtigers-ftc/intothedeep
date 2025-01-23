@@ -64,10 +64,10 @@ public class StateMachine<T> {
      */
     void addCondition(State<T> currentState, Transition<T> transition) {
         if (!stateList.contains(currentState)) {
-            throw new IllegalArgumentException("State: " + currentState + " does not exist");
+            throw new IllegalArgumentException("State: " + currentState.getName() + " does not exist");
         }
         if (!stateList.contains(transition.getNextState())) {
-            throw new IllegalArgumentException("State: " + transition.getNextState() + " does not exist");
+            throw new IllegalArgumentException("State: " + transition.getNextState().getName() + " does not exist");
         }
 
         Objects.requireNonNull(transitionMap.get(currentState.getName())).add(transition);

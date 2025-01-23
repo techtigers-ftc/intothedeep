@@ -20,34 +20,25 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
-    private static final int NEURAL_DETECTOR_PIPELINE = 5;
-    public static double TARGET_POINT_X = 450;
-    public static double TARGET_POINT_Y = 360;
+    private final static int NEURAL_DETECTOR_PIPELINE = 5;
+    private final static double TARGET_POINT_X = 450;
+    private final static double TARGET_POINT_Y = 360;
     private final RobotState robotState;
     private final Limelight3A limelight;
-    private final double height;
-    private final double xOffset;
-    private final double yOffset;
-    private final double downwardAngle;
+    private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
+    private final static double LIMELIGHT_X_OFFSET = 2.9;
+    private final double LIMELIGHT_Y_OFFSET = 6;
+    private final double LIMELIGHT_DOWNWARD_ANGLE = 25;
 
     /**
      * Constructor for the LimelightSubsystem
      *
      * @param hardwareMap   Used to get the limelight camera from list of hardware devices
      * @param robotState    Used to set limelight values in robotstate
-     * @param height        How high the limelight is off the ground
-     * @param xOffset       Lateral distance of limelight from robot's center
-     * @param yOffset       Distance from the limelight to the optimal position of the
-     *                      fine camera to read values
-     * @param downwardAngle The angle the limelight is facing, in degrees
      */
-    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState, double height, double xOffset, double yOffset, double downwardAngle) {
+    public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        this.height = height;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-        this.downwardAngle = downwardAngle;
     }
 
     @Override
@@ -145,11 +136,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
         if (result != null) {
             double[] angularValues = getNeuralDetectorAttributes(result.getDetectorResults());
             double tx = angularValues[0];
-            double ty = downwardAngle - angularValues[1];
-            double yDist = height * (1 / Math.tan(Math.toRadians(ty)));
-            double finalYDist = yDist - yOffset;
-            double xDist = yDist * Math.tan(Math.toRadians(tx)) - xOffset;
-            if(xDist == -xOffset) {
+            double ty = LIMELIGHT_DOWNWARD_ANGLE - angularValues[1];
+            double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty)));
+            double finalYDist = yDist - LIMELIGHT_Y_OFFSET;
+            double xDist = yDist * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
+            if(xDist == -LIMELIGHT_X_OFFSET) {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else if(finalYDist > IntakeSubsystem.SLIDES_MAX + VisionSubsystem.INTAKE_CAMERA_OFFSET - 0.5) {
                 robotState.setBlockDetectionState(BlockDetectionState.TOO_FAR);

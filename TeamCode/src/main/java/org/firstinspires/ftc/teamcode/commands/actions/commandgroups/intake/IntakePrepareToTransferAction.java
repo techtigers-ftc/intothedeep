@@ -19,12 +19,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * Command to move intake to Prepare To Transfer.
  */
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new IntakePrepareToTransferAction
@@ -34,7 +36,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public IntakePrepareToTransferAction(IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
+                                         DropperSubsystem dropper, DoubleSupplier targetSlidePosition,
                                          RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake, dropper);
@@ -47,7 +49,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
                 ),
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
+                        new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new DropperPitchAction(dropper,
@@ -55,6 +57,19 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 ),
                 new IntakeLoosenAction(intake, 50)
         );
+    }
+
+    /**
+     * Overloaded constructor which sets the slide position to 5 automatically
+     *
+     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param robotState the robot state
+     */
+    public IntakePrepareToTransferAction(IntakeSubsystem intake,
+                                         DropperSubsystem dropper,
+                                         RobotState robotState) {
+        this(intake, dropper, () -> 5, robotState);
     }
 
     @Override

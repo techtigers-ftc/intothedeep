@@ -36,7 +36,7 @@ public class IntakeReadyToTransferAction extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_TRANSFER) {
+        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_TRANSFER && !robotState.isAuto()) {
             RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();
