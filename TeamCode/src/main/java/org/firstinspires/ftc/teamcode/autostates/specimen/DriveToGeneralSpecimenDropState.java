@@ -26,7 +26,7 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
-     * @oaram intake The intake subsystem
+     * @param intake The intake subsystem
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);

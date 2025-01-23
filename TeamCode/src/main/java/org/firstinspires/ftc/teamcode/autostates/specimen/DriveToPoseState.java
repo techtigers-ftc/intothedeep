@@ -12,7 +12,7 @@ public class DriveToPoseState extends DriveStateBase {
             DriveToPoseState.class.getSimpleName();
 
     /**
-     * Constructor for a DriveToPlace state
+     * Constructor for a DriveToPose state
      *
      * @param name The name of the state
      * @param drive The drive subsystem

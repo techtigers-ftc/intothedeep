@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to clip a block to the chamber
+ * A state to clip the preload specimen to the chamber
  */
 public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
