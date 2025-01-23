@@ -31,9 +31,11 @@ import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
 @Autonomous
-public class SpecimenAutoOpMode extends BaseOpMode {
+public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+
+    protected abstract boolean isBlue();
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
