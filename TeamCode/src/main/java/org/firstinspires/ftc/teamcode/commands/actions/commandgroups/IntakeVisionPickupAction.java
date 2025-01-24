@@ -45,14 +45,10 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                headingSupplier, 0.3, Math.toRadians(2)
+                                headingSupplier, 0.6, Math.toRadians(2)
                         )
                 ),
-                // Waits, then runs the fine camera orientation and forward movement alignment
-                new WaitCommand(300),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
-                        + robotState.getBlockForwardFine()
-                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
+                new IntakeReadyToPickupAction(intake, robotState, intake::getCurrentSlidePositionInches, robotState::getBlockOrientation)
         );
     }
 
