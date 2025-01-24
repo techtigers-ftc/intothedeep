@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autostates;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -51,9 +50,9 @@ public class VisionSamplePickupState extends SequentialCommandGroupState<AutoSta
     public AutoState getCurrentCondition() {
         if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
             if(runCounter == 1) {
-                return AutoState.SAMPLE_5_INTAKE_COMPLETE;
+                return AutoState.SAMPLE_4_INTAKE_COMPLETE;
             } else {
-                return AutoState.SAMPLE_6_INTAKE_COMPLETE;
+                return AutoState.SAMPLE_5_INTAKE_COMPLETE;
             }
         } else {
             return AutoState.RUNNING;

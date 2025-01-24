@@ -230,6 +230,130 @@ public class BasketDriveStateConfigurator {
     }
 
     /**
+     * Configures the FourthSampleIntake.
+     *
+     * @param state The DriveToGeneralSampleIntakeState to configure
+     */
+    public static void configFourthSampleIntake(DriveToGeneralSampleIntakeState state) {
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
+        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(12, 12),
+                                        new Point(11, 58),
+                                        new Point(49, 61.35)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                                Math.toRadians(0))
+                        .build()
+        );
+
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the FourthSampleDrop.
+     *
+     * @param state The DriveToGeneralSampleDropState to configure
+     */
+    public static void configFourthSampleDrop(DriveToGeneralSampleDropState state) {
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
+        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(49, 61.35),
+                                        new Point(11,58),
+                                        new Point(12, 12)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(0),
+                                Math.toRadians(45))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the FifthSampleIntake.
+     *
+     * @param state The DriveToGeneralSampleIntakeState to configure
+     */
+    public static void configFifthSampleIntake(DriveToGeneralSampleIntakeState state) {
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
+        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(12, 12),
+                                        new Point(11, 58),
+                                        new Point(49, 63.35)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                                Math.toRadians(0))
+                        .build()
+        );
+
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the FifthSampleDrop.
+     *
+     * @param state The DriveToGeneralSampleDropState to configure
+     */
+    public static void configFifthSampleDrop(DriveToGeneralSampleDropState state) {
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
+        state.setHeadingPIDF(1, 0, 0.03, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(49, 63.35),
+                                        new Point(11,58),
+                                        new Point(12, 12)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(0),
+                                Math.toRadians(45))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    /**
      * Configures the DriveToSubmersible.
      *
      * @param state The DriveToSubmersible to configure
@@ -259,4 +383,5 @@ public class BasketDriveStateConfigurator {
         state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
+
 }
