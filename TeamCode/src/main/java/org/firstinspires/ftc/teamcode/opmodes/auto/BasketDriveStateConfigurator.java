@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -53,7 +53,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToFirstSampleIntakeState to configure
      */
-    public static void configFirstSampleIntake(DriveToIntakeState state) {
+    public static void configFirstSampleIntake(DriveToGeneralSampleIntakeState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -83,7 +83,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The FirstSampleDrop to configure
      */
-    public static void configFirstSampleDrop(DriveToGeneralDropState state) {
+    public static void configFirstSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -113,7 +113,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The SecondSampleIntake to configure
      */
-    public static void configSecondSampleIntake(DriveToIntakeState state) {
+    public static void configSecondSampleIntake(DriveToGeneralSampleIntakeState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -143,7 +143,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The SecondSampleDrop to configure
      */
-    public static void configSecondSampleDrop(DriveToGeneralDropState state) {
+    public static void configSecondSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -173,7 +173,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The ThirdSampleIntake to configure
      */
-    public static void configThirdSampleIntake(DriveToIntakeState state) {
+    public static void configThirdSampleIntake(DriveToGeneralSampleIntakeState state) {
         state.setPIDSToTuning();
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
@@ -204,7 +204,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The ThirdSampleDrop to configure
      */
-    public static void configThirdSampleDrop(DriveToGeneralDropState state) {
+    public static void configThirdSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);

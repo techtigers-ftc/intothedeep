@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
@@ -61,7 +59,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "drop",
                 dropper);
 
-        DriveToIntakeState driveIntakeFirstSample = new DriveToIntakeState(
+        DriveToGeneralSampleIntakeState driveIntakeFirstSample = new DriveToGeneralSampleIntakeState(
                 "driveToIntakeFirstSample",
                 drive,
                 dropper,
@@ -76,7 +74,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 distToIntakeTarget(robotState, new Waypoint(23, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
-        DriveToGeneralDropState driveBasketFirstSample = new DriveToGeneralDropState(
+        DriveToGeneralSampleDropState driveBasketFirstSample = new DriveToGeneralSampleDropState(
                 "driveToBasketFirstSample",
                 drive,
                 dropper,
@@ -84,7 +82,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         BasketDriveStateConfigurator.configFirstSampleDrop(driveBasketFirstSample);
 
-        DriveToIntakeState driveIntakeSecondSample = new DriveToIntakeState(
+        DriveToGeneralSampleIntakeState driveIntakeSecondSample = new DriveToGeneralSampleIntakeState(
                 "driveToIntakeSecondSample",
                 drive,
                 dropper,
@@ -99,7 +97,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 distToIntakeTarget(robotState, new Waypoint(13, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
-        DriveToGeneralDropState driveBasketSecondSample = new DriveToGeneralDropState(
+        DriveToGeneralSampleDropState driveBasketSecondSample = new DriveToGeneralSampleDropState(
                 "driveToBasketSecondSample",
                 drive,
                 dropper,
@@ -107,7 +105,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         BasketDriveStateConfigurator.configSecondSampleDrop(driveBasketSecondSample);
 
-        DriveToIntakeState driveIntakeThirdSample = new DriveToIntakeState(
+        DriveToGeneralSampleIntakeState driveIntakeThirdSample = new DriveToGeneralSampleIntakeState(
                 "driveToIntakeThirdSample",
                 drive,
                 dropper,
@@ -122,7 +120,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 distToIntakeTarget(robotState, new Waypoint(3, 45)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
-        DriveToGeneralDropState driveBasketThirdSample = new DriveToGeneralDropState(
+        DriveToGeneralSampleDropState driveBasketThirdSample = new DriveToGeneralSampleDropState(
                 "driveToBasketThirdSample",
                 drive,
                 dropper,
