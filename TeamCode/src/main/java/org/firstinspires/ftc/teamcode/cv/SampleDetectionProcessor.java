@@ -52,17 +52,17 @@ public class SampleDetectionProcessor implements VisionProcessor {
 
 
     // Vision Things
-    private static Mat edges = new Mat();
-    private static Mat erodeMat = new Mat(ERODE_NUMBER, ERODE_NUMBER, Imgproc.MORPH_RECT);
-    private static Size gaussianBlurSize = new Size(3, 3);
-    private static Mat hierarchy = new Mat();
-    private static Mat masked = new Mat();
-    private static Mat allianceMask = new Mat();
-    private static Mat yellowMask = new Mat();
-    private static Point[] rectPoints = new Point[4];
-    private static Scalar greenColor = new Scalar(0, 255, 0);
-    private static Scalar redColor = new Scalar(255, 0, 0);
-    private static Scalar blueColor = new Scalar(0, 0, 255);
+    private static final Mat edges = new Mat();
+    private static final Mat erodeMat = new Mat(ERODE_NUMBER, ERODE_NUMBER, Imgproc.MORPH_RECT);
+    private static final Size gaussianBlurSize = new Size(3, 3);
+    private static final Mat hierarchy = new Mat();
+    private static final Mat masked = new Mat();
+    private static final Mat allianceMask = new Mat();
+    private static final Mat yellowMask = new Mat();
+    private static final Point[] rectPoints = new Point[4];
+    private static final Scalar greenColor = new Scalar(0, 255, 0);
+    private static final Scalar redColor = new Scalar(255, 0, 0);
+    private static final Scalar blueColor = new Scalar(0, 0, 255);
     /**
      * Construct a SampleDetectionProcessor
      *
