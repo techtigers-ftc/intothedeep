@@ -24,7 +24,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final static double TARGET_POINT_X = 450;
     private final static double TARGET_POINT_Y = 360;
     private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
-    private final static double LIMELIGHT_X_OFFSET = 2.9;
+    private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
     private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
     private static final double SLIDES_INTAKE_OFFSET = 3;
@@ -40,6 +40,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double FORWARD_C = -1.77;
     private static final double FORWARD_H_STRETCH = 7390.34;
     private static final double FORWARD_RATE = 2.38;
+
+    // Horizontal offset cube root function parameters
+    private static final double LATERAL_V_STRETCH = 0.82;
+    private static final double LATERAL_H_SHIFT = -2.7;
+    private static final double LATERAL_V_SHIFT = 2.47;
 
     // Block values
     private static final double BLOCK_WIDTH_VERTICAL = 1.5;
@@ -182,8 +187,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private double getCorrectedYDist(double yDist) {
         double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
-        RobotLog.dd(tag, "Corrective Factor:%f", correctiveFactor);
+        RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
         return yDist - correctiveFactor;
+    }
+
+    private double getCorrectedXDist(double xDist) {
+        double correctiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
+        RobotLog.dd(tag, "Lateral Corrective Factor:%f", correctiveFactor);
+        return xDist + correctiveFactor;
     }
 
     @Override
@@ -195,7 +206,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double ty = LIMELIGHT_DOWNWARD_ANGLE - angularValues[1];
             double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
             double finalYDist = getCorrectedYDist(yDist);
-            double xDist = yDist * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
+            double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
+            double finalXDist = getCorrectedXDist(xDist);
             if (xDist == -LIMELIGHT_X_OFFSET) {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else if (finalYDist > IntakeSubsystem.SLIDES_MAX + SLIDES_INTAKE_OFFSET - 0.5) {
@@ -203,7 +215,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
                 robotState.setBlockForwardCoarse(finalYDist);
-                robotState.setBlockLateralCoarse(xDist);
+                robotState.setBlockLateralCoarse(finalXDist);
                 robotState.setBlockOrientation(angularValues[2]);
             }
             RobotLog.dd(tag, "x dist:%f, y dist:%f", xDist, finalYDist);
