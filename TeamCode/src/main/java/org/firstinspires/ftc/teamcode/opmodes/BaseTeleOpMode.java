@@ -31,6 +31,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
@@ -120,9 +121,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Intake TODO: Split into a different method
 
         // Commands
-        IntakeReadyToPickupAction intakeToObservation =
-                new IntakeReadyToPickupAction(intake, robotState,
-                        () -> 5, () -> 90);
+        IntakeToObservationZoneAction intakeToObservation =
+                new IntakeToObservationZoneAction(intake, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 5);
@@ -134,7 +134,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
-                () -> (robotState.getBlockOrientation() + 180) % 180); // This is done to translate claw rotation to block orientation
+                () -> (robotState.getBlockOrientation() + 180) % 180// This is done to translate claw rotation to block orientation
+        );
         IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
                 intake, dropper, robotState);
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
@@ -198,7 +199,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
-        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
+        // TODO: Make auto when small vision is fixed
+        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
 
         // Other Intake Stuff
 

@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * Command to tuck the intake in.
  */
 public class IntakeTuckAction extends ParallelCommandGroup {
+    private final IntakeSubsystem intake;
     private final RobotState robotState;
     private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
@@ -28,6 +29,7 @@ public class IntakeTuckAction extends ParallelCommandGroup {
      * @param robotState the robot state
      */
     public IntakeTuckAction(IntakeSubsystem intake, RobotState robotState) {
+        this.intake = intake;
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
@@ -56,9 +58,12 @@ public class IntakeTuckAction extends ParallelCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted) {
-            robotState.setIntakeState(IntakeState.TUCK);
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        if (interrupted) {
+            intake.setWristAbsolute(IntakeSubsystem.WRIST_PITCH_TUCK_POSITION
+                    , IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
+            intake.setClawRotationAbsolute(IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION);
         }
+        robotState.setIntakeState(IntakeState.TUCK);
+        robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
     }
 }

@@ -23,7 +23,7 @@ import java.util.function.DoubleSupplier;
  * Command to move intake to observation zone, dropping its block in the zone
  * ans moving to ready to intake
  */
-public class IntakeToObservationZoneAction extends SequentialCommandGroup {
+public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeToObservationZoneAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -37,17 +37,13 @@ public class IntakeToObservationZoneAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, () -> 10, 1),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
-                        new IntakeClawRotationAction(intake,
-                                () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
-                        new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
-                ),
-                new IntakeOpenAction(intake, 100)
-
+                new IntakeSlidesAbsoluteAction(intake, () -> 10, 1),
+                new IntakeWristRotationAction(intake,
+                        IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
+                new IntakeClawRotationAction(intake,
+                        () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
+                new IntakeWristPitchAction(intake,
+                        IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
         );
     }
 

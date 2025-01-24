@@ -36,7 +36,7 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new DropperForwardCarryNoTransferAction(dropper, robotState),
                         new SequentialCommandGroup(
-                                new WaitCommand(500),
+                                new WaitCommand(200),
                                 new IntakeTuckAction(intake, robotState)
                         )
                 )
