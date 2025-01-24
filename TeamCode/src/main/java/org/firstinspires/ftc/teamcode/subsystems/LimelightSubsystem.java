@@ -23,18 +23,36 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final static int NEURAL_DETECTOR_PIPELINE = 5;
     private final static double TARGET_POINT_X = 450;
     private final static double TARGET_POINT_Y = 360;
-    private final RobotState robotState;
-    private final Limelight3A limelight;
     private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
     private final static double LIMELIGHT_X_OFFSET = 2.9;
-    private final double LIMELIGHT_Y_OFFSET = 6;
-    private final double LIMELIGHT_DOWNWARD_ANGLE = 25;
+    private static final double LIMELIGHT_INTAKE_OFFSET = 8;
+    private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
+    private static final double SLIDES_INTAKE_OFFSET = 3;
+
+    // Orientation logistic function parameters
+    private static final double ORIENTATION_FLOOR = 0.00221939;
+    private static final double ORIENTATION_C = 0.0725463;
+    private static final double ORIENTATION_H_STRETCH = 4.40165;
+    private static final double ORIENTATION_RATE = 0.0902167;
+
+    // Forward offset logistic function parameters
+    private static final double FORWARD_FLOOR = 1.34;
+    private static final double FORWARD_C = -1.77;
+    private static final double FORWARD_H_STRETCH = 7390.34;
+    private static final double FORWARD_RATE = 2.38;
+
+    // Block values
+    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
+    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
+    private final RobotState robotState;
+    private final Limelight3A limelight;
+
 
     /**
      * Constructor for the LimelightSubsystem
      *
-     * @param hardwareMap   Used to get the limelight camera from list of hardware devices
-     * @param robotState    Used to set limelight values in robotstate
+     * @param hardwareMap Used to get the limelight camera from list of hardware devices
+     * @param robotState  Used to set limelight values in robotstate
      */
     public LimelightSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
@@ -93,6 +111,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
     }
 
+    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
     /**
      * Gets the target x and target y degrees of the neural detector detection
      * that is closest to the extension point of the limelight frame
@@ -106,6 +128,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double centerY = 0;
         double targetXDegrees = 0;
         double targetYDegrees = 0;
+        double orientation = 0;
         for (LLResultTypes.DetectorResult detection : detections) {
             // Gets the values for the detection to check
             double newCenterX = getCenterCoordinates(detection)[0];
@@ -120,6 +143,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 // Sets the values of this specific block detection to be used in the periodic
                 targetXDegrees = detection.getTargetXDegrees();
                 targetYDegrees = detection.getTargetYDegrees();
+                orientation = getClawAngle(detection);
             }
         }
         if (targetXDegrees == 0 && targetYDegrees == 0) {
@@ -127,7 +151,39 @@ public class LimelightSubsystem extends CloseableSubsystem {
         } else {
             robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
         }
-        return new double[]{targetXDegrees, targetYDegrees};
+        return new double[]{targetXDegrees, targetYDegrees, orientation};
+    }
+
+    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
+        // Width is the distance between the top right and bottom right corners of the detection
+        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+    }
+
+    /**
+     * Returns the angle the intake claw should go to in order to pick up the block
+     *
+     * @param detection The detected block
+     * @return The angle the claw should go to in order to pick up the block
+     */
+    private double getClawAngle(LLResultTypes.DetectorResult detection) {
+        double blockWidth = getBlockWidth(detection);
+        RobotLog.dd(tag, "block width detection:%f", blockWidth);
+        double distance = robotState.getBlockForwardCoarse();
+        double widthScalar = (ORIENTATION_C / (1 + ORIENTATION_H_STRETCH * Math.pow(Math.E, -ORIENTATION_RATE * distance))) + ORIENTATION_FLOOR;
+        double normalizedBlockWidth = blockWidth * widthScalar;
+        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
+        if (normalizedBlockWidth > 2.4) {
+            return 0;
+        } else {
+            return 90;
+        }
+    }
+
+    private double getCorrectedYDist(double yDist) {
+        double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
+        RobotLog.dd(tag, "Corrective Factor:%f", correctiveFactor);
+        return yDist - correctiveFactor;
     }
 
     @Override
@@ -137,17 +193,18 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double[] angularValues = getNeuralDetectorAttributes(result.getDetectorResults());
             double tx = angularValues[0];
             double ty = LIMELIGHT_DOWNWARD_ANGLE - angularValues[1];
-            double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty)));
-            double finalYDist = yDist - LIMELIGHT_Y_OFFSET;
+            double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
+            double finalYDist = getCorrectedYDist(yDist);
             double xDist = yDist * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
-            if(xDist == -LIMELIGHT_X_OFFSET) {
+            if (xDist == -LIMELIGHT_X_OFFSET) {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-            } else if(finalYDist > IntakeSubsystem.SLIDES_MAX + VisionSubsystem.INTAKE_CAMERA_OFFSET - 0.5) {
+            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX + SLIDES_INTAKE_OFFSET - 0.5) {
                 robotState.setBlockDetectionState(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
                 robotState.setBlockForwardCoarse(finalYDist);
                 robotState.setBlockLateralCoarse(xDist);
+                robotState.setBlockOrientation(angularValues[2]);
             }
             RobotLog.dd(tag, "x dist:%f, y dist:%f", xDist, finalYDist);
         }

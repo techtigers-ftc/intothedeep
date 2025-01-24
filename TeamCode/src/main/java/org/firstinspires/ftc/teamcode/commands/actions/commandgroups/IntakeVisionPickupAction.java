@@ -47,12 +47,12 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
-                ),
+                )
                 // Waits, then runs the fine camera orientation and forward movement alignment
-                new WaitCommand(300),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
-                        + robotState.getBlockForwardFine()
-                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
+//                new WaitCommand(300),
+//                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
+//                        + robotState.getBlockForwardFine()
+//                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
         );
     }
 
