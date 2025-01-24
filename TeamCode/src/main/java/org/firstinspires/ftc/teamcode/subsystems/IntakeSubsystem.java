@@ -136,6 +136,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
             resetSlides();
         }
 
+        moveSlidesAbsolute(getCurrentSlidePositionInches());
+
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
 
