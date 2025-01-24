@@ -199,8 +199,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
-        // TODO: Make auto when small vision is fixed
-        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
+        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
 
@@ -357,5 +356,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("Runtime: ", robotState.getRunTime());
         telemetry.addData("Voltage: ", voltage.getVoltage());
+        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
     }
 }

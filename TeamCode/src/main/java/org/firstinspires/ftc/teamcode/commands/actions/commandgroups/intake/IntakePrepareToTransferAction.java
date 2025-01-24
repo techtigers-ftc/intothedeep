@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
@@ -27,6 +28,8 @@ import java.util.function.DoubleSupplier;
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
+    private final IntakeSubsystem intake;
+    private double lastClawRotation;
 
     /**
      * Creates a new IntakePrepareToTransferAction
@@ -39,6 +42,8 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                          DropperSubsystem dropper, DoubleSupplier targetSlidePosition,
                                          RobotState robotState) {
         this.robotState = robotState;
+        this.intake = intake;
+        lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
                 new IntakeWristPitchAction(intake,
@@ -48,6 +53,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
                 ),
+                new IntakeCheckSensorAction(robotState, this),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
@@ -83,6 +89,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
             robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
             super.initialize();
         }
+        lastClawRotation = intake.getClawRotation();
     }
 
     @Override
@@ -92,6 +99,10 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
             robotState.setIntakeState(IntakeState.PREPARE_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+        } else {
+            intake.setClawRotationAbsolute(lastClawRotation);
+            intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
+            intake.openClaw();
         }
     }
 }

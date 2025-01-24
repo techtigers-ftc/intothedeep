@@ -191,14 +191,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
         if (normalizedBlockWidth > 2.4) {
             return 0;
         } else {
-            return 90;
+            return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
         }
     }
 
     private double getCorrectedYDist(double yDist) {
         double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
         RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor;
+        return yDist - correctiveFactor + 1;
     }
 
     private double getCorrectedXDist(double xDist) {
