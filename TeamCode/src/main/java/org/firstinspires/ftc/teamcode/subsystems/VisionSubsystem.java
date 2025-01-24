@@ -5,12 +5,14 @@ import static android.os.SystemClock.sleep;
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.concurrent.TimeUnit;
@@ -26,6 +28,7 @@ public class VisionSubsystem extends CloseableSubsystem {
     public static int GAIN = 0;
     private final WebcamName camera;
     private final VisionPortal visionPortal;
+    private final RobotState robotState;
 
     /**
      * Construct a VisionSubsystem
@@ -34,6 +37,7 @@ public class VisionSubsystem extends CloseableSubsystem {
      * @param robotState  The RobotState
      */
     public VisionSubsystem(HardwareMap hardwareMap, RobotState robotState) {
+        this.robotState = robotState;
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
@@ -45,7 +49,12 @@ public class VisionSubsystem extends CloseableSubsystem {
     @Override
     public void init() {
         visionPortal.stopLiveView();
-        setExposure();
+        visionPortal.getCameraState();
+//        setExposure();
+
+        while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            sleep(100);
+        }
     }
 
     private void setExposure() {

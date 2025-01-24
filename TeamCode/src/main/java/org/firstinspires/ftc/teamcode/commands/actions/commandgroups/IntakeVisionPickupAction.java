@@ -64,10 +64,11 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                 ),
                                 // Waits, then runs the fine camera orientation and forward movement alignment
 //                                new WaitCommand(300),
-                                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
-                                        + robotState.getBlockForwardFine()
-                                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
+//                                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches()
+//                                        + robotState.getBlockForwardFine()
+//                                        - VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState::getBlockOrientation)
 
+                                new IntakeReadyToPickupAction(intake, robotState, 90)
 //                        )
 //                        new TakeoverRumbleAction(gamepad)
 //                    )

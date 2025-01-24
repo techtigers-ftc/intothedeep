@@ -75,7 +75,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
-        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+//        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
         try {
@@ -83,7 +83,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         } catch (Exception e) {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         }
-        registerSubsystems(intake, drive, dropper, smallCamera, limelight,
+
+        registerSubsystems(intake, drive, dropper, limelight, //smallCamera
                 odometry, ascent);
 
         // ASCENT
@@ -139,7 +140,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
                 intake, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, robotState::getVisionIntakeHeading, driverGamepad);
+                intake, dropper, drive, robotState,
+                () -> robotState.getRobotCurrentPose().getHeading(), // robotState
+                // ::getVisionIntakeHeading,
+                driverGamepad);
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
