@@ -63,6 +63,7 @@ public class SampleDetectionProcessor implements VisionProcessor {
     private static final Scalar greenColor = new Scalar(0, 255, 0);
     private static final Scalar redColor = new Scalar(255, 0, 0);
     private static final Scalar blueColor = new Scalar(0, 0, 255);
+
     /**
      * Construct a SampleDetectionProcessor
      *

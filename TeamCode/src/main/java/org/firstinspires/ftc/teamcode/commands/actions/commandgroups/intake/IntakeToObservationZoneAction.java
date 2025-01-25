@@ -22,7 +22,7 @@ import java.util.function.DoubleSupplier;
 
 /**
  * Command to move intake to observation zone, dropping its block in the zone
- * ans moving to ready to intake
+ * and moving to ready to intake
  */
 public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeToObservationZoneAction.class.getSimpleName();
