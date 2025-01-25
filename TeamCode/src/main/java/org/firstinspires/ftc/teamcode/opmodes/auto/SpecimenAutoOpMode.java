@@ -291,6 +291,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
         telemetry.update();
     }
@@ -304,6 +305,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
     }
 }
