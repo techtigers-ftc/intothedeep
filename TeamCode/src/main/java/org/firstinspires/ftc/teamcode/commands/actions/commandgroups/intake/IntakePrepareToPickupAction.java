@@ -42,7 +42,7 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 200),
+                                IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
                         new IntakeClawRotationAction(intake,
                                 () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
                         new IntakeWristPitchAction(intake,
