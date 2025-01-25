@@ -31,7 +31,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
-                target.getY() - robotState.getRobotCurrentPose().getY()) - 9, 19);
+                target.getY() - robotState.getRobotCurrentPose().getY()) - 8.75, IntakeSubsystem.SLIDES_MAX);
     }
 
     @Override
@@ -73,7 +73,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(23, 45)),
+                distToIntakeTarget(robotState, new Waypoint(22.5, 45.25)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketFirstSample = new DriveToGeneralDropState(
@@ -96,7 +96,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(13, 45)),
+                distToIntakeTarget(robotState, new Waypoint(12.5, 45.25)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketSecondSample = new DriveToGeneralDropState(
@@ -119,7 +119,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState,
-                distToIntakeTarget(robotState, new Waypoint(3, 45)),
+                distToIntakeTarget(robotState, new Waypoint(2.5, 45.25)),
                 () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 
         DriveToGeneralDropState driveBasketThirdSample = new DriveToGeneralDropState(
