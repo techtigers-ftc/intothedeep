@@ -25,7 +25,7 @@ import team.techtigers.base.CloseableSubsystem;
 public class DriveSubsystem extends CloseableSubsystem {
     private static final double GEAR_MULTIPLIER = 0.5;
     private static final double TURN_MULTIPLIER = 0.55;
-    private static final double TURN_GEAR_MULTIPLIER = 0.375;
+    private static final double TURN_GEAR_MULTIPLIER = 0.5;
     private final DcMotor frontLeft, frontRight;
     public final DcMotor backLeft, backRight;
     private final DriveVectorScaler driveVectorScaler;
@@ -130,9 +130,9 @@ public class DriveSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "----------------------------------");
         RobotLog.dd(tag, "Forward: %f, Strafe: %f, Turn: %f",
                 forward, strafe, rotation);
-        double strafeSpeed = Range.clip(strafe, -1, 1);
-        double forwardSpeed = Range.clip(forward, -1, 1);
-        double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER;
+        double strafeSpeed = Range.clip(strafe, -1, 1) * 0.9;
+        double forwardSpeed = Range.clip(forward, -1, 1) * 0.9;
+        double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER * 0.9;
 
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
             strafeSpeed *= GEAR_MULTIPLIER;
@@ -193,6 +193,9 @@ public class DriveSubsystem extends CloseableSubsystem {
         backRight.setPower(br);
     }
 
+    /**
+     * Toggles the drive gears between engaged and not engaged.
+     */
     public void toggleDriveGears() {
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
             robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);

@@ -104,7 +104,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotorRight = (DcMotorEx) rightSlideMotor;
         currentMotorLeft = (DcMotorEx) leftSlideMotor;
-        resetSlides();
 
         slideController.setTolerance(SLIDES_TOLERANCE);
 
@@ -123,6 +122,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         if (robotState.isAuto()) {
             closeClaw();
+            resetSlides();
         } else {
             openClaw();
         }
@@ -218,6 +218,15 @@ public class DropperSubsystem extends CloseableSubsystem {
      */
     public void moveSlidesRelative(double position) {
         moveSlidesAbsolute(getCurrentSlidePositionInches() + position);
+    }
+
+    /**
+     * Increments slides from wherever it is currently, with no limits
+     *
+     * @param position Amount you are incrementing by inches
+     */
+    public void moveSlidesRelativeUnsafe(double position) {
+        slideController.moveToInches(getCurrentSlidePositionInches() + position);
     }
 
     /**

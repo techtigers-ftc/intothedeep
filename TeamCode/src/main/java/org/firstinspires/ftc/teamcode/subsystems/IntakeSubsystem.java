@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -12,12 +13,15 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -46,27 +50,28 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.25;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
-    private static final double CLAW_LOOSE_POSITION = 0.75;
+    private static final double CLAW_LOOSE_POSITION = 0.77;
     private static final double CLAW_CLOSED_POSITION = 0.8;
+    private static final double CLAW_LEFT_OFFSET = 0.01;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     public static final double SLIDES_MAX = 18.75;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 5;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 80;
 
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 5;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 80;
 
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 175;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 88;
+    public static final double WRIST_PITCH_PECK_POSITION = 95;
 
     public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 80;
 
 
     private final RobotState robotState;
@@ -85,6 +90,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private final DistanceSensor distanceSensor;
     private final ElapsedTime colorSensorTimer;
 
     /**
@@ -106,6 +112,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "intake_color_sensor");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -115,7 +122,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
-        resetSlides();
         currentMotorRight = (DcMotorEx) rightSlideMotor;
         currentMotorLeft = (DcMotorEx) leftSlideMotor;
 
@@ -134,7 +140,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         if (robotState.isAuto()) {
             init();
+            resetSlides();
         }
+
+        moveSlidesAbsolute(getCurrentSlidePositionInches());
 
         RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
@@ -203,6 +212,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Moves the Slides relatively, but with no restriction on movement
+     *
+     * @param distance The distance you want to move in inches
+     */
+    public void moveSlidesRelativeUnsafe(double distance) {
+        slideController.moveToInches(getCurrentSlidePositionInches() + distance);
+    }
+
+    /**
      * Sets the current position to 0 encoder ticks on the motors
      */
     public void resetSlides() {
@@ -232,10 +250,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void openClaw() {
         if (getPitch() <= IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION - 5) {
-            leftClaw.setPosition(CLAW_MIDDLE_POSITION);
+            leftClaw.setPosition(CLAW_MIDDLE_POSITION + CLAW_LEFT_OFFSET);
             rightClaw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
-            leftClaw.setPosition(CLAW_OPEN_POSITION);
+            leftClaw.setPosition(CLAW_OPEN_POSITION + CLAW_LEFT_OFFSET);
             rightClaw.setPosition(CLAW_OPEN_POSITION);
         }
         robotState.setIntakeClawState(ClawState.OPEN);
@@ -245,7 +263,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Closes the Intake Claw
      */
     public void closeClaw() {
-        leftClaw.setPosition(CLAW_CLOSED_POSITION);
+        leftClaw.setPosition(CLAW_CLOSED_POSITION + CLAW_LEFT_OFFSET);
         rightClaw.setPosition(CLAW_CLOSED_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
@@ -254,7 +272,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Loosens the intake claw
      */
     public void loosenClaw() {
-        leftClaw.setPosition(CLAW_LOOSE_POSITION);
+        leftClaw.setPosition(CLAW_LOOSE_POSITION + CLAW_LEFT_OFFSET);
         rightClaw.setPosition(CLAW_LOOSE_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
@@ -336,10 +354,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Toggles the rotation of the wrist between 0 and 90
      */
     public void togglePerpendicularRotation() {
-        if (getClawRotation() == 90) {
+        if (Math.abs(getClawRotation() - CLAW_ROTATION_PICKUP_POSITION) < 2) {
             setClawRotationAbsolute(0);
         } else {
-            setClawRotationAbsolute(90);
+            setClawRotationAbsolute(CLAW_ROTATION_PICKUP_POSITION);
         }
     }
 
@@ -379,26 +397,32 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Updates the block color of the color sensor
      */
     private void updateBlockColor() {
-        double sensorRed = getSensorRed();
-        double sensorGreen = getSensorGreen();
-        double sensorBlue = getSensorBlue();
-        double colorsSum = sensorRed + sensorGreen + sensorBlue;
-        double normalizedBlue = sensorBlue / colorsSum;
-        double normalizedGreen = sensorGreen / colorsSum;
-        double normalizedRed = sensorRed / colorsSum;
-        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+//        double sensorRed = getSensorRed();
+//        double sensorGreen = getSensorGreen();
+//        double sensorBlue = getSensorBlue();
+//        double colorsSum = sensorRed + sensorGreen + sensorBlue;
+//        double normalizedBlue = sensorBlue / colorsSum;
+//        double normalizedGreen = sensorGreen / colorsSum;
+//        double normalizedRed = sensorRed / colorsSum;
+//        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
+//
+//        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
+//        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
+//
+//        if (magnitude < minMagnitude) {
+//            robotState.setIntakeBlockColor(BlockColor.NONE);
+//        } else if (normalizedBlue > minBlue) {
+//            robotState.setIntakeBlockColor(BlockColor.BLUE);
+//        } else if (normalizedRed > minRed) {
+//            robotState.setIntakeBlockColor(BlockColor.RED);
+//        } else if (normalizedBlue < 0.165) {
+//            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+//        }
 
-        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
-        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
-
-        if (magnitude < minMagnitude) {
-            robotState.setIntakeBlockColor(BlockColor.NONE);
-        } else if (normalizedBlue > minBlue) {
-            robotState.setIntakeBlockColor(BlockColor.BLUE);
-        } else if (normalizedRed > minRed) {
-            robotState.setIntakeBlockColor(BlockColor.RED);
-        } else if (normalizedBlue < 0.165) {
-            robotState.setIntakeBlockColor(BlockColor.YELLOW);
+        if (getSensorDist() < 0.9) {
+            robotState.setBlockPosition(RobotBlockPosition.INTAKE);
+        } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
+            robotState.setBlockPosition(RobotBlockPosition.NONE);
         }
     }
 
@@ -424,6 +448,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return the current distance the color sensor reports (in inches)
+     */
+    public double getSensorDist() {
+        return distanceSensor.getDistance(DistanceUnit.INCH);
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
@@ -441,10 +472,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-//        if(colorSensorTimer.milliseconds() > 1000){
-//            updateBlockColor();
-//            colorSensorTimer.reset();
-//        }
+        if(!robotState.isAuto() && robotState.getIntakeState() == IntakeState.READY_TO_PICKUP && colorSensorTimer.milliseconds() > 100){
+            updateBlockColor();
+            colorSensorTimer.reset();
+        }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
         RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());

@@ -46,6 +46,6 @@ public class IntakeSlidesAbsoluteAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(intake.getCurrentSlidePositionInches() - targetPosition) < tolerance) || timer.milliseconds() > 1500;
+        return (Math.abs(intake.getCurrentSlidePositionInches() - targetPosition) < tolerance) || timer.milliseconds() > 1000;
     }
 }
