@@ -50,19 +50,19 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                         IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 100),
+                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
                 ),
                 new IntakeCheckSensorAction(robotState, this),
                 new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
+//                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_TRANSFER_POSITION, 100)
                 ),
-                new IntakeLoosenAction(intake, 50)
+                new IntakeLoosenAction(intake, 200)
         );
     }
 
