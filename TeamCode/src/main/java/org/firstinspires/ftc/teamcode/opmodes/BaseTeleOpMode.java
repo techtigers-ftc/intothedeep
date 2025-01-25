@@ -164,7 +164,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
-//        manualRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
         manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
         manualRetractTrigger.or(autoRetractTrigger).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
@@ -178,14 +177,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
-//        autoRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
-
         // Extend Trigger Bindings
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
         manualExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
 
-//        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(prepareToTransfer);
-//        manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(fullReadyToTransfer);
+        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
