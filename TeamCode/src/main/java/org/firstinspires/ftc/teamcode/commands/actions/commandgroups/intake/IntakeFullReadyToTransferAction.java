@@ -57,7 +57,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_TRANSFER_POSITION, 100),
-                        new IntakeLoosenAction(intake, 200)
+                        new IntakeLoosenAction(intake, 350)
                 ),
                 new IntakeCloseAction(intake, 50),
                 new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 1)
