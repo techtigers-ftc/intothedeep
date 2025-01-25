@@ -44,7 +44,8 @@ public class IntakeTuckAction extends ParallelCommandGroup {
     @Override
     public void initialize() {
         if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP
-                && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER) {
+                && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER &&
+                    robotState.getIntakeState() != IntakeState.TUCK) {
             RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
             robotState.setError(RobotError.INVALID_INTAKE_POSITION);
             this.cancel();

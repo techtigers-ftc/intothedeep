@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
@@ -31,19 +32,21 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
      * Creates a new IntakeToPrepareToIntakeCommand
      *
      * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeToObservationZoneAction(IntakeSubsystem intake, RobotState robotState) {
+    public IntakeToObservationZoneAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, () -> 10, 1),
+                new DropperPreTransferAction(dropper, robotState),
+                new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
                 new IntakeWristRotationAction(intake,
                         IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
                 new IntakeClawRotationAction(intake,
                         () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
                 new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 500)
+                        IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 500)
         );
     }
 
@@ -57,11 +60,11 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     public void end(boolean interrupted){
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+            robotState.setIntakeState(IntakeState.TUCK);
             if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
-            robotState.setCurrentGear(DriveGears.ENGAGED);
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         }
     }
 }

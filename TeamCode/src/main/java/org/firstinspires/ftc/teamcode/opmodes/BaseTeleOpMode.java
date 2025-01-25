@@ -122,7 +122,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Commands
         IntakeToObservationZoneAction intakeToObservation =
-                new IntakeToObservationZoneAction(intake, robotState);
+                new IntakeToObservationZoneAction(intake, dropper, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 5);
@@ -199,7 +199,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
-        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupAuto);
+        // TODO: Make auto later when small cam works
+        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
 
         // Other Intake Stuff
 
@@ -357,5 +358,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Runtime: ", robotState.getRunTime());
         telemetry.addData("Voltage: ", voltage.getVoltage());
         telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
+        telemetry.addData("Sensor Dist: ", intake.getSensorDist());
     }
 }

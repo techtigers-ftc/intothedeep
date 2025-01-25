@@ -55,7 +55,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
-        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropSpecimenState driveChamberPreload = new DriveToPreloadDropSpecimenState(
@@ -284,7 +283,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper, intake, limelight, vision);
+        registerSubsystems(auto, drive, odometry, dropper, intake, limelight);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));

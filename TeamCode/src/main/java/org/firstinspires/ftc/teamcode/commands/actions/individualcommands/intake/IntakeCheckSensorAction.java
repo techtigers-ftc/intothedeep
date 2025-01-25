@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 public class IntakeCheckSensorAction extends CommandBase {
     private final RobotState robotState;
@@ -16,7 +17,7 @@ public class IntakeCheckSensorAction extends CommandBase {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeBlockColor() == BlockColor.NONE) {
+        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE) {
             command.cancel();
         }
     }
