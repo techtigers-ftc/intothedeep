@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
-/** An action that checks if there is a block in the intake
- *
+/**
+ * An action that checks if there is a block in the intake
  */
 public class IntakeCheckSensorAction extends CommandBase {
     private final RobotState robotState;
