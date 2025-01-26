@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
@@ -29,6 +31,7 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
@@ -44,7 +47,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
-        telemetry = dashboard.getTelemetry();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);

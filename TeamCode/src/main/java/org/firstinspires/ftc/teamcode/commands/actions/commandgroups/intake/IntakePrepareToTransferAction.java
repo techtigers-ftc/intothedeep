@@ -62,7 +62,8 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_TRANSFER_POSITION, 100)
                 ),
-                new IntakeLoosenAction(intake, 200)
+                new IntakeLoosenAction(intake, 300),
+                new IntakeCloseAction(intake, 50)
         );
     }
 
