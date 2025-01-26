@@ -187,7 +187,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(12, 12),
-                                        new Point(14.5, 25)
+                                        new Point(14, 25)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
