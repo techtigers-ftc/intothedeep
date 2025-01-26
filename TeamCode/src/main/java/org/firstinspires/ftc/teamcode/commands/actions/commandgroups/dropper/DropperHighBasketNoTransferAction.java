@@ -31,7 +31,8 @@ public class DropperHighBasketNoTransferAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 22, 1),
+                        new DropperSlidesAbsoluteAction(dropper,
+                                DropperSubsystem.SLIDE_MAX, 1),
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                         new DropperRotationAction(dropper,
                                 DropperSubsystem.ROTATION_BASKET_POSITION, 300)
