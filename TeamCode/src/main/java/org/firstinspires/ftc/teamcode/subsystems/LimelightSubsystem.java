@@ -189,7 +189,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double normalizedBlockWidth = blockWidth * widthScalar;
         RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
         if (normalizedBlockWidth > 2.4) {
-            return 0;
+            return 180;
         } else {
             return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
         }
@@ -198,7 +198,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double getCorrectedYDist(double yDist) {
         double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
         RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor + 1;
+        return yDist - correctiveFactor;
     }
 
     private double getCorrectedXDist(double xDist) {

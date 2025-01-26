@@ -30,7 +30,7 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_FIRST_LEVEL_ASCENT = 94;
-    public static final double PITCH_PRE_TRANSFER_POSITION = 35;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 40;
     public static final double PITCH_TRANSFER_POSITION = 25;
     public static final double PITCH_BASKET_POSITION = 200;
     public static final double PITCH_CHAMBER_POSITION = 175;

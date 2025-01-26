@@ -55,7 +55,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
-                new IntakeReadyToPickupAction(intake, robotState, 90)
+                new IntakeReadyToPickupAction(intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION)
         );
     }
 

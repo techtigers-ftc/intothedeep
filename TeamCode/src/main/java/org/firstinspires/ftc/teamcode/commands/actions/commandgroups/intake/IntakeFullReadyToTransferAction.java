@@ -20,27 +20,25 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-import java.util.function.DoubleSupplier;
-
 /**
- * Command to move intake to Prepare To Transfer.
+ * Command to move intake to Ready To Transfer.
  */
-public class IntakePrepareToTransferAction extends SequentialCommandGroup {
+public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakePrepareToTransferAction
+     * Creates a new IntakeFullReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakePrepareToTransferAction(IntakeSubsystem intake,
-                                         DropperSubsystem dropper, DoubleSupplier targetSlidePosition,
-                                         RobotState robotState) {
+    public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
+                                           DropperSubsystem dropper,
+                                           RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
         lastClawRotation = 90;
@@ -51,33 +49,19 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
-                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300)
                 ),
                 new IntakeCheckSensorAction(robotState, this),
                 new ParallelCommandGroup(
-//                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
-                        new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 100)
+                                DropperSubsystem.PITCH_TRANSFER_POSITION, 100),
+                        new IntakeLoosenAction(intake, 350)
                 ),
-                new IntakeLoosenAction(intake, 300),
-                new IntakeCloseAction(intake, 50)
+                new IntakeCloseAction(intake, 50),
+                new IntakeSlidesAbsoluteAction(intake, () -> 0.5, 1)
         );
-    }
-
-    /**
-     * Overloaded constructor which sets the slide position to 5 automatically
-     *
-     * @param intake the intake subsystem
-     * @param dropper the dropper subsystem
-     * @param robotState the robot state
-     */
-    public IntakePrepareToTransferAction(IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
-                                         RobotState robotState) {
-        this(intake, dropper, () -> 5, robotState);
     }
 
     @Override
@@ -98,12 +82,13 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setIntakeState(IntakeState.PREPARE_TO_TRANSFER);
+            robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         } else {
             intake.setClawRotationAbsolute(lastClawRotation);
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
+            intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
         }
     }

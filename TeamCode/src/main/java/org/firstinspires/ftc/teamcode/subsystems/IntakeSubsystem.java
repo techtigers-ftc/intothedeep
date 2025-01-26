@@ -34,17 +34,17 @@ import team.techtigers.base.CloseableSubsystem;
 public class IntakeSubsystem extends CloseableSubsystem {
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 5;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 80;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 2;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 77;
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 175;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 80;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 65;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 175;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
     public static final double WRIST_PITCH_PECK_POSITION = 100;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 80;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
@@ -347,7 +347,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void togglePerpendicularRotation() {
         if (Math.abs(getClawRotation() - CLAW_ROTATION_PICKUP_POSITION) < 2) {
-            setClawRotationAbsolute(0);
+            setClawRotationAbsolute(180);
         } else {
             setClawRotationAbsolute(CLAW_ROTATION_PICKUP_POSITION);
         }
