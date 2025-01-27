@@ -80,7 +80,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
