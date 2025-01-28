@@ -28,7 +28,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
-     * @param timeout The max time of the drive in seconds
+     * @param timeout    The max time of the drive in seconds
      **/
     public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
         super(name, timeout);
@@ -225,7 +225,7 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
 
-        if(super.isTimeoutReached()){
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         }
 

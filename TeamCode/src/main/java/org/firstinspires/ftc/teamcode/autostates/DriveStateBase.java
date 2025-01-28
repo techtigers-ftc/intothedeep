@@ -28,7 +28,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
-     * @param  timeout time limit of the drive in seconds
+     * @param timeout    time limit of the drive in seconds
      */
     public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
         super(name, timeout);
@@ -220,7 +220,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
         }
 
-        if (super.isTimeoutReached()){
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         }
 
