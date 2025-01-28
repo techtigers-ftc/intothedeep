@@ -28,7 +28,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
     private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
-    private static final double SLIDES_INTAKE_OFFSET = 3;
+    private static final double SLIDES_INTAKE_OFFSET = 3.5;
 
     // Orientation logistic function parameters
     private static final double ORIENTATION_FLOOR = 0.00221939;

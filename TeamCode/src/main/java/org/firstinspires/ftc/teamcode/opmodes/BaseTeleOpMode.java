@@ -353,5 +353,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Voltage: ", voltage.getVoltage());
         telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
         telemetry.addData("Sensor Dist: ", intake.getSensorDist());
+        telemetry.addLine();
+        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
+        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
     }
 }
