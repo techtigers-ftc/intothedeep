@@ -9,13 +9,12 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
-import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
  * A base class for autonomous drive states, using a parallel command group.
  */
-public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState> {
+public abstract class DriveStateBase extends TimeoutStateBase {
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
     protected final AutoDriveCommand autoDriveCommand;
     protected final RobotState robotState;
@@ -28,9 +27,25 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
+     * @param  timeout time limit of the drive
+     */
+    public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
+        super(name, timeout);
+        this.robotState = robotState;
+        autoDriveCommand = new AutoDriveCommand(drive, robotState);
+        tolerance = -1;
+        angleTolerance = -1;
+    }
+
+    /**
+     * Constructor for the SequentialCommandGroupState
+     *
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
      */
     public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name);
+        super(name, -1);
         this.robotState = robotState;
         autoDriveCommand = new AutoDriveCommand(drive, robotState);
         tolerance = -1;
@@ -206,6 +221,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     public AutoState getCurrentCondition() {
         if (tolerance < 0 || angleTolerance < 0) {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
+        }
+
+        if (super.getCurrentCondition() == AutoState.TIMEOUT){
+            return AutoState.TIMEOUT;
         }
 
         Waypoint current = robotState.getRobotCurrentPose();

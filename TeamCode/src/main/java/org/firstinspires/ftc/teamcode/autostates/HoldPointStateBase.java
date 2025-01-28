@@ -14,7 +14,7 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * An abstract class for holding to a point
  */
-public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoState> {
+public abstract class HoldPointStateBase extends TimeoutStateBase {
 
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
     protected final AutoHoldPointCommand holdPointCommand;
@@ -28,9 +28,10 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
+     * @param timeout The max time of the drive
      **/
-    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name);
+    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
+        super(name, timeout);
         this.robotState = robotState;
         holdPointCommand = new AutoHoldPointCommand(drive, robotState);
         tolerance = -1;
