@@ -14,7 +14,7 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * An abstract class for holding to a point
  */
-public abstract class HoldPointStateBase extends TimeoutStateBase {
+public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoState> {
 
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
     protected final AutoHoldPointCommand holdPointCommand;
@@ -36,6 +36,17 @@ public abstract class HoldPointStateBase extends TimeoutStateBase {
         holdPointCommand = new AutoHoldPointCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
+    }
+
+    /**
+     * Overload Constructor without Timeout
+     *
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
+     **/
+    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState) {
+        this(name, drive, robotState, -1);
     }
 
     /**
@@ -213,6 +224,10 @@ public abstract class HoldPointStateBase extends TimeoutStateBase {
 
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
+
+        if(super.isTimeoutReached()){
+            return AutoState.TIMEOUT;
+        }
 
         RobotLog.dd(LOG_TAG, "Dist to target: %f Angle diff: %f",
                 distToTarget(current, target),

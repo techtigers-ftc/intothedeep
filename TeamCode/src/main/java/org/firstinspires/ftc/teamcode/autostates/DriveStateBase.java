@@ -9,12 +9,13 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
+import team.techtigers.base.statemachine.ParallelCommandGroupState;
 import team.techtigers.core.paths.Waypoint;
 
 /**
  * A base class for autonomous drive states, using a parallel command group.
  */
-public abstract class DriveStateBase extends TimeoutStateBase {
+public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
     protected final AutoDriveCommand autoDriveCommand;
     protected final RobotState robotState;
@@ -38,18 +39,14 @@ public abstract class DriveStateBase extends TimeoutStateBase {
     }
 
     /**
-     * Constructor for the SequentialCommandGroupState
+     * Overload Constructor without Timeout
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
      */
     public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name, -1);
-        this.robotState = robotState;
-        autoDriveCommand = new AutoDriveCommand(drive, robotState);
-        tolerance = -1;
-        angleTolerance = -1;
+        this(name, drive, robotState, -1);
     }
 
     /**
@@ -223,7 +220,7 @@ public abstract class DriveStateBase extends TimeoutStateBase {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
         }
 
-        if (super.getCurrentCondition() == AutoState.TIMEOUT){
+        if (super.isTimeoutReached()){
             return AutoState.TIMEOUT;
         }
 
