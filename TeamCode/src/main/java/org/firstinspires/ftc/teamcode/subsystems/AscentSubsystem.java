@@ -32,7 +32,7 @@ public class AscentSubsystem extends CloseableSubsystem {
         leftJackServo = hardwareMap.get(Servo.class, "left_jack");
         rightJackServo = hardwareMap.get(Servo.class, "right_jack");
 
-        rightJackServo.setDirection(Servo.Direction.REVERSE);
+        leftJackServo.setDirection(Servo.Direction.REVERSE);
 
         jacksEngaged = false;
 
