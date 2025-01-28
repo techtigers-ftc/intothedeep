@@ -45,10 +45,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
-    private static final double ERROR_FACTOR = 1.0 / 1.1565;
+    private static final double ERROR_FACTOR = 1.0 / 1.04247104;
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
@@ -225,7 +226,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks * MOTOR_TICKS_PER_INCH;
+        return slideController.targetTicks / MOTOR_TICKS_PER_INCH;
     }
 
     /**
