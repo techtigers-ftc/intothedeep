@@ -91,7 +91,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // ASCENT
         Trigger startAscentTrigger =
-                new Trigger(() -> gamepad1.touchpad_finger_2);
+                new Trigger(() -> gamepad1.touchpad_finger_2 || gamepad1.guide);
         Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,

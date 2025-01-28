@@ -29,11 +29,11 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
-    public static final double PITCH_FIRST_LEVEL_ASCENT = 94;
-    public static final double PITCH_PRE_TRANSFER_POSITION = 40;
-    public static final double PITCH_TRANSFER_POSITION = 25;
-    public static final double PITCH_BASKET_POSITION = 200;
-    public static final double PITCH_CHAMBER_POSITION = 175;
+    public static final double PITCH_FIRST_LEVEL_ASCENT = 104;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 45;
+    public static final double PITCH_TRANSFER_POSITION = 30;
+    public static final double PITCH_BASKET_POSITION = 205;
+    public static final double PITCH_CHAMBER_POSITION = 180;
     public static final double PITCH_FRONT_SLAP_POSITION = 105;
     public static final double PITCH_BACK_SLAP_POSITION = 245;
     public static final double ROTATION_TRANSFER_POSITION = 10;
@@ -50,7 +50,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
-    public static double CLAW_CLOSED_POSITION = 0.02;
+    public static double CLAW_CLOSED_POSITION = 0.03;
     public static double KP = 0.01;
     public static double KI = 0;
     public static double KD = 0.000000001;

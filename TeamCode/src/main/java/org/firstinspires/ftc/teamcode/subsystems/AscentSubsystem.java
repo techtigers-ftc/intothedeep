@@ -54,8 +54,8 @@ public class AscentSubsystem extends CloseableSubsystem {
      * Engages the jacks that lift the robot
      */
     public void engageJacks() {
-        leftJackServo.setPosition(1);
-        rightJackServo.setPosition(1);
+        leftJackServo.setPosition(0.99);
+        rightJackServo.setPosition(0.99);
         jacksEngaged = true;
     }
 
