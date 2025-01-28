@@ -21,6 +21,7 @@ public abstract class SequentialCommandGroupState<T> extends SequentialCommandGr
     public SequentialCommandGroupState(String name, double timeout) {
         this.name = name;
         this.timeout = timeout;
+        timer = new ElapsedTime();
     }
 
     /**
