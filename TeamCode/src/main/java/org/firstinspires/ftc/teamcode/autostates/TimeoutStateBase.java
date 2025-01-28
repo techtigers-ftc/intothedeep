@@ -14,7 +14,7 @@ public abstract class TimeoutStateBase extends ParallelCommandGroupState<AutoSta
      * Constructor for the SequentialCommandGroupState
      *
      * @param name The name of the state
-     * @param timeout the max time of the state
+     * @param timeout the max time of the state in milliseconds
      */
     public TimeoutStateBase(String name, double timeout) {
         super(name);

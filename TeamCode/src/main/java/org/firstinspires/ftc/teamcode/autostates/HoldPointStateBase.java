@@ -28,7 +28,7 @@ public abstract class HoldPointStateBase extends TimeoutStateBase {
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
-     * @param timeout The max time of the drive
+     * @param timeout The max time of the drive in milliseconds
      **/
     public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
         super(name, timeout);
