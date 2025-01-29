@@ -41,6 +41,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
@@ -58,8 +59,6 @@ import team.techtigers.core.utils.RobotSaveState;
 public abstract class BaseTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
-    private VoltageSensor voltage;
-
 
     protected abstract boolean isBlue();
 
@@ -67,7 +66,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        voltage = hardwareMap.voltageSensor.iterator().next();
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         robotState = new RobotState(isBlue(), false);
@@ -79,6 +77,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
 //        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
         try {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
@@ -87,7 +86,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }
 
         registerSubsystems(intake, drive, dropper, limelight, //smallCamera
-                odometry, ascent);
+                odometry, ascent, sensor);
 
         // ASCENT
         Trigger startAscentTrigger =
@@ -115,7 +114,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 () -> robotState.setCurrentGear(DriveGears.ENGAGED));
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
                 () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED));
-
 
         // MANIPULATOR
 
@@ -326,7 +324,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad2.rumbleBlips(5);
         }));
 
-        telemetry.addData("Voltage: ", voltage.getVoltage());
+        telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
     }
 
@@ -350,7 +348,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
         telemetry.addLine();
         telemetry.addData("Runtime: ", robotState.getRunTime());
-        telemetry.addData("Voltage: ", voltage.getVoltage());
+        telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
         telemetry.addData("Sensor Dist: ", intake.getSensorDist());
         telemetry.addLine();

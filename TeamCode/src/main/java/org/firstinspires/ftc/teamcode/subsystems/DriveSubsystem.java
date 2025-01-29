@@ -100,7 +100,7 @@ public class DriveSubsystem extends CloseableSubsystem {
                 maxMagnitude = temp;
             }
         }
-        if (maxMagnitude > 1) {
+        if (maxMagnitude > FollowerConstants.maxPower) {
             for (int i = 0; i < wheelSpeeds.length; i++) {
                 wheelSpeeds[i] = (wheelSpeeds[i] / maxMagnitude);
             }
@@ -194,23 +194,18 @@ public class DriveSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Toggles the drive gears between engaged and not engaged.
-     */
-    public void toggleDriveGears() {
-        if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
-            robotstate.setCurrentGear(DriveGears.NOT_ENGAGED);
-        } else {
-            robotstate.setCurrentGear(DriveGears.ENGAGED);
-        }
-    }
-
-    /**
      * Drives the robot given the vectors calculated by the pedro path follower
      *
      * @param vectors The vectors to drive with
      */
     public void drivePedroPath(DriveVectors vectors) {
         double[] drivePowers = driveVectorScaler.getDrivePowers(vectors.correctivePower, vectors.headingPower, vectors.pathingPower, vectors.robotHeading);
+
+        for (int i = 0; i < drivePowers.length; i++) {
+            drivePowers[i] /= (robotstate.getVoltage()/12.0);
+        }
+
+        normalize(drivePowers);
         setMotorPowers(drivePowers[0], drivePowers[1], drivePowers[2], drivePowers[3]);
     }
 
