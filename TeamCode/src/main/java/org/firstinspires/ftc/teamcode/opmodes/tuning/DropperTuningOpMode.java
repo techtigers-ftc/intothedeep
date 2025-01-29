@@ -8,6 +8,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeActionPartTwo;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -23,6 +25,7 @@ public class DropperTuningOpMode extends BaseOpMode {
     private DropperSubsystem dropperSubsystem;
     private RobotState robotState;
     private IntakeSubsystem intakeSubsystem;
+    private DriveSubsystem drive;
 
     @Override
     public void initialize() {
@@ -42,7 +45,8 @@ public class DropperTuningOpMode extends BaseOpMode {
         }));
 
         //Wall Intake
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new DropperWallIntakeAction(dropperSubsystem, robotState));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new DropperWallIntakeAction(dropperSubsystem, robotState, drive));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new DropperWallIntakeActionPartTwo(dropperSubsystem, robotState, drive));
 
         // Pitch
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
