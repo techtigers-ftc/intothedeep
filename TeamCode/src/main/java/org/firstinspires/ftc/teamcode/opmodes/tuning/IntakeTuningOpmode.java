@@ -28,44 +28,44 @@ public class IntakeTuningOpmode extends BaseOpMode {
         registerSubsystems(intakeSubsystem);
 
         // Claw
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
-//            intakeSubsystem.openClaw();
-//        });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
-//            intakeSubsystem.closeClaw();
-//        });
-//
-//        // Wrist Pitch
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
-//            intakeSubsystem.setWristRelative(-5, 0);
-//        });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> {
-//            intakeSubsystem.setWristRelative(5, 0);
-//        });
-//
-//        // Wrist Rotation
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> {
-//            intakeSubsystem.setWristRelative(0, -5);
-//        });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> {
-//            intakeSubsystem.setWristRelative(0, 5);
-//        });
-//
-//        // Presets for the differential
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
-//            intakeSubsystem.setWristAbsolute(90, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
-//        });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-//            intakeSubsystem.setWristAbsolute(180, 90);
-//        });
-//
-//        // Claw Rotation
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> {
-//            intakeSubsystem.setClawRotationRelative(5);
-//        });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() -> {
-//            intakeSubsystem.setClawRotationRelative(-5);
-//        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
+            intakeSubsystem.openClaw();
+        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
+            intakeSubsystem.closeClaw();
+        });
+
+        // Wrist Pitch
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
+            intakeSubsystem.setWristRelative(-5, 0);
+        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> {
+            intakeSubsystem.setWristRelative(5, 0);
+        });
+
+        // Wrist Rotation
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> {
+            intakeSubsystem.setWristRelative(0, -5);
+        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> {
+            intakeSubsystem.setWristRelative(0, 5);
+        });
+
+        // Presets for the differential
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
+            intakeSubsystem.setWristAbsolute(90, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
+        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
+            intakeSubsystem.setWristAbsolute(180, 90);
+        });
+
+        // Claw Rotation
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> {
+            intakeSubsystem.setClawRotationRelative(5);
+        });
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() -> {
+            intakeSubsystem.setClawRotationRelative(-5);
+        });
 
         // Slides
         Trigger slidesTrigger = new Trigger(() ->
@@ -73,22 +73,22 @@ public class IntakeTuningOpmode extends BaseOpMode {
         );
         slidesTrigger.whileActiveContinuous(() -> intakeSubsystem.moveSlidesRelative(driverGamepad.getLeftY() * 2));
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
-            intakeSubsystem.moveSlidesAbsolute(0);
-        });
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
-            intakeSubsystem.moveSlidesAbsolute(6);
-        });
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
-            intakeSubsystem.moveSlidesAbsolute(12);
-        });
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-            intakeSubsystem.moveSlidesAbsolute(18);
-        });
-
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(0);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(6);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(12);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(18);
+//        });
+//
         // Emergency stop button for the slides
         driverGamepad.getGamepadButton(GamepadKeys.Button.START).whenPressed(new InstantCommand(() -> {
             intakeSubsystem.stopSlides();
