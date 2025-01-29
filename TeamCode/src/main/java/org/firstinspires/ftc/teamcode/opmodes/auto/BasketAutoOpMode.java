@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -53,6 +54,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropState driveBasketPreload = new DriveToPreloadDropState(
@@ -195,7 +197,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper);
+        registerSubsystems(auto, drive, odometry, dropper, sensor);
     }
 
     @Override
