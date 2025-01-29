@@ -52,6 +52,7 @@ public class RobotState extends GlobalState {
     private final boolean isBlue;
     private final boolean isAuto;
     private double visionIntakeHeading;
+    private double voltage;
 
     /**
      * Initializes a new RobotState
@@ -89,6 +90,7 @@ public class RobotState extends GlobalState {
         this.isBlue = isBlue;
         this.isAuto = isAuto;
         visionIntakeHeading = Math.toRadians(0);
+        voltage = 0;
     }
 
     /**
@@ -608,5 +610,20 @@ public class RobotState extends GlobalState {
      */
     public void setVisionIntakeHeading(double visionIntakeHeading) {
         this.visionIntakeHeading = visionIntakeHeading;
+    }
+
+    /**
+     * @return the current voltage of the robot
+     */
+    public double getVoltage() {
+        return voltage;
+    }
+
+    /**
+     * Sets the current voltage of the robot
+     * @param voltage the current voltage of the robot
+     */
+    public void setVoltage(double voltage) {
+        this.voltage = voltage;
     }
 }
