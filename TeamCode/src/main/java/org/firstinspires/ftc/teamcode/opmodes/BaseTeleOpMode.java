@@ -324,6 +324,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad2.rumbleBlips(5);
         }));
 
+        telemetry.addData("Sensor Dist: ", intake.getSensorDist());
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
     }
@@ -354,5 +355,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
+        telemetry.addLine();
     }
 }

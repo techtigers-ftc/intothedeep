@@ -103,13 +103,12 @@ public class TeleHoldPointAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(3, 0, 0.02,
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.25, 0, 0.04,
                 0));
-        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.00055, 0.6, 0));
+        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.001, 0.6, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
-        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.4, 0, 0.03, 0));
-        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.004
-                , 0, 0.002, 0.6, 0));
+        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.25, 0, 0.04, 0));
+        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.001, 0.6, 0));
         follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(3.5, 0,
                 0, 0));
 
