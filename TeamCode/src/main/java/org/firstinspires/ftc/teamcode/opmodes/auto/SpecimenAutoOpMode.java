@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
@@ -20,7 +22,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -30,6 +31,7 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
@@ -45,7 +47,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
-        telemetry = dashboard.getTelemetry();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -291,6 +293,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
         telemetry.update();
     }
@@ -304,6 +307,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
     }
 }

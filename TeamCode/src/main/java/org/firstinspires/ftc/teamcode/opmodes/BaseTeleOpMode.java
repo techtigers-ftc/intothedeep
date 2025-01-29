@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -90,7 +91,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // ASCENT
         Trigger startAscentTrigger =
-                new Trigger(() -> gamepad1.touchpad_finger_2);
+                new Trigger(() -> gamepad1.touchpad_finger_2 || gamepad1.guide);
         Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
@@ -136,10 +137,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
                 () -> (robotState.getBlockOrientation() + 180) % 180// This is done to translate claw rotation to block orientation
         );
-        IntakePrepareToTransferAction prepareToTransfer = new IntakePrepareToTransferAction(
+        IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
-        IntakeReadyToTransferAction readyToTransfer = new IntakeReadyToTransferAction(
-                intake, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
                 intake, dropper, drive, robotState,
                 () -> robotState.getRobotCurrentPose().getHeading(), // robotState
@@ -158,18 +157,16 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // State triggers
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
-        Trigger inPrepareToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
-        Trigger inReadyToIntake = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
-        Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
+        Trigger inPrepareToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
+        Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
         Trigger blockDetected = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
-        manualRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
 
-        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToIntake.or(inTuck)).whenActive(tuck);
-        manualRetractTrigger.or(autoRetractTrigger).and(inReadyToIntake).whenActive(prepareToPickupNoSlides);
+        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
+        manualRetractTrigger.or(autoRetractTrigger).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
         autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
@@ -180,14 +177,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
-        autoRetractTrigger.and(inPrepareToTransfer).whenActive(prepareToPickupManual);
-
         // Extend Trigger Bindings
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
-        manualExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
+        manualExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
 
-        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToIntake).whenActive(prepareToTransfer);
-        manualExtendTrigger.or(autoExtendTrigger).and(inPrepareToTransfer).whenActive(readyToTransfer);
+        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
@@ -200,7 +194,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         // TODO: Make auto later when small cam works
-        autoExtendTrigger.and(inPrepareToIntake).whenActive(readyToPickupManual);
+        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
 
         // Other Intake Stuff
 
@@ -238,10 +232,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
                         manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
         );
-        intakeRotationTrigger.and(inReadyToIntake).whileActiveContinuous(intakeManualRotationCommand);
+        intakeRotationTrigger.and(inReadyToPickup).whileActiveContinuous(intakeManualRotationCommand);
 
         // Intake claw rotation toggle to 0 or 90
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToIntake)
+        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToPickup)
                 .whenActive(intake::togglePerpendicularRotation);
 
         // Changing Color Preference

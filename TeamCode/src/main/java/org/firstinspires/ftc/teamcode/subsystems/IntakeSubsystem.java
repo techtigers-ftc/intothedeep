@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -33,17 +32,24 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    public static double minMagnitude = 1;
-    public static double minBlue = 0.53;
-    public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.00575;
-    public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.0001;
-    public static double FORWARD_KF = 0.06;
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+    public static final double SLIDES_MAX = 18.75;
+    public static final double WRIST_PITCH_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 2;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 77;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 65;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_PITCH_PECK_POSITION = 100;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
+
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
-    private static final double ERROR_FACTOR = 1.0 / 1.1565;
+    private static final double ERROR_FACTOR = 1.0 / 1.04247104;
     private static final double DIST_PER_MOTOR_TICK = (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
@@ -54,26 +60,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_CLOSED_POSITION = 0.8;
     private static final double CLAW_LEFT_OFFSET = 0.01;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
-    public static final double SLIDES_MAX = 18.75;
-
-    public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 5;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 80;
-
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 5;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 80;
-
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 70;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 175;
-
-    public static final double WRIST_PITCH_PECK_POSITION = 95;
-
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 80;
-
-
+    public static double minMagnitude = 1;
+    public static double minBlue = 0.53;
+    public static double minRed = 0.43;
+    public static double FORWARD_KP = 0.00575;
+    public static double FORWARD_KI = 0.0;
+    public static double FORWARD_KD = 0.0001;
+    public static double FORWARD_KF = 0.06;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -233,7 +226,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks * MOTOR_TICKS_PER_INCH;
+        return slideController.targetTicks / MOTOR_TICKS_PER_INCH;
     }
 
     /**
@@ -355,7 +348,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void togglePerpendicularRotation() {
         if (Math.abs(getClawRotation() - CLAW_ROTATION_PICKUP_POSITION) < 2) {
-            setClawRotationAbsolute(0);
+            setClawRotationAbsolute(180);
         } else {
             setClawRotationAbsolute(CLAW_ROTATION_PICKUP_POSITION);
         }
@@ -389,7 +382,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * @return the current draw of the left slide motor
      */
-    public double getSlideCurrentLeft(){
+    public double getSlideCurrentLeft() {
         return leftSlideCurrentAverage.getAverage();
     }
 
@@ -421,7 +414,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         if (getSensorDist() < 0.9) {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
-        } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
+        } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
             robotState.setBlockPosition(RobotBlockPosition.NONE);
         }
     }
@@ -472,7 +465,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(!robotState.isAuto() && robotState.getIntakeState() == IntakeState.READY_TO_PICKUP && colorSensorTimer.milliseconds() > 100){
+        if (!robotState.isAuto() && robotState.getIntakeState() == IntakeState.READY_TO_PICKUP && colorSensorTimer.milliseconds() > 100) {
             updateBlockColor();
             colorSensorTimer.reset();
         }

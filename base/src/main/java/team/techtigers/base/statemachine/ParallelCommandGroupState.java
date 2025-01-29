@@ -1,6 +1,7 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * State that extends ParallelCommandGroup, to be used in a state machine
@@ -9,18 +10,45 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
  */
 public abstract class ParallelCommandGroupState<T> extends ParallelCommandGroup implements State<T> {
     private final String name;
+    private final double timeout;
+    private final ElapsedTime timer;
 
     /**
      * Constructor for the ParallelCommandGroupState
      *
      * @param name The name of the state
+     * @param timeout The max time of the state in seconds
      */
-    public ParallelCommandGroupState(String name) {
+    public ParallelCommandGroupState(String name, double timeout) {
         this.name = name;
+        this.timeout = timeout;
+        timer = new ElapsedTime();
+    }
+
+    /**
+     * Overload Constructor without timeout
+     *
+     * @param name The name of the state
+     */
+    public ParallelCommandGroupState(String name){
+        this(name, -1);
+    }
+
+    @Override
+    public void initialize(){
+        super.initialize();
+        timer.reset();
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return if timeout is valid and is exceeded returns true
+     */
+    protected final boolean isTimeoutReached(){
+        return timeout > 0 && timer.seconds() > timeout;
     }
 }

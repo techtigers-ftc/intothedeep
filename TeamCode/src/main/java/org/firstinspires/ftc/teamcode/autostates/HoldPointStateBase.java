@@ -28,13 +28,25 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
+     * @param timeout    The max time of the drive in seconds
      **/
-    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name);
+    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
+        super(name, timeout);
         this.robotState = robotState;
         holdPointCommand = new AutoHoldPointCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
+    }
+
+    /**
+     * Overload Constructor without Timeout
+     *
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
+     **/
+    public HoldPointStateBase(String name, DriveSubsystem drive, RobotState robotState) {
+        this(name, drive, robotState, -1);
     }
 
     /**
@@ -212,6 +224,10 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
 
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
+
+        if (super.isTimeoutReached()) {
+            return AutoState.TIMEOUT;
+        }
 
         RobotLog.dd(LOG_TAG, "Dist to target: %f Angle diff: %f",
                 distToTarget(current, target),
