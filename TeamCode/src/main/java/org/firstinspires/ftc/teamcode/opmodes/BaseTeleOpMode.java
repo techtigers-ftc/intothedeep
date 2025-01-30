@@ -220,7 +220,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 2));
+                manipulatorGamepad.getLeftY() * 1.3));
         intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
 
         // Manual intake rotation
