@@ -22,8 +22,8 @@ import team.techtigers.base.CloseableSubsystem;
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int BLOCK_CACHE_LIMIT = 3;
     private final static int NEURAL_DETECTOR_PIPELINE = 5;
-    private final static double TARGET_POINT_X = 450;
-    private final static double TARGET_POINT_Y = 360;
+    private final static double TARGET_POINT_X = 500;
+    private final static double TARGET_POINT_Y = 420;
     private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
     private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
