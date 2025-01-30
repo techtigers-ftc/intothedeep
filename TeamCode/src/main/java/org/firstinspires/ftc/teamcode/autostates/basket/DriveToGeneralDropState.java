@@ -26,7 +26,7 @@ public class DriveToGeneralDropState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new DropperHighBasketAction(dropper, intake, robotState)
@@ -38,6 +38,8 @@ public class DriveToGeneralDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
+        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
 
         return AutoState.RUNNING;

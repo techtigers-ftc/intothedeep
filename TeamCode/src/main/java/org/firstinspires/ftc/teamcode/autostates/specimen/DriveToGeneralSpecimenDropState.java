@@ -29,7 +29,7 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      * @param intake    The intake subsystem
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
@@ -44,6 +44,8 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.BACKWARD_CARRY) {
             return AutoState.DRIVE_END;
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
     }
