@@ -63,9 +63,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.01;
+    public static double FORWARD_KP = 0.008;
     public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.00005;
+    public static double FORWARD_KD = 0.0001;
     public static double FORWARD_KF = 0.001;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
