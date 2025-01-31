@@ -28,7 +28,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
     private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
-    private static final double SLIDES_INTAKE_OFFSET = 3.5;
 
     // Orientation logistic function parameters
     private static final double ORIENTATION_FLOOR = 0.00221939;
@@ -220,7 +219,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double finalXDist = getCorrectedXDist(xDist);
             if (xDist == -LIMELIGHT_X_OFFSET) {
                 replaceCache(BlockDetectionState.NOT_DETECTED);
-            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX + SLIDES_INTAKE_OFFSET - 0.5) {
+            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX) {
                 replaceCache(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
