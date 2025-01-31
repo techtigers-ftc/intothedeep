@@ -31,7 +31,6 @@ public class DropperWallIntakeActionPartTwo extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new WaitCommand(2000),
                 new DropperPitchAction(dropper, 300, 300),
                 new DropperCloseAction(dropper, 200),
                 new DropperForwardCarryNoTransferAction(dropper, robotState)
