@@ -27,7 +27,7 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralSpecimenIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
@@ -42,6 +42,8 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
     }
