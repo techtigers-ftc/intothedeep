@@ -44,7 +44,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         () -> robotState.getRobotCurrentPose().getX(),
                         () -> robotState.getRobotCurrentPose().getY(),
                         headingSupplier,
-                        0.6, Math.toRadians(2)
+                        0.2, Math.toRadians(2)
                 ),
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
@@ -52,7 +52,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                headingSupplier, 0.3, Math.toRadians(2)
+                                headingSupplier, 0.2, Math.toRadians(2)
                         )
                 ),
                 new IntakeReadyToPickupAction(intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION)

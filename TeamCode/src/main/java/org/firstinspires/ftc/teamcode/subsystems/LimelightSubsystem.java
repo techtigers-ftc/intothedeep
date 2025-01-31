@@ -198,7 +198,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double getCorrectedYDist(double yDist) {
         double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
         RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor;
+        return yDist - correctiveFactor + 0.375;
     }
 
     private double getCorrectedXDist(double xDist) {
