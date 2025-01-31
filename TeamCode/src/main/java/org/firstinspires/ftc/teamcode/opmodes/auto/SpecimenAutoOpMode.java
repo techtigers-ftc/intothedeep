@@ -265,6 +265,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(grabThirdSample, dropThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_DROP_COMPLETE)
                 .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_DROP_COMPLETE)
+                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 .addTransition(intakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
                 .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
