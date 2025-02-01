@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -146,11 +146,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
-        FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
-                "firstLevelAscent",
-                dropper
-        );
-
+        EndState endState = new EndState("endState");
 
         // Create the state machine
         stateMachine
@@ -166,7 +162,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(intakeThirdSample)
                 .addState(driveBasketThirdSample)
                 .addState(driveToSubmersible)
-                .addState(firstLevelAscent)
+                .addState(endState)
 
                 .addTransition(driveBasketPreload, dropSample, AutoState.DRIVE_END)
                 .addTransition(driveBasketPreload, dropSample, AutoState.TIMEOUT)
@@ -189,8 +185,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
                 .addTransition(driveBasketThirdSample, dropSample, AutoState.TIMEOUT)
                 .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
-                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
-                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.TIMEOUT)
+                .addTransition(driveToSubmersible, endState, AutoState.DRIVE_END)
 
                 .setCurrentState(driveBasketPreload);
 
