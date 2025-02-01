@@ -220,7 +220,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 2));
+                manipulatorGamepad.getLeftY() * 1.3));
         intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
 
         // Manual intake rotation
@@ -324,6 +324,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad2.rumbleBlips(5);
         }));
 
+        telemetry.addData("Sensor Dist: ", intake.getSensorDist());
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
     }
@@ -351,5 +352,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
         telemetry.addData("Sensor Dist: ", intake.getSensorDist());
+        telemetry.addLine();
+        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
+        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
+        telemetry.addLine();
     }
 }

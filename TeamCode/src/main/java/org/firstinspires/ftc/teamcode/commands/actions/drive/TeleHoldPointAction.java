@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -21,9 +22,10 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
+@Config
 public class TeleHoldPointAction extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
-    private static final double TIMEOUT = 1;
+    public static double TIMEOUT = 2;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
@@ -103,15 +105,9 @@ public class TeleHoldPointAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(3, 0, 0.02,
-                0));
-        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.00055, 0.6, 0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0));
+        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
-        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.4, 0, 0.03, 0));
-        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.004
-                , 0, 0.002, 0.6, 0));
-        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(3.5, 0,
-                0, 0));
 
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
@@ -121,7 +117,6 @@ public class TeleHoldPointAction extends CommandBase {
 
     @Override
     public void execute() {
-        // TODO: try to run the hold path in the execute method
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 

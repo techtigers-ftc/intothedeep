@@ -73,6 +73,22 @@ public class IntakeTuningOpmode extends BaseOpMode {
         );
         slidesTrigger.whileActiveContinuous(() -> intakeSubsystem.moveSlidesRelative(driverGamepad.getLeftY() * 2));
 
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(0);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(6);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(12);
+//        });
+//
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
+//            intakeSubsystem.moveSlidesAbsolute(18.75);
+//        });
+//
         // Emergency stop button for the slides
         driverGamepad.getGamepadButton(GamepadKeys.Button.START).whenPressed(new InstantCommand(() -> {
             intakeSubsystem.stopSlides();
