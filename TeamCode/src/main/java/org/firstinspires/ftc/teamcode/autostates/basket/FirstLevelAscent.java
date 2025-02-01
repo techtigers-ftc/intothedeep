@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -23,7 +25,7 @@ public class FirstLevelAscent extends ParallelCommandGroupState<AutoState> {
     public FirstLevelAscent(String name, DropperSubsystem dropper) {
         super(name);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_FIRST_LEVEL_ASCENT, 500)
+                new DropperSlidesAbsoluteAction(dropper, 14, 1)
         );
     }
 

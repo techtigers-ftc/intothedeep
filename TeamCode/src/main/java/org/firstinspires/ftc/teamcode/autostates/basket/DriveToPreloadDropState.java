@@ -31,7 +31,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(250),
+                        new WaitCommand(1),
                         new DropperHighBasketNoTransferAction(dropper, robotState)
                 )
         );
