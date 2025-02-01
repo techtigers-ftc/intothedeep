@@ -34,7 +34,7 @@ public class VisionSamplePickupState extends SequentialCommandGroupState<AutoSta
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, robotState::getVisionIntakeHeading),
+                new IntakeVisionPickupAction(intake, dropper, drive, robotState, null),
                 new IntakePrepareToTransferAction(intake, dropper, () -> 5, robotState),
                 new IntakeReadyToTransferAction(intake, robotState)
         );

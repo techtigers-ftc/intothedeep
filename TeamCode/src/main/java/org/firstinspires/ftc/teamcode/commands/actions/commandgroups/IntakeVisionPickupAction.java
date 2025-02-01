@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -77,5 +76,23 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     RobotState robotState, double heading,
                                     GamepadEx gamepad) {
         this(intake, dropper, drive, robotState, () -> heading, gamepad);
+    }
+
+    /**
+     * Yet another overload constructor for intake vision pickup action without given heading
+     *
+     * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param drive      the drive subsystem
+     * @param robotState the robot state
+     * @param gamepad    the driver gamepad. If a null gamepad is passed in,
+     *                   nothing will rumble
+     */
+    public IntakeVisionPickupAction(IntakeSubsystem intake,
+                                    DropperSubsystem dropper,
+                                    DriveSubsystem drive,
+                                    RobotState robotState,
+                                    GamepadEx gamepad) {
+        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), gamepad);
     }
 }
