@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -29,10 +28,10 @@ public class DriveToSubmersible extends DriveStateBase {
     /**
      * Constructor for the DriveToSubmersible
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @param intake The intake subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
+     * @param intake     The intake subsystem
      * @param robotState The robot state
      */
     public DriveToSubmersible(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
@@ -57,7 +56,7 @@ public class DriveToSubmersible extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
-        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
 
