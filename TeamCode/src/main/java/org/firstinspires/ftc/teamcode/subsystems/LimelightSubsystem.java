@@ -22,13 +22,12 @@ import team.techtigers.base.CloseableSubsystem;
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int BLOCK_CACHE_LIMIT = 3;
     private final static int NEURAL_DETECTOR_PIPELINE = 5;
-    private final static double TARGET_POINT_X = 450;
-    private final static double TARGET_POINT_Y = 360;
+    private final static double TARGET_POINT_X = 500;
+    private final static double TARGET_POINT_Y = 420;
     private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
     private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
     private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
-    private static final double SLIDES_INTAKE_OFFSET = 3;
 
     // Orientation logistic function parameters
     private static final double ORIENTATION_FLOOR = 0.00221939;
@@ -198,7 +197,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double getCorrectedYDist(double yDist) {
         double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
         RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor;
+        return yDist - correctiveFactor + 0.375;
     }
 
     private double getCorrectedXDist(double xDist) {
@@ -220,7 +219,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double finalXDist = getCorrectedXDist(xDist);
             if (xDist == -LIMELIGHT_X_OFFSET) {
                 replaceCache(BlockDetectionState.NOT_DETECTED);
-            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX + SLIDES_INTAKE_OFFSET - 0.5) {
+            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX) {
                 replaceCache(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);

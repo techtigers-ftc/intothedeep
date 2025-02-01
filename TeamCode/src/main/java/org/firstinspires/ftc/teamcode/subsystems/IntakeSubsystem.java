@@ -34,12 +34,12 @@ import team.techtigers.base.CloseableSubsystem;
 public class IntakeSubsystem extends CloseableSubsystem {
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 2;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
     public static final double CLAW_ROTATION_TUCK_POSITION = 77;
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
     public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 65;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 60;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
     public static final double WRIST_PITCH_PECK_POSITION = 100;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
@@ -65,10 +65,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.00575;
+    public static double FORWARD_KP = 0.008;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0.0001;
-    public static double FORWARD_KF = 0.06;
+    public static double FORWARD_KF = 0.001;
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
