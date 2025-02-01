@@ -91,6 +91,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return false;
     }
 
+    /**
+     * Checks that the block is detected over multiple frames before setting the block detection state
+     *
+     * @param state the block detection state to set
+     */
     private void replaceCache(BlockDetectionState state) {
         boolean unCache = framesCached > BLOCK_CACHE_LIMIT
                 || robotState.getRobotVelocity().getPoint().magnitude() > 1
@@ -103,6 +108,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
         }
     }
 
+    /**
+     * Gets the correct x and y distances of the block based on limelight tx and ty values
+     *
+     * @param detection the detection to find the values from
+     * @return the corrected x and y distances of the block from the robot
+     */
     private double[] getBlockDistances(LLResultTypes.DetectorResult detection) {
         double rawTy = detection.getTargetYDegrees();
         double ty = LIMELIGHT_DOWNWARD_ANGLE - rawTy;
@@ -119,10 +130,23 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return new double[]{finalXDist, finalYDist};
     }
 
+    /**
+     * Gets the weighted euclidean distance of the block from the robot to favor blocks with vertical extension
+     * rather than strafing to blocks
+     *
+     * @param distances the x and y distances of the block
+     * @return the weighted euclidean distance of the block from the robot
+     */
     private double getWeightedEuclideanDistance(double[] distances) {
         return Math.sqrt(Math.pow(distances[0], 2) + Math.pow(distances[1], 2) / HEAVY_WEIGHT);
     }
 
+    /**
+     * Goes through all of the limelight detections, checking to find the block that is deemed
+     * most ideal to pickup; also sets the block detection state
+     *
+     * @param detections the list of neural detections to check
+     */
     private void setBlockAttributes(List<LLResultTypes.DetectorResult> detections) {
         double distance = 1000;
         ArrayList<LLResultTypes.DetectorResult> validDetections = new ArrayList<>();
