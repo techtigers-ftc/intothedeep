@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
-import team.techtigers.core.paths.Waypoint;
 
 @TeleOp(name = "Limelight Test OpMode", group = "Tuning")
 public class LimelightTestOpMode extends BaseOpMode {

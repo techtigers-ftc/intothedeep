@@ -43,6 +43,8 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
+        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
 
         return AutoState.RUNNING;

@@ -35,7 +35,7 @@ public class DropperHighBasketAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new DropperHighBasketNoTransferAction(dropper, robotState),
                         new SequentialCommandGroup(
-                                new WaitCommand(500),
+                                new WaitCommand(200),
                                 new IntakeTuckAction(intake, robotState)
                         )
                 )

@@ -28,13 +28,25 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param robotState The robot state
+     * @param timeout    time limit of the drive in seconds
      */
-    public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name);
+    public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
+        super(name, timeout);
         this.robotState = robotState;
         autoDriveCommand = new AutoDriveCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
+    }
+
+    /**
+     * Overload Constructor without Timeout
+     *
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
+     */
+    public DriveStateBase(String name, DriveSubsystem drive, RobotState robotState) {
+        this(name, drive, robotState, -1);
     }
 
     /**
@@ -206,6 +218,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     public AutoState getCurrentCondition() {
         if (tolerance < 0 || angleTolerance < 0) {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
+        }
+
+        if (super.isTimeoutReached()) {
+            return AutoState.TIMEOUT;
         }
 
         Waypoint current = robotState.getRobotCurrentPose();

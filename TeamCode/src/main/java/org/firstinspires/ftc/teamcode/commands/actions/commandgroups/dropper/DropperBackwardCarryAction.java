@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
@@ -36,7 +37,7 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new DropperBackwardCarryNoTransferAction(dropper, robotState),
                         new SequentialCommandGroup(
-                                new WaitCommand(500),
+                                new WaitCommand(200),
                                 new IntakeTuckAction(intake, robotState)
                         )
                 )
@@ -47,6 +48,12 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
     public void initialize() {
         RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
         robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
+
         super.initialize();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
     }
 }

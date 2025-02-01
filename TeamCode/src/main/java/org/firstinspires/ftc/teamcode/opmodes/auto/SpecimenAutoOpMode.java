@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
@@ -20,7 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -30,6 +32,7 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
+@Config
 @Autonomous
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
@@ -45,7 +48,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         StateMachine<AutoState> stateMachine = new StateMachine<>();
         robotState = new RobotState(true, true);
-        telemetry = dashboard.getTelemetry();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
@@ -55,7 +58,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
-        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropSpecimenState driveChamberPreload = new DriveToPreloadDropSpecimenState(
@@ -251,40 +254,54 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(endState)
 
                 .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
+                .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
                 .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
                 .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
+                .addTransition(driveToFirstIntake, grabFirstSample, AutoState.TIMEOUT)
                 .addTransition(grabFirstSample, dropFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(dropFirstSample, grabSecondSample, AutoState.SAMPLE_DROP_COMPLETE)
+                .addTransition(dropFirstSample, grabSecondSample, AutoState.TIMEOUT)
                 .addTransition(grabSecondSample, dropSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(dropSecondSample, grabThirdSample, AutoState.SAMPLE_DROP_COMPLETE)
+                .addTransition(dropSecondSample, grabThirdSample, AutoState.TIMEOUT)
                 .addTransition(grabThirdSample, dropThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_DROP_COMPLETE)
+                .addTransition(dropThirdSample, driveToFirstSpecimenIntake, AutoState.SAMPLE_DROP_COMPLETE)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 .addTransition(intakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
                 .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
                 .addTransition(clipSpecimen, driveToSecondSpecimenIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 .addTransition(intakeSpecimen, driveToSecondSpecimenDrop, AutoState.SPECIMEN_2_INTAKE_COMPLETE)
                 .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
                 .addTransition(clipSpecimen, driveToThirdSpecimenIntake, AutoState.SPECIMEN_2_DROP_COMPLETE)
                 .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 .addTransition(intakeSpecimen, driveToThirdSpecimenDrop, AutoState.SPECIMEN_3_INTAKE_COMPLETE)
                 .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
 
 //                .addTransition(clipSpecimen, driveToFourthSpecimenIntake, AutoState.SPECIMEN_3_DROP_COMPLETE)
 //                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+//                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
 //                .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
 //                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+//                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
 
                 .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_3_DROP_COMPLETE)
                 .addTransition(driveToPark, endState, AutoState.DRIVE_END)
+                .addTransition(driveToPark, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveChamberPreload);
 
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper, intake, limelight, vision);
+        registerSubsystems(auto, drive, odometry, dropper, intake, limelight, sensor);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -292,6 +309,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
         telemetry.update();
     }
@@ -305,6 +323,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
         telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
     }
 }

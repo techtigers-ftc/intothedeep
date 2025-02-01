@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.function.DoubleSupplier;
@@ -28,8 +27,16 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param drive           the drive subsystem
      * @param robotState      the robot state
      * @param headingSupplier the heading supplier that supplier the heading values to the target position
+     * @param gamepad         the driver gamepad, which is rumbled during a
+     *                        drive takeover. If a null gamepad is passed in,
+     *                        nothing will rumble
      */
-    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, DoubleSupplier headingSupplier) {
+    public IntakeVisionPickupAction(IntakeSubsystem intake,
+                                    DropperSubsystem dropper,
+                                    DriveSubsystem drive,
+                                    RobotState robotState,
+                                    DoubleSupplier headingSupplier,
+                                    GamepadEx gamepad) {
         addRequirements(intake, dropper, drive);
         addCommands(
                 // Aligns the robot to the heading given by the heading supplier
@@ -45,7 +52,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                headingSupplier, 0.6, Math.toRadians(2)
+                                headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
                 new IntakeReadyToPickupAction(intake, robotState, intake::getCurrentSlidePositionInches, robotState::getBlockOrientation)
@@ -60,8 +67,14 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param drive      the drive subsystem
      * @param robotState the robot state
      * @param heading    the heading value
+     * @param gamepad    the driver gamepad. If a null gamepad is passed in,
+     *                   nothing will rumble
      */
-    public IntakeVisionPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState, double heading) {
-        this(intake, dropper, drive, robotState, () -> heading);
+    public IntakeVisionPickupAction(IntakeSubsystem intake,
+                                    DropperSubsystem dropper,
+                                    DriveSubsystem drive,
+                                    RobotState robotState, double heading,
+                                    GamepadEx gamepad) {
+        this(intake, dropper, drive, robotState, () -> heading, gamepad);
     }
 }

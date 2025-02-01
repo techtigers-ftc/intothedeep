@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -30,6 +31,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
+                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 200),
                 new DropperBackSlapAction(dropper, robotState),
                 new DropperOpenAction(dropper)
         );

@@ -32,7 +32,7 @@ public class AscentSubsystem extends CloseableSubsystem {
         leftJackServo = hardwareMap.get(Servo.class, "left_jack");
         rightJackServo = hardwareMap.get(Servo.class, "right_jack");
 
-        rightJackServo.setDirection(Servo.Direction.REVERSE);
+        leftJackServo.setDirection(Servo.Direction.REVERSE);
 
         jacksEngaged = false;
 
@@ -54,8 +54,8 @@ public class AscentSubsystem extends CloseableSubsystem {
      * Engages the jacks that lift the robot
      */
     public void engageJacks() {
-        leftJackServo.setPosition(1);
-        rightJackServo.setPosition(1);
+        leftJackServo.setPosition(0.99);
+        rightJackServo.setPosition(0.99);
         jacksEngaged = true;
     }
 

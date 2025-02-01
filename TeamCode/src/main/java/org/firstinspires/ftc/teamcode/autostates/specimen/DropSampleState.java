@@ -35,7 +35,7 @@ public class DropSampleState extends HoldPointStateBase {
      */
     public DropSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
                            RobotState robotState, DriveSubsystem drive) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         this.robotState = robotState;
         addCommands(
                 holdPointCommand,
@@ -60,6 +60,8 @@ public class DropSampleState extends HoldPointStateBase {
                 robotState.getDropperClawState() == ClawState.OPEN &&
                 robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
             return AutoState.SAMPLE_DROP_COMPLETE;
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT){
+            return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
     }

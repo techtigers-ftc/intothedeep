@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DropSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenHoldPointState;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -68,8 +69,9 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
-                                new BezierLine(
+                                new BezierCurve(
                                         new Point(76, 40.25),
+                                        new Point(76, 30),
                                         new Point(130, 26.5)
                                 )
                         )
@@ -78,7 +80,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
     }
 
@@ -194,7 +196,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 

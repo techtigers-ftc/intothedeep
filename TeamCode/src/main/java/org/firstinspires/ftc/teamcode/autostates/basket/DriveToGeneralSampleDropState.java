@@ -38,6 +38,8 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
+        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
 
         return AutoState.RUNNING;

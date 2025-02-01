@@ -18,13 +18,13 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
     /**
      * Constructor for the DriveToPreloadDropSpecimenState
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
     public DriveToPreloadDropSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryNoTransferAction(dropper, robotState)
@@ -36,6 +36,8 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             return AutoState.DRIVE_END;
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
     }
