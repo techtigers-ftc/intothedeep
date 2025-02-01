@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -22,18 +23,12 @@ import team.techtigers.base.CloseableSubsystem;
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int BLOCK_CACHE_LIMIT = 3;
     private final static int NEURAL_DETECTOR_PIPELINE = 5;
-    private final static double TARGET_POINT_X = 500;
-    private final static double TARGET_POINT_Y = 420;
     private final static double LIMELIGHT_VERTICAL_HEIGHT = 10.5;
     private final static double LIMELIGHT_X_OFFSET = 4;
     private static final double LIMELIGHT_INTAKE_OFFSET = 8;
     private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
 
-    // Orientation logistic function parameters
-    private static final double ORIENTATION_FLOOR = 0.00221939;
-    private static final double ORIENTATION_C = 0.0725463;
-    private static final double ORIENTATION_H_STRETCH = 4.40165;
-    private static final double ORIENTATION_RATE = 0.0902167;
+    private static final double HEAVY_WEIGHT = 2;
 
     // Forward offset logistic function parameters
     private static final double FORWARD_FLOOR = 1.34;
@@ -46,14 +41,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_H_SHIFT = -2.7;
     private static final double LATERAL_V_SHIFT = 2.47;
 
-    // Block values
-    private static final double BLOCK_WIDTH_VERTICAL = 1.5;
-    private static final double BLOCK_WIDTH_HORIZONTAL = 3.5;
     private final RobotState robotState;
     private final Limelight3A limelight;
 
     private double framesCached;
-
 
     /**
      * Constructor for the LimelightSubsystem
@@ -72,17 +63,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.setPollRateHz(50);
         limelight.start();
         limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
-    }
-
-    /**
-     * Finds the distance of a point from the center of the limelight
-     *
-     * @param x The x coordinate of the point to check
-     * @param y The y coordinate of the point to check
-     * @return The distance from the point to the center of the limelight
-     */
-    private double distanceFromExtensionPoint(double x, double y) {
-        return Math.sqrt(Math.pow(x - TARGET_POINT_X, 2) + Math.pow(y - TARGET_POINT_Y, 2));
     }
 
     /**
@@ -111,50 +91,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return false;
     }
 
-    private double[] getCenterCoordinates(LLResultTypes.DetectorResult detection) {
-        double topLeftX = detection.getTargetCorners().get(0).get(0);
-        double topLeftY = detection.getTargetCorners().get(0).get(1);
-        double bottomRightX = detection.getTargetCorners().get(2).get(0);
-        double bottomRightY = detection.getTargetCorners().get(2).get(1);
-        return new double[]{(topLeftX + bottomRightX) / 2, (topLeftY + bottomRightY) / 2};
-    }
-
-    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    }
-
     /**
-     * Gets the target x and target y degrees of the neural detector detection
-     * that is closest to the extension point of the limelight frame
+     * Checks that the block is detected over multiple frames before setting the block detection state
      *
-     * @param detections The list of detections of the neural detector
-     * @return the target x and target y degrees of the best neural detection
+     * @param state the block detection state to set
      */
-    private double[] getNeuralDetectorAttributes(List<LLResultTypes.DetectorResult> detections) {
-        // Initializes a few variables to be used for comparison of the different detections
-        double centerX = 0;
-        double centerY = 0;
-        double targetXDegrees = 0;
-        double targetYDegrees = 0;
-        for (LLResultTypes.DetectorResult detection : detections) {
-            // Gets the values for the detection to check
-            double newCenterX = getCenterCoordinates(detection)[0];
-            double newCenterY = getCenterCoordinates(detection)[1];
-            // Determines whether a detection is closer to the center of the limelight
-            // than a detection that has already been made
-            if ((distanceFromExtensionPoint(newCenterX, newCenterY) <
-                    distanceFromExtensionPoint(centerX, centerY)) && isDetectionPreferredColor(detection)) {
-                // Asserts this new block detection as the one closest to the camera center
-                centerX = newCenterX;
-                centerY = newCenterY;
-                // Sets the values of this specific block detection to be used in the periodic
-                targetXDegrees = detection.getTargetXDegrees();
-                targetYDegrees = detection.getTargetYDegrees();
-            }
-        }
-        return new double[]{targetXDegrees, targetYDegrees};
-    }
-
     private void replaceCache(BlockDetectionState state) {
         boolean unCache = framesCached > BLOCK_CACHE_LIMIT
                 || robotState.getRobotVelocity().getPoint().magnitude() > 1
@@ -167,46 +108,96 @@ public class LimelightSubsystem extends CloseableSubsystem {
         }
     }
 
-    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
-        // Width is the distance between the top right and bottom right corners of the detection
-        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
-                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+    /**
+     * Gets the correct x and y distances of the block based on limelight tx and ty values
+     *
+     * @param detection the detection to find the values from
+     * @return the corrected x and y distances of the block from the robot
+     */
+    private double[] getBlockDistances(LLResultTypes.DetectorResult detection) {
+        double rawTy = detection.getTargetYDegrees();
+        double ty = LIMELIGHT_DOWNWARD_ANGLE - rawTy;
+        double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
+        double YCorrectiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
+        RobotLog.dd(tag, "Forward Corrective Factor:%f", YCorrectiveFactor);
+        double finalYDist = yDist - YCorrectiveFactor + 0.375;
+        double rawTx = detection.getTargetXDegrees();
+        double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
+        double XCorrectiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
+        RobotLog.dd(tag, "Lateral Corrective Factor:%f", XCorrectiveFactor);
+        double finalXDist = xDist + XCorrectiveFactor + 0.375;
+
+        return new double[]{finalXDist, finalYDist};
     }
 
-    private double getCorrectedYDist(double yDist) {
-        double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
-        RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor + 0.375;
+    /**
+     * Gets the weighted euclidean distance of the block from the robot to favor blocks with vertical extension
+     * rather than strafing to blocks
+     *
+     * @param distances the x and y distances of the block
+     * @return the weighted euclidean distance of the block from the robot
+     */
+    private double getWeightedEuclideanDistance(double[] distances) {
+        return Math.sqrt(Math.pow(distances[0], 2) + Math.pow(distances[1], 2) / HEAVY_WEIGHT);
     }
 
-    private double getCorrectedXDist(double xDist) {
-        double correctiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
-        RobotLog.dd(tag, "Lateral Corrective Factor:%f", correctiveFactor);
-        return xDist + correctiveFactor;
+    /**
+     * Goes through all of the limelight detections, checking to find the block that is deemed
+     * most ideal to pickup; also sets the block detection state
+     *
+     * @param detections the list of neural detections to check
+     */
+    private void setBlockAttributes(List<LLResultTypes.DetectorResult> detections) {
+        double distance = 1000;
+        ArrayList<LLResultTypes.DetectorResult> validDetections = new ArrayList<>();
+        ArrayList<LLResultTypes.DetectorResult> greatDetections = new ArrayList<>();
+        LLResultTypes.DetectorResult bestDetection = null;
+
+        for (LLResultTypes.DetectorResult detection : detections) {
+            if (detection.getTargetXDegrees() != 0 && detection.getTargetYDegrees() != 0) {
+                if (isDetectionPreferredColor(detection)) {
+                    validDetections.add(detection);
+                }
+            }
+        }
+
+        if (validDetections.isEmpty()) {
+            replaceCache(BlockDetectionState.NOT_DETECTED);
+            return;
+        }
+
+        for (LLResultTypes.DetectorResult goodDetection : validDetections) {
+            double xDist = getBlockDistances(goodDetection)[0];
+            double yDist = getBlockDistances(goodDetection)[1];
+            if (xDist >= -4 && xDist <= 3 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+                greatDetections.add(goodDetection);
+            }
+        }
+
+        if (greatDetections.isEmpty()) {
+            replaceCache(BlockDetectionState.TOO_FAR);
+            return;
+        }
+
+        for (LLResultTypes.DetectorResult greatDetection : greatDetections) {
+            if (getWeightedEuclideanDistance(getBlockDistances(greatDetection)) < distance) {
+                distance = getWeightedEuclideanDistance(getBlockDistances(greatDetection));
+                bestDetection = greatDetection;
+            }
+            RobotLog.dd(tag, "Euclidian Distance: %f", getWeightedEuclideanDistance(getBlockDistances(greatDetection)));
+        }
+
+        RobotLog.dd(tag, "Best block euclidian distance: %f", getWeightedEuclideanDistance(getBlockDistances(bestDetection)));
+        robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+        robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
+        robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);
     }
 
     @Override
     public void periodic() {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
-            double[] angularValues = getNeuralDetectorAttributes(result.getDetectorResults());
-            double tx = angularValues[0];
-            double ty = LIMELIGHT_DOWNWARD_ANGLE - angularValues[1];
-            double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
-            double finalYDist = getCorrectedYDist(yDist);
-            double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(tx)) - LIMELIGHT_X_OFFSET;
-            double finalXDist = getCorrectedXDist(xDist);
-            if (xDist == -LIMELIGHT_X_OFFSET) {
-                replaceCache(BlockDetectionState.NOT_DETECTED);
-            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX) {
-                replaceCache(BlockDetectionState.TOO_FAR);
-            } else {
-                robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
-                robotState.setBlockForwardCoarse(finalYDist);
-                robotState.setBlockLateralCoarse(finalXDist);
-                robotState.setBlockOrientation(angularValues[2]);
-            }
-            RobotLog.dd(tag, "x dist:%f, y dist:%f", xDist, finalYDist);
+            setBlockAttributes(result.getDetectorResults());
         }
     }
 
