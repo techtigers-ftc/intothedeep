@@ -203,7 +203,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double getCorrectedXDist(double xDist) {
         double correctiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
         RobotLog.dd(tag, "Lateral Corrective Factor:%f", correctiveFactor);
-        return xDist + correctiveFactor;
+        return xDist + correctiveFactor + 0.375;
     }
 
     @Override
@@ -219,7 +219,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double finalXDist = getCorrectedXDist(xDist);
             if (xDist == -LIMELIGHT_X_OFFSET) {
                 replaceCache(BlockDetectionState.NOT_DETECTED);
-            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX) {
+            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX || finalXDist < -4 || finalXDist > 3) {
                 replaceCache(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
