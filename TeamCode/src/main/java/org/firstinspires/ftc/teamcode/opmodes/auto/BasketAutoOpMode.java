@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import org.firstinspires.ftc.teamcode.autostates.VisionSamplePickupState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralDropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.VisionSamplePickupState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
@@ -236,7 +234,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(visionPickupSample, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_COMPLETE)
                 .addTransition(driveToFifthDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_5_DROP_COMPLETE)
-                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
+                .addTransition(driveToSubmersible, endState, AutoState.DRIVE_END)
 
                 .setCurrentState(driveToPreloadDrop);
 

@@ -153,7 +153,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 targetYDegrees = detection.getTargetYDegrees();
             }
         }
-        return new double[]{targetXDegrees, targetYDegrees, orientation};
+        return new double[]{targetXDegrees, targetYDegrees};
     }
 
     private void replaceCache(BlockDetectionState state) {
@@ -166,71 +166,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
         } else {
             framesCached++;
         }
-        return new double[]{targetXDegrees, targetYDegrees, orientation};
     }
 
     private double getBlockWidth(LLResultTypes.DetectorResult detection) {
         // Width is the distance between the top right and bottom right corners of the detection
         return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
                 detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
-    }
-
-    /**
-     * Returns the angle the intake claw should go to in order to pick up the block
-     *
-     * @param detection The detected block
-     * @return The angle the claw should go to in order to pick up the block
-     */
-    private double getClawAngle(LLResultTypes.DetectorResult detection) {
-        double blockWidth = getBlockWidth(detection);
-        RobotLog.dd(tag, "block width detection:%f", blockWidth);
-        double distance = robotState.getBlockForwardCoarse();
-        double widthScalar = (ORIENTATION_C / (1 + ORIENTATION_H_STRETCH * Math.pow(Math.E, -ORIENTATION_RATE * distance))) + ORIENTATION_FLOOR;
-        double normalizedBlockWidth = blockWidth * widthScalar;
-        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
-        if (normalizedBlockWidth > 2.4) {
-            return 0;
-        } else {
-            return 90;
-        }
-    }
-
-    private double getCorrectedYDist(double yDist) {
-        double correctiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
-        RobotLog.dd(tag, "Forward Corrective Factor:%f", correctiveFactor);
-        return yDist - correctiveFactor;
-    }
-
-    private double getCorrectedXDist(double xDist) {
-        double correctiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
-        RobotLog.dd(tag, "Lateral Corrective Factor:%f", correctiveFactor);
-        return xDist + correctiveFactor;
-    }
-
-    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
-        // Width is the distance between the top right and bottom right corners of the detection
-        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
-                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
-    }
-
-    /**
-     * Returns the angle the intake claw should go to in order to pick up the block
-     *
-     * @param detection The detected block
-     * @return The angle the claw should go to in order to pick up the block
-     */
-    private double getClawAngle(LLResultTypes.DetectorResult detection) {
-        double blockWidth = getBlockWidth(detection);
-        RobotLog.dd(tag, "block width detection:%f", blockWidth);
-        double distance = robotState.getBlockForwardCoarse();
-        double widthScalar = (ORIENTATION_C / (1 + ORIENTATION_H_STRETCH * Math.pow(Math.E, -ORIENTATION_RATE * distance))) + ORIENTATION_FLOOR;
-        double normalizedBlockWidth = blockWidth * widthScalar;
-        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
-        if (normalizedBlockWidth > 2.4) {
-            return 180;
-        } else {
-            return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
-        }
     }
 
     private double getCorrectedYDist(double yDist) {
@@ -258,7 +199,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double finalXDist = getCorrectedXDist(xDist);
             if (xDist == -LIMELIGHT_X_OFFSET) {
                 replaceCache(BlockDetectionState.NOT_DETECTED);
-            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX + SLIDES_INTAKE_OFFSET - 0.5) {
+            } else if (finalYDist > IntakeSubsystem.SLIDES_MAX) {
                 replaceCache(BlockDetectionState.TOO_FAR);
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
