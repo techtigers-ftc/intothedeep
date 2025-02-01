@@ -29,29 +29,29 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
-    public static final double SLIDE_MAX = 28;
+    // SLIDE POSITIONS
+    public static final double SLIDE_MAX = 25.75;
+    public static final double SLIDES_CHAMBER_POSITION = 5;
 
     // PITCH POSITIONS
-    public static final double PITCH_FIRST_LEVEL_ASCENT = 104;
     public static final double PITCH_PRE_TRANSFER_POSITION = 45;
-    public static final double PITCH_TRANSFER_POSITION = 30;
-    public static final double PITCH_BASKET_POSITION = 205;
+    public static final double PITCH_TRANSFER_POSITION = 33;
+    public static final double PITCH_BASKET_POSITION = 220;
     public static final double PITCH_CHAMBER_POSITION = 180;
-    public static final double PITCH_FRONT_SLAP_POSITION = 105;
-    public static final double PITCH_BACK_SLAP_POSITION = 245;
+    public static final double PITCH_FRONT_SLAP_POSITION = 95;
+    public static final double PITCH_BACK_SLAP_POSITION = 265;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 10;
-    public static final double ROTATION_BASKET_POSITION = 210;
-    public static final double ROTATION_FRONT_SLAP_POSITION = 10;
-    public static final double ROTATION_BACK_SLAP_POSITION = 210;
+    public static final double ROTATION_TRANSFER_POSITION = 15;
+    public static final double ROTATION_BASKET_POSITION = 215;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 15;
+    public static final double ROTATION_BACK_SLAP_POSITION = 215;
 
-    public static final double SLIDES_CHAMBER_POSITION = 1;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 29.0 / 25.2 * 0.97;
+    private static final double ERROR_FACTOR = 1.15;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
