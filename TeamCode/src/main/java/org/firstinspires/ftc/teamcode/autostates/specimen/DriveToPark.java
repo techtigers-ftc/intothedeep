@@ -31,7 +31,7 @@ public class DriveToPark extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToPark(String name, IntakeSubsystem intake, DriveSubsystem drive, DropperSubsystem dropper, DoubleSupplier targetSlidePos, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 100),

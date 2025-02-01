@@ -9,13 +9,14 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscent;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -53,6 +54,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropState driveBasketPreload = new DriveToPreloadDropState(
@@ -144,11 +146,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
-        FirstLevelAscent firstLevelAscent = new FirstLevelAscent(
-                "firstLevelAscent",
-                dropper
-        );
-
+        EndState endState = new EndState("endState");
 
         // Create the state machine
         stateMachine
@@ -164,23 +162,30 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(intakeThirdSample)
                 .addState(driveBasketThirdSample)
                 .addState(driveToSubmersible)
-                .addState(firstLevelAscent)
+                .addState(endState)
 
                 .addTransition(driveBasketPreload, dropSample, AutoState.DRIVE_END)
+                .addTransition(driveBasketPreload, dropSample, AutoState.TIMEOUT)
                 .addTransition(dropSample, driveIntakeFirstSample, AutoState.SAMPLE_0_DROP_COMPLETE)
                 .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.DRIVE_END)
+                .addTransition(driveIntakeFirstSample, intakeFirstSample, AutoState.TIMEOUT)
                 .addTransition(intakeFirstSample, driveBasketFirstSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveBasketFirstSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(driveBasketFirstSample, dropSample, AutoState.TIMEOUT)
                 .addTransition(dropSample, driveIntakeSecondSample, AutoState.SAMPLE_1_DROP_COMPLETE)
                 .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(driveIntakeSecondSample, intakeSecondSample, AutoState.TIMEOUT)
                 .addTransition(intakeSecondSample, driveBasketSecondSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveBasketSecondSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(driveBasketSecondSample, dropSample, AutoState.TIMEOUT)
                 .addTransition(dropSample, driveIntakeThirdSample, AutoState.SAMPLE_2_DROP_COMPLETE)
                 .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.DRIVE_END)
+                .addTransition(driveIntakeThirdSample, intakeThirdSample, AutoState.TIMEOUT)
                 .addTransition(intakeThirdSample, driveBasketThirdSample, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveBasketThirdSample, dropSample, AutoState.DRIVE_END)
+                .addTransition(driveBasketThirdSample, dropSample, AutoState.TIMEOUT)
                 .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_3_DROP_COMPLETE)
-                .addTransition(driveToSubmersible, firstLevelAscent, AutoState.DRIVE_END)
+                .addTransition(driveToSubmersible, endState, AutoState.DRIVE_END)
 
                 .setCurrentState(driveBasketPreload);
 
@@ -195,7 +200,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper);
+        registerSubsystems(auto, drive, odometry, dropper, sensor);
     }
 
     @Override

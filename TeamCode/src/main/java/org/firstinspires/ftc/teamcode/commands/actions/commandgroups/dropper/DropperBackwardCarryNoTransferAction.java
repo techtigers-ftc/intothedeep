@@ -30,7 +30,7 @@ public class DropperBackwardCarryNoTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_CHAMBER_POSITION, 0.5),
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                 new DropperRotationAction(dropper,
                         DropperSubsystem.ROTATION_BACK_SLAP_POSITION, 300)

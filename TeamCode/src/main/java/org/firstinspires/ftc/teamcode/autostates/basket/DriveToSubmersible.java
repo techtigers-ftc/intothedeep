@@ -5,8 +5,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -26,21 +28,24 @@ public class DriveToSubmersible extends DriveStateBase {
     /**
      * Constructor for the DriveToSubmersible
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @param intake The intake subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
+     * @param intake     The intake subsystem
      * @param robotState The robot state
      */
     public DriveToSubmersible(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
                         new WaitCommand(100),
                         new ParallelCommandGroup(
-                                new DropperPreTransferAction(dropper, robotState),
-                                new IntakeTuckAction(intake, robotState)
+                                new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION,
+                                        300),
+                                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
+                                new IntakeTuckAction(intake, robotState),
+                                new DropperSlidesAbsoluteAction(dropper, 14, 1)
                         )
                 )
         );
@@ -51,6 +56,8 @@ public class DriveToSubmersible extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.PRE_TRANSFER) {
             return AutoState.DRIVE_END;
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            return AutoState.TIMEOUT;
         }
 
         return AutoState.RUNNING;
