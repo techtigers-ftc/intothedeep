@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -44,15 +45,15 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         () -> robotState.getRobotCurrentPose().getX(),
                         () -> robotState.getRobotCurrentPose().getY(),
                         headingSupplier,
-                        0.2, Math.toRadians(2)
+                        0.3, Math.toRadians(2)
                 ),
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                headingSupplier, 0.2, Math.toRadians(2)
+                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse() + 1,
+                                headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
                 new IntakeReadyToPickupAction(intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION)

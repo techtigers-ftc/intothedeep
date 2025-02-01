@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -21,9 +22,10 @@ import team.techtigers.core.paths.Waypoint;
 /**
  * A action which uses pedro pathing to hold to a given point
  */
+@Config
 public class TeleHoldPointAction extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
-    private static final double TIMEOUT = 1;
+    public static double TIMEOUT = 10;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
@@ -103,21 +105,17 @@ public class TeleHoldPointAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.25, 0, 0.04,
-                0));
-        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.001, 0.6, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
-        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.25, 0, 0.04, 0));
-        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.003, 0, 0.001, 0.6, 0));
-        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(3.5, 0,
-                0, 0));
+//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05,
+//                0));
+//        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
+//        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
 
         follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP, 0, TuningConstants.dDriveD, 0.6, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.eHeadingP, 0, TuningConstants.fHeadingD, 0));
-        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP, 0, TuningConstants.hSecondaryTranslationalD, 0));
-        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP, 0, TuningConstants.jSecondaryDriveD, 0.6, 0));
-        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP, 0, TuningConstants.lSecondaryHeadingD, 0));
+//        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP, 0, TuningConstants.hSecondaryTranslationalD, 0));
+//        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP, 0, TuningConstants.jSecondaryDriveD, 0.6, 0));
+//        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP, 0, TuningConstants.lSecondaryHeadingD, 0));
 
 
 
