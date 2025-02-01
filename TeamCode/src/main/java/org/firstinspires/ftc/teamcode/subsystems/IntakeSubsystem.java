@@ -46,6 +46,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
 
+    public static final double SLIDES_TRANSFER_POSITION = 0;
+
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 145.1;
