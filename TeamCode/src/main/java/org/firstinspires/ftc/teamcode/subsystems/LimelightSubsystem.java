@@ -30,6 +30,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private static final double HEAVY_WEIGHT = 2;
 
+    // Orientation exponential function parameters
+    private static final double ORIENTATION_V_COMPRESS = 0.719428;
+    private static final double ORIENTATION_BASE = 1.0629;
+    private static final double ORIENTATION_TURN_THRESHOLD = 111;
+
+
     // Forward offset logistic function parameters
     private static final double FORWARD_FLOOR = 1.34;
     private static final double FORWARD_C = -1.77;
@@ -63,6 +69,33 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.setPollRateHz(50);
         limelight.start();
         limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
+    }
+
+    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
+        // Width is the distance between the top right and bottom right corners of the detection
+        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+    }
+
+    private double getClawAngle(LLResultTypes.DetectorResult detection) {
+        double blockWidth = getBlockWidth(detection);
+        RobotLog.dd(tag, "block width detection:%f", blockWidth);
+        double distance = getBlockDistances(detection)[1];
+//        double widthScalar = 0.000523061 * Math.pow(distance, 4)-0.0227837 * Math.pow(distance, 3)+0.348316 * Math.pow(distance, 2)-2.09751 * distance+5.15031;
+        double widthScalar = 0.000447842 * Math.pow(distance, 4) - 0.020271 * Math.pow(distance, 3) + 0.320859 * Math.pow(distance, 2) - 1.98378 * distance + 5.00345;
+        RobotLog.dd(tag, "width scalar: %f", widthScalar);
+//        double widthScalar = ORIENTATION_V_COMPRESS * Math.pow(ORIENTATION_BASE, distance);
+        double normalizedBlockWidth = blockWidth * widthScalar;
+        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
+        if (normalizedBlockWidth > ORIENTATION_TURN_THRESHOLD) {
+            return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
+        } else {
+            return 180;
+        }
     }
 
     /**
@@ -126,7 +159,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
         double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
-        double finalXDist = xDist + 0.375;
+        double finalXDist = xDist + 0.4;
 
         return new double[]{finalXDist, finalYDist};
     }
@@ -179,7 +212,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         for (LLResultTypes.DetectorResult validDetection : validDetections) {
             double xDist = getBlockDistances(validDetection)[0];
             double yDist = getBlockDistances(validDetection)[1];
-            if (xDist >= -5 && xDist <= 2 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+            if (xDist >= -5 && xDist <= 1 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
                 greatDetections.add(validDetection);
             }
         }
@@ -204,6 +237,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Sets the coarse forward and lateral distances of the block found to be closest to the robot
         robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
         robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);
+        robotState.setBlockOrientation(getClawAngle(bestDetection));
     }
 
     @Override

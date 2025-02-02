@@ -65,19 +65,6 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER && !robotState.isAuto()) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
-    }
-
-    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {

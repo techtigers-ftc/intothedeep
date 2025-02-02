@@ -135,7 +135,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), () -> 90,
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation,
                 driverGamepad);
 
         // Button Triggers + Manual trigger
@@ -352,6 +352,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
+        telemetry.addData("Block Orientation", robotState.getBlockOrientation());
         telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
     }
