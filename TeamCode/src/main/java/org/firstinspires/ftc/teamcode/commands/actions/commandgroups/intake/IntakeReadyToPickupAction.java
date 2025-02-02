@@ -39,7 +39,8 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 100),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100)
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100),
+                        new IntakeOpenAction(intake, 0)
                 ),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake,
