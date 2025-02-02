@@ -126,10 +126,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
         double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
-        // Uses a cube root correction function to correct the x distance to the final x distance
-        double XCorrectiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
-        RobotLog.dd(tag, "Lateral Corrective Factor:%f", XCorrectiveFactor);
-        double finalXDist = xDist + XCorrectiveFactor + 0.375;
+        double finalXDist = xDist + 0.375;
 
         return new double[]{finalXDist, finalYDist};
     }
@@ -182,7 +179,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         for (LLResultTypes.DetectorResult validDetection : validDetections) {
             double xDist = getBlockDistances(validDetection)[0];
             double yDist = getBlockDistances(validDetection)[1];
-            if (xDist >= -4 && xDist <= 3 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+            if (xDist >= -5 && xDist <= 2 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
                 greatDetections.add(validDetection);
             }
         }
