@@ -43,9 +43,7 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
                 new IntakeVisionPickupAction(intake, dropper, drive, robotState,
                         () -> robotState.getRobotCurrentPose().getHeading(),
                         () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()),
-                        null),
-                new IntakeFullReadyToTransferAction(intake, dropper, robotState)
-        );
+                        null));
     }
 
     @Override

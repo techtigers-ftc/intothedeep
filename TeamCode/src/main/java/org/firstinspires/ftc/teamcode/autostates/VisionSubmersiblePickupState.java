@@ -33,8 +33,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), () -> 90,null),
-                new IntakeFullReadyToTransferAction(intake, dropper, robotState)
+                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation,null)
         );
     }
 
