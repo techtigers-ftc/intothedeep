@@ -8,7 +8,6 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -29,9 +28,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
@@ -138,9 +135,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState,
-                () -> robotState.getRobotCurrentPose().getHeading(), // robotState
-                // ::getVisionIntakeHeading,
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), () -> 90,
                 driverGamepad);
 
         // Button Triggers + Manual trigger
@@ -240,7 +235,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
                 new ChangeBlockColorPreferenceCommand(robotState, manipulatorGamepad);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                    changeBlockColorPreferenceCommand);
+                changeBlockColorPreferenceCommand);
 
         // Dropper TODO: Split into a different method
 
@@ -304,7 +299,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
             Gamepad.RumbleEffect endgameRumbleEffect = new Gamepad.RumbleEffect.Builder()
                     .addStep(
-                        1, 1, 1000
+                            1, 1, 1000
                     )
                     .addStep(
                             0, 0, 500

@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -25,16 +24,16 @@ import team.techtigers.core.paths.Waypoint;
 @Config
 public class TeleHoldPointAction extends CommandBase {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
-    public static double TIMEOUT = 2;
+    public static double TIMEOUT = 1000000;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private final Follower follower;
+    private final ElapsedTime timer;
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
-    private final ElapsedTime timer;
 
     /**
      * Creates a new HoldPointAction
@@ -48,9 +47,9 @@ public class TeleHoldPointAction extends CommandBase {
      * @param angleTolerance  the tolerance for the angle to the target
      */
     public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
-                            DoubleSupplier xSupplier,
-                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
-                           double tolerance, double angleTolerance) {
+                               DoubleSupplier xSupplier,
+                               DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                               double tolerance, double angleTolerance) {
         this.drive = drive;
         this.robotState = robotState;
         this.xSupplier = xSupplier;
@@ -74,9 +73,9 @@ public class TeleHoldPointAction extends CommandBase {
      * @param angleTolerance the tolerance for the angle to the target
      */
     public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
-                            double x,
-                           double y, double heading,
-                           double tolerance, double angleTolerance) {
+                               double x,
+                               double y, double heading,
+                               double tolerance, double angleTolerance) {
         this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
@@ -105,9 +104,10 @@ public class TeleHoldPointAction extends CommandBase {
     @Override
     public void initialize() {
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0.01));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
+        follower.disableSecondaryPIDS();
 
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
@@ -136,7 +136,7 @@ public class TeleHoldPointAction extends CommandBase {
         return
                 (distToTarget(current, target) < tolerance
                         && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance)
-                || timer.seconds() > TIMEOUT;
+                        || timer.seconds() > TIMEOUT;
     }
 
     @Override

@@ -27,6 +27,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param drive           the drive subsystem
      * @param robotState      the robot state
      * @param headingSupplier the heading supplier that supplier the heading values to the target position
+     * @param clawRotationSupplier the claw rotation supplier that supplies the claw rotation values to the target position
      * @param gamepad         the driver gamepad, which is rumbled during a
      *                        drive takeover. If a null gamepad is passed in,
      *                        nothing will rumble
@@ -36,6 +37,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     DriveSubsystem drive,
                                     RobotState robotState,
                                     DoubleSupplier headingSupplier,
+                                    DoubleSupplier clawRotationSupplier,
                                     GamepadEx gamepad) {
         addRequirements(intake, dropper, drive);
         addCommands(
@@ -50,12 +52,12 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakePrepareToPickupAction(intake, dropper, robotState, robotState::getBlockForwardCoarse),
                         new TeleHoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse(),
-                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * robotState.getBlockLateralCoarse() + 1,
+                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
+                                () -> robotState.getRobotCurrentPose().getY() + Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
-                new IntakeReadyToPickupAction(intake, robotState, intake::getCurrentSlidePositionInches, robotState::getBlockOrientation)
+                new IntakeReadyToPickupAction(intake, robotState, intake::getCurrentSlidePositionInches, clawRotationSupplier)
         );
     }
 
@@ -75,7 +77,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     DriveSubsystem drive,
                                     RobotState robotState, double heading,
                                     GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> heading, gamepad);
+        this(intake, dropper, drive, robotState, () -> heading, robotState::getBlockOrientation, gamepad);
     }
 
     /**
@@ -93,6 +95,6 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     DriveSubsystem drive,
                                     RobotState robotState,
                                     GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), gamepad);
+        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation,gamepad);
     }
 }
