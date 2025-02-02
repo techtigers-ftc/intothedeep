@@ -115,17 +115,18 @@ public class LimelightSubsystem extends CloseableSubsystem {
      * @return the corrected x and y distances of the block from the robot
      */
     private double[] getBlockDistances(LLResultTypes.DetectorResult detection) {
+        // Gets the raw ty values from the limelight and converts them to rough forward distances
         double rawTy = detection.getTargetYDegrees();
         double ty = LIMELIGHT_DOWNWARD_ANGLE - rawTy;
         double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
+        // Uses a logistic correction function to correct the y distance to the final y distance
         double YCorrectiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
         RobotLog.dd(tag, "Forward Corrective Factor:%f", YCorrectiveFactor);
         double finalYDist = yDist - YCorrectiveFactor + 0.375;
+        // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
         double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
-        double XCorrectiveFactor = LATERAL_V_STRETCH * Math.cbrt(xDist + LATERAL_H_SHIFT) + LATERAL_V_SHIFT;
-        RobotLog.dd(tag, "Lateral Corrective Factor:%f", XCorrectiveFactor);
-        double finalXDist = xDist + XCorrectiveFactor + 0.375;
+        double finalXDist = xDist + 0.375;
 
         return new double[]{finalXDist, finalYDist};
     }
@@ -149,46 +150,58 @@ public class LimelightSubsystem extends CloseableSubsystem {
      */
     private void setBlockAttributes(List<LLResultTypes.DetectorResult> detections) {
         double distance = 1000;
+        // List of valid detections
         ArrayList<LLResultTypes.DetectorResult> validDetections = new ArrayList<>();
+        // List of detections within the distance ranges set
         ArrayList<LLResultTypes.DetectorResult> greatDetections = new ArrayList<>();
+        // The detection closest to the robot
         LLResultTypes.DetectorResult bestDetection = null;
 
+        // Checks to see if there are any detected blocks
         for (LLResultTypes.DetectorResult detection : detections) {
+            // Checks to see that there is actually a detection
+            // (The limelight returns 0 for tx and ty values if there is no detection)
             if (detection.getTargetXDegrees() != 0 && detection.getTargetYDegrees() != 0) {
+                // Adds a block to the valid detections list if it is the preferred color
                 if (isDetectionPreferredColor(detection)) {
                     validDetections.add(detection);
                 }
             }
         }
 
+        // Sets the block detection state to not detected if no blocks are detected
         if (validDetections.isEmpty()) {
             replaceCache(BlockDetectionState.NOT_DETECTED);
             return;
         }
 
-        for (LLResultTypes.DetectorResult goodDetection : validDetections) {
-            double xDist = getBlockDistances(goodDetection)[0];
-            double yDist = getBlockDistances(goodDetection)[1];
-            if (xDist >= -4 && xDist <= 3 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
-                greatDetections.add(goodDetection);
+        // Checks to see if the valid detections are  within the set distance ranges
+        for (LLResultTypes.DetectorResult validDetection : validDetections) {
+            double xDist = getBlockDistances(validDetection)[0];
+            double yDist = getBlockDistances(validDetection)[1];
+            if (xDist >= -5 && xDist <= 2 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+                greatDetections.add(validDetection);
             }
         }
 
+        // Sets the block detection state to too far if all the detected blocks aren't within the
+        // set distance ranges
         if (greatDetections.isEmpty()) {
             replaceCache(BlockDetectionState.TOO_FAR);
             return;
         }
 
+        // Finds the block closest to the robot from the list of valid detections within the set bounds
         for (LLResultTypes.DetectorResult greatDetection : greatDetections) {
             if (getWeightedEuclideanDistance(getBlockDistances(greatDetection)) < distance) {
                 distance = getWeightedEuclideanDistance(getBlockDistances(greatDetection));
                 bestDetection = greatDetection;
             }
-            RobotLog.dd(tag, "Euclidian Distance: %f", getWeightedEuclideanDistance(getBlockDistances(greatDetection)));
         }
 
-        RobotLog.dd(tag, "Best block euclidian distance: %f", getWeightedEuclideanDistance(getBlockDistances(bestDetection)));
+        // Sets the block detection state to detected
         robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+        // Sets the coarse forward and lateral distances of the block found to be closest to the robot
         robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
         robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);
     }
