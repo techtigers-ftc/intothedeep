@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -25,10 +24,10 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
     /**
      * Constructor for the VisionFloorPickupState
      *
-     * @param name The name of the state
-     * @param intake The intake subsystem
-     * @param dropper The dropper subsystem
-     * @param drive the drive subsystem
+     * @param name       The name of the state
+     * @param intake     The intake subsystem
+     * @param dropper    The dropper subsystem
+     * @param drive      the drive subsystem
      * @param robotState The robot state
      */
     public VisionFloorPickupState(String name, IntakeSubsystem intake,
@@ -54,11 +53,12 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
 
     /**
      * Get the current condition of the robot
+     *
      * @return the current condition of the robot using the AutoState enum
      */
     @Override
     public AutoState getCurrentCondition() {
-        if(super.isTimeoutReached()) {
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -22,10 +21,10 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
     /**
      * Creates a new VisionSubmersiblePickupState
      *
-     * @param name the name of the state
-     * @param intake the intake subsystem
-     * @param dropper the dropper subsystem
-     * @param drive the drive subsystem
+     * @param name       the name of the state
+     * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param drive      the drive subsystem
      * @param robotState the robot state
      */
     public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
@@ -33,7 +32,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation,null)
+                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation, null)
         );
     }
 
@@ -45,7 +44,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
 
     @Override
     public AutoState getCurrentCondition() {
-        if(super.isTimeoutReached()) {
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
