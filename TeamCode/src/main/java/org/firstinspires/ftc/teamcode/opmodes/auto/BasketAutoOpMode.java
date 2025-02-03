@@ -83,6 +83,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 drive,
+                limelight,
                 robotState
                 );
 
@@ -129,6 +130,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 drive,
+                limelight,
                 robotState
         );
 
@@ -203,7 +205,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToSecondIntake, AutoState.SAMPLE_1_DROP_COMPLETE)
                 .addTransition(driveToSecondIntake, intakeFloorSample, AutoState.DRIVE_END)
-                .addTransition(intakeFloorSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_COMPLETE)
+//                .addTransition(intakeFloorSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_COMPLETE)
                 .addTransition(driveToSecondDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToThirdIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
                 .addTransition(driveToThirdIntake, intakeFloorSample, AutoState.DRIVE_END)

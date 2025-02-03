@@ -34,6 +34,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
+     * @param command    the command to cancel
      */
     public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
                                            DropperSubsystem dropper,
@@ -59,7 +60,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeLoosenAction(intake, 350)
                 ),
                 new IntakeCloseAction(intake, 50),
-                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
+                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.3)
         );
     }
 

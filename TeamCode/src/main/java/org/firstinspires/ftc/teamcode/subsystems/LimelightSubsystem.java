@@ -47,6 +47,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_H_SHIFT = -2.7;
     private static final double LATERAL_V_SHIFT = 2.47;
 
+    // Lateral bounds
+    private double lateralLowerBound = -5;
+    private double lateralUpperBound = 1;
+
     private final RobotState robotState;
     private final Limelight3A limelight;
 
@@ -176,6 +180,36 @@ public class LimelightSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * @return lower bound for determining if blocks are too far laterally
+     */
+    public double getLateralLowerBound() {
+        return lateralLowerBound;
+    }
+
+    /**
+     * Sets the lower bound for determining if blocks are too far laterally
+     * @param lateralLowerBound the bound to set
+     */
+    public void setLateralLowerBound(double lateralLowerBound) {
+        this.lateralLowerBound = lateralLowerBound;
+    }
+
+    /**
+     * @return upper bound for determining if blocks are too far laterally
+     */
+    public double getLateralUpperBound() {
+        return lateralUpperBound;
+    }
+
+    /**
+     * Sets the upper bound for determining if blocks are too far laterally
+     * @param lateralUpperBound the bound to set
+     */
+    public void setLateralUpperBound(double lateralUpperBound) {
+        this.lateralUpperBound = lateralUpperBound;
+    }
+
+    /**
      * Goes through all of the limelight detections, checking to find the block that is deemed
      * most ideal to pickup; also sets the block detection state
      *
@@ -212,7 +246,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         for (LLResultTypes.DetectorResult validDetection : validDetections) {
             double xDist = getBlockDistances(validDetection)[0];
             double yDist = getBlockDistances(validDetection)[1];
-            if (xDist >= -5 && xDist <= 1 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+            if (xDist >= lateralLowerBound && xDist <= lateralUpperBound && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
                 greatDetections.add(validDetection);
             }
         }
