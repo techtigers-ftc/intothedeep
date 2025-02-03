@@ -92,6 +92,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         } else {
             robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+            robotState.setCurrentGear(DriveGears.ENGAGED);
             intake.setClawRotationAbsolute(lastClawRotation);
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
