@@ -5,14 +5,13 @@ import static android.os.SystemClock.sleep;
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.teamcode.cv.BetterDetectionProcessor;
 import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.concurrent.TimeUnit;
@@ -42,7 +41,8 @@ public class VisionSubsystem extends CloseableSubsystem {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
                 .setCameraResolution(new Size(SampleDetectionProcessor.WIDTH_RESOLUTION, SampleDetectionProcessor.HEIGHT_RESOLUTION))
-                .addProcessor(new SampleDetectionProcessor(robotState))
+//                .addProcessor(new SampleDetectionProcessor(robotState))
+                .addProcessor(new BetterDetectionProcessor(robotState))
                 .build();
     }
 
