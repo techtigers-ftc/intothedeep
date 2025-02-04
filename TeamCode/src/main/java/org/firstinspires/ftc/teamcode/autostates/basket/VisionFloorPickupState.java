@@ -47,7 +47,7 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
         runCounter = 0;
         addCommands(
                 new LimelightLateralBoundsAction(limelight, -3, 3),
-                new WaitCommand(250),
+                new WaitCommand(500),
                 new IntakeVisionPickupAction(intake, dropper, drive, robotState,
                         () -> robotState.getRobotCurrentPose().getHeading(),
                         () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()),
