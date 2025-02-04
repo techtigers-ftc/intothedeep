@@ -23,12 +23,15 @@ public class VisionTestOpmode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        GamepadEx gamepadEx = new GamepadEx(gamepad1);
-        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 0.5, robotState));
+        GamepadEx driverGamepad = new GamepadEx(gamepad1);
         robotState = new RobotState(true, false);
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
-        registerSubsystems(vision);
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 100, robotState));
+
+        registerSubsystems(vision, intakeSubsystem);
     }
 
     @Override

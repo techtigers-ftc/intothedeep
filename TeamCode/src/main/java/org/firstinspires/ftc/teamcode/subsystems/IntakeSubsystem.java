@@ -87,6 +87,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final NormalizedColorSensor colorSensor;
     private final DistanceSensor distanceSensor;
     private final ElapsedTime colorSensorTimer;
+    private boolean isDirectControlEnabled;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -132,6 +133,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setDirection(Servo.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
+
+        isDirectControlEnabled = false;
 
         if (robotState.isAuto()) {
             init();
@@ -450,13 +453,31 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the direct control motor mode
+     *
+     * @param directControlEnabled boolean to set the direct control to
+     */
+    public void setDirectControl(boolean directControlEnabled) {
+        isDirectControlEnabled = directControlEnabled;
+    }
+
+    public void setMotorPower(double power) {
+        if (isDirectControlEnabled) {
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
     public void periodic() {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
+        if (!isDirectControlEnabled) {
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
 
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());

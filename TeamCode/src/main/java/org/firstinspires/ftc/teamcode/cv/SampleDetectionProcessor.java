@@ -184,6 +184,9 @@ public class SampleDetectionProcessor implements VisionProcessor {
             bestBlock = blockPoses.get(0);
         } catch (Exception e) {
 //            throw new RuntimeException(blockPoses.toString());
+            robotState.setBlockForwardFine(-1);
+            robotState.setBlockLateralFine(-1);
+            robotState.setBlockOrientation(-1);
             return processedMat;
         }
 
