@@ -32,6 +32,7 @@ import team.techtigers.core.utils.RobotSaveState;
 @Config
 public abstract class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
+    private IntakeSubsystem intake;
 
     protected abstract boolean isBlue();
 
@@ -55,7 +56,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
                 robotState);
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        intake = new IntakeSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
 
@@ -201,11 +202,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToFirstIntake, AutoState.SAMPLE_PRELOAD_DROP_COMPLETE)
                 .addTransition(driveToFirstIntake, intakeFloorSample, AutoState.DRIVE_END)
-                .addTransition(intakeFloorSample, driveToFirstDrop, AutoState.SAMPLE_1_INTAKE_COMPLETE)
+//                .addTransition(intakeFloorSample, driveToFirstDrop, AutoState.SAMPLE_1_INTAKE_COMPLETE)
                 .addTransition(driveToFirstDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToSecondIntake, AutoState.SAMPLE_1_DROP_COMPLETE)
                 .addTransition(driveToSecondIntake, intakeFloorSample, AutoState.DRIVE_END)
-//                .addTransition(intakeFloorSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_COMPLETE)
+                .addTransition(intakeFloorSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_COMPLETE)
                 .addTransition(driveToSecondDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToThirdIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
                 .addTransition(driveToThirdIntake, intakeFloorSample, AutoState.DRIVE_END)
@@ -251,6 +252,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("block forward distance", robotState.getBlockForwardCoarse());
         telemetry.addData("block lateral distance", robotState.getBlockLateralCoarse());
+        telemetry.addLine();
+        double currentPos = intake.getCurrentSlidePositionInches();
+        double expectedPos = intake.getTargetPositionInches();
+        telemetry.addData("Current slide position (inches)", currentPos);
+        telemetry.addData("Expected slide position (inches)", expectedPos);
     }
 
     @Override
