@@ -195,7 +195,8 @@ public class SampleDetectionProcessor implements VisionProcessor {
         double avgY = bestBlock.getY();
         double avgX = bestBlock.getX();
         double orientation = bestBlock.getHeading();
-        robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
+//        robotState.setBlockForwardFine((HEIGHT_RESOLUTION - avgY) / HEIGHT_RESOLUTION * CAMERA_VIEWING_VERTICAL_DIST - CAMERA_VIEWING_VERTICAL_OVERLAP);
+        robotState.setBlockForwardFine(avgY);
         robotState.setBlockLateralFine((avgX - WIDTH_RESOLUTION / 2.) / WIDTH_RESOLUTION * CAMERA_VIEWING_HORIZONTAL_DIST);
         robotState.setBlockOrientation((Math.toDegrees(orientation) + 180) % 180);
 

@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
@@ -15,9 +19,12 @@ import team.techtigers.base.BaseOpMode;
 @SuppressWarnings("unused")
 public class VisionTestOpmode extends BaseOpMode {
     RobotState robotState;
+    IntakeSubsystem intakeSubsystem;
 
     @Override
     public void initialize() {
+        GamepadEx gamepadEx = new GamepadEx(gamepad1);
+        gamepadEx.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 0.5, robotState));
         robotState = new RobotState(true, false);
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
