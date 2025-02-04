@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightLateralBoundsAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
@@ -44,7 +47,7 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
         runCounter = 0;
         addCommands(
                 new LimelightLateralBoundsAction(limelight, -3, 3),
-                new WaitCommand(100),
+                new WaitCommand(250),
                 new IntakeVisionPickupAction(intake, dropper, drive, robotState,
                         () -> robotState.getRobotCurrentPose().getHeading(),
                         () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()),
@@ -55,6 +58,7 @@ public class VisionFloorPickupState extends SequentialCommandGroupState<AutoStat
     public void initialize() {
         runCounter++;
         super.initialize();
+        robotState.setBlockColorPreference(BlockColorPreference.YELLOW);
     }
 
     @Override
