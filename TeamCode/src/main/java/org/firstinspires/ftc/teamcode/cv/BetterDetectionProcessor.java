@@ -533,6 +533,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
 
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+                robotState.setBlockForwardFine(-1);
+                robotState.setBlockLateralFine(-1);
+                robotState.setBlockOrientation(0);
             }
 
 
