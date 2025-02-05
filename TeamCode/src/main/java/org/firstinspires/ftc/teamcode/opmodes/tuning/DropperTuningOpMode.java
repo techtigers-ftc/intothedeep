@@ -44,10 +44,6 @@ public class DropperTuningOpMode extends BaseOpMode {
             dropperSubsystem.openClaw();
         }));
 
-        //Wall Intake
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new DropperWallIntakeAction(dropperSubsystem, robotState, drive));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new DropperForwardCarryWallAction(dropperSubsystem, robotState, drive));
-
         // Pitch
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.setPitchRelative(-5);
