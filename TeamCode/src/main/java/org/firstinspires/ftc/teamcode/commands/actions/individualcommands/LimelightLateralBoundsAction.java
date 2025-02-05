@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands.actions.individualcommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 
 /**
  * Sets the limelight lateral bounds to given parameters
  */
-public class LimelightLateralBoundsAction extends CommandBase {
+public class LimelightLateralBoundsAction extends InstantCommand {
     private static final String LOG_TAG = LimelightLateralBoundsAction.class.getSimpleName();
     private final LimelightSubsystem limelight;
     private double lowerBound;
@@ -31,10 +32,5 @@ public class LimelightLateralBoundsAction extends CommandBase {
     public void initialize() {
         limelight.setLateralLowerBound(lowerBound);
         limelight.setLateralUpperBound(upperBound);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
     }
 }
