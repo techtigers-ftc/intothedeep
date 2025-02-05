@@ -5,7 +5,9 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -50,13 +52,15 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 ),
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
-                        new IntakeReadyToPickupAction(intake, robotState, robotState::getBlockForwardCoarse, clawRotationSupplier),
+                        new IntakePrepareToPickupAction(intake, dropper, robotState::getBlockForwardCoarse, robotState),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
+                new IntakeTrackingAction(intake, 50, robotState),
+                new IntakeReadyToPickupAction(intake, robotState, intake::getCurrentSlidePositionInches, clawRotationSupplier),
                 new IntakeFullReadyToTransferAction(intake, dropper, robotState, this)
         );
     }
@@ -77,7 +81,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     DriveSubsystem drive,
                                     RobotState robotState, double heading,
                                     GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> heading, robotState::getBlockOrientation, gamepad);
+        this(intake, dropper, drive, robotState, () -> heading, robotState::getDetectedFineBlockOrientation, gamepad);
     }
 
     /**
@@ -95,6 +99,6 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                     DriveSubsystem drive,
                                     RobotState robotState,
                                     GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation, gamepad);
+        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getDetectedFineBlockOrientation, gamepad);
     }
 }
