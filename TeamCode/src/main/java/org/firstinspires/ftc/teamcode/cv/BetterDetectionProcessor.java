@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class BetterDetectionProcessor implements VisionProcessor {
     // Camera settings
-    public static final int WIDTH_RESOLUTION = 640;
+    public static final int WIDTH_RESOLUTION = 320;
     public static final int HEIGHT_RESOLUTION = 480;
     public static final int CAMERA_ANGLE_HEIGHT_CENTER = 280;
     static final int CAMERA_FPS = 120;

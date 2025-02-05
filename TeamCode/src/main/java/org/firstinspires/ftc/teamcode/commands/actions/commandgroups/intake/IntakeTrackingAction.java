@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
-    private static final double TARGET_Y = 450;
-    public static double FORWARD_KP = 0.001;
+    private static final double TARGET_Y = 150;
+    public static double FORWARD_KP = 0.003;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0;
     public static double FORWARD_KF = 0;
@@ -71,6 +71,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
         robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(-3.5);
+        intake.moveSlidesRelative(-2.25);
     }
 }
