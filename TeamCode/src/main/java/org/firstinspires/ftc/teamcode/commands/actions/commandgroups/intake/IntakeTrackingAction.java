@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -16,21 +15,21 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
     private static final double TARGET_Y = 450;
-    private final IntakeSubsystem intake;
-    private final RobotState robotState;
+    private static final double PIXELS_PER_INCH = 88.27586207;
     public static double FORWARD_KP = 0.001;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0;
     public static double FORWARD_KF = 0;
-    private static final double PIXELS_PER_INCH = 88.27586207;
     public final PIDFController pidfController;
+    private final IntakeSubsystem intake;
+    private final RobotState robotState;
     private double tolerance;
 
     /**
      * Constructs a new IntakeTrackingAction
      *
-     * @param intake the intake subsystem
-     * @param tolerance the tolerance for the command (in pixels)
+     * @param intake     the intake subsystem
+     * @param tolerance  the tolerance for the command (in pixels)
      * @param robotState robot state
      */
     public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {

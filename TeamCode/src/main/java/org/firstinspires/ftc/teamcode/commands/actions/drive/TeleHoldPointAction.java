@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
@@ -10,11 +8,9 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import java.util.function.DoubleSupplier;
 
@@ -48,9 +44,9 @@ public class TeleHoldPointAction extends TimeoutCommand {
      * @param angleTolerance  the tolerance for the angle to the target
      */
     public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
-                            DoubleSupplier xSupplier,
-                           DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
-                           double tolerance, double angleTolerance) {
+                               DoubleSupplier xSupplier,
+                               DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                               double tolerance, double angleTolerance) {
         super(TIMEOUT);
         this.drive = drive;
         this.robotState = robotState;
@@ -74,9 +70,9 @@ public class TeleHoldPointAction extends TimeoutCommand {
      * @param angleTolerance the tolerance for the angle to the target
      */
     public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
-                            double x,
-                           double y, double heading,
-                           double tolerance, double angleTolerance) {
+                               double x,
+                               double y, double heading,
+                               double tolerance, double angleTolerance) {
         this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
@@ -136,7 +132,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
         return
                 (distToTarget(current, target) < tolerance
                         && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance)
-                || isTimeoutReached();
+                        || isTimeoutReached();
     }
 
     @Override
