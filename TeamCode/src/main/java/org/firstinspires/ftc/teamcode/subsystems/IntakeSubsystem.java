@@ -461,10 +461,17 @@ public class IntakeSubsystem extends CloseableSubsystem {
         isDirectControlEnabled = directControlEnabled;
     }
 
+    /**
+     * Sets both slide motors to a given power
+     *
+     * @param power the given power to set the motors to
+     */
     public void setMotorPower(double power) {
         if (isDirectControlEnabled) {
-            if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power <0)) {
+            if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power < 0)) {
                 power = 0;
+            } else if (robotState.getVoltage() != 0) {
+                power = Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
             }
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);

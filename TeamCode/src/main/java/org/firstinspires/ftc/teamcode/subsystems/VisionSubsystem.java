@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.cv.BetterDetectionProcessor;
-import org.firstinspires.ftc.teamcode.cv.SampleDetectionProcessor;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -40,8 +39,7 @@ public class VisionSubsystem extends CloseableSubsystem {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(SampleDetectionProcessor.WIDTH_RESOLUTION, SampleDetectionProcessor.HEIGHT_RESOLUTION))
-//                .addProcessor(new SampleDetectionProcessor(robotState))
+                .setCameraResolution(new Size(640, 480))
                 .addProcessor(new BetterDetectionProcessor(robotState))
                 .build();
     }
