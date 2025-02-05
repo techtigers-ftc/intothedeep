@@ -34,16 +34,16 @@ import team.techtigers.base.CloseableSubsystem;
 public class IntakeSubsystem extends CloseableSubsystem {
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 0;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 8;
     public static final double CLAW_ROTATION_TUCK_POSITION = 77;
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 178;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 60;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 178;
     public static final double WRIST_PITCH_PECK_POSITION = 100;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 8;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
@@ -87,6 +87,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final NormalizedColorSensor colorSensor;
     private final DistanceSensor distanceSensor;
     private final ElapsedTime colorSensorTimer;
+    private boolean isDirectControlEnabled;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -132,6 +133,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightClaw.setDirection(Servo.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
+
+        isDirectControlEnabled = false;
 
         if (robotState.isAuto()) {
             init();
@@ -450,13 +453,42 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
+     * Sets the direct control motor mode
+     *
+     * @param directControlEnabled boolean to set the direct control to
+     */
+    public void setDirectControl(boolean directControlEnabled) {
+        isDirectControlEnabled = directControlEnabled;
+    }
+
+    /**
+     * Sets both slide motors to a given power, also using voltage to compensate for the correct power
+     *
+     * @param power the given power to set the motors to
+     */
+    public void setMotorPower(double power) {
+        if (isDirectControlEnabled) {
+            if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power < 0)) {
+                power = 0;
+            } else if (robotState.getVoltage() != 0) {
+                power = Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+            }
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
+    }
+
+    /**
      * Updates and powers motors every cycle
      */
     @Override
     public void periodic() {
         double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
-        leftSlideMotor.setPower(power);
-        rightSlideMotor.setPower(power);
+        // TODO: add voltage compensation to intake subsystem
+        if (!isDirectControlEnabled) {
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
+        }
 
         robotState.setHorizontalExtended(encoderMotor.getCurrentPosition() > 100);
         double[] wristAngles = differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition());
