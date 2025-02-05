@@ -62,7 +62,6 @@ public class BetterDetectionProcessor implements VisionProcessor {
     static final double SMALL_CONTOUR_AREA = 200;
     // Minimum average brightness threshold (0-255)
     static final double MIN_BRIGHTNESS_THRESHOLD = 60;
-    private static final double PIXELS_PER_INCH = 88.27586207;
     private static final Translation2d center = new Translation2d(WIDTH_RESOLUTION / 2., CAMERA_ANGLE_HEIGHT_CENTER);
     // Track OpenCV function calls and timing
     // opencv_stats equivalent: a Map from function name to its count and total_time
@@ -526,10 +525,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 }
                 robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
                 robotState.setBlockOrientation((double) bestPiece.get("angle"));
-//                robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y / PIXELS_PER_INCH);
                 robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
 
-                robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x / PIXELS_PER_INCH);
+                robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
 
             } else {
                 robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
