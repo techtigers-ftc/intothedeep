@@ -82,15 +82,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.READY_TO_PICKUP) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
         lastClawRotation = intake.getClawRotation();
     }
 
