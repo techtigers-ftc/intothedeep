@@ -10,8 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-import java.util.function.DoubleSupplier;
-
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -23,7 +21,8 @@ public class RobotState extends GlobalState {
     private Waypoint robotVelocity;
     private Waypoint robotFinalPose;
     private BlockColorPreference blockColorPreference;
-    private BlockDetectionState blockDetectionState;
+    private BlockDetectionState coarseBlockDetectionState;
+    private BlockDetectionState fineBlockDetectionState;
     private double blockLateralCoarse;
     private double blockOrientation;
     private double blockForwardCoarse;
@@ -62,7 +61,8 @@ public class RobotState extends GlobalState {
         robotVelocity = new Waypoint(0, 0, 0);
         robotFinalPose = new Waypoint(0, 0, 0);
         blockColorPreference = BlockColorPreference.ANY;
-        blockDetectionState = BlockDetectionState.NOT_DETECTED;
+        coarseBlockDetectionState = BlockDetectionState.NOT_DETECTED;
+        fineBlockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
         blockOrientation = 0;
         blockForwardCoarse = 0;
@@ -382,19 +382,35 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current state of block detection
+     * @return the current state of the coarse block detection
      */
-    public BlockDetectionState getBlockDetectionState() {
-        return blockDetectionState;
+    public BlockDetectionState getCoarseBlockDetectionState() {
+        return coarseBlockDetectionState;
     }
 
     /**
-     * Sets the current state of block detection
+     * Sets the current state of the coarse block detection
      *
-     * @param blockDetectionState the state of block detection
+     * @param coarseBlockDetectionState the state of coarse block detection
      */
-    public void setBlockDetectionState(BlockDetectionState blockDetectionState) {
-        this.blockDetectionState = blockDetectionState;
+    public void setCoarseBlockDetectionState(BlockDetectionState coarseBlockDetectionState) {
+        this.coarseBlockDetectionState = coarseBlockDetectionState;
+    }
+
+    /**
+     * @return the current state of the fine block detection
+     */
+    public BlockDetectionState getFineBlockDetectionState() {
+        return fineBlockDetectionState;
+    }
+
+    /**
+     * Sets the current state of the fine block detection
+     *
+     * @param fineBlockDetectionState the state of the fine block detection
+     */
+    public void setFineBlockDetectionState(BlockDetectionState fineBlockDetectionState) {
+        this.fineBlockDetectionState = fineBlockDetectionState;
     }
 
     /**

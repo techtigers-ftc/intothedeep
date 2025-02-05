@@ -138,7 +138,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 || robotState.getRobotVelocity().getPoint().magnitude() > 1
                 || robotState.getRobotVelocity().getHeading() > Math.toRadians(3);
         if (unCache) {
-            robotState.setBlockDetectionState(state);
+            robotState.setCoarseBlockDetectionState(state);
             framesCached = 1;
         } else {
             framesCached++;
@@ -267,7 +267,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         }
 
         // Sets the block detection state to detected
-        robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+        robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
         // Sets the coarse forward and lateral distances of the block found to be closest to the robot
         robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
         robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);

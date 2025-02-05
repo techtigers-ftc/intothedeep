@@ -153,7 +153,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inPrepareToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
-        Trigger blockDetected = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger blockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
@@ -335,7 +335,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
+        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 //        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));

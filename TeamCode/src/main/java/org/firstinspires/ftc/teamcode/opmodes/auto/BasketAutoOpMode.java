@@ -248,7 +248,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
-        telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
+        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
         telemetry.addLine();
         telemetry.addData("block forward distance", robotState.getBlockForwardCoarse());
         telemetry.addData("block lateral distance", robotState.getBlockLateralCoarse());
