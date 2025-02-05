@@ -191,7 +191,7 @@ public class BasketDriveStateConfigurator {
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(110))
+                                Math.toRadians(112))
                         .build()
         );
 

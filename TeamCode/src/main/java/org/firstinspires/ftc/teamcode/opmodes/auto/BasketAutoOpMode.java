@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -59,6 +60,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
+        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropState driveToPreloadDrop = new DriveToPreloadDropState(
@@ -83,7 +85,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFirstSample",
                 intake,
                 dropper,
-                drive,
                 distToIntakeTarget(robotState, new Waypoint(22.5, 44.75)),
                 robotState
                 );
@@ -107,7 +108,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeSecondSample",
                 intake,
                 dropper,
-                drive,
                 distToIntakeTarget(robotState, new Waypoint(12.5, 44.75)),
                 robotState
         );
@@ -131,7 +131,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeThirdSample",
                 intake,
                 dropper,
-                drive,
                 distToIntakeTarget(robotState, new Waypoint(2.5, 44.75)),
                 robotState
         );
@@ -232,7 +231,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
                 .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(driveToThirdDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToFourthIntake, AutoState.SAMPLE_3_DROP_COMPLETE)
+//                .addTransition(dropSample, driveToFourthIntake, AutoState.SAMPLE_3_DROP_COMPLETE)
                 .addTransition(driveToFourthIntake, submersiblePickup, AutoState.DRIVE_END)
                 .addTransition(submersiblePickup, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_COMPLETE)
                 .addTransition(driveToFourthDrop, dropSample, AutoState.DRIVE_END)
@@ -256,7 +255,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper, sensor, limelight);
+        registerSubsystems(auto, drive, odometry, dropper, sensor, limelight, vision);
     }
 
     @Override

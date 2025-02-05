@@ -31,7 +31,7 @@ public class VisionTestOpmode extends BaseOpMode {
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 100, robotState));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 50, robotState));
 
         registerSubsystems(vision, intakeSubsystem, sensor);
     }

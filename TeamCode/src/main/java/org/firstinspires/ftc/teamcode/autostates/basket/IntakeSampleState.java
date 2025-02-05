@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
@@ -32,37 +33,24 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      * @param name           The name of the state
      * @param intake         The intake subsystem
      * @param dropper        The dropper subsystem
-     * @param drive          the drive subsystem
      * @param targetSlidePos the target position for the slides to move to
      * @param robotState     The robot state
      */
     public IntakeSampleState(String name, IntakeSubsystem intake,
                              DropperSubsystem dropper,
-                             DriveSubsystem drive,
                              DoubleSupplier targetSlidePos,
                              RobotState robotState) {
-        super(name, 5);
+        super(name, 10);
         this.robotState = robotState;
         addCommands(
-                new IntakePrepareToTransferAction(intake, dropper, () -> targetSlidePos.getAsDouble() - 2, robotState),
+//                new IntakePrepareToPickupAction(intake, dropper, () -> targetSlidePos.getAsDouble() - 1, robotState),
+                new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
                 new IntakeTrackingAction(intake, 50, robotState),
                 new IntakeReadyToPickupAction(intake, robotState,
                         intake::getCurrentSlidePositionInches,
                         () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())),
                 new IntakeFullReadyToTransferAction(intake, dropper, robotState, this)
         );
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        robotState.setBlockColorPreference(BlockColorPreference.YELLOW);
-    }
-
-    @Override
-    public void execute() {
-        super.execute();
-        RobotLog.dd(LOG_TAG, "forward limelight distance: %f", robotState.getBlockForwardCoarse());
     }
 
     /**

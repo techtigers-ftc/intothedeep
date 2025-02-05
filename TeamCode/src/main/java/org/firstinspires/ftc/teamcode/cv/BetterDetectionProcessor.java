@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.cv;
 import android.graphics.Canvas;
 
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -409,6 +410,7 @@ public class BetterDetectionProcessor implements VisionProcessor {
 
             // Combine all color masks
             Mat combined_mask = bitwise_or(bitwise_or(blue_mask, red_mask), yellow_mask);
+//            Mat combined_mask = yellow_mask; // TODO: Hack
 
             Mat kernel = Mat.ones(5, 5, CvType.CV_8UC1);
             Mat masked_frame = bitwise_and(frame, frame, combined_mask);
@@ -515,7 +517,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 }
             }
 
-            if (!contours.isEmpty()) {
+            if (!gamePieces.isEmpty()) {
+//                RobotLog.dd("detection pipeline", "Contour size: %f", contours.size());
+                RobotLog.dd("detection pipeline", "detecting block");
                 Map<String, Object> bestPiece = gamePieces.get(0);
                 for (Map<String, Object> piece : gamePieces) {
                     Point piecePosition = (Point) piece.get("position");
@@ -531,8 +535,10 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
 
                 robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
+                RobotLog.dd("detection pipeline", "detection complete");
 
             } else {
+                RobotLog.dd("detection pipeline", "not detecting block");
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                 robotState.setBlockForwardFine(-1);
                 robotState.setBlockLateralFine(-1);
@@ -542,7 +548,8 @@ public class BetterDetectionProcessor implements VisionProcessor {
 
             return contour_frame;
         } catch (Exception e) {
-            System.out.println(frame + " Error: " + e.getMessage());
+            RobotLog.dd("detection pipeline", "catching error: %s", e.getMessage());
+//            System.out.println(frame + " Error: " + e.getMessage());
             return frame;
         }
     }
