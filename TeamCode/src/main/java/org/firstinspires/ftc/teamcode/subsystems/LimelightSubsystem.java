@@ -271,7 +271,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Sets the coarse forward and lateral distances of the block found to be closest to the robot
         robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
         robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);
-        robotState.setBlockOrientation(getClawAngle(bestDetection));
+//        robotState.setBlockOrientation(getClawAngle(bestDetection));
     }
 
     @Override
