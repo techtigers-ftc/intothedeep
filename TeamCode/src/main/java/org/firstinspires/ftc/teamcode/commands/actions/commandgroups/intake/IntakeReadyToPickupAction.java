@@ -15,14 +15,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to move intake to ready to intake state
+ * Command to move intake to ready to pickup state
  */
 public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakeReadyToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeReadyToIntakeCommand
+     * Creates a new IntakeReadyToPickupCommand
      *
      * @param intake                the intake subsystem
      * @param robotState            the robot state
@@ -61,6 +61,18 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState,
                                      double clawRotationPosition) {
         this(intake, robotState, intake::getCurrentSlidePositionInches, () -> clawRotationPosition);
+    }
+
+    /**
+     * Overloaded constructor that defaults to no slide movement.
+     *
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     * @param clawRotationPosition the target claw rotation supplier
+     */
+    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState,
+                                     DoubleSupplier clawRotationPosition) {
+        this(intake, robotState, intake::getCurrentSlidePositionInches, clawRotationPosition);
     }
 
     @Override
