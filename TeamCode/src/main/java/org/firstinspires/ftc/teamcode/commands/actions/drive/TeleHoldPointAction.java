@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
@@ -23,7 +24,7 @@ import team.techtigers.core.paths.Waypoint;
  * A action which uses pedro pathing to hold to a given point
  */
 @Config
-public class TeleHoldPointAction extends CommandBase {
+public class TeleHoldPointAction extends TimeoutCommand {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
     public static double TIMEOUT = 2;
     private final double tolerance;
@@ -51,6 +52,7 @@ public class TeleHoldPointAction extends CommandBase {
                             DoubleSupplier xSupplier,
                            DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
                            double tolerance, double angleTolerance) {
+        super(TIMEOUT);
         this.drive = drive;
         this.robotState = robotState;
         this.xSupplier = xSupplier;
@@ -104,6 +106,7 @@ public class TeleHoldPointAction extends CommandBase {
 
     @Override
     public void initialize() {
+        super.initialize();
         // Set the PIDF coefficients
         follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
@@ -136,7 +139,7 @@ public class TeleHoldPointAction extends CommandBase {
         return
                 (distToTarget(current, target) < tolerance
                         && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance)
-                || timer.seconds() > TIMEOUT;
+                || isTimeoutReached();
     }
 
     @Override
