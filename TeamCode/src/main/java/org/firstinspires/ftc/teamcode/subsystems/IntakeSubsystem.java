@@ -462,7 +462,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Sets both slide motors to a given power
+     * Sets both slide motors to a given power, also using voltage to compensate for the correct power
      *
      * @param power the given power to set the motors to
      */
