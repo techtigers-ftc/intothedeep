@@ -36,7 +36,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         runCounter = 0;
         addCommands(
                 new LimelightLateralBoundsAction(limelight, -5, 1),
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation, null)
+                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getDetectedFineBlockOrientation, null)
         );
     }
 

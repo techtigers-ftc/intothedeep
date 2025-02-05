@@ -123,19 +123,19 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 5);
         IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, () -> robotState.getBlockForwardCoarse());
+                intake, dropper, () -> robotState.getBlockForwardCoarse(), robotState);
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, () -> intake.getCurrentSlidePositionInches());
+                intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
-                () -> (robotState.getBlockOrientation() + 180) % 180// This is done to translate claw rotation to block orientation
+                robotState::getDetectedFineBlockOrientation
         );
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getBlockOrientation,
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getDetectedFineBlockOrientation,
                 driverGamepad);
 
         // Button Triggers + Manual trigger
@@ -352,7 +352,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
-        telemetry.addData("Block Orientation", robotState.getBlockOrientation());
+        telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
         telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
     }

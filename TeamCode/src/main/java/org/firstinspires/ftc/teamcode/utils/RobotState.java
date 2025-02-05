@@ -25,6 +25,7 @@ public class RobotState extends GlobalState {
     private BlockDetectionState fineBlockDetectionState;
     private double blockLateralCoarse;
     private double blockOrientation;
+    private double detectedFineBlockOrientation;
     private double blockForwardCoarse;
     private BlockColor intakeBlockColor;
     private BlockColor dropperBlockColor;
@@ -65,6 +66,7 @@ public class RobotState extends GlobalState {
         fineBlockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
         blockOrientation = 0;
+        detectedFineBlockOrientation = 0;
         blockForwardCoarse = 0;
         intakeBlockColor = BlockColor.NONE;
         dropperBlockColor = BlockColor.NONE;
@@ -363,6 +365,22 @@ public class RobotState extends GlobalState {
      */
     public void setBlockOrientation(double blockOrientation) {
         this.blockOrientation = blockOrientation;
+    }
+
+    /**
+     * @return the current detected fine block orientation in degrees
+     */
+    public double getDetectedFineBlockOrientation() {
+        return detectedFineBlockOrientation;
+    }
+
+    /**
+     * Sets the current detected fine block orientation
+     *
+     * @param detectedFineBlockOrientation the orientation of the detected block in degrees
+     */
+    public void setDetectedFineBlockOrientation(double detectedFineBlockOrientation) {
+        this.detectedFineBlockOrientation = detectedFineBlockOrientation;
     }
 
     /**

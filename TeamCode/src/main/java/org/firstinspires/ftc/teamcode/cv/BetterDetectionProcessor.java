@@ -527,7 +527,7 @@ public class BetterDetectionProcessor implements VisionProcessor {
                     }
                 }
                 robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
-                robotState.setBlockOrientation((double) bestPiece.get("angle"));
+                robotState.setBlockOrientation((270 - (double) bestPiece.get("angle")) % 180);
                 robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
 
                 robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
@@ -536,6 +536,7 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                 robotState.setBlockForwardFine(-1);
                 robotState.setBlockLateralFine(-1);
+                robotState.setBlockOrientation(0);
             }
 
 

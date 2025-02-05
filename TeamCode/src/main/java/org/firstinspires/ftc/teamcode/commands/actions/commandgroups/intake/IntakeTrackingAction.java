@@ -68,6 +68,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
     @Override
     public void end(boolean interrupted) {
         RobotLog.dd("tracking action", "ending tracking action");
+        robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         intake.moveSlidesRelative(-3.5);
