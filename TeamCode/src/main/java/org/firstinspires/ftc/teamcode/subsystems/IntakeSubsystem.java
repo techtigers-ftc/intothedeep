@@ -463,6 +463,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     public void setMotorPower(double power) {
         if (isDirectControlEnabled) {
+            if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power <0)) {
+                power = 0;
+            }
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }
