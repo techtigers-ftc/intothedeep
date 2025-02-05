@@ -39,7 +39,7 @@ public class VisionSubsystem extends CloseableSubsystem {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(640, 480))
+                .setCameraResolution(new Size(320, 240))
                 .addProcessor(new BetterDetectionProcessor(robotState))
                 .build();
     }
