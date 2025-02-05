@@ -36,8 +36,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
     public static final double WRIST_ROTATION_TUCK_POSITION = 8;
     public static final double CLAW_ROTATION_TUCK_POSITION = 77;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 178;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 8;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 60;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 178;
