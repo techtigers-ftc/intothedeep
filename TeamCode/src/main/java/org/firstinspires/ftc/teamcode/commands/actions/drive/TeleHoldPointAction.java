@@ -35,7 +35,6 @@ public class TeleHoldPointAction extends TimeoutCommand {
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
-    private final ElapsedTime timer;
 
     /**
      * Creates a new HoldPointAction
@@ -61,7 +60,6 @@ public class TeleHoldPointAction extends TimeoutCommand {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
-        timer = new ElapsedTime();
     }
 
     /**
@@ -115,7 +113,6 @@ public class TeleHoldPointAction extends TimeoutCommand {
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
         follower.holdPoint(PoseTranslator.waypointToPose(target));
-        timer.reset();
     }
 
     @Override

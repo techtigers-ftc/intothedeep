@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * A command which times out once the command has reached past the timeout
+ */
 public class TimeoutCommand extends CommandBase {
     private double timeout;
     private ElapsedTime timer;

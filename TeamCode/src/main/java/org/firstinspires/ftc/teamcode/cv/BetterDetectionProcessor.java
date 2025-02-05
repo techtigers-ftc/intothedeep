@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class for detecting sample orientation and fine distance
+ */
 public class BetterDetectionProcessor implements VisionProcessor {
     // Camera settings
     public static final int WIDTH_RESOLUTION = 640;

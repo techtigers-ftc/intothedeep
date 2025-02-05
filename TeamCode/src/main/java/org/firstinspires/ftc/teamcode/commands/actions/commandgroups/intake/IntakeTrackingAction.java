@@ -10,6 +10,9 @@ import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ * Command to move the slides until the small camera sees the block is in the right place
+ */
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
     private static final double TARGET_Y = 450;
@@ -23,6 +26,13 @@ public class IntakeTrackingAction extends TimeoutCommand {
     public final PIDFController pidfController;
     private double tolerance;
 
+    /**
+     * Constructs a new IntakeTrackingAction
+     *
+     * @param intake the intake subsystem
+     * @param tolerance the tolerance for the command (in pixels)
+     * @param robotState robot state
+     */
     public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
         super(2);
         this.intake = intake;
@@ -52,7 +62,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
         movePower = Range.clip(movePower, -1, 1);
         RobotLog.dd("tracking action", "error: %f", currentPosition - TARGET_Y);
         RobotLog.dd("tracking action", "move power: %f", movePower);
-//        intake.moveSlidesRelative(moveDistance);
         intake.setMotorPower(movePower);
     }
 
@@ -63,11 +72,10 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void end(boolean interrupted) {
-        RobotLog.dd("tracking action", "ending action");
+        RobotLog.dd("tracking action", "ending tracking action");
         RobotLog.dd("tracking action", "ending error: %f", -(robotState.getBlockForwardFine() - TARGET_Y) / PIXELS_PER_INCH);
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-//        intake.moveSlidesRelative(-(robotState.getBlockForwardFine() - TARGET_Y) / PIXELS_PER_INCH - 3.5);
         intake.moveSlidesRelative(-3.5);
     }
 }
