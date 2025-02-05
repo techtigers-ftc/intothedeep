@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -10,7 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that moves the dropper system to the high basket drop position
@@ -39,13 +37,6 @@ public class DropperHighBasketNoTransferAction extends SequentialCommandGroup {
                 ),
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300)
         );
-    }
-
-    @Override
-    public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
-        super.initialize();
     }
 
     @Override
