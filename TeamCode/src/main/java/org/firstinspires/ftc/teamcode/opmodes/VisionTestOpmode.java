@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
@@ -28,10 +29,11 @@ public class VisionTestOpmode extends BaseOpMode {
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 100, robotState));
 
-        registerSubsystems(vision, intakeSubsystem);
+        registerSubsystems(vision, intakeSubsystem, sensor);
     }
 
     @Override
