@@ -247,7 +247,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Dropper TODO: Split into a different method
 
         // Dropper State Transitions
-        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState, drive);
+        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
         DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, robotState, drive);
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);

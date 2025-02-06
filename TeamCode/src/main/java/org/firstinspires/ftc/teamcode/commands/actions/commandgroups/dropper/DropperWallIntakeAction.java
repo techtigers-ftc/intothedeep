@@ -23,15 +23,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper system to the high basket drop position
+ * A command group that Prepare the Dropper for wall intake
  */
 public class DropperWallIntakeAction extends ParallelCommandGroup {
     private final RobotState robotState;
     private static final String LOG_TAG = DropperWallIntakeAction.class.getSimpleName();
 
     /**
-     * Creates a new DropperHighBasketAction
+     * Creates a new DropperWallIntakeAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state

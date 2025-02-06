@@ -14,20 +14,19 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper system to the high basket drop position
+ * A command group that closes the dropper and moves the dropper to forward carry
  */
 public class DropperForwardCarryWallAction extends SequentialCommandGroup {
     private final RobotState robotState;
     private static final String LOG_TAG = DropperForwardCarryWallAction.class.getSimpleName();
 
     /**
-     * Creates a new DropperHighBasketAction
+     * Creates a new DropperForwardCarryWallAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperForwardCarryWallAction(DropperSubsystem dropper, RobotState robotState, DriveSubsystem drive) {
+    public DropperForwardCarryWallAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
