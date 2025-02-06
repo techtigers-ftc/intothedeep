@@ -23,7 +23,7 @@ public class AutoIntakeReadyToPickupAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeTrackingAction(intake, 50, robotState),
+                new IntakeTrackingAction(intake, 0.5, robotState),
                 new IntakeReadyToPickupAction(intake, robotState, robotState::getDetectedFineBlockOrientation)
         );
     }

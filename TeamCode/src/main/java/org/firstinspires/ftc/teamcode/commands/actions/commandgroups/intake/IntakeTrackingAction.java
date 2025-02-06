@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
     private static final double TARGET_Y = 0;
-    public static double FORWARD_KP = 0.2;
-    public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.01;
+    public static double FORWARD_KP = 0.18;
+    public static double FORWARD_KI = 0;
+    public static double FORWARD_KD = 0;
     public static double FORWARD_KF = 0;
     public final PIDFController pidfController;
     private final IntakeSubsystem intake;
@@ -33,7 +33,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
      * @param robotState robot state
      */
     public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
-        super(10);
+        super(2.5);
         this.intake = intake;
         this.tolerance = tolerance;
         this.robotState = robotState;
@@ -54,7 +54,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
     public void execute() {
         double currentPosition = robotState.getBlockForwardFine();
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            currentPosition = -3;
+            currentPosition = -2.5;
         }
         double movePower = pidfController.calculate(currentPosition, TARGET_Y);
         RobotLog.dd("tracking action", "error: %f", currentPosition - TARGET_Y);
@@ -73,6 +73,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
         robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET);
+        intake.moveSlidesRelative(-VisionSubsystem.INTAKE_CAMERA_OFFSET);
     }
 }

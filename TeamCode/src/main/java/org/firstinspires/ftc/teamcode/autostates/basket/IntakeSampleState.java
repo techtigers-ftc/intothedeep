@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -38,12 +40,13 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
-//                new IntakePrepareToPickupAction(intake, dropper, () -> targetSlidePos.getAsDouble() - 1, robotState),
                 new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
-                new IntakeTrackingAction(intake, 50, robotState),
+//                new IntakePrepareToPickupAction(intake, dropper, () -> 0, robotState),
+                new IntakeTrackingAction(intake, 0.4, robotState),
+                new WaitCommand(150),
                 new IntakeReadyToPickupAction(intake, robotState,
                         intake::getCurrentSlidePositionInches,
-                        () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading())),
+                        robotState::getDetectedFineBlockOrientation),
                 new IntakeFullReadyToTransferAction(intake, dropper, robotState, this)
         );
     }
