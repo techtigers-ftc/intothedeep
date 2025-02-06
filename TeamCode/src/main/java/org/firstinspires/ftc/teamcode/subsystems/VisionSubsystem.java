@@ -21,7 +21,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem for using the intake camera
  */
 public class VisionSubsystem extends CloseableSubsystem {
-    public static final double INTAKE_CAMERA_OFFSET = 2;
+    public static final double INTAKE_CAMERA_OFFSET = 2.5;
     public static int EXPOSURE = 16;
     public static int GAIN = 0;
     private final WebcamName camera;
@@ -39,7 +39,7 @@ public class VisionSubsystem extends CloseableSubsystem {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(320, 240))
+                .setCameraResolution(new Size(BetterDetectionProcessor.WIDTH_RESOLUTION, BetterDetectionProcessor.HEIGHT_RESOLUTION))
                 .addProcessor(new BetterDetectionProcessor(robotState))
                 .build();
     }

@@ -31,7 +31,7 @@ public class VisionTestOpmode extends BaseOpMode {
         VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 50, robotState));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 0.4, robotState));
 
         registerSubsystems(vision, intakeSubsystem, sensor);
     }
@@ -42,5 +42,6 @@ public class VisionTestOpmode extends BaseOpMode {
         telemetry.addData("Lateral fine", robotState.getBlockLateralFine());
         telemetry.addData("Orientation", robotState.getBlockOrientation());
         telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
+        telemetry.addData("Fine block detections state", robotState.getFineBlockDetectionState());
     }
 }

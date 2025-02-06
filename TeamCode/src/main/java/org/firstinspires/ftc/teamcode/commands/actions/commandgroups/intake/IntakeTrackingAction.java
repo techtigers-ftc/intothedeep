@@ -6,17 +6,19 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 /**
  * Command to move the slides until the small camera sees the block is in the right place
  */
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
-    private static final double TARGET_Y = 150;
-    public static double FORWARD_KP = 0.002;
+    private static final double TARGET_Y = 0;
+    public static double FORWARD_KP = 0.2;
     public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0;
+    public static double FORWARD_KD = 0.01;
     public static double FORWARD_KF = 0;
     public final PIDFController pidfController;
     private final IntakeSubsystem intake;
@@ -31,7 +33,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
      * @param robotState robot state
      */
     public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
-        super(3);
+        super(10);
         this.intake = intake;
         this.tolerance = tolerance;
         this.robotState = robotState;
@@ -51,8 +53,8 @@ public class IntakeTrackingAction extends TimeoutCommand {
     @Override
     public void execute() {
         double currentPosition = robotState.getBlockForwardFine();
-        if (currentPosition < 0) {
-            currentPosition = 0;
+        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+            currentPosition = -3;
         }
         double movePower = pidfController.calculate(currentPosition, TARGET_Y);
         RobotLog.dd("tracking action", "error: %f", currentPosition - TARGET_Y);
@@ -62,7 +64,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(robotState.getBlockForwardFine() - TARGET_Y) < tolerance) || isTimeoutReached();
+        return ((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) < tolerance) && robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) || isTimeoutReached();
     }
 
     @Override
@@ -71,6 +73,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
         robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(-1.5);
+        intake.moveSlidesRelative(robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET);
     }
 }

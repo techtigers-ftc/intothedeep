@@ -34,7 +34,9 @@ import java.util.Map;
 public class BetterDetectionProcessor implements VisionProcessor {
     // Camera settings
     public static final int WIDTH_RESOLUTION = 320;
-    public static final int HEIGHT_RESOLUTION = 480;
+    public static final int HEIGHT_RESOLUTION = 240;
+    private static final double WIDTH_MIDPOINT = 3.5;
+    private static final double HEIGHT_MIDPOINT = 2.625;
     public static final int CAMERA_ANGLE_HEIGHT_CENTER = 280;
     static final int CAMERA_FPS = 120;
     // Camera exposure settings
@@ -53,6 +55,7 @@ public class BetterDetectionProcessor implements VisionProcessor {
     static final int CANNY_HIGH = 200;
     static final int BLUR_SIZE = 13;
     static final int SOBEL_KERNEL = 7;
+    private static final double PIXELS_PER_INCH = 45.7;
     // Color detection ranges for different color spaces
     static final Scalar HSV_YELLOW_RANGE_LOW = new Scalar(90, 120, 40);
     static final Scalar HSV_YELLOW_RANGE_HIGH = new Scalar(140, 255, 255);
@@ -534,18 +537,15 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
                 robotState.setBlockOrientation((90 + (double) bestPiece.get(
                         "angle")) % 180);
-                robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
+                robotState.setBlockForwardFine(-((((Point) bestPiece.get("position")).y / PIXELS_PER_INCH) - HEIGHT_MIDPOINT));
 
-                robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
+                robotState.setBlockLateralFine((((Point) bestPiece.get("position")).x / PIXELS_PER_INCH) - WIDTH_MIDPOINT);
                 RobotLog.dd("detection pipeline", "detection complete");
                 RobotLog.dd("detection pipeline", "Block Color: %s", bestPiece.get("color"));
 
             } else {
                 RobotLog.dd("detection pipeline", "not detecting block");
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-                robotState.setBlockForwardFine(-1);
-                robotState.setBlockLateralFine(-1);
-                robotState.setBlockOrientation(0);
             }
 
 
