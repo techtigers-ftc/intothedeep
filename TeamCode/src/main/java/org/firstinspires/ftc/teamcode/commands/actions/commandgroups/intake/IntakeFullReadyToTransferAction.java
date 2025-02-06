@@ -61,7 +61,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeSlidesAbsoluteAction(intake, () -> 5, 1)
                 ),
                 new IntakeCloseAction(intake, 50),
-                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.3)
+                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
         );
     }
 

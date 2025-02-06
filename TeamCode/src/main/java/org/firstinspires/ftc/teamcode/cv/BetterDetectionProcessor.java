@@ -54,14 +54,14 @@ public class BetterDetectionProcessor implements VisionProcessor {
     static final int BLUR_SIZE = 13;
     static final int SOBEL_KERNEL = 7;
     // Color detection ranges for different color spaces
-    static final Scalar HSV_BLUE_RANGE_LOW = new Scalar(90, 120, 40);
-    static final Scalar HSV_BLUE_RANGE_HIGH = new Scalar(140, 255, 255);
+    static final Scalar HSV_YELLOW_RANGE_LOW = new Scalar(90, 120, 40);
+    static final Scalar HSV_YELLOW_RANGE_HIGH = new Scalar(140, 255, 255);
     static final Scalar HSV_RED_RANGE_1_LOW = new Scalar(0, 120, 40);
     static final Scalar HSV_RED_RANGE_1_HIGH = new Scalar(10, 255, 255); // Red wraps around in HSV
     static final Scalar HSV_RED_RANGE_2_LOW = new Scalar(170, 120, 40);
     static final Scalar HSV_RED_RANGE_2_HIGH = new Scalar(180, 255, 255);
-    static final Scalar HSV_YELLOW_RANGE_LOW = new Scalar(10, 120, 40);
-    static final Scalar HSV_YELLOW_RANGE_HIGH = new Scalar(30, 255, 255);
+    static final Scalar HSV_BLUE_RANGE_LOW = new Scalar(10, 120, 40);
+    static final Scalar HSV_BLUE_RANGE_HIGH = new Scalar(30, 255, 255);
     // Constants for filtering contours
     static final double SMALL_CONTOUR_AREA = 200;
     // Minimum average brightness threshold (0-255)
@@ -409,8 +409,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
             Mat yellow_mask = inRange(hsv_denoised, HSV_YELLOW_RANGE_LOW, HSV_YELLOW_RANGE_HIGH);
 
             // Combine all color masks
-            Mat combined_mask = bitwise_or(bitwise_or(blue_mask, red_mask), yellow_mask);
-//            Mat combined_mask = yellow_mask; // TODO: Hack
+            Mat combined_mask = bitwise_or(bitwise_or(blue_mask, red_mask),
+                    yellow_mask);
+//            Mat combined_mask = bit(blue_mask; // TODO: Hack
 
             Mat kernel = Mat.ones(5, 5, CvType.CV_8UC1);
             Mat masked_frame = bitwise_and(frame, frame, combined_mask);
@@ -531,11 +532,13 @@ public class BetterDetectionProcessor implements VisionProcessor {
                     }
                 }
                 robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
-                robotState.setBlockOrientation((270 - (double) bestPiece.get("angle")) % 180);
+                robotState.setBlockOrientation((90 + (double) bestPiece.get(
+                        "angle")) % 180);
                 robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
 
                 robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
                 RobotLog.dd("detection pipeline", "detection complete");
+                RobotLog.dd("detection pipeline", "Block Color: %s", bestPiece.get("color"));
 
             } else {
                 RobotLog.dd("detection pipeline", "not detecting block");

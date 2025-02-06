@@ -40,6 +40,7 @@ public class VisionTestOpmode extends BaseOpMode {
     public void update() {
         telemetry.addData("Forward fine", robotState.getBlockForwardFine());
         telemetry.addData("Lateral fine", robotState.getBlockLateralFine());
+        telemetry.addData("Orientation", robotState.getBlockOrientation());
         telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
     }
 }

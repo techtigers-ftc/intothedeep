@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
@@ -59,8 +61,11 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
+                new WaitCommand(300),
                 new SetFineCameraOrientationAction(robotState),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 1.5, clawRotationSupplier),
+                new IntakeReadyToPickupAction(intake, robotState,
+                        () -> intake.getCurrentSlidePositionInches() - 1,
+                        clawRotationSupplier),
                 new IntakeFullReadyToTransferAction(intake, dropper, robotState, this)
         );
     }
