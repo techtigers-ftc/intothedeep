@@ -33,4 +33,8 @@ public enum DropperState {
      * The Dropper is Finished Slapping Backward
      */
     BACK_SLAP,
+    /**
+     * The Dropper is in the Wall Intake State
+     */
+    WALL_INTAKE,
 }
