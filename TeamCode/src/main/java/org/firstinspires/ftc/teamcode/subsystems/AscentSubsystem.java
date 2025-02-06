@@ -11,8 +11,12 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the ascent mechanism.
  */
 public class AscentSubsystem extends CloseableSubsystem {
-    public static final double ASCENT_INITIAL_HEIGHT = 12;
-    public static final double JACKS_DISENGAGE_HEIGHT = 9;
+    public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 12;
+    public static final double JACKS_SLIDES_DISENGAGE_HEIGHT = 9;
+    public static final double ASCENT_UNENGAGED_POSITION = 0.5;
+    public static final double ASCENT_ENGAGED_POSITION = 0.71;
+    public static final double JACKS_UNENGAGED_POSITION = 0;
+    public static final double JACKS_ENGAGED_POSITION = 0.84;
     private final Servo changingTransmission;
     private final Servo leftJackServo;
     private final Servo rightJackServo;
@@ -32,11 +36,11 @@ public class AscentSubsystem extends CloseableSubsystem {
         leftJackServo = hardwareMap.get(Servo.class, "left_jack");
         rightJackServo = hardwareMap.get(Servo.class, "right_jack");
 
-        leftJackServo.setDirection(Servo.Direction.REVERSE);
+        rightJackServo.setDirection(Servo.Direction.REVERSE);
 
         jacksEngaged = false;
 
-        changingTransmission.setPosition(0.5);
+        changingTransmission.setPosition(ASCENT_UNENGAGED_POSITION);
         robotState.setIsAscending(false);
         disengageJacks();
     }
@@ -45,8 +49,8 @@ public class AscentSubsystem extends CloseableSubsystem {
      * Disengages the jacks that lift the robot
      */
     public void disengageJacks() {
-        leftJackServo.setPosition(0);
-        rightJackServo.setPosition(0);
+        leftJackServo.setPosition(JACKS_UNENGAGED_POSITION);
+        rightJackServo.setPosition(JACKS_UNENGAGED_POSITION);
         jacksEngaged = false;
     }
 
@@ -54,8 +58,8 @@ public class AscentSubsystem extends CloseableSubsystem {
      * Engages the jacks that lift the robot
      */
     public void engageJacks() {
-        leftJackServo.setPosition(0.99);
-        rightJackServo.setPosition(0.99);
+        leftJackServo.setPosition(JACKS_ENGAGED_POSITION);
+        rightJackServo.setPosition(JACKS_ENGAGED_POSITION);
         jacksEngaged = true;
     }
 
@@ -63,7 +67,7 @@ public class AscentSubsystem extends CloseableSubsystem {
      * Engages the switching transmission and the jacks
      */
     public void engageAscent() {
-        changingTransmission.setPosition(0.69);
+        changingTransmission.setPosition(ASCENT_ENGAGED_POSITION);
         robotState.setIsAscending(true);
         engageJacks();
     }
