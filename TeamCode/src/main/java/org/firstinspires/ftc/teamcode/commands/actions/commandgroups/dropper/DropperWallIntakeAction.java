@@ -35,7 +35,7 @@ public class DropperWallIntakeAction extends ParallelCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperWallIntakeAction(DropperSubsystem dropper, RobotState robotState, DriveSubsystem drive) {
+    public DropperWallIntakeAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
