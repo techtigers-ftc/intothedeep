@@ -23,10 +23,12 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
@@ -75,7 +77,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
-//        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
@@ -85,7 +87,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         }
 
-        registerSubsystems(intake, drive, dropper, limelight, //smallCamera
+        registerSubsystems(intake, drive, dropper, limelight, smallCamera,
                 odometry, ascent, sensor);
 
         // ASCENT
@@ -245,6 +247,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Dropper TODO: Split into a different method
 
         // Dropper State Transitions
+        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
+        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, robotState);
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
@@ -255,27 +259,44 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
 
-        Trigger dpadLeft = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
-        Trigger dpadRight = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+        Trigger dpadLeft =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
+        Trigger dpadRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+        Trigger dpadLeftAndRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
+        Trigger back =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.BACK);
         Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
         Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
 
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
         Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
+        Trigger transfer =
+                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER);
+        Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
+        Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
+        // Back down
         dpadDown.whenActive(dropperPreTransferAction);
 
+        // Basket drop
         dpadUp.and(blockInIntake).whenActive(dropperHighBasketAction);
         dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
 
-        dpadLeft.and(backwardCarry).whenActive(dropperBackSlapAction);
-        dpadLeft.and(backwardCarry.negate()).and(blockInIntake).whenActive(dropperBackwardCarryAction);
-        dpadLeft.and(backwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperBackwardCarryNoTransferAction);
+        // Wall Intake
+        dpadLeft.and(wallIntake.negate()).whenActive(dropperWallIntakeAction);
+        dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
+
+        // Dropper specimen movements
+        back.and(backwardCarry).whenActive(dropperBackSlapAction);
+        back.and(blockInIntake).and(transfer).whenActive(dropperBackwardCarryAction);
+        back.and(backwardCarry.negate()).and(blockInDropper).whenActive(dropperBackwardCarryNoTransferAction);
 
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInIntake).whenActive(dropperForwardCarryAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryNoTransferAction);
+        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
+        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
 
         //Manual Dropper Stuff
 
