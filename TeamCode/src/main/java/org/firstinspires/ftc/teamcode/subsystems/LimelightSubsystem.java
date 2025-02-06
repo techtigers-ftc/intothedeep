@@ -126,7 +126,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
         double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
-        double finalXDist = xDist + 0.375;
+        double finalXDist = xDist - 0.375;
 
         return new double[]{finalXDist, finalYDist};
     }
