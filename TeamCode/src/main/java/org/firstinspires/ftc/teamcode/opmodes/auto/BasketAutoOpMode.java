@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import org.firstinspires.ftc.teamcode.autostates.VisionSubmersiblePickupState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
@@ -152,7 +153,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState
         );
 
-        DriveToGeneralSampleIntakeState driveToFourthIntake = new DriveToGeneralSampleIntakeState(
+        DriveToGeneralSubmersibleIntakeState driveToFourthIntake = new DriveToGeneralSubmersibleIntakeState(
                 "driveToFourthIntake",
                 drive,
                 dropper,
@@ -169,7 +170,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFourthSampleDrop(driveToFourthDrop);
 
-        DriveToGeneralSampleIntakeState driveToFifthIntake = new DriveToGeneralSampleIntakeState(
+        DriveToGeneralSubmersibleIntakeState driveToFifthIntake = new DriveToGeneralSubmersibleIntakeState(
                 "driveToFifthIntake",
                 drive,
                 dropper,

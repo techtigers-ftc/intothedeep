@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -234,7 +235,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
-    public static void configFourthSampleIntake(DriveToGeneralSampleIntakeState state) {
+    public static void configFourthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
         state.setTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -296,7 +297,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
-    public static void configFifthSampleIntake(DriveToGeneralSampleIntakeState state) {
+    public static void configFifthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
         state.setTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
