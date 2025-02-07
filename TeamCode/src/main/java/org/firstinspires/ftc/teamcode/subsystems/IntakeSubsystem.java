@@ -62,6 +62,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_CLOSED_POSITION = 0.81;
     private static final double CLAW_LEFT_OFFSET = 0.01;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
@@ -417,11 +418,18 @@ public class IntakeSubsystem extends CloseableSubsystem {
 //            robotState.setIntakeBlockColor(BlockColor.YELLOW);
 //        }
 
-        if (getSensorDist() < 1.2) {
+        if (isBlockInIntake()) {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
         } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
             robotState.setBlockPosition(RobotBlockPosition.NONE);
         }
+    }
+
+    /**
+     * @return whether or not the block is in the intake
+     */
+    public boolean isBlockInIntake() {
+        return getSensorDist() < INTAKE_SENSOR_THRESHOLD;
     }
 
     /**

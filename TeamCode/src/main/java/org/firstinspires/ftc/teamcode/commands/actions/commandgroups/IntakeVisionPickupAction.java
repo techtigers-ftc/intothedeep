@@ -52,7 +52,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                                 headingSupplier, 0.3, Math.toRadians(2)
                         )
                 ),
-                new WaitCommand(300),
+                new WaitCommand(200),
                 new AutoIntakeReadyToPickupAction(intake, dropper, robotState, this)
         );
     }

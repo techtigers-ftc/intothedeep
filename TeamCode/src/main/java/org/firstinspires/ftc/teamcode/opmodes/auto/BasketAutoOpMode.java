@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibl
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -196,6 +197,13 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
+        FirstLevelAscentState firstLevelAscent = new FirstLevelAscentState(
+                "firstLevelAscent",
+                dropper,
+                intake,
+                robotState
+        );
+
         EndState endState = new EndState("endState");
 
         // Create the state machine
@@ -217,6 +225,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
                 .addState(driveToSubmersible)
+                .addState(firstLevelAscent)
                 .addState(endState)
 
                 .addTransition(driveToPreloadDrop, dropSample, AutoState.DRIVE_END)
@@ -234,15 +243,18 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToThirdDrop, dropSample, AutoState.DRIVE_END)
                 .addTransition(dropSample, driveToFourthIntake, AutoState.SAMPLE_3_DROP_COMPLETE)
                 .addTransition(driveToFourthIntake, submersiblePickup, AutoState.DRIVE_END)
+                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.TIMEOUT)
                 .addTransition(submersiblePickup, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_COMPLETE)
-                .addTransition(submersiblePickup, driveToSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(submersiblePickup, firstLevelAscent, AutoState.NO_TIME)
                 .addTransition(driveToFourthDrop, dropSample, AutoState.DRIVE_END)
+                .addTransition(dropSample, endState, AutoState.SAMPLE_4_DROP_COMPLETE)
+
 //                .addTransition(dropSample, driveToFifthIntake, AutoState.SAMPLE_4_DROP_COMPLETE)
-                .addTransition(driveToFifthIntake, submersiblePickup, AutoState.DRIVE_END)
-                .addTransition(submersiblePickup, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_COMPLETE)
-                .addTransition(driveToFifthDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_5_DROP_COMPLETE)
-                .addTransition(driveToSubmersible, endState, AutoState.DRIVE_END)
+//                .addTransition(driveToFifthIntake, submersiblePickup, AutoState.DRIVE_END)
+//                .addTransition(submersiblePickup, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_COMPLETE)
+//                .addTransition(driveToFifthDrop, dropSample, AutoState.DRIVE_END)
+//                .addTransition(dropSample, driveToSubmersible, AutoState.SAMPLE_5_DROP_COMPLETE)
+                .addTransition(firstLevelAscent, endState, AutoState.ASCENT_COMPLETE)
 
                 .setCurrentState(driveToPreloadDrop);
 
@@ -278,6 +290,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         double expectedPos = intake.getTargetPositionInches();
         telemetry.addData("Current slide position (inches)", currentPos);
         telemetry.addData("Expected slide position (inches)", expectedPos);
+    }
+
+    @Override
+    public void justAfterStart() {
+        robotState.resetTimer();
     }
 
     @Override

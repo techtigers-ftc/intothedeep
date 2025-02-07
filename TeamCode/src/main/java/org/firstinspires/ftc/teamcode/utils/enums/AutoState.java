@@ -6,7 +6,9 @@ package org.firstinspires.ftc.teamcode.utils.enums;
 public enum AutoState {
     RUNNING,
     DRIVE_END,
+    ASCENT_COMPLETE,
     SAMPLE_INTAKE_COMPLETE,
+    NO_TIME,
     SAMPLE_4_INTAKE_COMPLETE,
     SAMPLE_5_INTAKE_COMPLETE,
     SAMPLE_DROP_COMPLETE,
@@ -25,5 +27,5 @@ public enum AutoState {
     SPECIMEN_2_DROP_COMPLETE,
     SPECIMEN_3_DROP_COMPLETE,
     SPECIMEN_4_DROP_COMPLETE,
-    TIMEOUT
+    TIMEOUT,
 }

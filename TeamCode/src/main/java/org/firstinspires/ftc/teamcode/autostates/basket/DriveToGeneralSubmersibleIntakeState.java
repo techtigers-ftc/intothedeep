@@ -28,7 +28,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralSubmersibleIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 3);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(

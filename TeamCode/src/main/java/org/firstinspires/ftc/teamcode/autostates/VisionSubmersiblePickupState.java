@@ -18,6 +18,7 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 public class VisionSubmersiblePickupState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = VisionSubmersiblePickupState.class.getSimpleName();
     private final RobotState robotState;
+    private final IntakeSubsystem intake;
     private int runCounter;
 
     /**
@@ -33,6 +34,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
     public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
+        this.intake = intake;
         runCounter = 0;
         addCommands(
                 new LimelightLateralBoundsAction(limelight, -5, 1),
@@ -52,6 +54,9 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
+                if (!intake.isBlockInIntake()) {
+                    return AutoState.NO_TIME;
+                }
                 if (runCounter == 1) {
                     return AutoState.SAMPLE_4_INTAKE_COMPLETE;
                 } else {
