@@ -33,7 +33,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
      * @param robotState robot state
      */
     public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
-        super(2);
+        super(1.3);
         addRequirements(intake);
         this.intake = intake;
         this.tolerance = tolerance;
