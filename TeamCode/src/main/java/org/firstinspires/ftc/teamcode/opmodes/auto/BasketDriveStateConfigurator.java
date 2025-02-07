@@ -71,7 +71,7 @@ public class BasketDriveStateConfigurator {
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(67))
+                                Math.toRadians(68))
                         .build()
         );
 
@@ -100,7 +100,7 @@ public class BasketDriveStateConfigurator {
                                         new Point(10, 11)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(67),
+                        .setLinearHeadingInterpolation(Math.toRadians(68),
                                 Math.toRadians(45))
                         .build()
         );
@@ -236,12 +236,13 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
     public static void configFourthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
-        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+//        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+//        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
+//        state.setHeadingPIDF(1, 0, 0.03, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+//        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+//        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+        state.setPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
