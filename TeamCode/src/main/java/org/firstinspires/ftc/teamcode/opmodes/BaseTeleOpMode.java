@@ -131,13 +131,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
-        AutoIntakeReadyToPickupAction readyToPickupAuto = new AutoIntakeReadyToPickupAction(intake, robotState
+        AutoIntakeReadyToPickupAction readyToPickupAuto = new AutoIntakeReadyToPickupAction(intake, dropper,robotState, null
         );
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getDetectedFineBlockOrientation,
-                driverGamepad);
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
@@ -188,7 +187,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         // TODO: Make auto later when small cam works
-        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
+        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
 

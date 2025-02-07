@@ -61,7 +61,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeSlidesAbsoluteAction(intake, () -> 5, 1)
                 ),
                 new IntakeCloseAction(intake, 50),
-                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
+                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
         );
     }
 
@@ -92,11 +92,11 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         } else {
-            robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+            robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
             robotState.setCurrentGear(DriveGears.ENGAGED);
-            intake.setClawRotationAbsolute(lastClawRotation);
-            intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
-            intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
+//            intake.setClawRotationAbsolute(lastClawRotation);
+            intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION);
+            intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION);
             intake.openClaw();
         }
     }

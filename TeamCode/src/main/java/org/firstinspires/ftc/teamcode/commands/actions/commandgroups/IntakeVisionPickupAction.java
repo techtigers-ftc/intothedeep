@@ -1,19 +1,16 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.AutoIntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.SetFineCameraOrientationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.function.DoubleSupplier;
@@ -26,23 +23,17 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
     /**
      * Creates a new IntakeVisionPickupAction
      *
-     * @param intake               the intake subsystem
-     * @param dropper              the dropper subsystem
-     * @param drive                the drive subsystem
-     * @param robotState           the robot state
-     * @param headingSupplier      the heading supplier that supplier the heading values to the target position
-     * @param clawRotationSupplier the claw rotation supplier that supplies the claw rotation values to the target position
-     * @param gamepad              the driver gamepad, which is rumbled during a
-     *                             drive takeover. If a null gamepad is passed in,
-     *                             nothing will rumble
+     * @param intake          the intake subsystem
+     * @param dropper         the dropper subsystem
+     * @param drive           the drive subsystem
+     * @param robotState      the robot state
+     * @param headingSupplier the heading supplier that supplier the heading values to the target position
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake,
                                     DropperSubsystem dropper,
                                     DriveSubsystem drive,
                                     RobotState robotState,
-                                    DoubleSupplier headingSupplier,
-                                    DoubleSupplier clawRotationSupplier,
-                                    GamepadEx gamepad) {
+                                    DoubleSupplier headingSupplier) {
         addRequirements(intake, dropper, drive);
         addCommands(
                 // Aligns the robot to the heading given by the heading supplier
@@ -54,7 +45,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                 ),
                 // Moves intake to prepare to pickup and runs intake and drive coarse align
                 new ParallelCommandGroup(
-                        new IntakePrepareToPickupAction(intake, dropper, () -> robotState.getBlockForwardCoarse() + 1.5, robotState),
+                        new IntakePrepareToPickupAction(intake, dropper, () -> robotState.getBlockForwardCoarse() + VisionSubsystem.INTAKE_CAMERA_OFFSET, robotState),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
@@ -62,11 +53,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         )
                 ),
                 new WaitCommand(300),
-                new SetFineCameraOrientationAction(robotState),
-                new IntakeReadyToPickupAction(intake, robotState,
-                        () -> intake.getCurrentSlidePositionInches() - 1,
-                        clawRotationSupplier),
-                new IntakeFullReadyToTransferAction(intake, dropper, robotState, this)
+                new AutoIntakeReadyToPickupAction(intake, dropper, robotState, this)
         );
     }
 
@@ -78,15 +65,12 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param drive      the drive subsystem
      * @param robotState the robot state
      * @param heading    the heading value
-     * @param gamepad    the driver gamepad. If a null gamepad is passed in,
-     *                   nothing will rumble
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake,
                                     DropperSubsystem dropper,
                                     DriveSubsystem drive,
-                                    RobotState robotState, double heading,
-                                    GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> heading, robotState::getDetectedFineBlockOrientation, gamepad);
+                                    RobotState robotState, double heading) {
+        this(intake, dropper, drive, robotState, () -> heading);
     }
 
     /**
@@ -96,14 +80,11 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param drive      the drive subsystem
      * @param robotState the robot state
-     * @param gamepad    the driver gamepad. If a null gamepad is passed in,
-     *                   nothing will rumble
      */
     public IntakeVisionPickupAction(IntakeSubsystem intake,
                                     DropperSubsystem dropper,
                                     DriveSubsystem drive,
-                                    RobotState robotState,
-                                    GamepadEx gamepad) {
-        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading(), robotState::getDetectedFineBlockOrientation, gamepad);
+                                    RobotState robotState) {
+        this(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
     }
 }
