@@ -58,7 +58,7 @@ public class DropperWallIntakeAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setCurrentGear(DriveGears.ENGAGED);
+//            robotState.setCurrentGear(DriveGears.ENGAGED);
             robotState.setDropperState(DropperState.WALL_INTAKE);
         }
     }
