@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
@@ -22,6 +23,7 @@ import team.techtigers.base.BaseOpMode;
  * Test opmode for running just the VisionSubsystem
  */
 @TeleOp
+@Disabled
 @SuppressWarnings("unused")
 public class VisionTestOpmode extends BaseOpMode {
     RobotState robotState;
