@@ -386,6 +386,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        if (!robotState.isCameraRunning()){
+            return frame;
+        }
         try {
             int blur_size = BLUR_SIZE;
             int sobel_kernel = SOBEL_KERNEL;

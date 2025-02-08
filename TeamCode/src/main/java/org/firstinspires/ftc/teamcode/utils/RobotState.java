@@ -53,6 +53,7 @@ public class RobotState extends GlobalState {
     private final boolean isAuto;
     private double visionIntakeHeading;
     private double voltage;
+    private boolean isCameraRunning;
 
     /**
      * Initializes a new RobotState
@@ -93,6 +94,7 @@ public class RobotState extends GlobalState {
         this.isAuto = isAuto;
         visionIntakeHeading = Math.toRadians(0);
         voltage = 0;
+        isCameraRunning = false;
     }
 
     /**
@@ -659,5 +661,13 @@ public class RobotState extends GlobalState {
      */
     public void setVoltage(double voltage) {
         this.voltage = voltage;
+    }
+
+    public boolean isCameraRunning() {
+        return isCameraRunning;
+    }
+
+    public void setCameraRunning(boolean cameraRunning) {
+        isCameraRunning = cameraRunning;
     }
 }
