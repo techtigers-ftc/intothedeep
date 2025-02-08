@@ -663,10 +663,18 @@ public class RobotState extends GlobalState {
         this.voltage = voltage;
     }
 
+    /**
+     * @return if the small camera is running
+     */
     public boolean isCameraRunning() {
         return isCameraRunning;
     }
 
+    /**
+     * Sets if the small camera is running
+     *
+     * @param cameraRunning whether the small camera is running
+     */
     public void setCameraRunning(boolean cameraRunning) {
         isCameraRunning = cameraRunning;
     }
