@@ -16,7 +16,7 @@ import java.util.function.DoubleSupplier;
  */
 public class ManualAscentCommand extends CommandBase {
     // Ascent bottom limit
-    private static final double JOSH_FAILSAFE_LIMIT = 0.5;
+    private static final double JOSH_FAILSAFE_LIMIT = 0;
     private final RobotState robotState;
     private final DoubleSupplier powerSupplier;
     private final AscentSubsystem ascent;
