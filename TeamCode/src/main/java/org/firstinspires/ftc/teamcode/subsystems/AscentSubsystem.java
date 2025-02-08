@@ -11,7 +11,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the ascent mechanism.
  */
 public class AscentSubsystem extends CloseableSubsystem {
-    public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 12;
+    public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 14;
     public static final double JACKS_SLIDES_DISENGAGE_HEIGHT = 9;
     public static final double ASCENT_UNENGAGED_POSITION = 0.5;
     public static final double ASCENT_ENGAGED_POSITION = 0.74;
@@ -68,7 +68,6 @@ public class AscentSubsystem extends CloseableSubsystem {
      */
     public void engageAscent() {
         changingTransmission.setPosition(ASCENT_ENGAGED_POSITION);
-        robotState.setIsAscending(true);
         engageJacks();
     }
 

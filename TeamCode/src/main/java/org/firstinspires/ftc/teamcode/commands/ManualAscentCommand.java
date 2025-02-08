@@ -47,7 +47,7 @@ public class ManualAscentCommand extends CommandBase {
     @Override
     public void initialize() {
         ascent.engageAscent();
-        if (dropper.getCurrentSlidePositionInches() < 12) {
+        if (dropper.getCurrentSlidePositionInches() < AscentSubsystem.ASCENT_SLIDES_INITIAL_HEIGHT) {
             this.cancel();
         }
     }
