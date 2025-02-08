@@ -36,13 +36,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_TUCK_POSITION = 0;
     public static final double WRIST_ROTATION_TUCK_POSITION = 8;
     public static final double CLAW_ROTATION_TUCK_POSITION = 77;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 35;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 178;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 8;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 60;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 55;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 178;
     public static final double WRIST_PITCH_PECK_POSITION = 100;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 28;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 8;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
 
@@ -56,12 +56,13 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.25;
+    private static final double CLAW_OPEN_POSITION = 0.35;
     private static final double CLAW_MIDDLE_POSITION = 0.55;
     private static final double CLAW_LOOSE_POSITION = 0.77;
-    private static final double CLAW_CLOSED_POSITION = 0.8;
+    private static final double CLAW_CLOSED_POSITION = 0.81;
     private static final double CLAW_LEFT_OFFSET = 0.01;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
@@ -417,11 +418,18 @@ public class IntakeSubsystem extends CloseableSubsystem {
 //            robotState.setIntakeBlockColor(BlockColor.YELLOW);
 //        }
 
-        if (getSensorDist() < 0.9) {
+        if (isBlockInIntake()) {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
         } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
             robotState.setBlockPosition(RobotBlockPosition.NONE);
         }
+    }
+
+    /**
+     * @return whether or not the block is in the intake
+     */
+    public boolean isBlockInIntake() {
+        return getSensorDist() < INTAKE_SENSOR_THRESHOLD;
     }
 
     /**

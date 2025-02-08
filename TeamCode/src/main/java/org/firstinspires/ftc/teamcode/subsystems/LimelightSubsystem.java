@@ -30,6 +30,12 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private static final double HEAVY_WEIGHT = 2;
 
+    // Orientation exponential function parameters
+    private static final double ORIENTATION_V_COMPRESS = 0.719428;
+    private static final double ORIENTATION_BASE = 1.0629;
+    private static final double ORIENTATION_TURN_THRESHOLD = 111;
+
+
     // Forward offset logistic function parameters
     private static final double FORWARD_FLOOR = 1.34;
     private static final double FORWARD_C = -1.77;
@@ -40,6 +46,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_V_STRETCH = 0.82;
     private static final double LATERAL_H_SHIFT = -2.7;
     private static final double LATERAL_V_SHIFT = 2.47;
+
+    // Lateral bounds
+    private double lateralLowerBound = -5;
+    private double lateralUpperBound = 1;
 
     private final RobotState robotState;
     private final Limelight3A limelight;
@@ -63,6 +73,33 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.setPollRateHz(50);
         limelight.start();
         limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
+    }
+
+    private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    private double getBlockWidth(LLResultTypes.DetectorResult detection) {
+        // Width is the distance between the top right and bottom right corners of the detection
+        return distanceBetweenPoints(detection.getTargetCorners().get(1).get(0), detection.getTargetCorners().get(1).get(1),
+                detection.getTargetCorners().get(2).get(0), detection.getTargetCorners().get(2).get(1));
+    }
+
+    private double getClawAngle(LLResultTypes.DetectorResult detection) {
+        double blockWidth = getBlockWidth(detection);
+        RobotLog.dd(tag, "block width detection:%f", blockWidth);
+        double distance = getBlockDistances(detection)[1];
+//        double widthScalar = 0.000523061 * Math.pow(distance, 4)-0.0227837 * Math.pow(distance, 3)+0.348316 * Math.pow(distance, 2)-2.09751 * distance+5.15031;
+        double widthScalar = 0.000447842 * Math.pow(distance, 4) - 0.020271 * Math.pow(distance, 3) + 0.320859 * Math.pow(distance, 2) - 1.98378 * distance + 5.00345;
+        RobotLog.dd(tag, "width scalar: %f", widthScalar);
+//        double widthScalar = ORIENTATION_V_COMPRESS * Math.pow(ORIENTATION_BASE, distance);
+        double normalizedBlockWidth = blockWidth * widthScalar;
+        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
+        if (normalizedBlockWidth > ORIENTATION_TURN_THRESHOLD) {
+            return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
+        } else {
+            return 180;
+        }
     }
 
     /**
@@ -101,7 +138,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 || robotState.getRobotVelocity().getPoint().magnitude() > 1
                 || robotState.getRobotVelocity().getHeading() > Math.toRadians(3);
         if (unCache) {
-            robotState.setBlockDetectionState(state);
+            robotState.setCoarseBlockDetectionState(state);
             framesCached = 1;
         } else {
             framesCached++;
@@ -126,7 +163,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
         double xDist = (finalYDist + LIMELIGHT_INTAKE_OFFSET) * Math.tan(Math.toRadians(rawTx)) - LIMELIGHT_X_OFFSET;
-        double finalXDist = xDist + 0.375;
+        double finalXDist = xDist + 0.4;
 
         return new double[]{finalXDist, finalYDist};
     }
@@ -140,6 +177,36 @@ public class LimelightSubsystem extends CloseableSubsystem {
      */
     private double getWeightedEuclideanDistance(double[] distances) {
         return Math.sqrt(Math.pow(distances[0], 2) + Math.pow(distances[1], 2) / HEAVY_WEIGHT);
+    }
+
+    /**
+     * @return lower bound for determining if blocks are too far laterally
+     */
+    public double getLateralLowerBound() {
+        return lateralLowerBound;
+    }
+
+    /**
+     * Sets the lower bound for determining if blocks are too far laterally
+     * @param lateralLowerBound the bound to set
+     */
+    public void setLateralLowerBound(double lateralLowerBound) {
+        this.lateralLowerBound = lateralLowerBound;
+    }
+
+    /**
+     * @return upper bound for determining if blocks are too far laterally
+     */
+    public double getLateralUpperBound() {
+        return lateralUpperBound;
+    }
+
+    /**
+     * Sets the upper bound for determining if blocks are too far laterally
+     * @param lateralUpperBound the bound to set
+     */
+    public void setLateralUpperBound(double lateralUpperBound) {
+        this.lateralUpperBound = lateralUpperBound;
     }
 
     /**
@@ -179,7 +246,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         for (LLResultTypes.DetectorResult validDetection : validDetections) {
             double xDist = getBlockDistances(validDetection)[0];
             double yDist = getBlockDistances(validDetection)[1];
-            if (xDist >= -5 && xDist <= 2 && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
+            if (xDist >= lateralLowerBound && xDist <= lateralUpperBound && yDist <= IntakeSubsystem.SLIDES_MAX - 0.25) {
                 greatDetections.add(validDetection);
             }
         }
@@ -200,10 +267,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
         }
 
         // Sets the block detection state to detected
-        robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
+        robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
         // Sets the coarse forward and lateral distances of the block found to be closest to the robot
         robotState.setBlockLateralCoarse(getBlockDistances(bestDetection)[0]);
         robotState.setBlockForwardCoarse(getBlockDistances(bestDetection)[1]);
+//        robotState.setBlockOrientation(getClawAngle(bestDetection));
     }
 
     @Override

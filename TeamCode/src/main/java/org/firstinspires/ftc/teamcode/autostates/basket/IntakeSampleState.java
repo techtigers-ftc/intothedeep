@@ -1,78 +1,63 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to intake a sample
+ * A state to intake a sample for the basket auto
  */
 public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             IntakeSampleState.class.getSimpleName();
     private final RobotState robotState;
-    private DoubleSupplier slidePos;
-    private DoubleSupplier clawPos;
 
     /**
      * Constructor for the IntakeSampleState
      *
-     * @param name The name of the state
-     * @param intake The intake subsystem
-     * @param dropper The dropper subsystem
-     * @param robotState The robot state
-     * @param targetSlidePos The target slide position
-     * @param targetClawRotation The target claw rotation
+     * @param name           The name of the state
+     * @param intake         The intake subsystem
+     * @param dropper        The dropper subsystem
+     * @param targetSlidePos the target position for the slides to move to
+     * @param robotState     The robot state
      */
-    public IntakeSampleState(String name, IntakeSubsystem intake, DropperSubsystem dropper,
-                             RobotState robotState, DoubleSupplier targetSlidePos,
-                             DoubleSupplier targetClawRotation) {
-        super(name);
+    public IntakeSampleState(String name, IntakeSubsystem intake,
+                             DropperSubsystem dropper,
+                             DoubleSupplier targetSlidePos,
+                             RobotState robotState) {
+        super(name, 10);
         this.robotState = robotState;
-        slidePos = targetSlidePos;
-        clawPos = targetClawRotation;
         addCommands(
-                new IntakePrepareToPickupAction(intake, dropper, robotState, targetSlidePos),
-                new IntakeReadyToPickupAction(intake, robotState,
-                        targetSlidePos, targetClawRotation),
-                new IntakePrepareToTransferAction(intake, dropper, robotState),
-                new IntakeReadyToTransferAction(intake, robotState)
+                new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
+                new IntakeTrackingAction(intake, 1, robotState),
+                new SmallCameraVisionPickup(intake, dropper, robotState, this)
         );
     }
 
     /**
      * Get the current condition of the robot
-     */
-    @Override
-    public void initialize() {
-        super.initialize();
-        RobotLog.dd(LOG_TAG, "Target slide pos: %s Target Claw pos %s",
-                slidePos.getAsDouble(), clawPos.getAsDouble());
-    }
-
-    /**
-     * Get the current condition of the robot
+     *
      * @return the current condition of the robot using the AutoState enum
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER &&
-            robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-            return AutoState.SAMPLE_INTAKE_COMPLETE;
+        if (super.isTimeoutReached()) {
+            return AutoState.TIMEOUT;
+        } else {
+            if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
+                return AutoState.SAMPLE_INTAKE_COMPLETE;
+            } else {
+                return AutoState.RUNNING;
+            }
         }
-        return AutoState.RUNNING;
     }
 }

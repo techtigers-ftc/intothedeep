@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
@@ -18,7 +17,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import java.util.function.DoubleSupplier;
 
@@ -55,7 +53,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 ),
                 new IntakeCheckSensorAction(robotState, this),
                 new ParallelCommandGroup(
-//                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
@@ -70,8 +67,8 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     /**
      * Overloaded constructor which sets the slide position to 5 automatically
      *
-     * @param intake the intake subsystem
-     * @param dropper the dropper subsystem
+     * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
     public IntakePrepareToTransferAction(IntakeSubsystem intake,
@@ -82,15 +79,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.READY_TO_PICKUP) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
         lastClawRotation = intake.getClawRotation();
     }
 

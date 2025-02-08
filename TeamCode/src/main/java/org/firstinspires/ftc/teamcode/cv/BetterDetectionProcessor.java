@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.cv;
 import android.graphics.Canvas;
 
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -33,7 +34,9 @@ import java.util.Map;
 public class BetterDetectionProcessor implements VisionProcessor {
     // Camera settings
     public static final int WIDTH_RESOLUTION = 320;
-    public static final int HEIGHT_RESOLUTION = 480;
+    public static final int HEIGHT_RESOLUTION = 240;
+    private static final double WIDTH_MIDPOINT = 3.5;
+    private static final double HEIGHT_MIDPOINT = 2.625;
     public static final int CAMERA_ANGLE_HEIGHT_CENTER = 280;
     static final int CAMERA_FPS = 120;
     // Camera exposure settings
@@ -52,15 +55,16 @@ public class BetterDetectionProcessor implements VisionProcessor {
     static final int CANNY_HIGH = 200;
     static final int BLUR_SIZE = 13;
     static final int SOBEL_KERNEL = 7;
+    private static final double PIXELS_PER_INCH = 45.7;
     // Color detection ranges for different color spaces
-    static final Scalar HSV_BLUE_RANGE_LOW = new Scalar(90, 120, 40);
-    static final Scalar HSV_BLUE_RANGE_HIGH = new Scalar(140, 255, 255);
+    static final Scalar HSV_YELLOW_RANGE_LOW = new Scalar(90, 120, 40);
+    static final Scalar HSV_YELLOW_RANGE_HIGH = new Scalar(140, 255, 255);
     static final Scalar HSV_RED_RANGE_1_LOW = new Scalar(0, 120, 40);
     static final Scalar HSV_RED_RANGE_1_HIGH = new Scalar(10, 255, 255); // Red wraps around in HSV
     static final Scalar HSV_RED_RANGE_2_LOW = new Scalar(170, 120, 40);
     static final Scalar HSV_RED_RANGE_2_HIGH = new Scalar(180, 255, 255);
-    static final Scalar HSV_YELLOW_RANGE_LOW = new Scalar(10, 120, 40);
-    static final Scalar HSV_YELLOW_RANGE_HIGH = new Scalar(30, 255, 255);
+    static final Scalar HSV_BLUE_RANGE_LOW = new Scalar(10, 120, 40);
+    static final Scalar HSV_BLUE_RANGE_HIGH = new Scalar(30, 255, 255);
     // Constants for filtering contours
     static final double SMALL_CONTOUR_AREA = 200;
     // Minimum average brightness threshold (0-255)
@@ -408,7 +412,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
             Mat yellow_mask = inRange(hsv_denoised, HSV_YELLOW_RANGE_LOW, HSV_YELLOW_RANGE_HIGH);
 
             // Combine all color masks
-            Mat combined_mask = bitwise_or(bitwise_or(blue_mask, red_mask), yellow_mask);
+            Mat combined_mask = bitwise_or(bitwise_or(blue_mask, red_mask),
+                    yellow_mask);
+//            Mat combined_mask = bit(blue_mask; // TODO: Hack
 
             Mat kernel = Mat.ones(5, 5, CvType.CV_8UC1);
             Mat masked_frame = bitwise_and(frame, frame, combined_mask);
@@ -515,7 +521,9 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 }
             }
 
-            if (!contours.isEmpty()) {
+            if (!gamePieces.isEmpty()) {
+//                RobotLog.dd("detection pipeline", "Contour size: %f", contours.size());
+                RobotLog.dd("detection pipeline", "detecting block");
                 Map<String, Object> bestPiece = gamePieces.get(0);
                 for (Map<String, Object> piece : gamePieces) {
                     Point piecePosition = (Point) piece.get("position");
@@ -526,23 +534,25 @@ public class BetterDetectionProcessor implements VisionProcessor {
                         bestPiece = piece;
                     }
                 }
-                robotState.setBlockDetectionState(BlockDetectionState.DETECTED);
-                robotState.setBlockOrientation((double) bestPiece.get("angle"));
-                robotState.setBlockForwardFine(((Point) bestPiece.get("position")).y);
+                robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+                robotState.setBlockOrientation((90 + (double) bestPiece.get(
+                        "angle")) % 180);
+                robotState.setBlockForwardFine(-((((Point) bestPiece.get("position")).y / PIXELS_PER_INCH) - HEIGHT_MIDPOINT));
 
-                robotState.setBlockLateralFine(((Point) bestPiece.get("position")).x);
+                robotState.setBlockLateralFine((((Point) bestPiece.get("position")).x / PIXELS_PER_INCH) - WIDTH_MIDPOINT);
+                RobotLog.dd("detection pipeline", "detection complete");
+                RobotLog.dd("detection pipeline", "Block Color: %s", bestPiece.get("color"));
 
             } else {
-                robotState.setBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-                robotState.setBlockForwardFine(-1);
-                robotState.setBlockLateralFine(-1);
-                robotState.setBlockOrientation(0);
+                RobotLog.dd("detection pipeline", "not detecting block");
+                robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             }
 
 
             return contour_frame;
         } catch (Exception e) {
-            System.out.println(frame + " Error: " + e.getMessage());
+            RobotLog.dd("detection pipeline", "catching error: %s", e.getMessage());
+//            System.out.println(frame + " Error: " + e.getMessage());
             return frame;
         }
     }

@@ -31,11 +31,11 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
-     * @param robotState the robot state
      * @param slidePositionSupplier the supplier for the target slide position
+     * @param robotState the robot state
      */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper,
-                                       RobotState robotState, DoubleSupplier slidePositionSupplier) {
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DoubleSupplier slidePositionSupplier,
+                                       RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake, dropper);
         addCommands(
@@ -64,7 +64,7 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
      * @param slidePosition the target slide position
      */
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, double slidePosition) {
-        this(intake, dropper, robotState, () -> slidePosition);
+        this(intake, dropper, () -> slidePosition, robotState);
     }
 
     @Override

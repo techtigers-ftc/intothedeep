@@ -3,14 +3,12 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
@@ -41,12 +39,5 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
                         )
                 )
         );
-    }
-
-    @Override
-    public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
-        super.initialize();
     }
 }

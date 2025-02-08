@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
@@ -20,6 +20,7 @@ public class IntakeCheckSensorAction extends CommandBase {
 
     @Override
     public void initialize() {
+        RobotLog.dd("cancel command", "block position:%s", robotState.getBlockPosition());
         if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE) {
             command.cancel();
         }

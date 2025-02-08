@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -10,7 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.droppe
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that moves the dropper to the transfer position
@@ -35,13 +33,6 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
                 new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
                 new DropperOpenAction(dropper)
         );
-    }
-
-    @Override
-    public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
-        super.initialize();
     }
 
     @Override

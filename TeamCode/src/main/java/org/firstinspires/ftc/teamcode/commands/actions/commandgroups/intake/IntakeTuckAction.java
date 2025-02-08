@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
@@ -12,15 +11,14 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * Command to tuck the intake in.
  */
 public class IntakeTuckAction extends ParallelCommandGroup {
+    private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
     private final IntakeSubsystem intake;
     private final RobotState robotState;
-    private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
 
     /**
      * Creates a new IntakeTuckCommand
@@ -39,21 +37,6 @@ public class IntakeTuckAction extends ParallelCommandGroup {
                 new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION, 200),
                 new IntakeCloseAction(intake)
         );
-    }
-
-    @Override
-    public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP
-                && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER &&
-                    robotState.getIntakeState() != IntakeState.TUCK) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
     }
 
     @Override

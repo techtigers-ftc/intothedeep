@@ -15,20 +15,20 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
  * A State to Drive to the intake position
  * Used autoCommand to drive to a custom intake position
  */
-public class DriveToIntakeState extends DriveStateBase {
+public class DriveToGeneralSampleIntakeState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToIntakeState.class.getSimpleName();
+            DriveToGeneralSampleIntakeState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToIntakeState
+     * Constructor for the DriveToGeneralSampleIntakeState
      *
      * @param name The name of the state
      * @param drive The drive subsystem
      * @param dropper The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState, 5);
+    public DriveToGeneralSampleIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+        super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(

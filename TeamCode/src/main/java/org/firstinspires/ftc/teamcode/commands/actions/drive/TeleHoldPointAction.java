@@ -22,7 +22,7 @@ import team.techtigers.core.paths.Waypoint;
 @Config
 public class TeleHoldPointAction extends TimeoutCommand {
     private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
-    public static double TIMEOUT = 2;
+    public static double TIMEOUT = 1.5;
     private final double tolerance;
     private final double angleTolerance;
     private final DriveSubsystem drive;
@@ -102,9 +102,19 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void initialize() {
         super.initialize();
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.43, 0, 0.05, 0.01));
         follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0.1));
+        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(0.4, 0, 0.065, 0));
+        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(0.045, 0, 0.001, 0.6, 0));
+        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+
+//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));
+//        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP, 0, TuningConstants.dDriveD, 0.6, 0));
+//        follower.setHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.eHeadingP, 0, TuningConstants.fHeadingD, 0));
+//        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP, 0, TuningConstants.hSecondaryTranslationalD, 0));
+//        follower.setSecondaryDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP, 0, TuningConstants.jSecondaryDriveD, 0.6, 0));
+//        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP, 0, TuningConstants.lSecondaryHeadingD, 0));
 
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
