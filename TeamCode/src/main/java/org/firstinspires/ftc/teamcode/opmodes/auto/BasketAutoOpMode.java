@@ -87,7 +87,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFirstSample",
                 intake,
                 dropper,
-                distToIntakeTarget(robotState, new Waypoint(22.5, 42.75)),
+                distToIntakeTarget(robotState, new Waypoint(22.5, 41.75)),
                 robotState
                 );
 
