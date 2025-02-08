@@ -59,6 +59,7 @@ import team.techtigers.core.utils.RobotSaveState;
 public abstract class BaseTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
 
@@ -72,7 +73,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
         VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
@@ -352,7 +353,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Intake Slide POS",
+                intake.getCurrentSlidePositionInches());
+        telemetry.addData("Dropper Slide POS",
+                dropper.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
         telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
