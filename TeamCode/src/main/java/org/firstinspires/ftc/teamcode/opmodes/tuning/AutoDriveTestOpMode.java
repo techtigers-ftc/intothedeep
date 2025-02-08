@@ -17,8 +17,8 @@ import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
 import team.techtigers.core.paths.Waypoint;
 
-@Disabled
 @Autonomous(name = "Auto Test Drive OpMode")
+@Disabled
 public class AutoDriveTestOpMode extends BaseOpMode {
     private RobotState robotState;
 

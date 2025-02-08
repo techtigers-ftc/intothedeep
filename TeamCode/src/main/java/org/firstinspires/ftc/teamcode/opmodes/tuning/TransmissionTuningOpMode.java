@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
@@ -17,6 +18,7 @@ import team.techtigers.base.BaseOpMode;
 /**
  * An opmode to test the capabilities of the dropper subsystem, including the slides, arm, and claw
  */
+@Disabled
 @TeleOp(name = "Transmission Tuning OpMode", group = "Tuning")
 public class TransmissionTuningOpMode extends BaseOpMode {
     private AscentSubsystem ascentSubsystem;

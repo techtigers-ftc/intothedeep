@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -10,6 +11,7 @@ import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.paths.geometry.Point;
 
 @TeleOp(name = "Localization Tuning OpMode", group = "Tuning")
+@Disabled
 public class LocalizationTuningOpMode extends BaseOpMode {
     private RobotState robotState;
 

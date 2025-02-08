@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -14,6 +15,8 @@ import java.util.function.DoubleSupplier;
  * A command used to ascend the robot
  */
 public class ManualAscentCommand extends CommandBase {
+    // Ascent bottom limit
+    private static final double JOSH_FAILSAFE_LIMIT = 0.5;
     private final RobotState robotState;
     private final DoubleSupplier powerSupplier;
     private final AscentSubsystem ascent;
@@ -44,7 +47,7 @@ public class ManualAscentCommand extends CommandBase {
     @Override
     public void initialize() {
         ascent.engageAscent();
-        if (dropper.getCurrentSlidePositionInches() < 12) {
+        if (dropper.getCurrentSlidePositionInches() < AscentSubsystem.ASCENT_SLIDES_INITIAL_HEIGHT) {
             this.cancel();
         }
     }
@@ -52,11 +55,15 @@ public class ManualAscentCommand extends CommandBase {
     @Override
     public void execute() {
         double power = powerSupplier.getAsDouble();
+        RobotLog.dd(ManualAscentCommand.class.getSimpleName(), "Raw Power: %f",
+                power);
         if (dropper.getCurrentSlidePositionInches() > DropperSubsystem.SLIDE_MAX) {
             power = Math.min(0, power);
-        } else if (dropper.getCurrentSlidePositionInches() < 0) {
+        } else if (dropper.getCurrentSlidePositionInches() < JOSH_FAILSAFE_LIMIT) {
             power = Math.max(0, power);
         }
+        RobotLog.dd(ManualAscentCommand.class.getSimpleName(), "Limited " +
+                        "Power: %f");
 
         dropper.leftSlideMotor.setPower(power);
         dropper.rightSlideMotor.setPower(power);
