@@ -131,8 +131,9 @@ public class DropperSubsystem extends CloseableSubsystem {
         if (robotState.isAuto()) {
             closeClaw();
             resetSlides();
-        } else {
-            openClaw();
+        } else if (getCurrentSlidePositionInches() > 5) {
+            moveSlidesAbsolute(getCurrentSlidePositionInches());
+            closeClaw();
         }
     }
 
