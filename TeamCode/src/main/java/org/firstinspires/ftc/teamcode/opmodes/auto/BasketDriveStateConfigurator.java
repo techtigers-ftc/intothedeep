@@ -249,7 +249,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(12, 12),
                                         new Point(11, 58),
-                                        new Point(49, 60)
+                                        new Point(50.5, 60)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -278,7 +278,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(49, 60),
+                                        new Point(50.5, 60),
                                         new Point(11, 58),
                                         new Point(10, 11)
                                 )
