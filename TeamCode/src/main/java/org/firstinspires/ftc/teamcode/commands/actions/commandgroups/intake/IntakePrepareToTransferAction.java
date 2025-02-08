@@ -53,7 +53,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 ),
                 new IntakeCheckSensorAction(robotState, this),
                 new ParallelCommandGroup(
-//                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),

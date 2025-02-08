@@ -1,24 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -26,8 +16,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
  * A command group that Prepare the Dropper for wall intake
  */
 public class DropperWallIntakeAction extends ParallelCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = DropperWallIntakeAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new DropperWallIntakeAction
@@ -58,7 +48,6 @@ public class DropperWallIntakeAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-//            robotState.setCurrentGear(DriveGears.ENGAGED);
             robotState.setDropperState(DropperState.WALL_INTAKE);
         }
     }

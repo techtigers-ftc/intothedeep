@@ -61,7 +61,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                 new IntakeLoosenAction(intake, 350),
                                 new IntakeCloseAction(intake, 50)
                         ),
-//                        new IntakeSlidesAbsoluteAction(intake, () -> 5, 1)
                         new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
                 )
         );
@@ -81,12 +80,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
-        lastClawRotation = intake.getClawRotation();
-    }
-
-    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
@@ -96,7 +89,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         } else {
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
             robotState.setCurrentGear(DriveGears.ENGAGED);
-//            intake.setClawRotationAbsolute(lastClawRotation);
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION);
             intake.openClaw();

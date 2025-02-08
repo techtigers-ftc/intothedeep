@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import com.arcrobotics.ftclib.command.WaitCommand;
-
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.AutoIntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -42,9 +38,8 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
-//                new IntakePrepareToPickupAction(intake, dropper, () -> 0, robotState),
                 new IntakeTrackingAction(intake, 1, robotState),
-                new AutoIntakeReadyToPickupAction(intake, dropper, robotState, this)
+                new SmallCameraVisionPickup(intake, dropper, robotState, this)
         );
     }
 

@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.AutoIntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -43,7 +43,7 @@ public class VisionTestOpmode extends BaseOpMode {
                 new IntakePrepareToPickupAction(intake, dropper, intake::getCurrentSlidePositionInches, robotState),
                 new IntakeTrackingAction(intake, 0.5, robotState),
                 new WaitCommand(150),
-                new AutoIntakeReadyToPickupAction(intake, dropper, robotState, null)
+                new SmallCameraVisionPickup(intake, dropper, robotState, null)
         ));
 
 

@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * Command to move intake to ready to pickup state, tracking the block and its orientation with the small camera
  * If the block is in the intake, it will move to the ready to transfer state
  */
-public class AutoIntakeReadyToPickupAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = AutoIntakeReadyToPickupAction.class.getSimpleName();
+public class SmallCameraVisionPickup extends SequentialCommandGroup {
+    private static final String LOG_TAG = SmallCameraVisionPickup.class.getSimpleName();
     private final RobotState robotState;
 
     /**
@@ -25,9 +25,8 @@ public class AutoIntakeReadyToPickupAction extends SequentialCommandGroup {
      * @param robotState the robot state
      * @param command    the command to cancel using the intake color sensor
      */
-    public AutoIntakeReadyToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, CommandBase command) {
+    public SmallCameraVisionPickup(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, CommandBase command) {
         this.robotState = robotState;
-        addRequirements(intake);
         addCommands(
                 new SetFineCameraOrientationAction(robotState),
                 new IntakeReadyToPickupAction(intake, robotState,

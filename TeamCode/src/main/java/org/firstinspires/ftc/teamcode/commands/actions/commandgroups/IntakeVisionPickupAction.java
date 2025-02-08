@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.AutoIntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -53,7 +53,7 @@ public class IntakeVisionPickupAction extends SequentialCommandGroup {
                         )
                 ),
                 new WaitCommand(200),
-                new AutoIntakeReadyToPickupAction(intake, dropper, robotState, this)
+                new SmallCameraVisionPickup(intake, dropper, robotState, this)
         );
     }
 
