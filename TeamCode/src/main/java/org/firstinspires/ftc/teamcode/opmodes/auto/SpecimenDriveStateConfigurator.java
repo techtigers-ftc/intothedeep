@@ -29,12 +29,13 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropSpecimenState state) {
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setDrivePIDF(0.006, 0, 0.0004, 0.6, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+//        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
+//        state.setDrivePIDF(0.006, 0, 0.0004, 0.6, 0);
+//        state.setHeadingPIDF(1, 0, 0.03, 0);
+//        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setPIDSToTuning();
 
 
         state.setPathChain(
