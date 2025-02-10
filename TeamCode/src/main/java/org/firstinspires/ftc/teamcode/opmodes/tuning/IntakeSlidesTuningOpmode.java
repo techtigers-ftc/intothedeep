@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.base.BaseOpMode;
 
-@TeleOp(name = "Intake Tuning OpMode", group = "Tuning")
+@TeleOp(name = "Intake Slides Tuning OpMode", group = "Tuning")
 public class IntakeSlidesTuningOpmode extends BaseOpMode {
     private IntakeSubsystem intakeSubsystem;
     private RobotState robotState;

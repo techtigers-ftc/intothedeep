@@ -59,7 +59,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
     public static double CLAW_CLOSED_POSITION = 0.055;
-    public static double KP = 0.01;
+    public static double KP = 0.0045;
     public static double KI = 0;
     public static double KD = 0.000000001;
     public static double KF = 0;
