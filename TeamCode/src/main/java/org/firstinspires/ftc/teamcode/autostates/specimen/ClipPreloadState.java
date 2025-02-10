@@ -27,8 +27,7 @@ public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
         super(name);
         this.robotState = robotState;
         addCommands(
-                new DropperFrontSlapAction(dropper, robotState),
-                new DropperOpenAction(dropper)
+                new DropperFrontSlapAction(dropper, robotState)
         );
     }
 

@@ -119,7 +119,9 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (robotState.isAuto()) {
-            init();
+            resetSlides();
+            closeClaw();
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         }
 
         colorSensorTimer = new ElapsedTime();
@@ -127,13 +129,14 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     @Override
     public void init() {
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        if (robotState.isAuto()) {
-            closeClaw();
-            resetSlides();
-        } else if (getCurrentSlidePositionInches() > 5) {
+        if (!robotState.isAuto()) {
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
             moveSlidesAbsolute(getCurrentSlidePositionInches());
-            closeClaw();
+            if (getCurrentSlidePositionInches() > 5) {
+                closeClaw();
+            } else {
+                openClaw();
+            }
         }
     }
 
@@ -217,6 +220,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
+        RobotLog.dd(tag, "moving slides absolute to: %f", position);
         slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
     }
 
