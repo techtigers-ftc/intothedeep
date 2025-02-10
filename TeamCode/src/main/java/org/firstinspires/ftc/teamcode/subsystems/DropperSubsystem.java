@@ -372,10 +372,18 @@ public class DropperSubsystem extends CloseableSubsystem {
         return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
     }
 
+    private double getVoltageCompensatedMotorPower(double power) {
+        if(robotState.getVoltage() != 0) {
+            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+        } else {
+            return power;
+        }
+    }
+
     @Override
     public void periodic() {
         double power =
-                slideController.calculateMotorPowers(getCurrentSlidePositionTicks());
+                getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
 
         if (!robotState.getIsAscending()) {
             leftSlideMotor.setPower(power);
