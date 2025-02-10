@@ -67,7 +67,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(10, 11),
-                                        new Point(14, 25)
+                                        new Point(16, 25)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -76,7 +76,7 @@ public class BasketDriveStateConfigurator {
         );
 
         state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(Math.toRadians(2));
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
     /**
@@ -96,7 +96,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(14, 25),
+                                        new Point(16, 25),
                                         new Point(10, 11)
                                 )
                         )
@@ -249,7 +249,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(12, 12),
                                         new Point(11, 58),
-                                        new Point(49, 60)
+                                        new Point(50.5, 60)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -278,7 +278,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(49, 60),
+                                        new Point(50.5, 60),
                                         new Point(11, 58),
                                         new Point(10, 11)
                                 )
