@@ -71,8 +71,11 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(76, 40.25),
-                                        new Point(104, 37.5),
-                                        new Point(119, 56)
+                                        new Point(107, 25),
+                                        new Point(127, 58),
+                                        new Point(52, 92),
+                                        new Point(116, 26),
+                                        new Point(121, 12)
                                 )
                         )
 
@@ -81,7 +84,7 @@ public class SpecimenDriveStateConfigurator {
         );
 
         state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(MINISCULE_ANGLE_TOLERANCE);
+        state.setAngleTolerance(SMALL_TOLERANCE);
     }
 
     /**
