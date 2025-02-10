@@ -41,7 +41,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
-                target.getY() - robotState.getRobotCurrentPose().getY()) - 8.75, IntakeSubsystem.SLIDES_MAX);
+                target.getY() - robotState.getRobotCurrentPose().getY()) - 9.5, IntakeSubsystem.SLIDES_MAX);
     }
 
     @Override
@@ -87,7 +87,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFirstSample",
                 intake,
                 dropper,
-                distToIntakeTarget(robotState, new Waypoint(22.5, 44.75)),
+                distToIntakeTarget(robotState, new Waypoint(22.5, 41.75)),
                 robotState
                 );
 

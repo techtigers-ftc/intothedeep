@@ -32,7 +32,7 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new WaitCommand(300),
                         new DropperPreTransferAction(dropper, robotState)
                 )
         );
