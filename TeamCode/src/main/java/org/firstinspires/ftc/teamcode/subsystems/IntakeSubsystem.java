@@ -60,7 +60,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_MIDDLE_POSITION = 0.55;
     private static final double CLAW_LOOSE_POSITION = 0.77;
     private static final double CLAW_CLOSED_POSITION = 0.8;
-    private static final double CLAW_LEFT_OFFSET = 0.01;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
@@ -77,8 +76,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DcMotorEx currentMotorLeft;
     private final Servo leftWrist;
     private final Servo rightWrist;
-    private final Servo leftClaw;
-    private final Servo rightClaw;
+    private final Servo claw;
     private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
@@ -103,8 +101,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist = hardwareMap.get(Servo.class, "left_intake_wrist");
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
         //Claw zero is the most open position of the claw
-        leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
-        rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+        claw = hardwareMap.get(Servo.class, "claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
@@ -130,8 +127,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.FORWARD);
-        leftClaw.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
 
         isDirectControlEnabled = false;
@@ -181,7 +178,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the position of the claw
      */
     public double getClawPosition() {
-        return leftClaw.getPosition();
+        return claw.getPosition();
     }
 
     /**
@@ -248,11 +245,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void openClaw() {
         if (getPitch() <= IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION - 5) {
-            leftClaw.setPosition(CLAW_MIDDLE_POSITION + CLAW_LEFT_OFFSET);
-            rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+            claw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
-            leftClaw.setPosition(CLAW_OPEN_POSITION + CLAW_LEFT_OFFSET);
-            rightClaw.setPosition(CLAW_OPEN_POSITION);
+            claw.setPosition(CLAW_OPEN_POSITION);
         }
         robotState.setIntakeClawState(ClawState.OPEN);
     }
@@ -261,8 +256,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Closes the Intake Claw
      */
     public void closeClaw() {
-        leftClaw.setPosition(CLAW_CLOSED_POSITION + CLAW_LEFT_OFFSET);
-        rightClaw.setPosition(CLAW_CLOSED_POSITION);
+        claw.setPosition(CLAW_CLOSED_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
@@ -270,8 +264,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Loosens the intake claw
      */
     public void loosenClaw() {
-        leftClaw.setPosition(CLAW_LOOSE_POSITION + CLAW_LEFT_OFFSET);
-        rightClaw.setPosition(CLAW_LOOSE_POSITION);
+        claw.setPosition(CLAW_LOOSE_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
