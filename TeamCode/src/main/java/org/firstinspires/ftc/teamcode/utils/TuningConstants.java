@@ -9,9 +9,9 @@ import com.acmerobotics.dashboard.config.Config;
 public class TuningConstants {
     public static double aTranslationalP = 0.15;
     public static double bTranslationalD = 0;
-    public static double cDriveP = 0.01;
-    public static double dDriveD = 0.006;
-    public static double eHeadingP = 1;
+    public static double cDriveP = 0.02;
+    public static double dDriveD = 0.0035;
+    public static double eHeadingP = 0.5;
     public static double fHeadingD = 0;
     public static double gSecondaryTranslationalP = 0.15;
     public static double hSecondaryTranslationalD = 0;

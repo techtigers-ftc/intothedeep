@@ -35,8 +35,7 @@ public class SpecimenDriveStateConfigurator {
 //        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
 //        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
 //        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setPIDSToTuning();
-
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -60,27 +59,33 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configFirstIntake(DriveToPoseState state) {
-        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
-        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
-        state.setHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
-        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+//        state.setTranslationalPIDF(0.3, 0, 0.01, 0);
+//        state.setDrivePIDF(0.003, 0, 0.00055, 0.6, 0);
+//        state.setHeadingPIDF(1, 0, 0.06, 0);
+//        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
+//        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
                                         new Point(76, 40.25),
-                                        new Point(107, 25),
-                                        new Point(127, 58),
-                                        new Point(52, 92),
-                                        new Point(116, 26),
-                                        new Point(121, 12)
+                                        new Point(117.25, 7),
+                                        new Point(108.25, 53),
+                                        new Point(97.25, 63),
+                                        new Point(118.25, 60)
+
+
+//                                        new Point(111.25, 0),
+//                                        new Point(124.25, 58),
+//                                        new Point(120.25, 92),
+//                                        new Point(117.25, 26)
                                 )
                         )
 
-                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(120))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -128,7 +133,7 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configureThirdHoldPoint(DropSampleState state) {
-       configureFirstHoldPoint(state);
+        configureFirstHoldPoint(state);
     }
 
     /**
