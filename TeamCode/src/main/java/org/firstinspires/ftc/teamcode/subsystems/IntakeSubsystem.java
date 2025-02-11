@@ -66,7 +66,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.008;
+    public static double FORWARD_KP = 0.007;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0.0001;
     public static double FORWARD_KF = 0.001;
@@ -478,11 +478,20 @@ public class IntakeSubsystem extends CloseableSubsystem {
         if (isDirectControlEnabled) {
             if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power < 0)) {
                 power = 0;
-            } else if (robotState.getVoltage() != 0) {
-                power = Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
             }
-            leftSlideMotor.setPower(power);
-            rightSlideMotor.setPower(power);
+            leftSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
+            rightSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
+        }
+    }
+
+    private double getVoltageCompensatedMotorPower(double power) {
+        if(robotState.getVoltage() != 0) {
+            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
+            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
+            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+        } else {
+            RobotLog.dd(tag, "Voltage Is Not Set");
+            return power;
         }
     }
 
@@ -491,7 +500,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(encoderMotor.getCurrentPosition()));
         // TODO: add voltage compensation to intake subsystem
         if (!isDirectControlEnabled) {
             leftSlideMotor.setPower(power);
