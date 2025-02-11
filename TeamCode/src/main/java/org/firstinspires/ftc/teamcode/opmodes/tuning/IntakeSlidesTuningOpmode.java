@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -26,7 +26,8 @@ public class IntakeSlidesTuningOpmode extends BaseOpMode {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         robotState = new RobotState(true, false);
         intakeSubsystem = new IntakeSubsystem(hardwareMap, robotState);
-        registerSubsystems(intakeSubsystem);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
+        registerSubsystems(intakeSubsystem, sensor);
 
         // Slides
         Trigger slidesTrigger = new Trigger(() ->

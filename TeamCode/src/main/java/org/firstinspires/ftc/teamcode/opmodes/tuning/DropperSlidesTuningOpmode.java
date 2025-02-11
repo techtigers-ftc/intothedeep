@@ -8,7 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
@@ -26,7 +26,8 @@ public class DropperSlidesTuningOpmode extends BaseOpMode {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         robotState = new RobotState(true, false);
         dropperSubsystem = new DropperSubsystem(hardwareMap, robotState);
-        registerSubsystems(dropperSubsystem);
+        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
+        registerSubsystems(dropperSubsystem, sensor);
 
         // Slides
         Trigger slidesTrigger = new Trigger(() ->
