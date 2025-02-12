@@ -71,7 +71,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
         robotState = new RobotState(isBlue(), false);
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
-
         intake = new IntakeSubsystem(hardwareMap, robotState);
         dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);

@@ -55,6 +55,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final Limelight3A limelight;
 
     private double framesCached;
+    private double lastYellowInput, lastRedInput, lastBlueInput, lastCourseCameraInput;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -66,6 +67,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         framesCached = 1;
+        lastYellowInput = 0;
+        lastRedInput = 0;
+        lastBlueInput = 0;
+        lastCourseCameraInput = 0;
     }
 
     @Override
@@ -279,6 +284,28 @@ public class LimelightSubsystem extends CloseableSubsystem {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
             setBlockAttributes(result.getDetectorResults());
+        }
+
+        double blue = robotState.isBlue()? 1: 0;
+        double red = robotState.isBlue()? 0: 1;
+        double yellow = 0;
+        double courseCamera = robotState.isCoarseCameraMode()? 1: 0;
+
+        if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
+            yellow = 1;
+            blue = 0;
+            red = 0;
+        } else if (robotState.getBlockColorPreference() == BlockColorPreference.ANY) {
+            yellow = 1;
+        }
+
+        // Only update the python inputs if they have changed
+        if (red != lastRedInput || blue != lastBlueInput || yellow != lastYellowInput || courseCamera != lastCourseCameraInput) {
+            limelight.updatePythonInputs(blue, red, yellow, courseCamera, 0, 0, 0, 0);
+            lastYellowInput = yellow;
+            lastRedInput = red;
+            lastBlueInput = blue;
+            lastCourseCameraInput = courseCamera;
         }
     }
 
