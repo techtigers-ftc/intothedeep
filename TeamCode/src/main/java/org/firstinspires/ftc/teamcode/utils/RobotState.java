@@ -10,8 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-import java.util.function.DoubleSupplier;
-
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -23,9 +21,11 @@ public class RobotState extends GlobalState {
     private Waypoint robotVelocity;
     private Waypoint robotFinalPose;
     private BlockColorPreference blockColorPreference;
-    private BlockDetectionState blockDetectionState;
+    private BlockDetectionState coarseBlockDetectionState;
+    private BlockDetectionState fineBlockDetectionState;
     private double blockLateralCoarse;
     private double blockOrientation;
+    private double detectedFineBlockOrientation;
     private double blockForwardCoarse;
     private BlockColor intakeBlockColor;
     private BlockColor dropperBlockColor;
@@ -53,6 +53,7 @@ public class RobotState extends GlobalState {
     private final boolean isAuto;
     private double visionIntakeHeading;
     private double voltage;
+    private boolean isCameraRunning;
 
     /**
      * Initializes a new RobotState
@@ -62,9 +63,11 @@ public class RobotState extends GlobalState {
         robotVelocity = new Waypoint(0, 0, 0);
         robotFinalPose = new Waypoint(0, 0, 0);
         blockColorPreference = BlockColorPreference.ANY;
-        blockDetectionState = BlockDetectionState.NOT_DETECTED;
+        coarseBlockDetectionState = BlockDetectionState.NOT_DETECTED;
+        fineBlockDetectionState = BlockDetectionState.NOT_DETECTED;
         blockLateralCoarse = 0;
         blockOrientation = 0;
+        detectedFineBlockOrientation = 0;
         blockForwardCoarse = 0;
         intakeBlockColor = BlockColor.NONE;
         dropperBlockColor = BlockColor.NONE;
@@ -91,6 +94,7 @@ public class RobotState extends GlobalState {
         this.isAuto = isAuto;
         visionIntakeHeading = Math.toRadians(0);
         voltage = 0;
+        isCameraRunning = false;
     }
 
     /**
@@ -366,6 +370,22 @@ public class RobotState extends GlobalState {
     }
 
     /**
+     * @return the current detected fine block orientation in degrees
+     */
+    public double getDetectedFineBlockOrientation() {
+        return detectedFineBlockOrientation;
+    }
+
+    /**
+     * Sets the current detected fine block orientation
+     *
+     * @param detectedFineBlockOrientation the orientation of the detected block in degrees
+     */
+    public void setDetectedFineBlockOrientation(double detectedFineBlockOrientation) {
+        this.detectedFineBlockOrientation = detectedFineBlockOrientation;
+    }
+
+    /**
      * @return the current coarse lateral position of the block from the robot
      */
     public double getBlockLateralCoarse() {
@@ -382,19 +402,35 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * @return the current state of block detection
+     * @return the current state of the coarse block detection
      */
-    public BlockDetectionState getBlockDetectionState() {
-        return blockDetectionState;
+    public BlockDetectionState getCoarseBlockDetectionState() {
+        return coarseBlockDetectionState;
     }
 
     /**
-     * Sets the current state of block detection
+     * Sets the current state of the coarse block detection
      *
-     * @param blockDetectionState the state of block detection
+     * @param coarseBlockDetectionState the state of coarse block detection
      */
-    public void setBlockDetectionState(BlockDetectionState blockDetectionState) {
-        this.blockDetectionState = blockDetectionState;
+    public void setCoarseBlockDetectionState(BlockDetectionState coarseBlockDetectionState) {
+        this.coarseBlockDetectionState = coarseBlockDetectionState;
+    }
+
+    /**
+     * @return the current state of the fine block detection
+     */
+    public BlockDetectionState getFineBlockDetectionState() {
+        return fineBlockDetectionState;
+    }
+
+    /**
+     * Sets the current state of the fine block detection
+     *
+     * @param fineBlockDetectionState the state of the fine block detection
+     */
+    public void setFineBlockDetectionState(BlockDetectionState fineBlockDetectionState) {
+        this.fineBlockDetectionState = fineBlockDetectionState;
     }
 
     /**
@@ -625,5 +661,21 @@ public class RobotState extends GlobalState {
      */
     public void setVoltage(double voltage) {
         this.voltage = voltage;
+    }
+
+    /**
+     * @return if the small camera is running
+     */
+    public boolean isCameraRunning() {
+        return isCameraRunning;
+    }
+
+    /**
+     * Sets if the small camera is running
+     *
+     * @param cameraRunning whether the small camera is running
+     */
+    public void setCameraRunning(boolean cameraRunning) {
+        isCameraRunning = cameraRunning;
     }
 }

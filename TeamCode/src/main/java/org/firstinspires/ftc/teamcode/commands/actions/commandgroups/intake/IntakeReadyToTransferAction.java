@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * Command to move intake to ready to transfer state.
@@ -31,19 +29,6 @@ public class IntakeReadyToTransferAction extends SequentialCommandGroup {
                 new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1),
                 new IntakeCloseAction(intake)
         );
-    }
-
-    @Override
-    public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_TRANSFER && !robotState.isAuto()) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
     }
 
     @Override

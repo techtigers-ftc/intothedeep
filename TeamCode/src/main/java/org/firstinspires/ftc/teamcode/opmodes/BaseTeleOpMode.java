@@ -8,7 +8,6 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -23,15 +22,16 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
@@ -59,6 +59,7 @@ import team.techtigers.core.utils.RobotSaveState;
 public abstract class BaseTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
 
@@ -72,10 +73,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
 
         intake = new IntakeSubsystem(hardwareMap, robotState);
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
-//        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
+        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
@@ -85,7 +86,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         }
 
-        registerSubsystems(intake, drive, dropper, limelight, //smallCamera
+        registerSubsystems(intake, drive, dropper, limelight, smallCamera,
                 odometry, ascent, sensor);
 
         // ASCENT
@@ -126,22 +127,17 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 5);
         IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, () -> robotState.getBlockForwardCoarse());
+                intake, dropper, () -> robotState.getBlockForwardCoarse(), robotState);
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, () -> intake.getCurrentSlidePositionInches());
+                intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
-        IntakeReadyToPickupAction readyToPickupAuto = new IntakeReadyToPickupAction(intake, robotState,
-                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
-                () -> (robotState.getBlockOrientation() + 180) % 180// This is done to translate claw rotation to block orientation
+        SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper,robotState, null
         );
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState,
-                () -> robotState.getRobotCurrentPose().getHeading(), // robotState
-                // ::getVisionIntakeHeading,
-                driverGamepad);
+                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
@@ -158,7 +154,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inPrepareToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
-        Trigger blockDetected = new Trigger(() -> robotState.getBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger blockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
         manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
@@ -192,7 +188,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         // TODO: Make auto later when small cam works
-        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
+        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
 
@@ -240,11 +236,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
                 new ChangeBlockColorPreferenceCommand(robotState, manipulatorGamepad);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                    changeBlockColorPreferenceCommand);
+                changeBlockColorPreferenceCommand);
 
         // Dropper TODO: Split into a different method
 
         // Dropper State Transitions
+        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
+        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, robotState);
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
@@ -255,27 +253,44 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
 
-        Trigger dpadLeft = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
-        Trigger dpadRight = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+        Trigger dpadLeft =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
+        Trigger dpadRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+        Trigger dpadLeftAndRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
+        Trigger back =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.BACK);
         Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
         Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
 
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
         Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
+        Trigger transfer =
+                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER);
+        Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
+        Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
+        // Back down
         dpadDown.whenActive(dropperPreTransferAction);
 
+        // Basket drop
         dpadUp.and(blockInIntake).whenActive(dropperHighBasketAction);
         dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
 
-        dpadLeft.and(backwardCarry).whenActive(dropperBackSlapAction);
-        dpadLeft.and(backwardCarry.negate()).and(blockInIntake).whenActive(dropperBackwardCarryAction);
-        dpadLeft.and(backwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperBackwardCarryNoTransferAction);
+        // Wall Intake
+        dpadLeft.and(wallIntake.negate()).whenActive(dropperWallIntakeAction);
+        dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
+
+        // Dropper specimen movements
+        back.and(backwardCarry).whenActive(dropperBackSlapAction);
+        back.and(blockInIntake).and(transfer).whenActive(dropperBackwardCarryAction);
+        back.and(backwardCarry.negate()).and(blockInDropper).whenActive(dropperBackwardCarryNoTransferAction);
 
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInIntake).whenActive(dropperForwardCarryAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInIntake.negate()).whenActive(dropperForwardCarryNoTransferAction);
+        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
+        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
 
         //Manual Dropper Stuff
 
@@ -304,7 +319,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
             Gamepad.RumbleEffect endgameRumbleEffect = new Gamepad.RumbleEffect.Builder()
                     .addStep(
-                        1, 1, 1000
+                            1, 1, 1000
                     )
                     .addStep(
                             0, 0, 500
@@ -338,9 +353,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void update() {
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Slide POS", intake.getCurrentSlidePositionInches());
+        telemetry.addData("Intake Slide POS",
+                intake.getCurrentSlidePositionInches());
+        telemetry.addData("Dropper Slide POS",
+                dropper.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Block Detection State", robotState.getBlockDetectionState());
+        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 //        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
@@ -357,6 +375,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
+        telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
         telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
     }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import team.techtigers.base.BaseOpMode;
 
 @TeleOp(name = "Limelight Test OpMode", group = "Tuning")
+@Disabled
 public class LimelightTestOpMode extends BaseOpMode {
     private RobotState robotState;
 

@@ -23,8 +23,8 @@ public class StartAscentAction extends SequentialCommandGroup {
     public StartAscentAction(RobotState robotState, AscentSubsystem ascent, DropperSubsystem dropper) {
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper,
-                        AscentSubsystem.ASCENT_INITIAL_HEIGHT + 1, 0.5),
-                new AscentEngageAction(ascent, 0)
+                        AscentSubsystem.ASCENT_SLIDES_INITIAL_HEIGHT + 1, 0.5),
+                new AscentEngageAction(ascent, robotState, 1000)
         );
     }
 }

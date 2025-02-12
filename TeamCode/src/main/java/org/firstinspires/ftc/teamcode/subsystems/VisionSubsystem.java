@@ -39,9 +39,10 @@ public class VisionSubsystem extends CloseableSubsystem {
         camera = hardwareMap.get(WebcamName.class, "camera");
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(320, 240))
+                .setCameraResolution(new Size(BetterDetectionProcessor.WIDTH_RESOLUTION, BetterDetectionProcessor.HEIGHT_RESOLUTION))
                 .addProcessor(new BetterDetectionProcessor(robotState))
                 .build();
+//        visionPortal.stopStreaming();
     }
 
     @Override
@@ -49,6 +50,8 @@ public class VisionSubsystem extends CloseableSubsystem {
         visionPortal.stopLiveView();
         visionPortal.getCameraState();
 //        setExposure();
+//        visionPortal.resumeStreaming();
+        robotState.setCameraRunning(true);
 
         while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             sleep(100);

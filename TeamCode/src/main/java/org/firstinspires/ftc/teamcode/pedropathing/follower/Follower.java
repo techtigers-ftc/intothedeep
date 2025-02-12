@@ -163,6 +163,12 @@ public class Follower {
         drivePIDF.setCoefficients(coefficients);
     }
 
+    public void disableSecondaryPIDS() {
+        useSecondaryTranslationalPID = false;
+        useSecondaryHeadingPID = false;
+        useSecondaryDrivePID = false;
+    }
+
     /**
      * This sets the maximum power the motors are allowed to use.
      *

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
@@ -12,19 +11,18 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to move intake to ready to intake state
+ * Command to move intake to ready to pickup state
  */
 public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakeReadyToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeReadyToIntakeCommand
+     * Creates a new IntakeReadyToPickupCommand
      *
      * @param intake                the intake subsystem
      * @param robotState            the robot state
@@ -39,9 +37,10 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 100),
+                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 300),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100)
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 300),
+                        new IntakeOpenAction(intake, 0)
                 ),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake,
@@ -64,17 +63,16 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
         this(intake, robotState, intake::getCurrentSlidePositionInches, () -> clawRotationPosition);
     }
 
-    @Override
-    public void initialize() {
-        if (robotState.getIntakeState() != IntakeState.PREPARE_TO_PICKUP && robotState.getIntakeState() != IntakeState.READY_TO_TRANSFER && !robotState.isAuto()) {
-            RobotLog.ww(LOG_TAG, "Invalid intake position: %s", robotState.getIntakeState());
-            robotState.setError(RobotError.INVALID_INTAKE_POSITION);
-            this.cancel();
-        } else {
-            RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-            robotState.clearError(RobotError.INVALID_INTAKE_POSITION);
-            super.initialize();
-        }
+    /**
+     * Overloaded constructor that defaults to no slide movement.
+     *
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     * @param clawRotationPosition the target claw rotation supplier
+     */
+    public IntakeReadyToPickupAction(IntakeSubsystem intake, RobotState robotState,
+                                     DoubleSupplier clawRotationPosition) {
+        this(intake, robotState, intake::getCurrentSlidePositionInches, clawRotationPosition);
     }
 
     @Override
