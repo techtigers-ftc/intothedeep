@@ -101,7 +101,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist = hardwareMap.get(Servo.class, "left_intake_wrist");
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
         //Claw zero is the most open position of the claw
-        claw = hardwareMap.get(Servo.class, "claw");
+        claw = hardwareMap.get(Servo.class, "intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
