@@ -37,6 +37,7 @@ import team.techtigers.core.paths.Waypoint;
 public class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    private DropperSubsystem dropper;
 
     private DoubleSupplier distToIntakeTarget(RobotState robotState, Waypoint target) {
         return () -> Math.min(Math.hypot(target.getX() - robotState.getRobotCurrentPose().getX(),
@@ -54,7 +55,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
                 robotState, new Waypoint(77, 7.25, Math.toRadians(90)));
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
+        dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
@@ -236,10 +237,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
 
-                .addTransition(clipPreload, endState, AutoState.DRIVE_END)
+//                .addTransition(clipPreload, endState, AutoState.DRIVE_END)
 
-//                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
-//                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
 
 //                .addTransition(driveToFirstIntake, grabFirstSample, AutoState.DRIVE_END)
 //                .addTransition(driveToFirstIntake, grabFirstSample, AutoState.TIMEOUT)
@@ -308,7 +309,11 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
-        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
-        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addLine();
+        telemetry.addData("Expected Intake Slide Position", intake.getTargetPositionInches());
+        telemetry.addData("Intake Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addLine();
+        telemetry.addData("Expected Dropper Slide Position", intake.getTargetPositionInches());
+        telemetry.addData("Dropper Slide Position", intake.getCurrentSlidePositionInches());
     }
 }
