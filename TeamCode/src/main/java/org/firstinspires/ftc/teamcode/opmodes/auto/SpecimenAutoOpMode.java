@@ -57,7 +57,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 robotState, new Waypoint(77, 7.25, Math.toRadians(90)));
         dropper = new DropperSubsystem(hardwareMap,
                 robotState);
-        intake = new IntakeSubsystem(hardwareMap, robotState);
+//        intake = new IntakeSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
@@ -287,7 +287,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper, intake, limelight, sensor);
+        registerSubsystems(auto, drive, odometry, dropper, limelight, sensor);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
@@ -295,8 +295,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
-        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
-        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+//        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
+//        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
         telemetry.update();
     }
 
@@ -310,10 +310,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addLine();
-        telemetry.addData("Expected Intake Slide Position", intake.getTargetPositionInches());
-        telemetry.addData("Intake Slide Position", intake.getCurrentSlidePositionInches());
-        telemetry.addLine();
-        telemetry.addData("Expected Dropper Slide Position", intake.getTargetPositionInches());
-        telemetry.addData("Dropper Slide Position", intake.getCurrentSlidePositionInches());
+//        telemetry.addData("Expected Intake Slide Position", intake.getTargetPositionInches());
+//        telemetry.addData("Intake Slide Position", intake.getCurrentSlidePositionInches());
+//        telemetry.addLine();
+//        telemetry.addData("Expected Dropper Slide Position", intake.getTargetPositionInches());
+//        telemetry.addData("Dropper Slide Position", intake.getCurrentSlidePositionInches());
     }
 }
