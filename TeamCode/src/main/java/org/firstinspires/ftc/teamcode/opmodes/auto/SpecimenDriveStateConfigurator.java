@@ -29,20 +29,17 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropSpecimenState state) {
-//        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-//        state.setDrivePIDF(0.006, 0, 0.0004, 0.6, 0);
-//        state.setHeadingPIDF(1, 0, 0.03, 0);
-//        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setDrivePIDF(0.014, 0, 0.0035, 0.6, 0);
+        state.setHeadingPIDF(0.5, 0, 0.03, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(77, 7.25),
-                                        new Point(76, 40.25)
+                                        new Point(76, 41.5)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -65,17 +62,26 @@ public class SpecimenDriveStateConfigurator {
 //        state.setSecondaryTranslationalPIDF(0.175, 0, 0.03, 0);
 //        state.setSecondaryDrivePIDF(0.004, 0, 0.0002, 0.6, 0);
 //        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setPIDSToTuning();
+//        state.setPIDSToTuning();
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(76, 40.25),
-                                        new Point(117.25, 7),
-                                        new Point(108.25, 53),
-                                        new Point(97.25, 63),
-                                        new Point(118.25, 60)
+                                        new Point(76, 41.5),
+//                                        new Point(118.25, -15),
+////                                        new Point(108.25, 80),
+//                                        new Point(116.25, 55)
+//                                        new Point(135, 35)
+
+
+
+
+                                        new Point(113, 17),
+                                        new Point(115, 37),
+//                                        new Point(97.25, 45),
+                                        new Point(116.25, 55)
 
 
 //                                        new Point(111.25, 0),
