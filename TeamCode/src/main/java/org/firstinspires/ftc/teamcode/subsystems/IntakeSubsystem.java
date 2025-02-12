@@ -56,10 +56,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.35;
-    private static final double CLAW_MIDDLE_POSITION = 0.55;
-    private static final double CLAW_LOOSE_POSITION = 0.77;
-    private static final double CLAW_CLOSED_POSITION = 0.8;
+    private static final double CLAW_OPEN_POSITION = 0.53;
+    private static final double CLAW_MIDDLE_POSITION = 0.63;
+    private static final double CLAW_LOOSE_POSITION = 0.78;
+    private static final double CLAW_CLOSED_POSITION = 0.83;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
@@ -128,7 +128,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        claw.setDirection(Servo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
 
         isDirectControlEnabled = false;
