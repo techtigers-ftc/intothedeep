@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -26,23 +23,20 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
-     * @param intake    The intake subsystem
+     * @param intake     The intake subsystem
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-                new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, robotState),
-                        new DropperBackwardCarryAction(dropper, intake, robotState)
-                )
+                new DropperForwardCarryWallAction(dropper, robotState)
         );
     }
 
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.BACKWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

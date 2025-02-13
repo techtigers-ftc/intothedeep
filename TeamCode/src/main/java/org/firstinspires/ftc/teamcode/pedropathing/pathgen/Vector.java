@@ -138,4 +138,9 @@ public class Vector {
     public double getYComponent() {
         return yComponent;
     }
+
+    @Override
+    public String toString() {
+        return "(" + xComponent + ", " + yComponent + ", " + theta + ")";
+    }
 }
