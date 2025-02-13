@@ -18,8 +18,8 @@ public class DriveToPoseState extends DriveStateBase {
      * @param drive      The drive subsystem
      * @param robotState The robot state
      */
-    public DriveToPoseState(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name, drive, robotState, 15);
+    public DriveToPoseState(String name, DriveSubsystem drive, RobotState robotState, double timeout) {
+        super(name, drive, robotState, timeout);
         addCommands(
                 autoDriveCommand
         );

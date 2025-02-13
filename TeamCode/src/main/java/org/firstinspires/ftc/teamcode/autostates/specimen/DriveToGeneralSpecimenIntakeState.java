@@ -24,7 +24,7 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralSpecimenIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState, 5);
+        super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
                 new DropperWallIntakeAction(dropper, robotState)

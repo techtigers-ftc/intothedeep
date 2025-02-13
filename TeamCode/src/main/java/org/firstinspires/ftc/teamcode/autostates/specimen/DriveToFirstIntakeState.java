@@ -22,7 +22,7 @@ public class DriveToFirstIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToFirstIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState, 10);
+        super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
                 new DropperWallIntakeAction(dropper, robotState)

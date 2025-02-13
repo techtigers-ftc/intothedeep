@@ -84,7 +84,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         DriveToPoseState firstPush = new DriveToPoseState(
                 "firstPush",
                 drive,
-                robotState
+                robotState,
+                3
         );
         SpecimenDriveStateConfigurator.configFirstPush(firstPush);
 
@@ -92,34 +93,40 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 "secondIntake",
                 drive,
                 robotState
+                ,3
         );
         SpecimenDriveStateConfigurator.configSecondIntake(secondIntake);
 
         DriveToPoseState secondPush = new DriveToPoseState(
                 "secondPush",
                 drive,
-                robotState
+                robotState,
+                3
         );
         SpecimenDriveStateConfigurator.configSecondPush(secondPush);
 
         DriveToPoseState thirdIntake = new DriveToPoseState(
                 "thirdIntake",
                 drive,
-                robotState
+                robotState,
+                3
         );
         SpecimenDriveStateConfigurator.configThirdIntake(thirdIntake);
 
         DriveToPoseState thirdPush = new DriveToPoseState(
                 "thirdPush",
                 drive,
-                robotState
+                robotState,
+                3
         );
         SpecimenDriveStateConfigurator.configThirdPush(thirdPush);
 
         DriveToPoseState driveToFirstSpecimenIntake = new DriveToPoseState(
                 "driveToFirstSpecimenIntake",
                 drive,
-                robotState);
+                robotState,
+                2
+        );
         SpecimenDriveStateConfigurator.configFirstSpecimenIntake(driveToFirstSpecimenIntake);
 
         ClipSpecimenState clipSpecimen = new ClipSpecimenState(
@@ -280,7 +287,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
 
+//                .addTransition(clipSpecimen, endState, AutoState.SPECIMEN_4_DROP_COMPLETE)
+
                 .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_4_DROP_COMPLETE)
+
                 .addTransition(driveToPark, endState, AutoState.DRIVE_END)
                 .addTransition(driveToPark, endState, AutoState.TIMEOUT)
 
@@ -300,6 +310,9 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
 //        telemetry.addData("Expected Slide Position", intake.getTargetPositionInches());
 //        telemetry.addData("Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addLine();
+        telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
+        telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
     }
 
@@ -315,8 +328,8 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addLine();
 //        telemetry.addData("Expected Intake Slide Position", intake.getTargetPositionInches());
 //        telemetry.addData("Intake Slide Position", intake.getCurrentSlidePositionInches());
-//        telemetry.addLine();
-//        telemetry.addData("Expected Dropper Slide Position", intake.getTargetPositionInches());
-//        telemetry.addData("Dropper Slide Position", intake.getCurrentSlidePositionInches());
+        telemetry.addLine();
+        telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
+        telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
     }
 }
