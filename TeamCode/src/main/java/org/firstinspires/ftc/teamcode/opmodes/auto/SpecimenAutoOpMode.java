@@ -53,7 +53,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(64.5,7.25, Math.toRadians(90)));
+                robotState, new Waypoint(64.25,7.25, Math.toRadians(90)));
         dropper = new DropperSubsystem(hardwareMap,
                 robotState);
 //        intake = new IntakeSubsystem(hardwareMap, robotState);
@@ -256,34 +256,35 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
 
-//                .addTransition(intakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
-//                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
-//                .addTransition(clipSpecimen, driveToSecondSpecimenIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
-//                .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
+                .addTransition(intakeSpecimen, driveToFirstSpecimenDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
+                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(clipSpecimen, driveToSecondSpecimenIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
+                .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToSecondSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
 
-//                .addTransition(intakeSpecimen, driveToSecondSpecimenDrop, AutoState.SPECIMEN_2_INTAKE_COMPLETE)
-//                .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
-//                .addTransition(clipSpecimen, driveToThirdSpecimenIntake, AutoState.SPECIMEN_2_DROP_COMPLETE)
-//                .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
-//                .addTransition(intakeSpecimen, driveToThirdSpecimenDrop, AutoState.SPECIMEN_3_INTAKE_COMPLETE)
-//                .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
-//
-//                .addTransition(clipSpecimen, driveToFourthSpecimenIntake, AutoState.SPECIMEN_3_DROP_COMPLETE)
-//                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
-//                .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
-//                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
-//
-//                .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_3_DROP_COMPLETE)
-//                .addTransition(driveToPark, endState, AutoState.DRIVE_END)
-//                .addTransition(driveToPark, endState, AutoState.TIMEOUT)
+                .addTransition(intakeSpecimen, driveToSecondSpecimenDrop, AutoState.SPECIMEN_2_INTAKE_COMPLETE)
+                .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToSecondSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(clipSpecimen, driveToThirdSpecimenIntake, AutoState.SPECIMEN_2_DROP_COMPLETE)
+                .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToThirdSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
+                .addTransition(intakeSpecimen, driveToThirdSpecimenDrop, AutoState.SPECIMEN_3_INTAKE_COMPLETE)
+                .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToThirdSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
 
+                .addTransition(clipSpecimen, driveToFourthSpecimenIntake, AutoState.SPECIMEN_3_DROP_COMPLETE)
+                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
+                .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
+                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
+
+                .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_4_DROP_COMPLETE)
+                .addTransition(driveToPark, endState, AutoState.DRIVE_END)
+                .addTransition(driveToPark, endState, AutoState.TIMEOUT)
+
+//                .setCurrentState(driveChamberPreload);
                 .setCurrentState(driveChamberPreload);
 
 

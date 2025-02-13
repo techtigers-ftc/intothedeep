@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -16,6 +17,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
             PickupSpecimenState.class.getSimpleName();
     private int runCounter;
     private RobotState robotState;
+    private DropperSubsystem dropper;
 
     /**
      * Constructor for the ClipSpecimenState
@@ -27,9 +29,11 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
     public PickupSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         this.robotState = robotState;
+        this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new DropperCloseAction(dropper, 100)
+                new DropperCloseAction(dropper, 100),
+                new DropperSlidesAbsoluteAction(dropper, 4, 1)
         );
     }
 
@@ -49,7 +53,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED && dropper.getCurrentSlidePositionInches() > 3) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {

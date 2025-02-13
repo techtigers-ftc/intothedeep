@@ -19,6 +19,7 @@ public class SpecimenDriveStateConfigurator {
     private static final double SMALL_TOLERANCE = 1.5;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
     private static final double MINISCULE_TOLERANCE = 1.25;
+    private static final double MICROSCOPIC_TOLERANCE = 1;
     private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
 
     /**
@@ -235,7 +236,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(MINISCULE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -277,8 +278,10 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierLine(
+                        .addBezierCurve(
                                 new Point(68, 42.5),
+                                new Point(73.25, 16),
+                                new Point(116.25, 40),
                                 new Point(111, 6.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -327,8 +330,10 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierLine(
+                        .addBezierCurve(
                                 new Point(70, 42.5),
+                                new Point(73.25, 16),
+                                new Point(116.25, 40),
                                 new Point(111, 6.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -377,8 +382,10 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierLine(
+                        .addBezierCurve(
                                 new Point(72, 42.5),
+                                new Point(73.25, 16),
+                                new Point(116.25, 40),
                                 new Point(111, 6.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
