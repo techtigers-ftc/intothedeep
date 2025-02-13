@@ -14,12 +14,12 @@ public class DriveToPoseState extends DriveStateBase {
     /**
      * Constructor for a DriveToPose state
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
      * @param robotState The robot state
      */
     public DriveToPoseState(String name, DriveSubsystem drive, RobotState robotState) {
-        super(name, drive, robotState, 10);
+        super(name, drive, robotState, 15);
         addCommands(
                 autoDriveCommand
         );

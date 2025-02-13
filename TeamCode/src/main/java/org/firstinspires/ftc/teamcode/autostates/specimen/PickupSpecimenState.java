@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -10,11 +9,11 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to clip a specimen onto the chamber
+ * A state to pickup a specimen from the wall
  */
-public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
+public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            ClipSpecimenState.class.getSimpleName();
+            PickupSpecimenState.class.getSimpleName();
     private int runCounter;
     private RobotState robotState;
 
@@ -25,13 +24,12 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public ClipSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
+    public PickupSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 200),
-                new DropperFrontSlapAction(dropper, robotState)
+                new DropperCloseAction(dropper, 100)
         );
     }
 
@@ -51,15 +49,15 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.OPEN) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED) {
             if (runCounter == 1) {
-                return AutoState.SPECIMEN_1_DROP_COMPLETE;
+                return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {
-                return AutoState.SPECIMEN_2_DROP_COMPLETE;
+                return AutoState.SPECIMEN_2_INTAKE_COMPLETE;
             } else if (runCounter == 3) {
-                return AutoState.SPECIMEN_3_DROP_COMPLETE;
+                return AutoState.SPECIMEN_3_INTAKE_COMPLETE;
             }
-            return AutoState.SPECIMEN_4_DROP_COMPLETE;
+            return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
     }
