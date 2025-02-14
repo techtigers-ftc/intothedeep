@@ -32,7 +32,7 @@ public class VisionTestOpmode extends BaseOpMode {
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        robotState = new RobotState(true, false);
+        robotState = new RobotState(false, false);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap,
                 robotState);
 

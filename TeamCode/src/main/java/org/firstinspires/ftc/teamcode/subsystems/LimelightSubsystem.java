@@ -77,7 +77,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public void init() {
         limelight.setPollRateHz(50);
         limelight.start();
-        limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
+        limelight.pipelineSwitch(3);
     }
 
     private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
@@ -281,10 +281,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-        LLResult result = limelight.getLatestResult();
-        if (result != null) {
-            setBlockAttributes(result.getDetectorResults());
-        }
+//        LLResult result = limelight.getLatestResult();
+//        if (result != null) {
+//            setBlockAttributes(result.getDetectorResults());
+//        }
 
         double blue = robotState.isBlue()? 1: 0;
         double red = robotState.isBlue()? 0: 1;
@@ -300,12 +300,20 @@ public class LimelightSubsystem extends CloseableSubsystem {
         }
 
         // Only update the python inputs if they have changed
-        if (red != lastRedInput || blue != lastBlueInput || yellow != lastYellowInput || courseCamera != lastCourseCameraInput) {
+//        if (red != lastRedInput || blue != lastBlueInput || yellow != lastYellowInput || courseCamera != lastCourseCameraInput) {
             limelight.updatePythonInputs(blue, red, yellow, courseCamera, 0, 0, 0, 0);
+//        limelight.updatePythonInputs(1, 1, 1, 0, 0, 0, 0, 0);
             lastYellowInput = yellow;
             lastRedInput = red;
             lastBlueInput = blue;
             lastCourseCameraInput = courseCamera;
+//        }
+
+        LLResult result = limelight.getLatestResult();
+        if (result != null) {
+            double[] results =  result.getPythonOutput();
+
+            robotState.setBlockOrientation(results[0]);
         }
     }
 
