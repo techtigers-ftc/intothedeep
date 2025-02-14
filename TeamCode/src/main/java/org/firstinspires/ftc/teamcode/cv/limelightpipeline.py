@@ -295,7 +295,7 @@ def runPipeline(frame, llrobot):
         if len(game_pieces) > 0:
             llpython = [1, center[0], center[1], angle, 0, 0, 0, 0]
 
-        return largest_contour, frame, [angle, 0, 0, 0, 0, 0, 0, 0]
+        return largest_contour, frame, llpython
         # return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
 
     except Exception as e:
