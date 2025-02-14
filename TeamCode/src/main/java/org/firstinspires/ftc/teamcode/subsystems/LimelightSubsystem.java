@@ -30,6 +30,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private static final double HEAVY_WEIGHT = 2;
 
+    private static final double WIDTH_MIDPOINT = 3.5;
+    private static final double HEIGHT_MIDPOINT = 2.625;
+    private static final double PIXELS_PER_INCH = 45.7;
+
     // Orientation exponential function parameters
     private static final double ORIENTATION_V_COMPRESS = 0.719428;
     private static final double ORIENTATION_BASE = 1.0629;
@@ -299,21 +303,20 @@ public class LimelightSubsystem extends CloseableSubsystem {
             yellow = 1;
         }
 
-        // Only update the python inputs if they have changed
-//        if (red != lastRedInput || blue != lastBlueInput || yellow != lastYellowInput || courseCamera != lastCourseCameraInput) {
-            limelight.updatePythonInputs(blue, red, yellow, courseCamera, 0, 0, 0, 0);
-//        limelight.updatePythonInputs(1, 1, 1, 0, 0, 0, 0, 0);
-            lastYellowInput = yellow;
-            lastRedInput = red;
-            lastBlueInput = blue;
-            lastCourseCameraInput = courseCamera;
-//        }
+        limelight.updatePythonInputs(yellow, red, blue, courseCamera, 0, 0,
+                0, 0);
+        lastYellowInput = yellow;
+        lastRedInput = red;
+        lastBlueInput = blue;
+        lastCourseCameraInput = courseCamera;
 
         LLResult result = limelight.getLatestResult();
         if (result != null) {
             double[] results =  result.getPythonOutput();
 
-            robotState.setBlockOrientation(results[0]);
+            robotState.setBlockLateralFine(results[1]);
+            robotState.setBlockForwardFine(results[2]);
+            robotState.setBlockOrientation(results[3]);
         }
     }
 
