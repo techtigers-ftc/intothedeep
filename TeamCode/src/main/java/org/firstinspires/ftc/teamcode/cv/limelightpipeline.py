@@ -164,6 +164,8 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 def runPipeline(frame, llrobot):
     try:
+
+        usingYellow, usingRed, usingBlue = list(map(bool, llrobot[:3]))
         llpython = [0, 0, 0, 0, 0, 0, 0, 0]
         largest_contour = np.array([[]])
         # frame = cv2.resize(frame, (256, 144))
@@ -187,18 +189,23 @@ def runPipeline(frame, llrobot):
         yellow_mask = cv2.inRange(hsv_denoised, np.array(HSV_YELLOW_RANGE[0]), np.array(HSV_YELLOW_RANGE[1]))
 
         # Combine all color masks
-        combined_mask = cv2.bitwise_or(cv2.bitwise_or(blue_mask, red_mask), yellow_mask)
+        height, width = blue_mask.shape
+        # usingRed = True
+        # usingBlue = True
+        # usingYellow = True
+        combined_mask = np.zeros((height, width), dtype=np.uint8)
+        if usingRed:
+            combined_mask = cv2.bitwise_or(red_mask, combined_mask)
+        if usingYellow:
+            combined_mask = cv2.bitwise_or(yellow_mask, combined_mask)
+        if usingBlue:
+            combined_mask = cv2.bitwise_or(blue_mask, combined_mask)
 
         masked_frame = cv2.bitwise_and(frame, frame, mask=combined_mask)
 
-
         gray_masked = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2GRAY)
-
-
         # Edge detection pipeline
         blurred = cv2.GaussianBlur(gray_masked, (BLUR_SIZE, BLUR_SIZE), 0)
-
-
 
         sobelx = cv2.Sobel(blurred, cv2.CV_32F, 1, 0, ksize=SOBEL_KERNEL)
         sobely = cv2.Sobel(blurred, cv2.CV_32F, 0, 1, ksize=SOBEL_KERNEL)
@@ -225,6 +232,7 @@ def runPipeline(frame, llrobot):
 
         game_pieces = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        contours_to_select_from = []
 
         for i, contour in enumerate(contours):
             if cv2.contourArea(contour) < SMALL_CONTOUR_AREA:
@@ -254,6 +262,8 @@ def runPipeline(frame, llrobot):
 
                 vertices = len(sep_contour)
 
+                contours_to_select_from.append([sep_contour, center])
+
                 color = COLOR_GREEN if hierarchy[0][i][3] == -1 else COLOR_RED
 
                 cv2.drawContours(frame, [sep_contour], 0, color, 2)
@@ -271,16 +281,23 @@ def runPipeline(frame, llrobot):
                 })
 
                 # Update largest_contour if this is the first valid contour
-                if len(game_pieces) == 1:
-                    largest_contour = sep_contour
+                # if len(game_pieces) == 1:
+                #     largest_contour = sep_contour
+        min_dist = 10000000000
+        for contour, center in contours_to_select_from:
+            dist = (width-center[0]) ** 2 +  (height-center[1]) ** 2
+            if dist < min_dist:
+                min_dist = dist
+                largest_contour = contour
 
         if len(game_pieces) > 0:
             llpython = [1, center[0], center[1], angle, 0, 0, 0, 0]
 
-#         return largest_contour, frame, llpython
-        return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
+        return largest_contour, frame, [angle, 0, 0, 0, 0, 0, 0, 0]
+        # return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
 
     except Exception as e:
+        print(e)
         cv2.putText(frame, f"Error: {str(e)}", (10, 30), FONT_NAME, FONT_SIZE,
                     COLOR_ERROR, FONT_THICKNESS)
         return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
