@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -27,7 +30,10 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
         super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
-                new DropperWallIntakeAction(dropper, robotState)
+                new SequentialCommandGroup(
+                        new WaitCommand(750),
+                        new DropperWallIntakeAction(dropper, robotState)
+                )
         );
     }
 
