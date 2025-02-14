@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -26,12 +29,14 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public ClipSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
-        super(name);
+        super(name, 0.3);
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 200),
-                new DropperFrontSlapAction(dropper, robotState)
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                new WaitCommand(300)
         );
     }
 
@@ -51,7 +56,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.OPEN) {
+        if (isTimeoutReached()) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_DROP_COMPLETE;
             } else if (runCounter == 2) {
