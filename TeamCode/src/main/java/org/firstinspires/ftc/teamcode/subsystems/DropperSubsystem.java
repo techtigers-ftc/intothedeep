@@ -59,9 +59,9 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
     public static double CLAW_CLOSED_POSITION = 0.055;
-    public static double KP = 0.01;
+    public static double KP = 0.006;
     public static double KI = 0;
-    public static double KD = 0.000000001;
+    public static double KD = 0;
     public static double KF = 0;
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
@@ -372,10 +372,21 @@ public class DropperSubsystem extends CloseableSubsystem {
         return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
     }
 
+    private double getVoltageCompensatedMotorPower(double power) {
+        if(robotState.getVoltage() != 0) {
+            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
+            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
+            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+        } else {
+            RobotLog.dd(tag, "Voltage Is Not Set");
+            return power;
+        }
+    }
+
     @Override
     public void periodic() {
         double power =
-                slideController.calculateMotorPowers(getCurrentSlidePositionTicks());
+                getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
 
         if (!robotState.getIsAscending()) {
             leftSlideMotor.setPower(power);

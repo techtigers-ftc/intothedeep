@@ -75,7 +75,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
-        VisionSubsystem smallCamera = new VisionSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
@@ -85,7 +84,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         }
 
-        registerSubsystems(intake, drive, dropper, limelight, smallCamera,
+        registerSubsystems(intake, drive, dropper, limelight,
                 odometry, ascent, sensor);
 
         // ASCENT

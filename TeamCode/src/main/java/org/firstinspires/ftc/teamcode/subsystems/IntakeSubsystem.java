@@ -56,17 +56,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.35;
-    private static final double CLAW_MIDDLE_POSITION = 0.55;
-    private static final double CLAW_LOOSE_POSITION = 0.77;
-    private static final double CLAW_CLOSED_POSITION = 0.81;
-    private static final double CLAW_LEFT_OFFSET = 0.01;
+    private static final double CLAW_OPEN_POSITION = 0.53;
+    private static final double CLAW_MIDDLE_POSITION = 0.63;
+    private static final double CLAW_LOOSE_POSITION = 0.78;
+    private static final double CLAW_CLOSED_POSITION = 0.83;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
     private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
     public static double minRed = 0.43;
-    public static double FORWARD_KP = 0.008;
+    public static double FORWARD_KP = 0.007;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0.0001;
     public static double FORWARD_KF = 0.001;
@@ -78,8 +77,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DcMotorEx currentMotorLeft;
     private final Servo leftWrist;
     private final Servo rightWrist;
-    private final Servo leftClaw;
-    private final Servo rightClaw;
+    private final Servo claw;
     private final Servo clawRotation;
     private final SlideController slideController;
     private final DifferentialController differentialController;
@@ -104,8 +102,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist = hardwareMap.get(Servo.class, "left_intake_wrist");
         rightWrist = hardwareMap.get(Servo.class, "right_intake_wrist");
         //Claw zero is the most open position of the claw
-        leftClaw = hardwareMap.get(Servo.class, "left_intake_claw");
-        rightClaw = hardwareMap.get(Servo.class, "right_intake_claw");
+        claw = hardwareMap.get(Servo.class, "intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
@@ -131,8 +128,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        rightClaw.setDirection(Servo.Direction.FORWARD);
-        leftClaw.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
         colorSensorTimer = new ElapsedTime();
 
         isDirectControlEnabled = false;
@@ -182,7 +178,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the position of the claw
      */
     public double getClawPosition() {
-        return leftClaw.getPosition();
+        return claw.getPosition();
     }
 
     /**
@@ -249,11 +245,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     public void openClaw() {
         if (getPitch() <= IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION - 5) {
-            leftClaw.setPosition(CLAW_MIDDLE_POSITION + CLAW_LEFT_OFFSET);
-            rightClaw.setPosition(CLAW_MIDDLE_POSITION);
+            claw.setPosition(CLAW_MIDDLE_POSITION);
         } else {
-            leftClaw.setPosition(CLAW_OPEN_POSITION + CLAW_LEFT_OFFSET);
-            rightClaw.setPosition(CLAW_OPEN_POSITION);
+            claw.setPosition(CLAW_OPEN_POSITION);
         }
         robotState.setIntakeClawState(ClawState.OPEN);
     }
@@ -262,8 +256,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Closes the Intake Claw
      */
     public void closeClaw() {
-        leftClaw.setPosition(CLAW_CLOSED_POSITION + CLAW_LEFT_OFFSET);
-        rightClaw.setPosition(CLAW_CLOSED_POSITION);
+        claw.setPosition(CLAW_CLOSED_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
@@ -271,8 +264,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * Loosens the intake claw
      */
     public void loosenClaw() {
-        leftClaw.setPosition(CLAW_LOOSE_POSITION + CLAW_LEFT_OFFSET);
-        rightClaw.setPosition(CLAW_LOOSE_POSITION);
+        claw.setPosition(CLAW_LOOSE_POSITION);
         robotState.setIntakeClawState(ClawState.CLOSED);
     }
 
@@ -478,11 +470,20 @@ public class IntakeSubsystem extends CloseableSubsystem {
         if (isDirectControlEnabled) {
             if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power < 0)) {
                 power = 0;
-            } else if (robotState.getVoltage() != 0) {
-                power = Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
             }
-            leftSlideMotor.setPower(power);
-            rightSlideMotor.setPower(power);
+            leftSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
+            rightSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
+        }
+    }
+
+    private double getVoltageCompensatedMotorPower(double power) {
+        if(robotState.getVoltage() != 0) {
+            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
+            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
+            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+        } else {
+            RobotLog.dd(tag, "Voltage Is Not Set");
+            return power;
         }
     }
 
@@ -491,7 +492,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     @Override
     public void periodic() {
-        double power = slideController.calculateMotorPowers(encoderMotor.getCurrentPosition());
+        double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(encoderMotor.getCurrentPosition()));
         // TODO: add voltage compensation to intake subsystem
         if (!isDirectControlEnabled) {
             leftSlideMotor.setPower(power);
