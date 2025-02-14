@@ -30,6 +30,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private static final double HEAVY_WEIGHT = 2;
 
+    private static final double WIDTH_RANGE = 4.75; // TODO: Tune properly
+    private static final double HEIGHT_RANGE = 5.6;
+    private static final double PIXELS_PER_INCH = 94.5;
+
     // Orientation exponential function parameters
     private static final double ORIENTATION_V_COMPRESS = 0.719428;
     private static final double ORIENTATION_BASE = 1.0629;
@@ -72,7 +76,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public void init() {
         limelight.setPollRateHz(50);
         limelight.start();
-        limelight.pipelineSwitch(NEURAL_DETECTOR_PIPELINE);
+        limelight.pipelineSwitch(3);
     }
 
     private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
@@ -276,9 +280,34 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
+//        LLResult result = limelight.getLatestResult();
+//        if (result != null) {
+//            setBlockAttributes(result.getDetectorResults());
+//        }
+
+        double blue = robotState.isBlue()? 1: 0;
+        double red = robotState.isBlue()? 0: 1;
+        double yellow = 0;
+        double courseCamera = robotState.isCoarseCameraMode()? 1: 0;
+
+        if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
+            yellow = 1;
+            blue = 0;
+            red = 0;
+        } else if (robotState.getBlockColorPreference() == BlockColorPreference.ANY) {
+            yellow = 1;
+        }
+
+        limelight.updatePythonInputs(yellow, red, blue, courseCamera, 0, 0,
+                0, 0);
+
         LLResult result = limelight.getLatestResult();
         if (result != null) {
-            setBlockAttributes(result.getDetectorResults());
+            double[] results =  result.getPythonOutput();
+
+            robotState.setBlockLateralFine(results[1] / PIXELS_PER_INCH - WIDTH_RANGE / 2.0);
+            robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
+            robotState.setBlockOrientation(results[3]);
         }
     }
 

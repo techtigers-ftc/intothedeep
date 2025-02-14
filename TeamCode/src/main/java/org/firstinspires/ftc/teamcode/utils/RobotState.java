@@ -54,6 +54,7 @@ public class RobotState extends GlobalState {
     private double visionIntakeHeading;
     private double voltage;
     private boolean isCameraRunning;
+    private boolean isCoarseCameraMode;
 
     /**
      * Initializes a new RobotState
@@ -95,6 +96,7 @@ public class RobotState extends GlobalState {
         visionIntakeHeading = Math.toRadians(0);
         voltage = 0;
         isCameraRunning = false;
+        isCoarseCameraMode = true;
     }
 
     /**
@@ -677,5 +679,21 @@ public class RobotState extends GlobalState {
      */
     public void setCameraRunning(boolean cameraRunning) {
         isCameraRunning = cameraRunning;
+    }
+
+    /**
+     * @return true if the small camera is in course camera mode, false if not
+     */
+    public boolean isCoarseCameraMode() {
+        return isCoarseCameraMode;
+    }
+
+    /**
+     * Sets the small camera mode
+     *
+     * @param courseCameraMode whether the small camera is in course or fine camera mode
+     */
+    public void setCoarseCameraMode(boolean courseCameraMode) {
+        isCoarseCameraMode = courseCameraMode;
     }
 }
