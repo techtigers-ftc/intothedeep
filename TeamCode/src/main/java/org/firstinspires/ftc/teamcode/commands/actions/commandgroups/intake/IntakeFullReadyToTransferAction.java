@@ -53,10 +53,10 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300)
                 ),
-                new IntakeCheckSensorAction(robotState, command == null ? this : command),
+//                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 100),
+                                DropperSubsystem.PITCH_TRANSFER_POSITION, 250),
                         new SequentialCommandGroup(
                                 new IntakeLoosenAction(intake, 350),
                                 new IntakeCloseAction(intake, 50)
@@ -87,7 +87,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         } else {
-            robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
+            robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
             robotState.setCurrentGear(DriveGears.ENGAGED);
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION);

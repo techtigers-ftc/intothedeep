@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
@@ -133,6 +134,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper,robotState, null
         );
+        IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
@@ -152,6 +154,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
         Trigger inPrepareToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
+        Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
         Trigger blockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
 
@@ -173,8 +176,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Extend Trigger Bindings
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
         manualExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
+        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransfer);
 
-        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
+//        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not

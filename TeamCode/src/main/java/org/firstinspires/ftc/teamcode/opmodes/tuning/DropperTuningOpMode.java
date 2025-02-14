@@ -22,7 +22,7 @@ import team.techtigers.base.BaseOpMode;
  * An opmode to test the capabilities of the dropper subsystem, including the slides, arm, and claw
  */
 @TeleOp(name = "Dropper Tuning OpMode", group = "Tuning")
-@Disabled
+//@Disabled
 public class DropperTuningOpMode extends BaseOpMode {
     private DropperSubsystem dropperSubsystem;
     private RobotState robotState;
