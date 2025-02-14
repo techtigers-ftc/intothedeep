@@ -59,7 +59,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private final Limelight3A limelight;
 
     private double framesCached;
-    private double lastYellowInput, lastRedInput, lastBlueInput, lastCourseCameraInput;
 
     /**
      * Constructor for the LimelightSubsystem
@@ -71,10 +70,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         framesCached = 1;
-        lastYellowInput = 0;
-        lastRedInput = 0;
-        lastBlueInput = 0;
-        lastCourseCameraInput = 0;
     }
 
     @Override
@@ -305,10 +300,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
         limelight.updatePythonInputs(yellow, red, blue, courseCamera, 0, 0,
                 0, 0);
-        lastYellowInput = yellow;
-        lastRedInput = red;
-        lastBlueInput = blue;
-        lastCourseCameraInput = courseCamera;
 
         LLResult result = limelight.getLatestResult();
         if (result != null) {
