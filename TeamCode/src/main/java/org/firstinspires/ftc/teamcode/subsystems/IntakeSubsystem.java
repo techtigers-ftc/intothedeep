@@ -32,18 +32,23 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
+    // TODO: Get new numbers for the intake - it might not be zeroed well rn
+    public static double INTAKE_PITCH_UNZERO_OFFSET = 20;
+    public static double INTAKE_ROTATION_UNZERO_OFFSET = -15;
+
+
     public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = 0;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 170;
+    public static final double WRIST_PITCH_TUCK_POSITION = 0 - INTAKE_PITCH_UNZERO_OFFSET;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
     public static final double CLAW_ROTATION_TUCK_POSITION = 77;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0 - INTAKE_PITCH_UNZERO_OFFSET;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 59;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
-    public static final double WRIST_PITCH_PECK_POSITION = 100;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 30;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 3;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 59 - INTAKE_PITCH_UNZERO_OFFSET;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
+    public static final double WRIST_PITCH_PECK_POSITION = 92 - INTAKE_PITCH_UNZERO_OFFSET;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 45 - INTAKE_PITCH_UNZERO_OFFSET;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = -10 - INTAKE_ROTATION_UNZERO_OFFSET;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
@@ -477,7 +482,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     private double getVoltageCompensatedMotorPower(double power) {
-        if(robotState.getVoltage() != 0) {
+        if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
             RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);

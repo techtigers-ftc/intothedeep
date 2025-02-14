@@ -51,12 +51,12 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300)
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
+                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 250)
                 ),
+// TODO: make intake move less when using dropper
 //                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
-                        new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 250),
                         new SequentialCommandGroup(
                                 new IntakeLoosenAction(intake, 350),
                                 new IntakeCloseAction(intake, 50)
