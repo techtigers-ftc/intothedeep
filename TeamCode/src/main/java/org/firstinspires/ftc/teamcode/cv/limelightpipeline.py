@@ -164,8 +164,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 def runPipeline(frame, llrobot):
     try:
+        usingYellow = llrobot[0] == 1
+        usingRed = llrobot[1] == 1
+        usingBlue = llrobot[2] == 1
 
-        usingYellow, usingRed, usingBlue = list(map(bool, llrobot[:3]))
         llpython = [0, 0, 0, 0, 0, 0, 0, 0]
         largest_contour = np.array([[]])
         # frame = cv2.resize(frame, (256, 144))
