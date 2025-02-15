@@ -50,14 +50,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_V_STRETCH = 0.82;
     private static final double LATERAL_H_SHIFT = -2.7;
     private static final double LATERAL_V_SHIFT = 2.47;
-
+    private final RobotState robotState;
+    private final Limelight3A limelight;
     // Lateral bounds
     private double lateralLowerBound = -5;
     private double lateralUpperBound = 1;
-
-    private final RobotState robotState;
-    private final Limelight3A limelight;
-
     private double framesCached;
 
     /**
@@ -192,6 +189,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     /**
      * Sets the lower bound for determining if blocks are too far laterally
+     *
      * @param lateralLowerBound the bound to set
      */
     public void setLateralLowerBound(double lateralLowerBound) {
@@ -207,6 +205,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     /**
      * Sets the upper bound for determining if blocks are too far laterally
+     *
      * @param lateralUpperBound the bound to set
      */
     public void setLateralUpperBound(double lateralUpperBound) {
@@ -285,10 +284,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
 //            setBlockAttributes(result.getDetectorResults());
 //        }
 
-        double blue = robotState.isBlue()? 1: 0;
-        double red = robotState.isBlue()? 0: 1;
+        double blue = robotState.isBlue() ? 1 : 0;
+        double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;
-        double courseCamera = robotState.isCoarseCameraMode()? 1: 0;
+        double courseCamera = robotState.isCoarseCameraMode() ? 1 : 0;
 
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
             yellow = 1;
@@ -303,11 +302,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
         LLResult result = limelight.getLatestResult();
         if (result != null) {
-            double[] results =  result.getPythonOutput();
+            double[] results = result.getPythonOutput();
 
             robotState.setBlockLateralFine(results[1] / PIXELS_PER_INCH - WIDTH_RANGE / 2.0);
             robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
-            robotState.setBlockOrientation(results[3]);
+            robotState.setBlockOrientation(results[3] + 180);
+            RobotLog.dd("claw rotation value", String.valueOf(results[3]));
+            RobotLog.dd("new claw rotation value", String.valueOf(results[3] + 180));
         }
     }
 

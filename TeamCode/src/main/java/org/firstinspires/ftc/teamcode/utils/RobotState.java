@@ -96,7 +96,7 @@ public class RobotState extends GlobalState {
         visionIntakeHeading = Math.toRadians(0);
         voltage = 0;
         isCameraRunning = false;
-        isCoarseCameraMode = true;
+        isCoarseCameraMode = false;
     }
 
     /**

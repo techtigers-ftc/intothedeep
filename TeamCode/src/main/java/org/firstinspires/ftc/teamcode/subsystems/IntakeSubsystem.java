@@ -33,23 +33,24 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
     // TODO: Get new numbers for the intake - it might not be zeroed well rn
-    public static double INTAKE_PITCH_UNZERO_OFFSET = 20;
-    public static double INTAKE_ROTATION_UNZERO_OFFSET = -15;
+    public static double WRIST_PITCH_OFFSET = 20;
+    public static double WRIST_ROTATION_OFFSET = -15;
+    public static double CLAW_ROTATION_BUFFER = 30;
 
 
     public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = 0 - INTAKE_PITCH_UNZERO_OFFSET;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 77;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0 - INTAKE_PITCH_UNZERO_OFFSET;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 77;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 59 - INTAKE_PITCH_UNZERO_OFFSET;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170 - INTAKE_ROTATION_UNZERO_OFFSET;
-    public static final double WRIST_PITCH_PECK_POSITION = 92 - INTAKE_PITCH_UNZERO_OFFSET;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 45 - INTAKE_PITCH_UNZERO_OFFSET;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = -10 - INTAKE_ROTATION_UNZERO_OFFSET;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 77;
+    public static final double WRIST_PITCH_TUCK_POSITION = 0 - WRIST_PITCH_OFFSET;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 170 - WRIST_ROTATION_OFFSET;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90; // was 77
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170 - WRIST_ROTATION_OFFSET;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 80 - WRIST_PITCH_OFFSET;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170 - WRIST_ROTATION_OFFSET;
+    public static final double WRIST_PITCH_PECK_POSITION = 105 - WRIST_PITCH_OFFSET;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 50 - WRIST_PITCH_OFFSET;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = -10 - WRIST_ROTATION_OFFSET;
+    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
 
@@ -65,7 +66,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_MIDDLE_POSITION = 0.63;
     private static final double CLAW_LOOSE_POSITION = 0.78;
     private static final double CLAW_CLOSED_POSITION = 0.83;
-    private static final double INTAKE_CLAW_ROTATION_RANGE = 180;
+    private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
     public static double minBlue = 0.53;
@@ -190,7 +191,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return the rotation of the claw in degrees
      */
     public double getClawRotation() {
-        return clawRotation.getPosition() * INTAKE_CLAW_ROTATION_RANGE;
+        return clawRotation.getPosition() * INTAKE_CLAW_ROTATION_RANGE - CLAW_ROTATION_BUFFER;
     }
 
     /**
@@ -360,10 +361,11 @@ public class IntakeSubsystem extends CloseableSubsystem {
     /**
      * Sets the rotation of the claw.
      *
-     * @param rotationAngle the desired rotation of the claw in degrees
+     * @param rotationAngle the desired rotation of the claw in degrees from 0º to 180º
      */
     public void setClawRotationAbsolute(double rotationAngle) {
-        clawRotation.setPosition(rotationAngle / INTAKE_CLAW_ROTATION_RANGE);
+        clawRotation.setPosition(Range.clip(rotationAngle + CLAW_ROTATION_BUFFER,
+                CLAW_ROTATION_BUFFER, CLAW_ROTATION_BUFFER + 180) / INTAKE_CLAW_ROTATION_RANGE);
     }
 
     /**

@@ -4,14 +4,15 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -36,7 +37,8 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
+    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
+                                           IntakeSubsystem intake,
                                            DropperSubsystem dropper,
                                            RobotState robotState, CommandBase command) {
         this.robotState = robotState;
@@ -44,8 +46,21 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
+                new ParallelCommandGroup(
+                        new IntakeSlidesAbsoluteAction(intake, () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 2.5, 0.5),
+                        new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 500),
+// This is the old tele hold point which i dont think we need
+//                        new TeleHoldPointAction(drive, robotState,
+//                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockForwardFine()),
+//                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+//                                () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
+                        // TODO: Tune this
+                        new TeleHoldPointAction(drive, robotState,
+                                () -> robotState.getRobotCurrentPose().getX(),
+                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                                () -> robotState.getRobotCurrentPose().getHeading(), 0.2, Math.toRadians(2))
+                ),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
                         new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
@@ -54,7 +69,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 250)
                 ),
-// TODO: make intake move less when using dropper
 //                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
@@ -73,10 +87,11 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
+    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
+                                           IntakeSubsystem intake,
                                            DropperSubsystem dropper,
                                            RobotState robotState) {
-        this(intake, dropper, robotState, null);
+        this(drive, intake, dropper, robotState, null);
     }
 
     @Override

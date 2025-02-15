@@ -135,7 +135,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
         IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
-                intake, dropper, robotState);
+                drive, intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
                 intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
@@ -375,10 +375,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralCoarse());
-        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardCoarse());
-        telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
-        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
+        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
+        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
+        telemetry.addData("Block Orientation", robotState.getBlockOrientation());
+//        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
     }
 }
