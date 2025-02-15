@@ -77,22 +77,8 @@ COLOR_ERROR = (0, 0, 255)
 def calculate_angle(contour):
     if len(contour) < 5:
         return 0
-    rect = cv2.minAreaRect(contour)
-    (center, dims, angle) = rect
-    area = dims[0] * dims[1]
-    print(dims[0], dims[1])
-    box = cv2.boxPoints(rect)
-    box = np.int0(box)
-    top = max(box, key=lambda x: x[1])
-    right  = max(box, key=lambda x: x[0])
-    angle = math.atan((top[1]-right[1])/(top[0] - right[0]))
-    if dims[0] > dims[1]:
-        return angle*180/3.14159265 - 90
-    return angle*180/3.14159265
-    # if len(contour) < 5:
-    #     return 0
-    # (x, y), (MA, ma), angle = cv2.fitEllipse(contour)
-    # return angle
+    (x, y), (MA, ma), angle = cv2.fitEllipse(contour)
+    return angle
 
 def draw_info(image, color, angle, center, index, area):
     x = center[0]
@@ -101,8 +87,6 @@ def draw_info(image, color, angle, center, index, area):
     angle_x = x + int(50 * math.cos(rotated_angle))
     angle_y = y + int(50 * math.sin(rotated_angle))
 
-    # cv2.putText(image, f"#{index}: {color}", (x - 40, y - 60), FONT_NAME,
-    #             FONT_SIZE, COLOR_INFO, FONT_THICKNESS)
     cv2.putText(image, f"Angle: {angle:.2f}", (x - 40, y - 40), FONT_NAME,
                 FONT_SIZE, COLOR_INFO, FONT_THICKNESS)
     cv2.putText(image, f"Area: {area:.2f}", (x - 40, y -20), FONT_NAME,
@@ -177,7 +161,6 @@ def runPipeline(frame, llrobot):
 
         llpython = [0, 0, 0, 0, 0, 0, 0, 0]
         largest_contour = np.array([[]])
-        # frame = cv2.resize(frame, (256, 144))
 
         # Convert to HSV and denoise
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -199,9 +182,6 @@ def runPipeline(frame, llrobot):
 
         # Combine all color masks
         height, width = blue_mask.shape
-        # usingRed = True
-        # usingBlue = True
-        # usingYellow = True
         combined_mask = np.zeros((height, width), dtype=np.uint8)
         if usingRed:
             combined_mask = cv2.bitwise_or(red_mask, combined_mask)
@@ -232,12 +212,8 @@ def runPipeline(frame, llrobot):
         edges = cv2.bitwise_not(edges)
         edges = cv2.bitwise_and(edges, edges, mask=combined_mask)
 
-
         contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        # cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)
-
         contour_frame = frame.copy()
-        # return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
 
         game_pieces = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -245,20 +221,14 @@ def runPipeline(frame, llrobot):
 
         for i, contour in enumerate(contours):
             if cv2.contourArea(contour) < SMALL_CONTOUR_AREA:
-                # print("too small")
                 continue
 
-            # return np.array([[]]), edges, [0, 0, 0, 0, 0, 0, 0, 0]
-            # frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
                 mask = np.zeros(gray.shape, dtype=np.uint8)
                 cv2.drawContours(mask, [sep_contour], -1, 255, -1)
 
                 if cv2.mean(gray, mask=mask)[0] < MIN_BRIGHTNESS_THRESHOLD:
-                    # print("too dim")
                     continue
-
-
 
                 angle = calculate_angle(sep_contour)
                 M = cv2.moments(sep_contour)
@@ -277,7 +247,6 @@ def runPipeline(frame, llrobot):
 
                 cv2.drawContours(frame, [sep_contour], 0, color, 2)
 
-                # Add visualization from testcv.py
                 draw_info(frame, 'Blue', angle, center, i, area)
 
                 game_pieces.append({
@@ -289,9 +258,6 @@ def runPipeline(frame, llrobot):
                     'hierarchy_level': 'external' if hierarchy[0][i][3] == -1 else 'internal'
                 })
 
-                # Update largest_contour if this is the first valid contour
-                # if len(game_pieces) == 1:
-                #     largest_contour = sep_contour
         min_dist = 10000000000
         for contour, center in contours_to_select_from:
             dist = (width/2-center[0]) ** 2 +  (height/2-center[1]) ** 2
@@ -303,7 +269,6 @@ def runPipeline(frame, llrobot):
             llpython = [1, center[0], center[1], angle, 0, 0, 0, 0]
 
         return largest_contour, frame, llpython
-        # return np.array([[]]), frame, [0, 0, 0, 0, 0, 0, 0, 0]
 
     except Exception as e:
         print(e)
