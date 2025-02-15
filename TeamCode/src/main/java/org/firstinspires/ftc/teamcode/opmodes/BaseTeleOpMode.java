@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
@@ -136,6 +137,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
+        IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(
+                intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
                 intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
@@ -158,39 +161,40 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger blockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
-        manualRetractTrigger.and(inReadyToTransfer).whenActive(prepareToPickupManual);
+        (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(prepareToPickupManual);
 
-        manualRetractTrigger.or(autoRetractTrigger).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
-        manualRetractTrigger.or(autoRetractTrigger).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
+        (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
+        (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
-        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
-        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(
-                () -> {
-                    prepareToPickupManual.schedule();
-                    gamepad2.rumbleBlips(3);
-                }
-        );
+//        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
+//        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(
+//                () -> {
+//                    prepareToPickupManual.schedule();
+//                    gamepad2.rumbleBlips(3);
+//                }
+//        );
 
         // Extend Trigger Bindings
-        manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
-        manualExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupManual);
-        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransfer);
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).whenActive(prepareToPickupManual);
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
+        autoExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransfer);
+        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
 
 //        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
         // Uses the full vision pickup if the block is detected, runs the manual one if not
-        autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
-        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(
-                () -> {
-                    prepareToPickupManual.schedule();
-                    gamepad2.rumbleBlips(3);
-                }
-        );
+//        autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
+//        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(
+//                () -> {
+//                    prepareToPickupManual.schedule();
+//                    gamepad2.rumbleBlips(3);
+//                }
+//        );
 
         // TODO: Make auto later when small cam works
-        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupAuto);
+//        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupAuto);
 
         // Other Intake Stuff
 
@@ -218,7 +222,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         );
 
         intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 1.3));
+                manipulatorGamepad.getLeftY() * 1.7));
         intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
 
         // Manual intake rotation
@@ -282,7 +286,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
 
         // Wall Intake
-        dpadLeft.and(wallIntake.negate()).whenActive(dropperWallIntakeAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeAction);
         dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
 
         // Dropper specimen movements
