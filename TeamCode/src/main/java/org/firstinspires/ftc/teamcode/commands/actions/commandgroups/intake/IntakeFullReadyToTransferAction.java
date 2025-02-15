@@ -47,18 +47,13 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         addRequirements(intake, dropper);
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 2.5, 0.5),
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
                         new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 500),
-// This is the old tele hold point which i dont think we need
-//                        new TeleHoldPointAction(drive, robotState,
-//                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockForwardFine()),
-//                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-//                                () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
-                        // TODO: Tune this
                         new TeleHoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX(),
+                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockForwardFine()),
                                 () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                                () -> robotState.getRobotCurrentPose().getHeading(), 0.2, Math.toRadians(2))
+                                () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
