@@ -30,7 +30,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private static final double HEAVY_WEIGHT = 2;
 
-    private static final double WIDTH_RANGE = 4.75; // TODO: Tune properly
+    private static final double WIDTH_RANGE = 6; // TODO: Tune properly
     private static final double HEIGHT_RANGE = 5.6;
     private static final double PIXELS_PER_INCH = 94.5;
 
