@@ -51,8 +51,10 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
                         new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 500),
                         new TeleHoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX() + Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockForwardFine()),
-                                () -> robotState.getRobotCurrentPose().getY() - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                                () -> robotState.getRobotCurrentPose().getX() +
+                                        Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                                () -> robotState.getRobotCurrentPose().getY()
+                                        - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
