@@ -42,7 +42,7 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
                 new DropperPreTransferAction(dropper, robotState),
                 new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
                 new IntakeWristRotationAction(intake,
-                        IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 500),
+                        IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 500),
                 new IntakeClawRotationAction(intake,
                         () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 500),
                 new IntakeWristPitchAction(intake,
@@ -60,7 +60,7 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     public void end(boolean interrupted){
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setIntakeState(IntakeState.TUCK);
+            robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
             if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
