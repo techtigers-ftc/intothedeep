@@ -287,7 +287,7 @@ def runPipeline(frame, llrobot):
                 #     largest_contour = sep_contour
         min_dist = 10000000000
         for contour, center in contours_to_select_from:
-            dist = (width-center[0]) ** 2 +  (height-center[1]) ** 2
+            dist = (width/2-center[0]) ** 2 +  (height/2-center[1]) ** 2
             if dist < min_dist:
                 min_dist = dist
                 largest_contour = contour
