@@ -7,6 +7,13 @@ from collections import defaultdict
 # Track OpenCV function calls and timing
 opencv_stats = defaultdict(lambda: {'count': 0, 'total_time': 0})
 
+DEBUG = False
+
+def log(*args):
+    if DEBUG:
+        print(*args)
+
+
 def track_opencv(func_name):
     def decorator(func):
         def wrapper(*args, **kwargs):
