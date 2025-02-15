@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.constants;
 
-import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;

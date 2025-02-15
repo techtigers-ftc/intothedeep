@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.localizers;
 
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Localizer;
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+
+import team.techtigers.core.paths.Waypoint;
 
 /**
  * A localizer that uses the RobotState to localize the robot.
@@ -102,5 +105,11 @@ public class RobotStateLocalizer extends Localizer {
     @Override
     public void resetIMU() throws InterruptedException {
         // Intentionally not doing this, IMU should be reset in odometry subsystem
+    }
+
+    @Override
+    public boolean isNAN() {
+        Waypoint robotPose = robotState.getRobotCurrentPose();
+        return Double.isNaN(robotPose.getX()) || Double.isNaN(robotPose.getY()) || Double.isNaN(robotPose.getHeading());
     }
 }
