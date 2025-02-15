@@ -221,7 +221,7 @@ public class SpecimenDriveStateConfigurator {
      */
     public static void configFirstSpecimenIntake(DriveToPoseState state) {
         state.setTranslationalPIDF(0.125, 0, 0.01, 0);
-        state.setDrivePIDF(0.00525, 0, 0.0035, 0.6, 0);
+        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.5, 0, 0.03, 0);
 //        state.setPrimaryPIDSToTuning();
 
