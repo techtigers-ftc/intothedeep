@@ -62,7 +62,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         intake = new IntakeSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
-        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropState driveToPreloadDrop = new DriveToPreloadDropState(
@@ -269,7 +268,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
-        registerSubsystems(auto, drive, odometry, dropper, sensor, limelight, vision);
+        registerSubsystems(auto, drive, odometry, dropper, sensor, limelight);
     }
 
     @Override

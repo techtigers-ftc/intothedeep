@@ -60,7 +60,8 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                                 new IntakeLoosenAction(intake, 350),
                                 new IntakeCloseAction(intake, 50)
                         ),
-                        new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1.2)
                 )
         );
     }
