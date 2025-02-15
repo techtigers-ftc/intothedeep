@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 
 import java.util.ArrayList;
 
@@ -72,6 +73,27 @@ public class BezierCurve {
     public BezierCurve(Point... controlPoints) {
         for (Point controlPoint : controlPoints) {
             this.controlPoints.add(controlPoint);
+        }
+        if (this.controlPoints.size()<3) {
+            try {
+                throw new Exception("Too few control points");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        initialize();
+    }
+
+    /**
+     * This creates a new Bezier curve with some specified control points and generates the curve.
+     * IMPORTANT NOTE: The order of the control points is important. That's the order the code will
+     * process them in, with the 0 index being the start point and the final index being the end point.
+     *
+     * @param controlPoses This is the specified control poses that define the BezierCurve.
+     */
+    public BezierCurve(Pose... controlPoses) {
+        for (Pose controlPose : controlPoses) {
+            this.controlPoints.add(new Point(controlPose));
         }
         if (this.controlPoints.size()<3) {
             try {

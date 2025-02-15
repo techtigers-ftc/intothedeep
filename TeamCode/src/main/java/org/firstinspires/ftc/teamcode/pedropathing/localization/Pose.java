@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization;
 
+import static org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions.rotatePose;
+
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
@@ -18,6 +20,7 @@ public class Pose {
     private double x;
     private double y;
     private double heading;
+    private boolean pedroCoordinates = true;
 
     /**
      * This creates a new Pose from a x, y, and heading inputs.
@@ -33,6 +36,21 @@ public class Pose {
     }
 
     /**
+     * This creates a new Pose from a x, y, and heading inputs in the Pedro Pathing coordinate system or the FTC Standard coordinate system.
+     *
+     * @param setX the initial x value
+     * @param setY the initial y value
+     * @param setHeading the initial heading value
+     * @param isInPedroCoordinates whether the input is in Pedro coordinates or FTC Standard coordinates
+     */
+    public Pose(double setX, double setY, double setHeading, boolean isInPedroCoordinates) {
+        setX(setX);
+        setY(setY);
+        setHeading(setHeading);
+        pedroCoordinates = isInPedroCoordinates;
+    }
+
+    /**
      * This creates a new Pose from x and y inputs. The heading is set to 0.
      *
      * @param setX the initial x value
@@ -42,6 +60,16 @@ public class Pose {
         this(setX, setY, 0);
     }
 
+    /**
+     * This creates a new Pose from x and y inputs. The heading is set to 0.
+     *
+     * @param setX the initial x value
+     * @param setY the initial y value
+     * @param isInPedroCoordinates whether the input is in Pedro coordinates or FTC Standard coordinates
+     */
+    public Pose(double setX, double setY, boolean isInPedroCoordinates) {
+        this(setX, setY, 0, isInPedroCoordinates);
+    }
     /**
      * This creates a new Pose with no inputs and 0 for all values.
      */
@@ -209,6 +237,48 @@ public class Pose {
      */
     public Pose copy() {
         return new Pose(getX(), getY(), getHeading());
+    }
+
+    /**
+     * This sets the Pose to be in Pedro coordinates or FTC Standard coordinates.
+     * This will automatically convert the Pose to the new coordinate system.
+     *
+     * @param pedroCoordinates whether the Pose is in Pedro coordinates or FTC Standard coordinates
+     */
+    public void setCoordinateSystem(boolean pedroCoordinates) {
+        if (pedroCoordinates) {
+            this.pedroCoordinates = true;
+            Pose temp = getAsPedroCoordinates();
+            setX(temp.getX());
+            setY(temp.getY());
+            setHeading(temp.getHeading());
+        } else {
+            this.pedroCoordinates = false;
+            Pose temp = getAsFTCStandardCoordinates();
+            setX(temp.getX());
+            setY(temp.getY());
+            setHeading(temp.getHeading());
+        }
+    }
+
+    /** This is a method that converts the Pose to Pedro coordinates from the FTC Standard coordinate system. */
+    public Pose getAsPedroCoordinates() {
+        if (!pedroCoordinates) {
+            Pose rotatedPose = rotatePose(this, -Math.PI/2, true);
+            return new Pose(rotatedPose.getX() + 72, rotatedPose.getY() + 72, rotatedPose.getHeading());
+        } else {
+            return this;
+        }
+    }
+
+    /** This is a method that converts the Pose to FTC Standard coordinate system from Pedro Coordinate system. */
+    public Pose getAsFTCStandardCoordinates() {
+        if (pedroCoordinates) {
+            Pose normalized = new Pose(this.getX() - 72, this.getY() - 72, this.getHeading());
+            return rotatePose(normalized, -Math.PI / 2, true);
+        } else {
+            return this;
+        }
     }
 
     @NonNull
