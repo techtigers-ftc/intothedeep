@@ -100,7 +100,7 @@ public class StrafeVelocityTuner extends OpMode {
         }
 
         for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         for (int i = 0; i < RECORD_NUMBER; i++) {

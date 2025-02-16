@@ -69,11 +69,11 @@ public class FollowerConstants {
 
     /** The Forward Velocity of the Robot - Different for each robot
      *  Default Value: 81.34056 */
-    public static double xMovement = 76.715;
+    public static double xMovement = 78;
 
     /** The Lateral Velocity of the Robot - Different for each robot
      *  Default Value: 65.43028 */
-    public static double yMovement = 57.012;
+    public static double yMovement = 60.6506;
 
 
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
@@ -145,7 +145,7 @@ public class FollowerConstants {
 
     /** Mass of robot in kilograms
      *  Default Value: 10.65942 */
-    public static double mass = 15.1;
+    public static double mass = 15.406;
 
     /** Centripetal force to power scaling
      *  Default Value: 0.0005 */
@@ -156,7 +156,7 @@ public class FollowerConstants {
      * if not negative, then the robot thinks that its going to go faster under 0 power
      *  Default Value: -34.62719
      * @implNote This value is found via 'ForwardZeroPowerAccelerationTuner'*/
-    public static double forwardZeroPowerAcceleration = -34.62719;
+    public static double forwardZeroPowerAcceleration = -30.214;
 
     /** Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
      * if not negative, then the robot thinks that its going to go faster under 0 power
