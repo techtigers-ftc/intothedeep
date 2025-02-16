@@ -345,7 +345,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             gamepad2.rumbleBlips(5);
         }));
 
-        telemetry.addData("Sensor Dist: ", intake.getSensorDist());
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
     }
@@ -375,7 +374,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Runtime: ", robotState.getRunTime());
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
-        telemetry.addData("Sensor Dist: ", intake.getSensorDist());
         telemetry.addLine();
         telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
@@ -384,5 +382,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
+        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
     }
 }
