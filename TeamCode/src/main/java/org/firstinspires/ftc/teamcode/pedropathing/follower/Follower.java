@@ -544,7 +544,7 @@ public class Follower {
                     RobotLog.dd("FollowerDEBUG", "NOT Holding position");
                     if (isBusy) {
                         RobotLog.dd("FollowerDEBUG", "BUSY");
-                        closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_BINARY_STEP_LIMIT);
+                        closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_SEARCH_LIMIT);
 
                         if (followingPathChain) updateCallbacks();
 
@@ -649,6 +649,10 @@ public class Follower {
 //                }
 //            }
         }
+    }
+
+    public DriveVectors getCurrentDriveVectors() {
+        return currentDriveVectors;
     }
 
     /**
@@ -1163,7 +1167,7 @@ public class Follower {
      * @return true if the robot is stuck and false otherwise
      */
     public boolean isRobotStuck() {
-        return zeroVelocityDetectedTimer != null;
+        return zeroVelocityDetectedTimer != null && zeroVelocityDetectedTimer.milliseconds() > 500.0;
     }
 
     /**

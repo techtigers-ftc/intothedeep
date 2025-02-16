@@ -111,6 +111,16 @@ public class AutoDriveCommand extends CommandBase {
     }
 
     /**
+     * Returns whether the robot is stuck. This is calculated by when the
+     * robot isn't moving for a period of time
+     *
+     * @return whether the robot is stuck
+     */
+    public boolean isRobotStuck() {
+        return follower.isRobotStuck();
+    }
+
+    /**
      * Sets the path chain for the command.
      *
      * @param pathChain the path chain to run
