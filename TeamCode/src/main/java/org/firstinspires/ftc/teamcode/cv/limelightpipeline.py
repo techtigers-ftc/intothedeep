@@ -69,7 +69,7 @@ HSV_YELLOW_RANGE = ([10, 70, 150], [30, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 15000
+SMALL_CONTOUR_AREA_FINE = 12000
 SMALL_CONTOUR_AREA_COARSE = 200
 
 
@@ -191,7 +191,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[1] = 1
+    llrobot[0] = 1
     llrobot[3] = 0
     try:
         usingYellow = llrobot[0] == 1
