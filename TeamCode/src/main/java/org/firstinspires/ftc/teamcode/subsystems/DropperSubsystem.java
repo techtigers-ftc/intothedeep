@@ -36,7 +36,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
-    public static final double PITCH_TRANSFER_POSITION = 45;
+    public static final double PITCH_TRANSFER_POSITION = 35;
     public static final double PITCH_BASKET_POSITION = 210;
     public static final double PITCH_CHAMBER_POSITION = 180;
     public static final double PITCH_FRONT_SLAP_POSITION = 95;
@@ -52,7 +52,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 1.15;
+    private static final double ERROR_FACTOR = 1.051;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;

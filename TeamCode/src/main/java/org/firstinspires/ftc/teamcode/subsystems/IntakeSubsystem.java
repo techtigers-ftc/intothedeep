@@ -34,17 +34,18 @@ import team.techtigers.base.CloseableSubsystem;
 public class IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 30;
 
+    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Clw Rotation: 90
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 59;
     public static final double WRIST_ROTATION_TUCK_POSITION = 172;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90; // was 77
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 0;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 79;
     public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 60;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
-    public static final double WRIST_PITCH_PECK_POSITION = 85;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 30;
+    public static final double WRIST_PITCH_PECK_POSITION = 159;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 104;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
@@ -59,8 +60,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.56;
-    private static final double CLAW_LOOSE_POSITION = 0.785;
-    private static final double CLAW_CLOSED_POSITION = 0.83;
+    private static final double CLAW_LOOSE_POSITION = 0.81;
+    private static final double CLAW_CLOSED_POSITION = 0.845;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 300;
     private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
     public static double minMagnitude = 1;
@@ -129,7 +130,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        claw.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.FORWARD);
         colorSensorTimer = new ElapsedTime();
 
         isDirectControlEnabled = false;

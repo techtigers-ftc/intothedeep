@@ -57,8 +57,8 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
 //                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new IntakeLoosenAction(intake, 350),
-                                new IntakeCloseAction(intake, 50)
+                                new IntakeLoosenAction(intake, 350)
+//                                new IntakeCloseAction(intake, 50)
                         ),
                         new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
                 )
