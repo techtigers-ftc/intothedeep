@@ -457,7 +457,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
         if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-               updateBlockPosition();
+            updateBlockPosition();
         }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
