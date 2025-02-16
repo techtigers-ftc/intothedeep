@@ -107,7 +107,7 @@ public class FollowerConstants {
 
     /** Feed forward constant added on to the translational PIDF
      *  Default Value: 0.015 */
-    public static double translationalPIDFFeedForward = 0.015;
+    public static double translationalPIDFFeedForward = 0;
 
 
     /** Heading error PIDF coefficients
@@ -120,7 +120,7 @@ public class FollowerConstants {
 
     /** Feed forward constant added on to the heading PIDF
      *  Default Value: 0.01 */
-    public static double headingPIDFFeedForward = 0.01;
+    public static double headingPIDFFeedForward = 0;
 
 
     /** Drive PIDF coefficients

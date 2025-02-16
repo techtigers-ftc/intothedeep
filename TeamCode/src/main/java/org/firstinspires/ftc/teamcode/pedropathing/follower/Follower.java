@@ -663,6 +663,8 @@ public class Follower {
     }
 
     public DriveVectors getCurrentDriveVectors() {
+        update();
+        
         return currentDriveVectors;
     }
 

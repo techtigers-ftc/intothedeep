@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.Pinpo
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -41,7 +42,8 @@ import org.firstinspires.ftc.teamcode.utils.TuningConstants;
  * @version 1.0, 3/12/2024
  */
 @Config
-@Autonomous (name = "Straight Back And Forth", group = "PIDF Tuning")
+@Disabled
+@Autonomous (name = "Straight Back And Forth ", group = "PIDF Tuning")
 public class StraightBackAndForth extends OpMode {
     private Telemetry telemetryA;
 
