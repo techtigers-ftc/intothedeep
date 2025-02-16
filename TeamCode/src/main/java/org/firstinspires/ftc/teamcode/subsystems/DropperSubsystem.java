@@ -49,7 +49,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_FRONT_SLAP_POSITION = 15;
     public static final double ROTATION_BACK_SLAP_POSITION = 215;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
     private static final double ERROR_FACTOR = 1.15;
