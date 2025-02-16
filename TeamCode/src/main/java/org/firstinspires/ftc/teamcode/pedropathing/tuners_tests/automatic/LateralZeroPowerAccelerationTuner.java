@@ -14,6 +14,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * This is the LateralZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot
@@ -69,13 +72,17 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
     private boolean stopping;
     private boolean end;
 
+    private GoBodometrySubsystem odometry;
+
     /**
      * This initializes the drive motors as well as the FTC Dashboard telemetry.
      */
     @Override
     public void init() {
-        PinpointLocalizer pinpointLocalizer = new PinpointLocalizer(hardwareMap);
-        poseUpdater = new PoseUpdater(pinpointLocalizer);
+        RobotState robotState = new RobotState(true, true);
+        RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
+        odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        poseUpdater = new PoseUpdater(robotStateLocalizer);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
@@ -134,6 +141,7 @@ public class LateralZeroPowerAccelerationTuner extends OpMode {
             requestOpModeStop();
         }
 
+        odometry.periodic();
         poseUpdater.update();
         Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading() - Math.PI / 2);
         if (!end) {

@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -15,8 +16,8 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
-
-
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 
 /**
@@ -46,14 +47,18 @@ public class StraightBackAndForth extends OpMode {
     private Path forwards;
     private Path backwards;
 
+    private GoBodometrySubsystem odometry;
+
     /**
      * This initializes the Follower and creates the forward and backward Paths. Additionally, this
      * initializes the FTC Dashboard telemetry.
      */
     @Override
     public void init() {
-        PinpointLocalizer pinpointLocalizer = new PinpointLocalizer(hardwareMap);
-        follower = new Follower(pinpointLocalizer);
+        RobotState robotState = new RobotState(true, true);
+        RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
+        odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        follower = new Follower(robotStateLocalizer);
 
         forwards = new Path(new BezierLine(new Point(0,0, Point.CARTESIAN), new Point(DISTANCE,0, Point.CARTESIAN)));
         forwards.setConstantHeadingInterpolation(0);
@@ -75,6 +80,7 @@ public class StraightBackAndForth extends OpMode {
      */
     @Override
     public void loop() {
+        odometry.periodic();
         follower.update();
         if (!follower.isBusy()) {
             if (forward) {

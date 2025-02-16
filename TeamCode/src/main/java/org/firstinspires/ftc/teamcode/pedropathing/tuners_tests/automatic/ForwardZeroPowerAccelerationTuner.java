@@ -22,8 +22,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,13 +71,17 @@ public class ForwardZeroPowerAccelerationTuner extends OpMode {
     private boolean stopping;
     private boolean end;
 
+    private GoBodometrySubsystem odometry;
+
     /**
      * This initializes the drive motors as well as the FTC Dashboard telemetry.
      */
     @Override
     public void init() {
-        PinpointLocalizer pinpointLocalizer = new PinpointLocalizer(hardwareMap);
-        poseUpdater = new PoseUpdater(pinpointLocalizer);
+        RobotState robotState = new RobotState(true, true);
+        RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
+        odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        poseUpdater = new PoseUpdater(robotStateLocalizer);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
@@ -133,6 +140,7 @@ public class ForwardZeroPowerAccelerationTuner extends OpMode {
             requestOpModeStop();
         }
 
+        odometry.periodic();
         poseUpdater.update();
         Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading());
         if (!end) {

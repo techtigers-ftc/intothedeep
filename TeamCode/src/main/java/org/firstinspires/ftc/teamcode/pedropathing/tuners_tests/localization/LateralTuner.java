@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
-
-
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 
 /**
@@ -40,13 +41,17 @@ public class LateralTuner extends OpMode {
 
     public static double DISTANCE = 48;
 
+    private GoBodometrySubsystem odometry;
+
     /**
      * This initializes the PoseUpdater as well as the FTC Dashboard telemetry.
      */
     @Override
     public void init() {
-        PinpointLocalizer pinpointLocalizer = new PinpointLocalizer(hardwareMap);
-        poseUpdater = new PoseUpdater(pinpointLocalizer);
+        RobotState robotState = new RobotState(true, true);
+        RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
+        odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        poseUpdater = new PoseUpdater(robotStateLocalizer);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
@@ -64,6 +69,7 @@ public class LateralTuner extends OpMode {
      */
     @Override
     public void loop() {
+        odometry.periodic();
         poseUpdater.update();
 
         telemetryA.addData("distance moved", poseUpdater.getPose().getY());

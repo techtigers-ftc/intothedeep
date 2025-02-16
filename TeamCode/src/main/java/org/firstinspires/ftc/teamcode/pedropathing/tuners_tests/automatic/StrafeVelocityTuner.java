@@ -15,6 +15,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -26,6 +27,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,14 +69,18 @@ public class StrafeVelocityTuner extends OpMode {
 
     private boolean end;
 
+    private GoBodometrySubsystem odometry;
+
     /**
      * This initializes the drive motors as well as the cache of velocities and the FTC Dashboard
      * telemetry.
      */
     @Override
     public void init() {
-        PinpointLocalizer pinpointLocalizer = new PinpointLocalizer(hardwareMap);
-        poseUpdater = new PoseUpdater(pinpointLocalizer);
+        RobotState robotState = new RobotState(true, true);
+        RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
+        odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        poseUpdater = new PoseUpdater(robotStateLocalizer);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
@@ -135,6 +142,7 @@ public class StrafeVelocityTuner extends OpMode {
             requestOpModeStop();
         }
 
+        odometry.periodic();
         poseUpdater.update();
         if (!end) {
             if (Math.abs(poseUpdater.getPose().getY()) > DISTANCE) {
