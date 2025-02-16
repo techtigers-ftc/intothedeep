@@ -51,11 +51,13 @@ public class FollowerConstants {
 
     /** The direction of the right front motor
      *  Default Value: DcMotorSimple.Direction.REVERSE */
-    public static DcMotorSimple.Direction rightFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
+    public static DcMotorSimple.Direction rightFrontMotorDirection =
+            DcMotorSimple.Direction.FORWARD;
 
     /** The direction of the left rear motor
      *  Default Value: DcMotorSimple.Direction.FORWARD */
-    public static DcMotorSimple.Direction leftRearMotorDirection = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction leftRearMotorDirection =
+            DcMotorSimple.Direction.REVERSE;
 
     /** The direction of the right rear motor
      *  Default Value: DcMotorSimple.Direction.FORWARD */
