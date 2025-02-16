@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -85,10 +86,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
-    private final NormalizedColorSensor colorSensor;
-    private final DistanceSensor distanceSensor;
-    private final ElapsedTime colorSensorTimer;
     private boolean isDirectControlEnabled;
+    private final DigitalChannel breakbeamSensor;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -107,14 +106,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
         claw = hardwareMap.get(Servo.class, "intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intake_color_sensor");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "intake_color_sensor");
+        breakbeamSensor = hardwareMap.get(DigitalChannel.class, "intake_break_beam");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
         leftSlideCurrentAverage = new SlidingAverageCalculator(10);
+
+        breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
@@ -131,8 +131,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
         claw.setDirection(Servo.Direction.FORWARD);
-        colorSensorTimer = new ElapsedTime();
-
         isDirectControlEnabled = false;
 
         if (robotState.isAuto()) {
@@ -384,31 +382,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     }
 
     /**
-     * Updates the block color of the color sensor
+     * Updates the block position of the robot
      */
-    private void updateBlockColor() {
-//        double sensorRed = getSensorRed();
-//        double sensorGreen = getSensorGreen();
-//        double sensorBlue = getSensorBlue();
-//        double colorsSum = sensorRed + sensorGreen + sensorBlue;
-//        double normalizedBlue = sensorBlue / colorsSum;
-//        double normalizedGreen = sensorGreen / colorsSum;
-//        double normalizedRed = sensorRed / colorsSum;
-//        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
-//
-//        RobotLog.dd(tag, "Normalized Colors Red: %f, Green: %f, Blue: %f", normalizedRed, normalizedGreen, normalizedBlue);
-//        RobotLog.dd(tag, "UnNormalized Colors Red: %f, Green: %f, Blue: %f", sensorRed, sensorGreen, sensorBlue);
-//
-//        if (magnitude < minMagnitude) {
-//            robotState.setIntakeBlockColor(BlockColor.NONE);
-//        } else if (normalizedBlue > minBlue) {
-//            robotState.setIntakeBlockColor(BlockColor.BLUE);
-//        } else if (normalizedRed > minRed) {
-//            robotState.setIntakeBlockColor(BlockColor.RED);
-//        } else if (normalizedBlue < 0.165) {
-//            robotState.setIntakeBlockColor(BlockColor.YELLOW);
-//        }
-
+    private void updateBlockPosition() {
         if (isBlockInIntake()) {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
         } else if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
@@ -420,35 +396,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
-        return getSensorDist() < INTAKE_SENSOR_THRESHOLD;
-    }
+        return !breakbeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
 
-    /**
-     * @return the blue value of the color sensor
-     */
-    public double getSensorBlue() {
-        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
-    }
-
-    /**
-     * @return the red value of the color sensor
-     */
-    public double getSensorRed() {
-        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
-    }
-
-    /**
-     * @return the green value of the color sensor
-     */
-    public double getSensorGreen() {
-        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
-    }
-
-    /**
-     * @return the current distance the color sensor reports (in inches)
-     */
-    public double getSensorDist() {
-        return distanceSensor.getDistance(DistanceUnit.INCH);
     }
 
     /**
@@ -507,9 +456,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if (!robotState.isAuto() && robotState.getIntakeState() == IntakeState.READY_TO_PICKUP && colorSensorTimer.milliseconds() > 100) {
-            updateBlockColor();
-            colorSensorTimer.reset();
+        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+               updateBlockPosition();
         }
 
         RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
@@ -518,7 +466,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-
-        RobotLog.dd(tag, "Intake Block Color: %s", robotState.getIntakeBlockColor().toString());
+        RobotLog.dd(tag, "Intake Break-beam : %s", breakbeamSensor.getState());
     }
 }
