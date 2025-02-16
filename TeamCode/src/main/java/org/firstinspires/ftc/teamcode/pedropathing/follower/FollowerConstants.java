@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilterParameters;
  * @author Baron Henderson - 20077 The Indubitables
  * @version 1.0, 3/4/2024
  */
-
+@Config
 public class FollowerConstants {
 
     /** The Localizer that the Follower & Pose Updater will use
@@ -69,11 +69,11 @@ public class FollowerConstants {
 
     /** The Forward Velocity of the Robot - Different for each robot
      *  Default Value: 81.34056 */
-    public static double xMovement = 78;
+    public static double xMovement = 77.5;
 
     /** The Lateral Velocity of the Robot - Different for each robot
      *  Default Value: 65.43028 */
-    public static double yMovement = 60.6506;
+    public static double yMovement = 61.2309;
 
 
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
@@ -156,13 +156,13 @@ public class FollowerConstants {
      * if not negative, then the robot thinks that its going to go faster under 0 power
      *  Default Value: -34.62719
      * @implNote This value is found via 'ForwardZeroPowerAccelerationTuner'*/
-    public static double forwardZeroPowerAcceleration = -30.214;
+    public static double forwardZeroPowerAcceleration = -70;
 
     /** Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
      * if not negative, then the robot thinks that its going to go faster under 0 power
      *  Default Value: -78.15554
      * @implNote This value is found via 'LateralZeroPowerAccelerationTuner'*/
-    public static double lateralZeroPowerAcceleration = -78.15554;
+    public static double lateralZeroPowerAcceleration = -111.0828;
 
 
     /** A multiplier for the zero power acceleration to change the speed the robot decelerates at

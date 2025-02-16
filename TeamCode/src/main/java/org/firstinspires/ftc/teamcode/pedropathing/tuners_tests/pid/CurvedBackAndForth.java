@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -48,6 +49,7 @@ public class CurvedBackAndForth extends OpMode {
     private Path backwards;
 
     private GoBodometrySubsystem odometry;
+    private DriveSubsystem drive;
 
     /**
      * This initializes the Follower and creates the forward and backward Paths. Additionally, this
@@ -58,6 +60,7 @@ public class CurvedBackAndForth extends OpMode {
         RobotState robotState = new RobotState(true, true);
         RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
         odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        drive = new DriveSubsystem(hardwareMap, robotState);
         follower = new Follower(robotStateLocalizer);
 
         forwards = new Path(new BezierCurve(new Point(0,0, Point.CARTESIAN), new Point(Math.abs(DISTANCE),0, Point.CARTESIAN), new Point(Math.abs(DISTANCE),DISTANCE, Point.CARTESIAN)));
@@ -82,7 +85,9 @@ public class CurvedBackAndForth extends OpMode {
     @Override
     public void loop() {
         odometry.periodic();
+        drive.periodic();
         follower.update();
+        drive.drivePedroPath(follower.getCurrentDriveVectors());
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;

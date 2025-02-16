@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
@@ -16,8 +17,14 @@ import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 
 /**
@@ -48,6 +55,7 @@ public class StraightBackAndForth extends OpMode {
     private Path backwards;
 
     private GoBodometrySubsystem odometry;
+    private DriveSubsystem drive;
 
     /**
      * This initializes the Follower and creates the forward and backward Paths. Additionally, this
@@ -58,6 +66,7 @@ public class StraightBackAndForth extends OpMode {
         RobotState robotState = new RobotState(true, true);
         RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
         odometry = new GoBodometrySubsystem(hardwareMap, robotState);
+        drive = new DriveSubsystem(hardwareMap, robotState);
         follower = new Follower(robotStateLocalizer);
 
         forwards = new Path(new BezierLine(new Point(0,0, Point.CARTESIAN), new Point(DISTANCE,0, Point.CARTESIAN)));
@@ -81,7 +90,17 @@ public class StraightBackAndForth extends OpMode {
     @Override
     public void loop() {
         odometry.periodic();
+        drive.periodic();
         follower.update();
+        drive.drivePedroPath(follower.getCurrentDriveVectors());
+
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP,0,TuningConstants.bTranslationalD,0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.eHeadingP,0,TuningConstants.fHeadingD,0));
+        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP,0,TuningConstants.dDriveD,0.6,0));
+//        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP,0,TuningConstants.hSecondaryTranslationalD,0));
+//        follower.setSecondaryHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP,0,TuningConstants.lSecondaryHeadingD,0));
+//        follower.setSecondaryDrivePIDF(new FilteredPIDFController(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP,0,TuningConstants.jSecondaryDriveD,0.6,0));
+
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;

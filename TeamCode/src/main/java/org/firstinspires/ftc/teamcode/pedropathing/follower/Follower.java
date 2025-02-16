@@ -58,6 +58,8 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilter;
 import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -131,14 +133,23 @@ public class Follower {
 
     private double centripetalScaling = FollowerConstants.centripetalScaling;
 
-    private PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
-    private PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-    private PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
-    private PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-    private PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
-    private PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
-    private FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
-    private FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+//    private PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
+//    private PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
+//    private PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+//    private FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+//
+    public static PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP,0,TuningConstants.hSecondaryTranslationalD,0));
+    public static PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
+    public static PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.aTranslationalP,0,TuningConstants.bTranslationalD,0));
+    public static PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
+    public static PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP,0,TuningConstants.lSecondaryHeadingD,0));
+    public static PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.eHeadingP,0,TuningConstants.fHeadingD,0));
+    public static FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP,0,TuningConstants.jSecondaryDriveD,0.6,0));
+    public static FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP,0,TuningConstants.dDriveD,0.6,0));
 
     private KalmanFilter driveKalmanFilter = new KalmanFilter(FollowerConstants.driveKalmanFilterParameters);
     private double[] driveErrors;
