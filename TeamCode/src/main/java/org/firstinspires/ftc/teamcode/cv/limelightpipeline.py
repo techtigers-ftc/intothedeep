@@ -74,6 +74,11 @@ COLOR_GREEN = (0, 255, 0)
 COLOR_INFO = (255, 255, 0)
 COLOR_ERROR = (0, 0, 255)
 
+LOWER_BOUND = height/2 - 0.4 * height
+UPPER_BOUND = height/2 + 0.4 * height
+LEFT_BOUND = width/2 - 0.4 * width
+RIGHT_BOUND = width/2 + 0.4 * width
+
 def calculate_angle(contour):
     if len(contour) < 5:
         return 0
@@ -260,10 +265,11 @@ def runPipeline(frame, llrobot):
 
         min_dist = 10000000000
         for contour, center in contours_to_select_from:
-            dist = (width/2-center[0]) ** 2 +  (height/2-center[1]) ** 2
-            if dist < min_dist:
-                min_dist = dist
-                largest_contour = contour
+            if (center[0] > LEFT_BOUND or center[0] < RIGHT_BOUND or center[1] > LOWER_BOUND or center[1] < UPPER_BOUND):
+                dist = ((width/2)-center[0]) ** 2 + ((height/2)-center[1]) ** 2
+                if dist < min_dist:
+                    min_dist = dist
+                    largest_contour = contour
 
         if len(game_pieces) > 0:
             llpython = [1, center[0], center[1], angle, 0, 0, 0, 0]
