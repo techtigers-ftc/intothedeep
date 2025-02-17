@@ -428,7 +428,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
             RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
-            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+            return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
         } else {
             RobotLog.dd(tag, "Voltage Is Not Set");
             return power;

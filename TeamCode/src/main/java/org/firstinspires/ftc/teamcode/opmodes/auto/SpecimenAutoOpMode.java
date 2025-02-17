@@ -239,9 +239,9 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
 
-//                .addTransition(clipPreload, endState, AutoState.DRIVE_END)
+                .addTransition(clipPreload, endState, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
 
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+//                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
 
 //                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
 
