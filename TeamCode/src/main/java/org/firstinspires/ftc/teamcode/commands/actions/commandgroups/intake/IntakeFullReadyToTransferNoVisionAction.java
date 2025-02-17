@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -48,13 +49,18 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
+                new IntakeWristPitchAction(intake,
+                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION-20, 200),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
-                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 250)
+                        new IntakeWristPitchAction(intake,
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
+                        new DropperPitchAction(dropper,
+                                DropperSubsystem.PITCH_TRANSFER_POSITION, 250),
+                        new DropperOpenAction(dropper, 100)
                 ),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
