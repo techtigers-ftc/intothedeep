@@ -31,15 +31,15 @@ import team.techtigers.base.CloseableSubsystem;
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
     public static final double SLIDE_MAX = 25.75;
-    public static final double SLIDES_CHAMBER_POSITION = 5.05;
+    public static final double SLIDES_CHAMBER_POSITION = 5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
-    public static final double PITCH_TRANSFER_POSITION = 41;
+    public static final double PITCH_TRANSFER_POSITION = 35;
     public static final double PITCH_BASKET_POSITION = 210;
     public static final double PITCH_CHAMBER_POSITION = 180;
-    public static final double PITCH_FRONT_SLAP_POSITION = 100;
+    public static final double PITCH_FRONT_SLAP_POSITION = 95;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
     public static final double PITCH_WALL_INTAKE_POSITION = 305;
 
@@ -49,16 +49,16 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_FRONT_SLAP_POSITION = 15;
     public static final double ROTATION_BACK_SLAP_POSITION = 215;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 1.15;
+    private static final double ERROR_FACTOR = 1.051;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
-    public static double CLAW_CLOSED_POSITION = 0.02;
+    public static double CLAW_CLOSED_POSITION = 0.055;
     public static double KP = 0.006;
     public static double KI = 0;
     public static double KD = 0;
@@ -119,9 +119,7 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (robotState.isAuto()) {
-            resetSlides();
-            closeClaw();
-            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            init();
         }
 
         colorSensorTimer = new ElapsedTime();
@@ -129,14 +127,13 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     @Override
     public void init() {
-        if (!robotState.isAuto()) {
-            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+        if (robotState.isAuto()) {
+            closeClaw();
+            resetSlides();
+        } else if (getCurrentSlidePositionInches() > 5) {
             moveSlidesAbsolute(getCurrentSlidePositionInches());
-            if (getCurrentSlidePositionInches() > 5) {
-                closeClaw();
-            } else {
-                openClaw();
-            }
+            closeClaw();
         }
     }
 
@@ -220,7 +217,6 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        RobotLog.dd(tag, "moving slides absolute to: %f", position);
         slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
     }
 

@@ -91,4 +91,10 @@ public class PathChain {
     public ArrayList<PathCallback> getCallbacks() {
         return callbacks;
     }
+
+    public void resetCallbacks() {
+        for (PathCallback callback : callbacks) {
+            callback.reset();
+        }
+    }
 }
