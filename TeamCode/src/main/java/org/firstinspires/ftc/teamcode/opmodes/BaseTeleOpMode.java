@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
@@ -258,6 +259,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
+        DropperTransferAction dropperTransferAction = new DropperTransferAction(dropper, robotState);
 
         Trigger dpadLeft =
                 manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
@@ -279,7 +281,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
         // Back down
-        dpadDown.whenActive(dropperPreTransferAction);
+        dpadDown.and(blockInIntake).whenActive(dropperTransferAction);
+        dpadDown.and(blockInIntake.negate()).whenActive(dropperPreTransferAction);
 
         // Basket drop
         dpadUp.and(blockInIntake).whenActive(dropperHighBasketAction);

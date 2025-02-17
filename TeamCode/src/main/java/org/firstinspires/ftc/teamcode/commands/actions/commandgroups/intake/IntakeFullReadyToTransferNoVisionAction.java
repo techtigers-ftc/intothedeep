@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -58,9 +59,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
                         new IntakeWristPitchAction(intake,
                                 IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
-                        new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 250),
-                        new DropperOpenAction(dropper, 100)
+                        new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
