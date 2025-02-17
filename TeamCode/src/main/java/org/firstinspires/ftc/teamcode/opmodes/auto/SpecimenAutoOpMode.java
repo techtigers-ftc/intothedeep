@@ -53,7 +53,7 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         // Initialize subsystems
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(64.25,7.25, Math.toRadians(90)));
+                robotState, new Waypoint(77.25,7.25, Math.toRadians(90)));
         dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
@@ -239,9 +239,9 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
 
-                .addTransition(clipPreload, endState, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+//                .addTransition(clipPreload, endState, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
 
-//                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
 
 //                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
 
@@ -255,8 +255,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(secondPush, thirdIntake, AutoState.TIMEOUT)
                 .addTransition(thirdIntake, thirdPush, AutoState.DRIVE_END)
                 .addTransition(thirdIntake, thirdPush, AutoState.TIMEOUT)
-                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
-                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
+                .addTransition(thirdPush, endState, AutoState.DRIVE_END)
+                .addTransition(thirdPush, endState, AutoState.TIMEOUT)
+//                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
+//                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
 
 //                .addTransition(driveToFirstSpecimenIntake, endState, AutoState.DRIVE_END)
 
