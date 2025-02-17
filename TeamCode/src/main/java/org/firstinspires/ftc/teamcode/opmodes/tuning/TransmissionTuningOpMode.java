@@ -18,7 +18,6 @@ import team.techtigers.base.BaseOpMode;
 /**
  * An opmode to test the capabilities of the dropper subsystem, including the slides, arm, and claw
  */
-@Disabled
 @TeleOp(name = "Transmission Tuning OpMode", group = "Tuning")
 public class TransmissionTuningOpMode extends BaseOpMode {
     private AscentSubsystem ascentSubsystem;
