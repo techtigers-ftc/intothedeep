@@ -28,17 +28,16 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -46,7 +45,6 @@ import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -60,7 +58,7 @@ import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
 @SuppressWarnings("unused")
-public abstract class BaseTeleOpMode extends BaseOpMode {
+public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
@@ -71,8 +69,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
+        GamepadEx playerGamepad = new GamepadEx(gamepad1);
         robotState = new RobotState(isBlue(), false);
         robotState.setBlockColorPreference(BlockColorPreference.ANY);
         intake = new IntakeSubsystem(hardwareMap, robotState);
@@ -97,7 +94,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
-                () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
+                () -> -playerGamepad.getRightY(), ascent, dropper, drive);
         StartAscentAction startAscentAction = new StartAscentAction(robotState, ascent, dropper);
 
         startAscentTrigger.whenActive(startAscentAction);
@@ -107,19 +104,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         isAscending.and(runningEngageAscent.negate()).whileActiveOnce(manualAscentCommand);
 
         // DRIVER TODO: Split into a different method
-        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
+        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
+                playerGamepad);
         drive.setDefaultCommand(manualDriveCommand);
-
-        CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
-
-        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whileActiveContinuous(headingLockCommand);
-
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                () -> robotState.setCurrentGear(DriveGears.ENGAGED));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
-                () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED));
 
         // MANIPULATOR
 
@@ -148,8 +135,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
         // Button Triggers + Manual trigger
-        Trigger rightBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
-        Trigger leftBumper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
+        Trigger rightBumper = playerGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
+        Trigger leftBumper = playerGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         Trigger isManual = new Trigger(() -> robotState.isManualIntakeSelected());
 
         Trigger autoExtendTrigger = rightBumper.and(isManual.negate());
@@ -204,49 +191,36 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // Other Intake Stuff
 
         // Toggles manual intake mode
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
+        playerGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
                 () -> {
                     robotState.setManualIntakeSelected(true);
-                    gamepad2.rumbleBlips(1);
+                    gamepad1.rumbleBlips(1);
                 },
                 () -> {
                     robotState.setManualIntakeSelected(false);
-                    gamepad2.rumbleBlips(2);
+                    gamepad1.rumbleBlips(2);
                 }
         );
 
         // Toggles the intake claw between open and closed positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
+        playerGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
         // Controls intake slides
-        UnsafeIntakeSlidesCommand unsafeIntakeSlidesCommand = new UnsafeIntakeSlidesCommand(intake, manipulatorGamepad);
-
-        Trigger unsafeIntake = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON);
         Trigger intakeSlidesTrigger = new Trigger(() ->
-                manipulatorGamepad.getLeftY() != 0
+                gamepad1.right_trigger - gamepad1.left_trigger != 0
         );
 
-        intakeSlidesTrigger.and(unsafeIntake.negate()).whileActiveContinuous(() -> intake.moveSlidesRelative(
-                manipulatorGamepad.getLeftY() * 1.7));
-        intakeSlidesTrigger.and(unsafeIntake).whileActiveOnce(unsafeIntakeSlidesCommand);
-
-        // Manual intake rotation
-        IntakeManualRotationCommand intakeManualRotationCommand =
-                new IntakeManualRotationCommand(intake, manipulatorGamepad);
-        Trigger intakeRotationTrigger = new Trigger(() ->
-                (manipulatorGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) != 0 ||
-                        manipulatorGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) != 0)
-        );
-        intakeRotationTrigger.and(inReadyToPickup).whileActiveContinuous(intakeManualRotationCommand);
+        intakeSlidesTrigger.whileActiveContinuous(() -> intake.moveSlidesRelative(
+                (gamepad1.right_trigger - gamepad1.left_trigger) * 1.7));
 
         // Intake claw rotation toggle to 0 or 90
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToPickup)
+        playerGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToPickup)
                 .whenActive(intake::togglePerpendicularRotation);
 
         // Changing Color Preference
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
-                new ChangeBlockColorPreferenceCommand(robotState, manipulatorGamepad);
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new ChangeBlockColorPreferenceCommand(robotState, playerGamepad);
+        playerGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 changeBlockColorPreferenceCommand);
 
         // Dropper TODO: Split into a different method
@@ -266,15 +240,15 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperTransferAction dropperTransferAction = new DropperTransferAction(dropper, robotState);
 
         Trigger dpadLeft =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
+                playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
         Trigger dpadRight =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+                playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
         Trigger dpadLeftAndRight =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
+                playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
         Trigger back =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.BACK);
-        Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
-        Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
+                playerGamepad.getGamepadButton(GamepadKeys.Button.BACK);
+        Trigger dpadUp = playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
+        Trigger dpadDown = playerGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
 
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
         Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
@@ -308,19 +282,19 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         //Manual Dropper Stuff
 
         // Toggles the dropper claw between open and closed positions
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+        playerGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 dropper::toggleClaw
         );
 
-        Trigger unsafeDropper = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON);
-        UnsafeDropperSlidesCommand unsafeDropperSlidesCommand = new UnsafeDropperSlidesCommand(dropper, manipulatorGamepad);
+        Trigger unsafeDropper = playerGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON);
+        UnsafeDropperSlidesCommand unsafeDropperSlidesCommand = new UnsafeDropperSlidesCommand(dropper, playerGamepad);
 
         Trigger dropperSlidesTrigger = new Trigger(() ->
-                manipulatorGamepad.getRightY() != 0
+                playerGamepad.getRightY() != 0
         );
         dropperSlidesTrigger.and(unsafeDropper.negate()).and(isAscending.negate()).whileActiveContinuous(() ->
                 dropper.moveSlidesRelative(
-                        -manipulatorGamepad.getRightY() * 2.5)
+                        -playerGamepad.getRightY() * 2.5)
         );
 
         unsafeDropper.whileActiveOnce(unsafeDropperSlidesCommand);
@@ -342,14 +316,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                     )
                     .build();
             gamepad1.runRumbleEffect(endgameRumbleEffect);
-            gamepad2.runRumbleEffect(endgameRumbleEffect);
         }));
 
         Trigger finalRumble = new Trigger(() -> robotState.getRunTime() > 115000);
 
         endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
             gamepad1.rumbleBlips(5);
-            gamepad2.rumbleBlips(5);
         }));
 
         telemetry.addData("Voltage: ", robotState.getVoltage());

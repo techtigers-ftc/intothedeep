@@ -59,8 +59,6 @@ public class ManualAscentCommand extends CommandBase {
                 power);
         if (dropper.getCurrentSlidePositionInches() > DropperSubsystem.SLIDE_MAX) {
             power = Math.min(0, power);
-        } else if (dropper.getCurrentSlidePositionInches() < JOSH_FAILSAFE_LIMIT) {
-            power = Math.max(0, power);
         }
         RobotLog.dd(ManualAscentCommand.class.getSimpleName(), "Limited " +
                         "Power: %f");
