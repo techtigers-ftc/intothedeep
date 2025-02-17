@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
@@ -34,12 +35,13 @@ import team.techtigers.base.BaseOpMode;
 @Config
 @Autonomous(name = "Straight Back And Forth", group = "PIDF Tuning")
 public class StraightBackAndForthTuningOpMode extends BaseOpMode {
-    public static double DISTANCE = 40;
+    public static double DISTANCE = 60;
     public static boolean useSecondaryPIDs = false;
     private Telemetry telemetryA;
     private boolean forward = true;
     private GoBodometrySubsystem odometry;
     private DriveSubsystem drive;
+    private IntakeSubsystem intake;
 
     private AutoDriveCommand forwardCommand;
     private AutoDriveCommand backwardCommand;
@@ -49,6 +51,7 @@ public class StraightBackAndForthTuningOpMode extends BaseOpMode {
         RobotState robotState = new RobotState(true, true);
         odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         drive = new DriveSubsystem(hardwareMap, robotState);
+        intake = new IntakeSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         registerSubsystems(odometry, drive, sensor);
 
@@ -67,6 +70,7 @@ public class StraightBackAndForthTuningOpMode extends BaseOpMode {
                         new Point(DISTANCE, 0,
                                 Point.CARTESIAN), new Point(0, 0,
                                 Point.CARTESIAN))
+//                        .setReversed(true)
                 .build()
         );
 
@@ -107,6 +111,7 @@ public class StraightBackAndForthTuningOpMode extends BaseOpMode {
         command.setTranslationalPIDF(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0);
         command.setHeadingPIDF(TuningConstants.eHeadingP, 0, TuningConstants.fHeadingD, 0);
         command.setDrivePIDF(TuningConstants.cDriveP, 0, TuningConstants.dDriveD, 0.6, 0);
+
         if (useSecondaryPIDs) {
             command.setSecondaryTranslationalPIDF(TuningConstants.gSecondaryTranslationalP, 0, TuningConstants.hSecondaryTranslationalD, 0);
             command.setSecondaryHeadingPIDF(TuningConstants.kSecondaryHeadingP, 0, TuningConstants.lSecondaryHeadingD, 0);

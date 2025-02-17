@@ -7,16 +7,16 @@ import com.acmerobotics.dashboard.config.Config;
  */
 @Config
 public class TuningConstants {
-    public static double aTranslationalP = 0.05;
-    public static double bTranslationalD = 0.005;
-    public static double cDriveP = 0.01;
-    public static double dDriveD = 0.006;
-    public static double eHeadingP = 0.4;
-    public static double fHeadingD = 0.01;
-    public static double gSecondaryTranslationalP = 0.15;
+    public static double aTranslationalP = 0.015;
+    public static double bTranslationalD = 0;
+    public static double cDriveP = 0.00155;
+    public static double dDriveD = 0.00065;
+    public static double eHeadingP = 0.2;
+    public static double fHeadingD = 0.005;
+    public static double gSecondaryTranslationalP = 0.005;
     public static double hSecondaryTranslationalD = 0;
-    public static double iSecondaryDriveP = 0.01;
-    public static double jSecondaryDriveD = 0.006;
-    public static double kSecondaryHeadingP = 1;
-    public static double lSecondaryHeadingD = 0;
+    public static double iSecondaryDriveP = 0.002; //0
+    public static double jSecondaryDriveD = 0.00085; //0
+    public static double kSecondaryHeadingP = 0.2;
+    public static double lSecondaryHeadingD = 0.01;
 }
