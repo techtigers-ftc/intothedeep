@@ -31,15 +31,15 @@ import team.techtigers.base.CloseableSubsystem;
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
     public static final double SLIDE_MAX = 27.75;
-    public static final double SLIDES_CHAMBER_POSITION = 5;
+    public static final double SLIDES_CHAMBER_POSITION = 5.8;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 35;
     public static final double PITCH_BASKET_POSITION = 225;
-    public static final double PITCH_CHAMBER_POSITION = 180;
-    public static final double PITCH_FRONT_SLAP_POSITION = 95;
+    public static final double PITCH_CHAMBER_POSITION = 155; // 180
+    public static final double PITCH_FRONT_SLAP_POSITION = 80;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
     public static final double PITCH_WALL_INTAKE_POSITION = 305;
 
@@ -58,7 +58,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.9;
-    public static double CLAW_CLOSED_POSITION = 0.055;
+    public static double CLAW_CLOSED_POSITION = 0;
     public static double KP = 0.006;
     public static double KI = 0;
     public static double KD = 0;

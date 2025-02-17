@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -111,6 +112,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
+
+        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whileActiveContinuous(headingLockCommand);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 () -> robotState.setCurrentGear(DriveGears.ENGAGED));
