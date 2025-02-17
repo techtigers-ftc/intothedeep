@@ -61,6 +61,7 @@ public class StraightBackAndForthTuningOpMode extends BaseOpMode {
                         new Point(0, 0,
                                 Point.CARTESIAN), new Point(DISTANCE, 0,
                                 Point.CARTESIAN))
+                        .setLinearHeadingInterpolation(0, Math.toRadians(180))
                 .build()
         );
 
@@ -71,6 +72,7 @@ public class StraightBackAndForthTuningOpMode extends BaseOpMode {
                                 Point.CARTESIAN), new Point(0, 0,
                                 Point.CARTESIAN))
 //                        .setReversed(true)
+                        .setLinearHeadingInterpolation(Math.toRadians(180), 0)
                 .build()
         );
 
