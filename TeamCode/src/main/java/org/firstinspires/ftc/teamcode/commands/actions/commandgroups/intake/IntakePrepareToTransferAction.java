@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -56,8 +58,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                         new IntakeSlidesAbsoluteAction(intake, targetSlidePosition, 1),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
-                        new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 100)
+                        new DropperTransferAction(dropper, robotState)
                 ),
                 new IntakeLoosenAction(intake, 300),
                 new IntakeCloseAction(intake, 50)
@@ -90,8 +91,10 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         } else {
-            intake.setClawRotationAbsolute(lastClawRotation);
+            robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
+            robotState.setCurrentGear(DriveGears.ENGAGED);
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
+            intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
         }
     }
