@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.Pinpo
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -35,7 +36,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous (name = "Curved Back And Forth", group = "PIDF Testing")
+@Disabled
+@Autonomous (name = "Curved Back And Forth s", group = "PIDF Testing")
 public class CurvedBackAndForth extends OpMode {
     private Telemetry telemetryA;
 
