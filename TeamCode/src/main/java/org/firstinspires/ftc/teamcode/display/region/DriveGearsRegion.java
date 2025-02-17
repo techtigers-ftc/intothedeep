@@ -32,7 +32,7 @@ public class DriveGearsRegion extends DisplayRegion {
         slowGearSprite = new XSprite(0, 0, 3, 3);
         fastGearSprite = new PlusSprite(0, 0);
 
-        slowGearSprite.setColor(new Color((byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00));
+        slowGearSprite.setColor(Color.RED);
         fastGearSprite.setColor(Color.GREEN);
 
         sprites = new Sprite[]{slowGearSprite, fastGearSprite};

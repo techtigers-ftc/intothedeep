@@ -35,9 +35,9 @@ public class BlockDetectionStateRegion extends DisplayRegion {
         detectedSprite = new RectangleSprite(0, 0, 3, 4);
         upArrowSprite = new UpArrowSprite(0, 0, 3, 4);
 
-        notDetectedSprite.setColor(Color.RED);
+        notDetectedSprite.setColor(Color.ORANGE);
         detectedSprite.setColor(Color.GREEN);
-        upArrowSprite.setColor(Color.RED);
+        upArrowSprite.setColor(Color.ORANGE);
 
         this.sprites = new Sprite[]{notDetectedSprite, detectedSprite, upArrowSprite};
     }
