@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
+
 import java.util.ArrayList;
 
 /**
@@ -34,6 +36,23 @@ public class BezierLine extends BezierCurve {
         super();
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        length = approximateLength();
+        UNIT_TO_TIME = 1 / length;
+        endTangent = MathFunctions.normalizeVector(getDerivative(1));
+        super.initializeDashboardDrawingPoints();
+    }
+
+    /**
+     * This creates a new BezierLine with specified start and end Points.
+     * This is just a line but it extends the BezierCurve class so things work.
+     *
+     * @param startPose start pose of the line.
+     * @param endPose end pose of the line.
+     */
+    public BezierLine(Pose startPose, Pose endPose) {
+        super();
+        this.startPoint = new Point(startPose);
+        this.endPoint = new Point(endPose);
         length = approximateLength();
         UNIT_TO_TIME = 1 / length;
         endTangent = MathFunctions.normalizeVector(getDerivative(1));

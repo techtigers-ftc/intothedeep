@@ -26,7 +26,7 @@ public class AutoDriveCommand extends CommandBase {
 
     private final DriveSubsystem drive;
     private final RobotState robotState;
-    private final Follower follower;
+    public final Follower follower;
     private PathChain pathChain;
 
     // Primary PIDF Controllers
@@ -108,6 +108,16 @@ public class AutoDriveCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drive.driveRobotCentric(0,0,0);
+    }
+
+    /**
+     * Returns whether the robot is stuck. This is calculated by when the
+     * robot isn't moving for a period of time
+     *
+     * @return whether the robot is stuck
+     */
+    public boolean isRobotStuck() {
+        return follower.isRobotStuck();
     }
 
     /**

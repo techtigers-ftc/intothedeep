@@ -29,6 +29,10 @@ public class Vector {
         setComponents(0, 0);
     }
 
+    public Vector(Point point) {
+        setOrthogonalComponents(point.getX(), point.getY());
+    }
+
     /**
      * This creates a new Vector with a specified magnitude and direction.
      *
