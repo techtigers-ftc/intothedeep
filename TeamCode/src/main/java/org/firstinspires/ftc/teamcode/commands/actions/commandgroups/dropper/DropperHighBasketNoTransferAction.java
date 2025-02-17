@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
  * A command group that moves the dropper system to the high basket drop position
  * The NT stands for "No Transfer"
  */
-public class DropperHighBasketNoTransferAction extends SequentialCommandGroup {
+public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = DropperHighBasketNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -28,14 +29,14 @@ public class DropperHighBasketNoTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper,
-                                DropperSubsystem.SLIDE_MAX, 1),
-                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
-                        new DropperRotationAction(dropper,
-                                DropperSubsystem.ROTATION_BASKET_POSITION, 300)
-                ),
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300)
+                new DropperSlidesAbsoluteAction(dropper,
+                        DropperSubsystem.SLIDE_MAX, 1),
+                new DropperRotationAction(dropper,
+                        DropperSubsystem.ROTATION_BASKET_POSITION, 300),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> dropper.getCurrentSlidePositionInches() > 5),
+                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300)
+                )
         );
     }
 

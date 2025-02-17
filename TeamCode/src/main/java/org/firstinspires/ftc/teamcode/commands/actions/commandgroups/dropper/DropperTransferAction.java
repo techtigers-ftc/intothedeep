@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that moves the dropper to the transfer position
+ * A command group that moves the dropper to the actual transfer position
  */
-public class DropperPreTransferAction extends ParallelCommandGroup {
-    private static final String LOG_TAG = DropperPreTransferAction.class.getSimpleName();
+public class DropperTransferAction extends ParallelCommandGroup {
+    private static final String LOG_TAG = DropperTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
@@ -23,14 +23,14 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperPreTransferAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION,
                         300),
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
-                new DropperSlidesAbsoluteAction(dropper, 5, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
                 new DropperOpenAction(dropper)
         );
     }

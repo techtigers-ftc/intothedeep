@@ -441,7 +441,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(encoderMotor.getCurrentPosition()));
-        // TODO: add voltage compensation to intake subsystem
         if (!isDirectControlEnabled) {
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
