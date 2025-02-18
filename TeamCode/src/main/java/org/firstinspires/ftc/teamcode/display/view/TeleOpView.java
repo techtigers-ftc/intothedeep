@@ -25,12 +25,12 @@ public class TeleOpView extends DisplayView {
     public TeleOpView(RobotState robotState) {
         super(new DisplayRegion[]{
 //                new IntakeFlashbangRegion(0, 0, robotState),
-                new CountdownTimerRegion(2, 0, robotState),
-                new DriveGearsRegion(2, 5, robotState),
-                new ColorPreferenceRegion(5, 5, robotState),
-                new BlockDetectionStateRegion(8, 0, robotState),
+//                new CountdownTimerRegion(2, 0, robotState),
+//                new DriveGearsRegion(2, 5, robotState),
+//                new ColorPreferenceRegion(5, 5, robotState),
+//                new BlockDetectionStateRegion(8, 0, robotState),
 //                new IntakeFlashbangRegion(22, 0, robotState)
-//                new DummyRegion(0, 0)
+                new DummyRegion(0,0)
         });
     }
 }

@@ -27,6 +27,6 @@ public class SensorSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-        robotState.setVoltage(voltage.getVoltage());
+//        robotState.setVoltage(voltage.getVoltage());
     }
 }

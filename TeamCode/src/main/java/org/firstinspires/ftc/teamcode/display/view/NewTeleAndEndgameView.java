@@ -18,14 +18,14 @@ public class NewTeleAndEndgameView extends DisplayView {
      */
     public NewTeleAndEndgameView(RobotState robotState) {
         super(new DisplayRegion[]{
-                new IntakeFlashbangRegion(0, 0, robotState),
-                new SwitchingTransmissionStatusRegion(3, 0, robotState),
-                new DriveGearsRegion(3, 4, robotState),
-                new VoltageIndicatorRegion(6, 0, robotState),
-                new CountdownTimerRegion(11, 0, robotState),
-                new BlockDetectionStateRegion(22, 0, robotState),
-                new ColorPreferenceRegion(21, 5, robotState),
-                new IntakeFlashbangRegion(26, 0, robotState)
+//                new IntakeFlashbangRegion(0, 0, robotState),
+//                new SwitchingTransmissionStatusRegion(3, 0, robotState),
+//                new DriveGearsRegion(3, 4, robotState),
+                new VoltageIndicatorRegion(0, 0, robotState),
+//                new CountdownTimerRegion(11, 0, robotState),
+//                new BlockDetectionStateRegion(22, 0, robotState),
+//                new ColorPreferenceRegion(21, 5, robotState),
+//                new IntakeFlashbangRegion(26, 0, robotState)
         });
     }
 }

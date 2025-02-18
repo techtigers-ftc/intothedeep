@@ -65,7 +65,7 @@ public class VoltageIndicatorRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public VoltageIndicatorRegion(int x, int y, RobotState robotState) {
-        super(x, y, 2, 8);
+        super(x, y, 20, 8);
         this.robotState = robotState;
         L1Sprite = new RectangleSprite(0, 0, 2, 1);
         L2Sprite = new RectangleSprite(0, 1, 2, 1);
@@ -106,46 +106,47 @@ public class VoltageIndicatorRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        double currentVoltage = robotState.getVoltage();
-        if (currentVoltage < L1_THRESHOLD) {
-            disableAllButSelectedSprites(0);
-        } else if (currentVoltage < L2_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1);
-        } else if (currentVoltage < L3_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2);
-        } else if (currentVoltage < L4_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3);
-        } else if (currentVoltage < L5_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4);
-        } else if (currentVoltage < L6_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
-        } else if (currentVoltage < L7_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6);
-        } else if (currentVoltage < L8_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7);
-        } else if (currentVoltage < L9_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8);
-        } else if (currentVoltage < L10_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        } else if (currentVoltage < L11_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        } else if (currentVoltage < L12_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-        } else if (currentVoltage < L13_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-        } else if (currentVoltage < L14_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
-        } else if (currentVoltage < L15_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
-        } else if (currentVoltage < L16_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-        } else if (currentVoltage < L17_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-        } else if (currentVoltage < L18_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-        } else {
-            enableAllSprites();
-        }
+//        double currentVoltage = robotState.getVoltage();
+//        if (currentVoltage < L1_THRESHOLD) {
+//            disableAllButSelectedSprites(0);
+//        } else if (currentVoltage < L2_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1);
+//        } else if (currentVoltage < L3_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2);
+//        } else if (currentVoltage < L4_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3);
+//        } else if (currentVoltage < L5_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4);
+//        } else if (currentVoltage < L6_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
+//        } else if (currentVoltage < L7_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6);
+//        } else if (currentVoltage < L8_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7);
+//        } else if (currentVoltage < L9_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8);
+//        } else if (currentVoltage < L10_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+//        } else if (currentVoltage < L11_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+//        } else if (currentVoltage < L12_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+//        } else if (currentVoltage < L13_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+//        } else if (currentVoltage < L14_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+//        } else if (currentVoltage < L15_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
+//        } else if (currentVoltage < L16_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+//        } else if (currentVoltage < L17_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+//        } else if (currentVoltage < L18_THRESHOLD) {
+//            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+//        } else {
+//            enableAllSprites();
+//        }
+        disableAllButSelectedSprites(14, 15, 16, 17);
     }
 
     @Override
