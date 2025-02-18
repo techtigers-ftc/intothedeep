@@ -11,7 +11,7 @@ public class TuningConstants {
     public static double bTranslationalD = 0.001;
     public static double cDriveP = 0.004;
     public static double dDriveD = 0.0019;
-    public static double eHeadingP = 1.1;
+    public static double eHeadingP = 0.7;
     public static double fHeadingD = 0.015;
     public static double gSecondaryTranslationalP = 0.005;
     public static double hSecondaryTranslationalD = 0;
