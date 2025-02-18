@@ -23,9 +23,9 @@ public class SwitchingTransmissionStatusRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public SwitchingTransmissionStatusRegion(int x, int y, RobotState robotState) {
-        super(x, y, 3, 3);
+        super(x, y, 2, 2);
         this.robotState = robotState;
-        rectangleSprite = new RectangleSprite(0, 0, 3, 3);
+        rectangleSprite = new RectangleSprite(0, 0, 2, 2);
         rectangleSprite.enable();
         rectangleSprite.setColor(Color.RED);
 
