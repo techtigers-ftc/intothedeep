@@ -207,11 +207,10 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         // Push third sample
                         .addBezierCurve(
-                                new Point(135, 53),
-                                new Point(133, 25)
+                                new Point(134, 53),
+                                new Point(134, 20)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(90))
-
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(110))
                         .build()
         );
 
@@ -228,19 +227,19 @@ public class SpecimenDriveStateConfigurator {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierCurve(
-                                new Point(133, 25),
-                                new Point(125, 9)
+                        .addBezierLine(
+                                new Point(134, 20),
+                                new Point(134, 8)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
-        state.setTolerance(MINISCULE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -258,7 +257,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(129, 9),
+                                new Point(125, 10),
                                 new Point(71, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))

@@ -262,10 +262,13 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
                 .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
 
-                .addTransition(driveToFirstSpecimenIntake, endState, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
 
-//                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
-//                .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
+//                .addTransition(driveToFirstSpecimenIntake, endState, AutoState.DRIVE_END)
+
+//                .addTransition(thirdPush, intakeSpecimen, AutoState.DRIVE_END)
+//                .addTransition(thirdPush, intakeSpecimen, AutoState.TIMEOUT)
 
 //                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
 //                .addTransition(driveToFirstSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)

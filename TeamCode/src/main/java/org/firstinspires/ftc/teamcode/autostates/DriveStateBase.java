@@ -235,6 +235,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
             return AutoState.DRIVE_END;
         }
 
+        if (autoDriveCommand.isRobotStuck()) {
+            return AutoState.DRIVE_END;
+        }
+
         return AutoState.RUNNING;
     }
 }
