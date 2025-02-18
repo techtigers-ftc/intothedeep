@@ -66,7 +66,8 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                                 new IntakeLoosenAction(intake, 350)
 //                                new IntakeCloseAction(intake, 50)
                         ),
-                        new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 )
         );
     }
@@ -97,6 +98,9 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
+            if (!robotState.isManualIntakeSelected()) {
+                intake.moveSlidesRelative(-3);
+            }
         }
     }
 }
