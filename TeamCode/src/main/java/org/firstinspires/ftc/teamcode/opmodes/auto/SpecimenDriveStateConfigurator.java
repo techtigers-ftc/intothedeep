@@ -28,21 +28,17 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropSpecimenState state) {
-        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-        state.setDrivePIDF(0.0055, 0, 0.004, 0.6, 0);
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.004, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.15, 0);
-        state.setSecondaryTranslationalPIDF(0.005, 0, 0.012, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.008, 0.6, 0);
-        state.setSecondaryHeadingPIDF(0.2, 0, 0.01, 0);
 //        state.setPrimaryPIDSToTuning();
-//        state.setSecondaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(79.25, 7.25),
-                                        new Point(75.75, 42)
+                                        new Point(74.75, 42)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -67,9 +63,9 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(75.75, 42),
+                                new Point(74.75, 42),
                                 new Point(77.25, 22),
-                                new Point(121, 24),
+                                new Point(122, 24),
                                 new Point(90.25, 59.5),
                                 new Point(117.25, 53)
                         )
@@ -239,7 +235,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -282,8 +278,8 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(71, 41.5),
-                                new Point(78, 41.5),
+                                new Point(70, 41.5),
+                                new Point(79, 41.5),
                                 new Point(73.25, 16),
                                 new Point(116.25, 40),
                                 new Point(111, 9)
@@ -302,23 +298,23 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configGeneralSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-        state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
-        state.setHeadingPIDF(0.7, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+//        state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
+//        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(111, 7.5),
                                 new Point(80, 16),
-                                new Point(71, 41.5)
+                                new Point(70, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -336,7 +332,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(72, 42.5),
+                                new Point(70, 42.5),
                                 new Point(111, 15)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))

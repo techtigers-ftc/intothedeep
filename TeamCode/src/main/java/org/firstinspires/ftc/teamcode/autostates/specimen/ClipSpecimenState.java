@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.drive.RawPowerDriveAction;
@@ -10,12 +9,12 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
-import team.techtigers.base.statemachine.ParallelCommandGroupState;
+import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to clip a specimen onto the chamber
  */
-public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
+public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipSpecimenState.class.getSimpleName();
     private int runCounter;
@@ -33,12 +32,10 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new SequentialCommandGroup(
-                        new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                        new WaitCommand(300)
-                ),
-                new RawPowerDriveAction(drive, 0.2, 0.3)
+                new RawPowerDriveAction(drive, 0.4, 0.1),
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                new WaitCommand(300)
         );
     }
 
