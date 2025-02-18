@@ -227,7 +227,7 @@ public class SpecimenDriveStateConfigurator {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
-        state.setPrimaryPIDSToTuning();
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -249,15 +249,15 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.07, 0, 0.001, 0);
-        state.setDrivePIDF(0.01, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(0.5, 0, 0.03, 0);
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
         state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(125, 10),
+                                new Point(134, 8),
                                 new Point(71, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
