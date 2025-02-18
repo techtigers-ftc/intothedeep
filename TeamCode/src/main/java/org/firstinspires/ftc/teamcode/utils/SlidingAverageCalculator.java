@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
-import java.util.Arrays;
-
 /**
  * A class to calculate the sliding average used to find how many amps the robot is using
  */
@@ -12,7 +8,7 @@ public class SlidingAverageCalculator {
     private double average;
     private int index;
     private double sum;
-    private int capacity;
+    private final int capacity;
     private int count;
 
     /**

@@ -4,17 +4,13 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
@@ -33,9 +29,9 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class IntakeSubsystem extends CloseableSubsystem {
-    public static double CLAW_ROTATION_BUFFER = 30;
+    public static double CLAW_ROTATION_BUFFER = 34;
 
-    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Clw Rotation: 90
+    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 59;
     public static final double WRIST_ROTATION_TUCK_POSITION = 172;
@@ -63,11 +59,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_OPEN_POSITION = 0.56;
     private static final double CLAW_LOOSE_POSITION = 0.81;
     private static final double CLAW_CLOSED_POSITION = 0.845;
-    private static final double INTAKE_CLAW_ROTATION_RANGE = 300;
-    private static final double INTAKE_SENSOR_THRESHOLD = 1.2;
-    public static double minMagnitude = 1;
-    public static double minBlue = 0.53;
-    public static double minRed = 0.43;
+    private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double FORWARD_KP = 0.007;
     public static double FORWARD_KI = 0.0;
     public static double FORWARD_KD = 0.0001;
@@ -87,7 +79,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private boolean isDirectControlEnabled;
-    private final DigitalChannel breakbeamSensor;
+    private final DigitalChannel breakBeamSensor;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -106,7 +98,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         claw = hardwareMap.get(Servo.class, "intake_claw");
         //Claw rotation zero is perpendicular to the slides, the triangle facing forwards
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
-        breakbeamSensor = hardwareMap.get(DigitalChannel.class, "intake_break_beam");
+        breakBeamSensor = hardwareMap.get(DigitalChannel.class, "intake_break_beam");
 
         slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
@@ -114,7 +106,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
         leftSlideCurrentAverage = new SlidingAverageCalculator(10);
 
-        breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
 
         //Assuming that the encoder is connected to the leftSlideMotor
         encoderMotor = rightSlideMotor;
@@ -131,6 +123,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
         claw.setDirection(Servo.Direction.FORWARD);
+        clawRotation.setDirection(Servo.Direction.REVERSE);
         isDirectControlEnabled = false;
 
         if (robotState.isAuto()) {
@@ -396,7 +389,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
-        return !breakbeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
+        return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
 
     }
 
@@ -465,6 +458,6 @@ public class IntakeSubsystem extends CloseableSubsystem {
         RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
         RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
         RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Intake Break-beam : %s", breakbeamSensor.getState());
+        RobotLog.dd(tag, "Intake Break-beam : %s", breakBeamSensor.getState());
     }
 }
