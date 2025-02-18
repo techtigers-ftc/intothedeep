@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import org.firstinspires.ftc.teamcode.commands.actions.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -23,15 +25,17 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
      * Constructor for the ClipSpecimenState
      *
      * @param name       The name of the state
+     * @param drive the drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public PickupSpecimenState(String name, DropperSubsystem dropper, RobotState robotState) {
+    public PickupSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         this.robotState = robotState;
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
+                new RawPowerDriveAction(drive, -0.3, 0.3),
                 new DropperCloseAction(dropper, 100),
                 new DropperSlidesAbsoluteAction(dropper, 4, 1)
         );

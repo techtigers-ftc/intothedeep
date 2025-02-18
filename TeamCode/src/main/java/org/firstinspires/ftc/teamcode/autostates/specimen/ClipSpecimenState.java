@@ -35,12 +35,11 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
         runCounter = 0;
         addCommands(
                 new SequentialCommandGroup(
-                        new DropperRotationAction(dropper, DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 200),
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                         new WaitCommand(300)
                 ),
-                new RawPowerDriveAction(drive, 0.2, 1)
+                new RawPowerDriveAction(drive, 0.2, 0.3)
         );
     }
 

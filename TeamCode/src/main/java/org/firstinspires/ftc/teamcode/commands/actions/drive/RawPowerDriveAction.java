@@ -3,16 +3,15 @@ package org.firstinspires.ftc.teamcode.commands.actions.drive;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 /**
  * An action which drives the robot forward/backward at a specific power for a certain amount of time
  */
-public class RawPowerDriveAction extends CommandBase {
+public class RawPowerDriveAction extends TimeoutCommand {
     private DriveSubsystem drive;
     private double power;
-    private double time;
-    private ElapsedTime timer;
 
     /**
      * Constructor for RawPowerDriveAction
@@ -22,21 +21,19 @@ public class RawPowerDriveAction extends CommandBase {
      * @param time the time to drive the robot for
      */
     public RawPowerDriveAction(DriveSubsystem drive, double power, double time) {
+        super(time);
         this.drive = drive;
         this.power = power;
-        this.time = time;
-        timer = new ElapsedTime();
     }
 
     @Override
-    public void initialize() {
-        timer.reset();
+    public void execute() {
         drive.driveRobotCentric(power, 0, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return timer.seconds() > time;
+        return isTimeoutReached();
     }
 
     @Override
