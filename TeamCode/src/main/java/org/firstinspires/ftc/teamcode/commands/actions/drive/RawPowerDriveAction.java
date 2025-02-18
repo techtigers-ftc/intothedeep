@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.commands.actions.drive;
 
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
@@ -18,7 +15,7 @@ public class RawPowerDriveAction extends TimeoutCommand {
      *
      * @param drive the drive subsystem to drive the robot
      * @param power the power to drive the robot at (-1 to 1)
-     * @param time the time to drive the robot for
+     * @param time  the time to drive the robot for
      */
     public RawPowerDriveAction(DriveSubsystem drive, double power, double time) {
         super(time);
