@@ -12,7 +12,7 @@ import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
 /**
- * A region that flashes the sprite when the intake gets a block in it
+ * A region that flashes the sprite when the intake picks up a block
  */
 public class IntakeFlashbangRegion extends DisplayRegion {
     private final RobotState robotState;
