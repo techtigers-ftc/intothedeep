@@ -15,7 +15,7 @@ import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
 /**
- * A region that displays the current drive gear of the robot
+ * A region that displays the current block detection state
  */
 public class BlockDetectionStateRegion extends DisplayRegion {
     private final RobotState robotState;
@@ -23,7 +23,6 @@ public class BlockDetectionStateRegion extends DisplayRegion {
     private final CheckmarkSprite detectedSprite;
     private final UpArrowSprite upArrowSprite;
     private final Sprite[] sprites;
-    private ElapsedTime timer;
 
     /**
      * Creates a new BlockDetectionStateRegion
@@ -37,8 +36,7 @@ public class BlockDetectionStateRegion extends DisplayRegion {
         this.robotState = robotState;
 
         notDetectedSprite = new XSprite(0, 2, 5, 5);
-//        detectedSprite = new RectangleSprite(1, 0, 2, 4);
-        detectedSprite = new CheckmarkSprite(0, 2, 4, 3);
+        detectedSprite = new CheckmarkSprite(0, 2);
         upArrowSprite = new UpArrowSprite(1, 0, 3, 5);
 
         notDetectedSprite.setColor(Color.ORANGE);
@@ -46,8 +44,6 @@ public class BlockDetectionStateRegion extends DisplayRegion {
         upArrowSprite.setColor(Color.ORANGE);
 
         this.sprites = new Sprite[]{notDetectedSprite, detectedSprite, upArrowSprite};
-        timer = new ElapsedTime();
-        timer.reset();
     }
 
 

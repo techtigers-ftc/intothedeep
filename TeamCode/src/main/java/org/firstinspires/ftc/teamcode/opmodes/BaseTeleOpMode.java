@@ -38,7 +38,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
-import org.firstinspires.ftc.teamcode.display.view.NewTeleAndEndgameView;
+import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.display.view.TeleOpView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -47,7 +47,6 @@ import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -89,10 +88,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
-        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new NewTeleAndEndgameView(robotState));
-
-        registerSubsystems(visualDisplaySubsystem);
-
+        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
 
         GoBodometrySubsystem odometry;
         try {
@@ -102,7 +98,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }
 
         registerSubsystems(intake, drive, dropper, limelight,
-                odometry, ascent, sensor);
+                odometry, ascent, sensor, visualDisplaySubsystem);
 
         // ASCENT
         Trigger startAscentTrigger =

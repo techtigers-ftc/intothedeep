@@ -13,7 +13,8 @@ import team.techtigers.core.display.Sprite;
  */
 public class ColorPreferenceRegion extends DisplayRegion {
     private final RobotState robotState;
-    private final RectangleSprite rectangleSprite;
+    private final RectangleSprite rectangleSpriteOne;
+    private final RectangleSprite rectangleSpriteTwo;
     private final Sprite[] sprites;
 
     /**
@@ -26,28 +27,35 @@ public class ColorPreferenceRegion extends DisplayRegion {
     public ColorPreferenceRegion(int x, int y, RobotState robotState) {
         super(x, y, 4, 2);
         this.robotState = robotState;
-        rectangleSprite = new RectangleSprite(0, 0, 4, 2);
-        rectangleSprite.enable();
+        rectangleSpriteOne = new RectangleSprite(0, 0, 2, 2);
+        rectangleSpriteTwo = new RectangleSprite(0, 0, 2, 2);
+        rectangleSpriteOne.enable();
+        rectangleSpriteTwo.enable();
 
-        sprites = new Sprite[]{rectangleSprite};
+        sprites = new Sprite[]{rectangleSpriteOne, rectangleSpriteTwo};
     }
 
 
     @Override
     public void update() {
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
-            this.rectangleSprite.setColor(Color.YELLOW);
+            rectangleSpriteOne.setColor(Color.YELLOW);
+            rectangleSpriteTwo.setColor(Color.YELLOW);
         } else if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
             if (robotState.isBlue()) {
-                rectangleSprite.setColor(Color.BLUE);
+                rectangleSpriteOne.setColor(Color.BLUE);
+                rectangleSpriteTwo.setColor(Color.BLUE);
             } else {
-                rectangleSprite.setColor(Color.RED);
+                rectangleSpriteOne.setColor(Color.RED);
+                rectangleSpriteTwo.setColor(Color.RED);
             }
         } else {
-            if(robotState.isBlue()) {
-                rectangleSprite.setColor(Color.GREEN);
+            if (robotState.isBlue()) {
+                rectangleSpriteOne.setColor(Color.BLUE);
+                rectangleSpriteTwo.setColor(Color.YELLOW);
             } else {
-                rectangleSprite.setColor(Color.ORANGE);
+                rectangleSpriteOne.setColor(Color.RED);
+                rectangleSpriteTwo.setColor(Color.YELLOW);
             }
         }
     }

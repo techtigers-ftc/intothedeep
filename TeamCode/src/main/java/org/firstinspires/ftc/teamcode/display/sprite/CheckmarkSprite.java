@@ -9,13 +9,12 @@ import team.techtigers.core.display.Sprite;
 public class CheckmarkSprite extends Sprite {
     /**
      * Creates a new checkmark sprite
-     * @param x     the x coordinate of the bottom left corner of the sprite within the region
-     * @param y     the y coordinate of the bottom left corner of the sprite within the region
-     * @param width the width of the line
-     * @param height the height of the line
+     *
+     * @param x the x coordinate of the bottom left corner of the sprite within the region
+     * @param y the y coordinate of the bottom left corner of the sprite within the region
      */
-    public CheckmarkSprite(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public CheckmarkSprite(int x, int y) {
+        super(x, y, 5, 4);
     }
 
 
