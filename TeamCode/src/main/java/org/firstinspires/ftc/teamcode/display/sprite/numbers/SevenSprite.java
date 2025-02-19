@@ -5,12 +5,12 @@ import team.techtigers.core.display.Color;
 import team.techtigers.core.display.Sprite;
 
 /**
- * A class which represents a cross shaped sprite
+ * A class which represents a sprite in the shape of a 7
  */
 public class SevenSprite extends Sprite {
 
     /**
-     * Creates a new cross sprite
+     * Creates a new 7 sprite
      *
      * @param x     the x coordinate of the bottom left corner of the sprite within the region
      * @param y     the y coordinate of the bottom left corner of the sprite within the region
