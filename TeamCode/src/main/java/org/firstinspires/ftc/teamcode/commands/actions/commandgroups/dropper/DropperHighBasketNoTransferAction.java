@@ -34,7 +34,7 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
                 new DropperRotationAction(dropper,
                         DropperSubsystem.ROTATION_BASKET_POSITION, 300),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> dropper.getCurrentSlidePositionInches() > 5),
+                        new WaitUntilCommand(() -> dropper.getCurrentSlidePositionInches() > 15),
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_BASKET_POSITION, 300)
                 )
         );
