@@ -40,7 +40,7 @@ public class DropperTransferAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setDropperState(DropperState.PRE_TRANSFER);
+            robotState.setDropperState(DropperState.TRANSFER);
         }
     }
 }

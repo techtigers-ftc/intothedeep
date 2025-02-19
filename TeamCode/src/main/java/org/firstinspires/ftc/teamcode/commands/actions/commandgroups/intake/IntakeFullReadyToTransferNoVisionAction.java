@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -88,7 +89,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted) {
+        if (!interrupted || robotState.getDropperState() == DropperState.TRANSFER) {
             robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
