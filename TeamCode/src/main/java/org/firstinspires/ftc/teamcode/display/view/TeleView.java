@@ -19,7 +19,6 @@ public class TeleView extends DisplayView {
     public TeleView(RobotState robotState) {
         super(new DisplayRegion[]{
                 new IntakeFlashbangRegion(0, 0, robotState),
-//                new SwitchingTransmissionStatusRegion(3, 0, robotState),
                 new CountdownTimerRegion(11, 0, robotState),
                 new BlockDetectionStateRegion(21, 1, robotState),
                 new ColorPreferenceRegion(3, 5, robotState),

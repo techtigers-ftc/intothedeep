@@ -36,7 +36,6 @@ public class IntakeFlashbangRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        // TODO: Replace this with the breakbeam and add a condition for the dropper
         if (robotState.getIntakeBlockColor() == BlockColor.NONE) {
             rectangleSprite.setColor(Color.RED);
         } else {
