@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.display.sprite.HollowRectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -16,7 +18,7 @@ public class VisionStreamRegion extends DisplayRegion {
     private int blockY;
     private double blockOrientation;
     private double LATERAL_INCHES_LIMIT = 6;
-    private double VERTICAL_INCHES_LIMIT = 5.6;
+    private double VERTICAL_INCHES_LIMIT = 2;
     private final Sprite[] sprites;
 
     public VisionStreamRegion(int x, int y, RobotState robotState) {
@@ -35,7 +37,7 @@ public class VisionStreamRegion extends DisplayRegion {
     public void update() {
         blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 2);
         blockX = (int) ((robotState.getBlockLateralFine() + (LATERAL_INCHES_LIMIT / 2)) / (LATERAL_INCHES_LIMIT) * 10);
-        block.setPosition(blockX + 1, blockY + 1);
+        block.setPosition(Range.clip(blockX + 1, 1, 10), Range.clip(blockY + 1, 1, 3));
     }
 
     @Override

@@ -18,6 +18,7 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
     public static double voltage = 14;
     public static double lateralFine = 0;
     public static double forwardFine = 0;
+    public static double orientation = 0;
 
     private RobotState robotState;
     private VisualDisplaySubsystem visualDisplaySubsystem;
