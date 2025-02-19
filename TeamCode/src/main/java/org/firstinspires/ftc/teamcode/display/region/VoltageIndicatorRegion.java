@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
+import org.firstinspires.ftc.teamcode.display.sprite.DiagonalRectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.core.display.Color;
@@ -10,19 +10,21 @@ import team.techtigers.core.display.Sprite;
 /**
  * A region which shows an indicator that shows the current status of the battery's voltage
  */
-public class VoltageIndicatorPartOneRegion extends DisplayRegion {
+public class VoltageIndicatorRegion extends DisplayRegion {
     private final RobotState robotState;
-    private final RectangleSprite L1Sprite;
-    private final RectangleSprite L2Sprite;
-    private final RectangleSprite L3Sprite;
-    private final RectangleSprite L4Sprite;
-    private final RectangleSprite L5Sprite;
-    private final RectangleSprite L6Sprite;
+    private final DiagonalRectangleSprite L1Sprite;
+    private final DiagonalRectangleSprite L2Sprite;
+    private final DiagonalRectangleSprite L3Sprite;
+    private final DiagonalRectangleSprite L4Sprite;
+    private final DiagonalRectangleSprite L5Sprite;
+    private final DiagonalRectangleSprite L6Sprite;
+    private final DiagonalRectangleSprite L7Sprite;
+    private final DiagonalRectangleSprite L8Sprite;
 
     private final static double MIN_VOLTAGE_THRESHOLD = 8;
-    private final static double MAX_VOLTAGE_THRESHOLD = 9.83;
+    private final static double MAX_VOLTAGE_THRESHOLD = 13.5;
 
-    private final static double STEP = (MAX_VOLTAGE_THRESHOLD - MIN_VOLTAGE_THRESHOLD) / 6;
+    private final static double STEP = (MAX_VOLTAGE_THRESHOLD - MIN_VOLTAGE_THRESHOLD) / 8;
 
     private final static double L1_THRESHOLD = MIN_VOLTAGE_THRESHOLD + STEP;
     private final static double L2_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 2 * STEP;
@@ -30,36 +32,42 @@ public class VoltageIndicatorPartOneRegion extends DisplayRegion {
     private final static double L4_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 4 * STEP;
     private final static double L5_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 5 * STEP;
     private final static double L6_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 6 * STEP;
+    private final static double L7_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 7 * STEP;
+    private final static double L8_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 8 * STEP;
 
     private final Sprite[] sprites;
 
     /**
-     * Creates a new VoltageIndicatorRegionPartOne
+     * Creates a new VoltageIndicatorRegion
      *
      * @param x          the x position of the region
      * @param y          the y position of the region
      * @param robotState the robot state
      */
-    public VoltageIndicatorPartOneRegion(int x, int y, RobotState robotState) {
-        super(x, y, 4, 6);
+    public VoltageIndicatorRegion(int x, int y, RobotState robotState) {
+        super(x, y, 9, 2);
         this.robotState = robotState;
-        L1Sprite = new RectangleSprite(0, 0, 2, 1);
-        L2Sprite = new RectangleSprite(0, 1, 2, 1);
-        L3Sprite = new RectangleSprite(0, 2, 2, 1);
-        L4Sprite = new RectangleSprite(1, 3, 2, 1);
-        L5Sprite = new RectangleSprite(1, 4, 2, 1);
-        L6Sprite = new RectangleSprite(2, 5, 2, 1);
-
+        L1Sprite = new DiagonalRectangleSprite(0, 0);
+        L2Sprite = new DiagonalRectangleSprite(1, 0);
+        L3Sprite = new DiagonalRectangleSprite(2, 0);
+        L4Sprite = new DiagonalRectangleSprite(3, 0);
+        L5Sprite = new DiagonalRectangleSprite(4, 0);
+        L6Sprite = new DiagonalRectangleSprite(5, 0);
+        L7Sprite = new DiagonalRectangleSprite(6, 0);
+        L8Sprite = new DiagonalRectangleSprite(7, 0);
 
         sprites = new Sprite[]{L1Sprite, L2Sprite, L3Sprite, L4Sprite,
-                L5Sprite, L6Sprite
+                L5Sprite, L6Sprite, L7Sprite, L8Sprite
         };
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             sprites[i].setColor(Color.RED);
         }
         for (int i = 0; i < 2; i++) {
-            sprites[i + 4].setColor(Color.YELLOW);
+            sprites[i + 2].setColor(Color.YELLOW);
+        }
+        for (int i = 0; i < 4; i++) {
+            sprites[i + 4].setColor(Color.GREEN);
         }
     }
 
@@ -80,6 +88,10 @@ public class VoltageIndicatorPartOneRegion extends DisplayRegion {
             disableAllButSelectedSprites(0, 1, 2, 3, 4);
         } else if (currentVoltage < L6_THRESHOLD) {
             disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
+        } else if (currentVoltage < L7_THRESHOLD) {
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6);
+        } else if (currentVoltage < L8_THRESHOLD) {
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7);
         } else {
             enableAllSprites();
         }
