@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.comp.Check;
+
+import org.firstinspires.ftc.teamcode.display.sprite.CheckmarkSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.UpArrowSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
@@ -16,9 +20,10 @@ import team.techtigers.core.display.Sprite;
 public class BlockDetectionStateRegion extends DisplayRegion {
     private final RobotState robotState;
     private final XSprite notDetectedSprite;
-    private final RectangleSprite detectedSprite;
+    private final CheckmarkSprite detectedSprite;
     private final UpArrowSprite upArrowSprite;
     private final Sprite[] sprites;
+    private ElapsedTime timer;
 
     /**
      * Creates a new BlockDetectionStateRegion
@@ -28,33 +33,35 @@ public class BlockDetectionStateRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public BlockDetectionStateRegion(int x, int y, RobotState robotState) {
-        super(x, y, 3, 4);
+        super(x, y, 5, 7);
         this.robotState = robotState;
 
-        notDetectedSprite = new XSprite(0, 0, 3, 3);
-        detectedSprite = new RectangleSprite(1, 0, 2, 4);
-        upArrowSprite = new UpArrowSprite(0, 0, 3, 4);
+        notDetectedSprite = new XSprite(0, 3, 4, 4);
+//        detectedSprite = new RectangleSprite(1, 0, 2, 4);
+        detectedSprite = new CheckmarkSprite(0, 2, 4, 3);
+        upArrowSprite = new UpArrowSprite(1, 0, 3, 5);
 
         notDetectedSprite.setColor(Color.ORANGE);
-        detectedSprite.setColor(Color.GREEN);
+        detectedSprite.setColor(Color.WHITE);
         upArrowSprite.setColor(Color.ORANGE);
 
         this.sprites = new Sprite[]{notDetectedSprite, detectedSprite, upArrowSprite};
+        timer = new ElapsedTime();
+        timer.reset();
     }
 
 
     @Override
     public void update() {
         BlockDetectionState blockDetectionState = robotState.getCoarseBlockDetectionState();
+
         if (blockDetectionState == BlockDetectionState.DETECTED) {
             disableAllButSelectedSprites(1);
-        } else if (blockDetectionState == BlockDetectionState.NOT_DETECTED) {
-            disableAllButSelectedSprites(1);
+        } else if (blockDetectionState == BlockDetectionState.TOO_FAR) {
+            disableAllButSelectedSprites(2);
+        } else {
+            disableAllButSelectedSprites(0);
         }
-        // TODO: Fix once main gets the new block detection state
-//        else if(blockDetectionState == BlockDetectionState.TOO_FAR) {
-//            enableAllButSelectedSprite(2);
-//        }
     }
 
     @Override
