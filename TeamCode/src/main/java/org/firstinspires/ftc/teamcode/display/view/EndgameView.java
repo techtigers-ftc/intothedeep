@@ -5,8 +5,8 @@ import org.firstinspires.ftc.teamcode.display.region.ColorPreferenceRegion;
 import org.firstinspires.ftc.teamcode.display.region.CountdownTimerRegion;
 import org.firstinspires.ftc.teamcode.display.region.DriveGearsRegion;
 import org.firstinspires.ftc.teamcode.display.region.IntakeFlashbangRegion;
-import org.firstinspires.ftc.teamcode.display.region.SwitchingTransmissionStatusRegion;
-import org.firstinspires.ftc.teamcode.display.region.VoltageIndicatorRegion;
+import org.firstinspires.ftc.teamcode.display.region.unused.SwitchingTransmissionStatusRegion;
+import org.firstinspires.ftc.teamcode.display.region.unused.VoltageIndicatorRegion;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.core.display.DisplayRegion;
