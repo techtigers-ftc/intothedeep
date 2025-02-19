@@ -30,5 +30,6 @@ public class UpArrowSprite extends Sprite {
         for (int i = 0; i < getWidth(); i++) {
             leds[getX() + i][getY() + getHeight() - 1] = getColor();
         }
+        leds[getX() + 1][getY() + getHeight()] = getColor();
     }
 }
