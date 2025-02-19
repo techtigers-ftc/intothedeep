@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import org.firstinspires.ftc.teamcode.display.sprite.DiagonalRectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
@@ -12,7 +11,7 @@ import team.techtigers.core.display.Sprite;
 /**
  * A region that flashes the sprite when the intake picks up a block
  */
-public class IntakeFlashbangRegion extends DisplayRegion {
+public class FlashbangRegion extends DisplayRegion {
     private final RobotState robotState;
     private final RectangleSprite rectangleSprite;
     private final Sprite[] sprites;
@@ -24,7 +23,7 @@ public class IntakeFlashbangRegion extends DisplayRegion {
      * @param y          the y position of the region on the display
      * @param robotState the robot state
      */
-    public IntakeFlashbangRegion(int x, int y, RobotState robotState) {
+    public FlashbangRegion(int x, int y, RobotState robotState) {
         super(x, y, 2, 8);
         this.robotState = robotState;
 
