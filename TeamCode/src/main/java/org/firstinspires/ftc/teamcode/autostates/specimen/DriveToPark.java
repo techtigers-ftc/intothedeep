@@ -29,12 +29,10 @@ public class DriveToPark extends DriveStateBase {
      * @param dropper    the dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToPark(String name, IntakeSubsystem intake, DriveSubsystem drive, DropperSubsystem dropper, DoubleSupplier targetSlidePos, RobotState robotState) {
+    public DriveToPark(String name, IntakeSubsystem intake, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-//                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 100),
-//                new IntakeSlidesAbsoluteAction(intake, targetSlidePos, 0.5),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
                         new DropperOpenAction(dropper, 100),
