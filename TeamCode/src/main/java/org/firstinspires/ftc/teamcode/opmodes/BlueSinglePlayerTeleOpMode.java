@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * A TeleOp mode for the blue alliance one driver
  */
-@TeleOp
+@TeleOp(name = "Blue Single Player TeleOp", group = "Single Player TeleOp")
 @SuppressWarnings("unused")
 public class BlueSinglePlayerTeleOpMode extends BaseSinglePlayerTeleOpMode{
     @Override
