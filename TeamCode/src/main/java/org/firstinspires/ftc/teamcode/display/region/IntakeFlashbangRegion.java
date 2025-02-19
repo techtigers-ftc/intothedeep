@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
-import org.firstinspires.ftc.teamcode.display.sprite.UpArrowSprite;
-import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -39,10 +36,11 @@ public class IntakeFlashbangRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        if(robotState.getIntakeBlockColor() == BlockColor.NONE) {
-            rectangleSprite.setColor(new Color((byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00));
+        // TODO: Replace this with the breakbeam and add a condition for the dropper
+        if (robotState.getIntakeBlockColor() == BlockColor.NONE && robotState.getDropperBlockColor() == BlockColor.NONE) {
+            rectangleSprite.setColor(Color.RED);
         } else {
-            rectangleSprite.setColor(new Color((byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00));
+            rectangleSprite.setColor(Color.GREEN);
         }
     }
 
