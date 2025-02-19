@@ -28,7 +28,7 @@ public class ColorPreferenceRegion extends DisplayRegion {
         super(x, y, 4, 2);
         this.robotState = robotState;
         rectangleSpriteOne = new RectangleSprite(0, 0, 2, 2);
-        rectangleSpriteTwo = new RectangleSprite(0, 0, 2, 2);
+        rectangleSpriteTwo = new RectangleSprite(2, 0, 2, 2);
         rectangleSpriteOne.enable();
         rectangleSpriteTwo.enable();
 

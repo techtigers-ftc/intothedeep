@@ -21,7 +21,7 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
 
     @Override
     public void initialize() {
-        robotState = new RobotState(true, false);
+        robotState = new RobotState(false, false);
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
         VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
