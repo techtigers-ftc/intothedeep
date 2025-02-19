@@ -28,7 +28,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public ClipSpecimenState(String name, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
-        super(name, 0.3);
+        super(name, 0.4);
         this.robotState = robotState;
         runCounter = 0;
         addCommands(

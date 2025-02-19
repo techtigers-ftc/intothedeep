@@ -36,7 +36,7 @@ public class DriveToPark extends DriveStateBase {
 //                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TUCK_POSITION, 100),
 //                new IntakeSlidesAbsoluteAction(intake, targetSlidePos, 0.5),
                 new SequentialCommandGroup(
-                        new WaitCommand(500),
+                        new WaitCommand(100),
                         new DropperOpenAction(dropper, 100),
                         new WaitCommand(500),
                         new DropperPreTransferAction(dropper, robotState)

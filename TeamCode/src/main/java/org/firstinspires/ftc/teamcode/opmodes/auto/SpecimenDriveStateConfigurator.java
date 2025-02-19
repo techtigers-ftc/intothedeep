@@ -279,7 +279,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(70, 41.5),
-                                new Point(79, 41.5),
+                                new Point(79, 43.5),
                                 new Point(73.25, 16),
                                 new Point(116.25, 40),
                                 new Point(111, 9)

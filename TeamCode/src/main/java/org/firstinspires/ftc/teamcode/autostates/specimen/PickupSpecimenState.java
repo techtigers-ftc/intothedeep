@@ -35,7 +35,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new RawPowerDriveAction(drive, -0.3, 0.3),
+                new RawPowerDriveAction(drive, -0.4, 0.1),
                 new DropperCloseAction(dropper, 100),
                 new DropperSlidesAbsoluteAction(dropper, 4, 1)
         );
