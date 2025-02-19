@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
@@ -34,6 +35,7 @@ import team.techtigers.base.BaseOpMode;
  */
 @Config
 @Autonomous(name = "Straight Back And Forth", group = "PIDF Tuning")
+@Disabled
 public class StraightBackAndForthTuningOpMode extends BaseOpMode {
     public static double DISTANCE = 60;
     public static boolean useSecondaryPIDs = false;
