@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -66,7 +67,8 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                                 new IntakeLoosenAction(intake, 350)
 //                                new IntakeCloseAction(intake, 50)
                         ),
-                        new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 )
         );
     }
@@ -87,7 +89,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted) {
+        if (!interrupted || robotState.getDropperState() == DropperState.TRANSFER) {
             robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
@@ -97,6 +99,9 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
+            if (!robotState.isManualIntakeSelected()) {
+                intake.moveSlidesRelative(-3);
+            }
         }
     }
 }
