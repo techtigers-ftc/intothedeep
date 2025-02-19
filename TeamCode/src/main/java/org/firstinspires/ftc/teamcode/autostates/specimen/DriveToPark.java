@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
-import java.util.function.DoubleSupplier;
-
 /**
  * A state to drive and extend the slides to the park position
  */
