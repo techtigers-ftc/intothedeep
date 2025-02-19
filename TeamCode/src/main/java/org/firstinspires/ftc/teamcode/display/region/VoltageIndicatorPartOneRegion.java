@@ -41,14 +41,14 @@ public class VoltageIndicatorPartOneRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public VoltageIndicatorPartOneRegion(int x, int y, RobotState robotState) {
-        super(x, y, 5, 6);
+        super(x, y, 4, 6);
         this.robotState = robotState;
         L1Sprite = new RectangleSprite(0, 0, 2, 1);
         L2Sprite = new RectangleSprite(0, 1, 2, 1);
-        L3Sprite = new RectangleSprite(1, 2, 2, 1);
+        L3Sprite = new RectangleSprite(0, 2, 2, 1);
         L4Sprite = new RectangleSprite(1, 3, 2, 1);
-        L5Sprite = new RectangleSprite(2, 4, 2, 1);
-        L6Sprite = new RectangleSprite(3, 5, 2, 1);
+        L5Sprite = new RectangleSprite(1, 4, 2, 1);
+        L6Sprite = new RectangleSprite(2, 5, 2, 1);
 
 
         sprites = new Sprite[]{L1Sprite, L2Sprite, L3Sprite, L4Sprite,
