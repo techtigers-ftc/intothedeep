@@ -22,10 +22,10 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
     private DropperSubsystem dropper;
 
     /**
-     * Constructor for the ClipSpecimenState
+     * Constructor for the PickupSpecimenState
      *
      * @param name       The name of the state
-     * @param drive the drive subsystem
+     * @param drive      the drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */

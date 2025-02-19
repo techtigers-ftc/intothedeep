@@ -32,9 +32,6 @@ public class SmallCameraVisionPickup extends SequentialCommandGroup {
                 new IntakeReadyToPickupAction(intake, robotState,
                         () -> intake.getCurrentSlidePositionInches() - robotState.getBlockForwardFine() - VisionSubsystem.INTAKE_CAMERA_OFFSET,
                         robotState::getBlockOrientation)
-                // TODO: Fix this
-//                ,
-//                new IntakeFullReadyToTransferAction(intake, dropper, robotState, command == null ? this : command)
         );
     }
 }
