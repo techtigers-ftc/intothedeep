@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
-import org.firstinspires.ftc.teamcode.display.view.TeleOpView;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
@@ -13,11 +12,11 @@ import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
 import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 
 @Config
-@TeleOp(name="VisualDisplayTestOpMode")
+@TeleOp(name = "VisualDisplayTestOpMode")
 public class VisualDisplayTestOpMode extends BaseOpMode {
 
-    private RobotState robotState;
     public static double voltage = 14;
+    private RobotState robotState;
     private VisualDisplaySubsystem visualDisplaySubsystem;
 
     @Override
