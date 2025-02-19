@@ -28,7 +28,7 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
         VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new NewTeleAndEndgameView(robotState));
         registerSubsystems(visualDisplaySubsystem);
 
-        robotState.setCurrentGear(DriveGears.ENGAGED);
+        robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
         robotState.setVoltage(voltage);
     }
 }
