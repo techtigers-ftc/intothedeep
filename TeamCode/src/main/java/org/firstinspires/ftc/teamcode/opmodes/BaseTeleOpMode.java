@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.HeadingLockCommand;
+import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -56,6 +57,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.BaseOpMode;
+import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
+import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
@@ -82,6 +85,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
+
+//        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
+//        displayDriver.initialize(224, 3);
+//        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
+
         try {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
         } catch (Exception e) {
@@ -136,7 +144,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, () -> 10, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
+                intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper, robotState, null
         );
         IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);

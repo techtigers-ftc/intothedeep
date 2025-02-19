@@ -5,20 +5,12 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
  * Command to move intake to Ready To Transfer.
@@ -58,7 +50,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
                 ),
                 new IntakeFullReadyToTransferNoVisionAction(intake, dropper,
-                        robotState, command==null? this: command)
+                        robotState, command == null ? this : command)
         );
     }
 

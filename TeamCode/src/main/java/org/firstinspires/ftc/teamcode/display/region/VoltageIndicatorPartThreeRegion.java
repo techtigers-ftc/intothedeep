@@ -63,17 +63,18 @@ public class VoltageIndicatorPartThreeRegion extends DisplayRegion {
     public void update() {
         double currentVoltage = robotState.getVoltage();
         if (currentVoltage < L13_THRESHOLD) {
-            disableAllButSelectedSprites(0);
+//            disableAllButSelectedSprites(0);
+            disableAllSprites();
         } else if (currentVoltage < L14_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1);
+            disableAllButSelectedSprites(0);
         } else if (currentVoltage < L15_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2);
+            disableAllButSelectedSprites(0, 1);
         } else if (currentVoltage < L16_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3);
+            disableAllButSelectedSprites(0, 1, 2);
         } else if (currentVoltage < L17_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4);
+            disableAllButSelectedSprites(0, 1, 2, 3);
         } else if (currentVoltage < L18_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4);
         } else {
             enableAllSprites();
         }
