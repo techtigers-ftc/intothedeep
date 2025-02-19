@@ -74,6 +74,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToFirstIntake",
                 drive,
                 dropper,
+                intake,
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
@@ -145,6 +146,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToSecondSpecimenIntake",
                 drive,
                 dropper,
+                intake,
                 robotState
         );
         SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToSecondSpecimenIntake);
@@ -162,6 +164,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToThirdSpecimenIntake",
                 drive,
                 dropper,
+                intake,
                 robotState
         );
         SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToThirdSpecimenIntake);
@@ -179,6 +182,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToFourthSpecimenIntake",
                 drive,
                 dropper,
+                intake,
                 robotState
         );
         SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToFourthSpecimenIntake);

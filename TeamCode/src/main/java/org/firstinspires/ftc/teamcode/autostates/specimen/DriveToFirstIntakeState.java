@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
@@ -21,11 +22,11 @@ public class DriveToFirstIntakeState extends DriveStateBase {
      * @param dropper the dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToFirstIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToFirstIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-                new DropperWallIntakeAction(dropper, robotState)
+                new DropperWallIntakeAction(dropper, intake, robotState)
         );
     }
 }
