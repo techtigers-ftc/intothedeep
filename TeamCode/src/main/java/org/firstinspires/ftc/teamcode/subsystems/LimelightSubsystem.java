@@ -34,24 +34,30 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double HEIGHT_RANGE = 5.6;
     private static final double PIXELS_PER_INCH = 94.5;
 
-    // Orientation exponential function parameters
+    // Coarse orientation exponential function parameters
     private static final double ORIENTATION_V_COMPRESS = 0.719428;
     private static final double ORIENTATION_BASE = 1.0629;
     private static final double ORIENTATION_TURN_THRESHOLD = 111;
 
 
-    // Forward offset logistic function parameters
+    // Forward coarse offset logistic function parameters
     private static final double FORWARD_FLOOR = 1.34;
     private static final double FORWARD_C = -1.77;
     private static final double FORWARD_H_STRETCH = 7390.34;
     private static final double FORWARD_RATE = 2.38;
 
-    // Horizontal offset cube root function parameters
+    // Horizontal coarse offset cube root function parameters
     private static final double LATERAL_V_STRETCH = 0.82;
     private static final double LATERAL_H_SHIFT = -2.7;
     private static final double LATERAL_V_SHIFT = 2.47;
+
+    // Limelight fine horizontal linear equation parameters
+    private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
+    private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
+
     private final RobotState robotState;
     private final Limelight3A limelight;
+
     // Lateral bounds
     private double lateralLowerBound = -5;
     private double lateralUpperBound = 1;
@@ -277,6 +283,16 @@ public class LimelightSubsystem extends CloseableSubsystem {
 //        robotState.setBlockOrientation(getClawAngle(bestDetection));
     }
 
+    /**
+     * Gets the corrected lateral fine distance of the block from the robot
+     *
+     * @param lateralFine the raw lateral fine distance of the block from the limelight (in pixels)
+     * @return the corrected lateral fine distances
+     */
+    private double getCorrectedLateralFine(double lateralFine) {
+        return lateralFine * LATERAL_FINE_VERTICAL_COMPRESSION + LATERAL_FINE_VERTICAL_SHIFT;
+    }
+
     @Override
     public void periodic() {
 //        LLResult result = limelight.getLatestResult();
@@ -303,11 +319,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
             double[] results = result.getPythonOutput();
-
-//            robotState.setBlockLateralFine(results[1] / PIXELS_PER_INCH - WIDTH_RANGE / 2.0);
-            robotState.setBlockLateralFine(results[1]);
-            robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
-            robotState.setBlockOrientation((results[3]+180) % 180);
+            if (results[1] == 0 && results[2] ==0 && results[3] ==0) {
+                robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+            } else {
+                robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+                robotState.setBlockLateralFine(getCorrectedLateralFine(results[1]));
+                robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
+                robotState.setBlockOrientation((results[3]+180) % 180);
+            }
             RobotLog.dd("claw rotation value", String.valueOf(results[3]));
             RobotLog.dd("new claw rotation value", String.valueOf(results[3] + 180));
         }
