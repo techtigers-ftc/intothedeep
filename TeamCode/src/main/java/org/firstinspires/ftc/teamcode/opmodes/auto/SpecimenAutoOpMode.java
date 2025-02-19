@@ -114,14 +114,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configThirdIntake(thirdIntake);
 
-        DriveToPoseState thirdPush = new DriveToPoseState(
-                "thirdPush",
-                drive,
-                robotState,
-                3
-        );
-        SpecimenDriveStateConfigurator.configThirdPush(thirdPush);
-
         DriveToPoseState driveToFirstSpecimenIntake = new DriveToPoseState(
                 "driveToFirstSpecimenIntake",
                 drive,
@@ -225,7 +217,6 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(secondIntake)
                 .addState(secondPush)
                 .addState(thirdIntake)
-                .addState(thirdPush)
                 .addState(driveToFirstSpecimenIntake)
                 .addState(clipSpecimen)
                 .addState(intakeSpecimen)
@@ -256,12 +247,10 @@ public class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(secondIntake, secondPush, AutoState.TIMEOUT)
                 .addTransition(secondPush, thirdIntake, AutoState.DRIVE_END)
                 .addTransition(secondPush, thirdIntake, AutoState.TIMEOUT)
-                .addTransition(thirdIntake, thirdPush, AutoState.DRIVE_END)
-                .addTransition(thirdIntake, thirdPush, AutoState.TIMEOUT)
-//                .addTransition(thirdPush, endState, AutoState.DRIVE_END)
-//                .addTransition(thirdPush, endState, AutoState.TIMEOUT)
-                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
-                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
+
+                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
+                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
+
 
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
