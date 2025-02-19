@@ -135,8 +135,8 @@ public class DriveSubsystem extends CloseableSubsystem {
         double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER * 0.9;
 
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
-            strafeSpeed *= GEAR_MULTIPLIER;
-            forwardSpeed *= GEAR_MULTIPLIER;
+//            strafeSpeed *= GEAR_MULTIPLIER;
+//            forwardSpeed *= GEAR_MULTIPLIER;
             turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
         }
 
@@ -201,8 +201,12 @@ public class DriveSubsystem extends CloseableSubsystem {
     public void drivePedroPath(DriveVectors vectors) {
         double[] drivePowers = driveVectorScaler.getDrivePowers(vectors.correctivePower, vectors.headingPower, vectors.pathingPower, vectors.robotHeading);
 
-        for (int i = 0; i < drivePowers.length; i++) {
-            drivePowers[i] /= (robotstate.getVoltage()/12.0);
+        if (robotstate.getVoltage() != 0) {
+            for (int i = 0; i < drivePowers.length; i++) {
+                drivePowers[i] /= (robotstate.getVoltage()/12.0);
+            }
+        } else {
+            throw new ArithmeticException("Voltage is 0, initialize sensor subsystem");
         }
 
         normalize(drivePowers);

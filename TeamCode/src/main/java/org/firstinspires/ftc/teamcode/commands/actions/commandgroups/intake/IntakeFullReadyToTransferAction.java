@@ -44,7 +44,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         this.intake = intake;
         lastClawRotation = 90;
-        addRequirements(intake, dropper, drive);
+        addRequirements(intake, dropper);
         addCommands(
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,

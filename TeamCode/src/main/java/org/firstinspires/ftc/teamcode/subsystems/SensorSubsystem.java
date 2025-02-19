@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -13,6 +14,7 @@ import team.techtigers.base.CloseableSubsystem;
 public class SensorSubsystem extends CloseableSubsystem {
     private final RobotState robotState;
     private final VoltageSensor voltage;
+    private final SlidingAverageCalculator voltageAverage;
 
     /**
      * Constructs a new SensorSubsystem.
@@ -23,10 +25,13 @@ public class SensorSubsystem extends CloseableSubsystem {
     public SensorSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
         voltage = hardwareMap.voltageSensor.iterator().next();
+        voltageAverage = new SlidingAverageCalculator(200);
+        voltageAverage.clear();
     }
 
     @Override
     public void periodic() {
-        robotState.setVoltage(voltage.getVoltage());
+        voltageAverage.add(voltage.getVoltage());
+        robotState.setVoltage(voltageAverage.getAverage());
     }
 }

@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
@@ -49,7 +50,7 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
                                 IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200)
                 ),
                 new ParallelCommandGroup(
-                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION, 50),
+                        new DropperPreTransferAction(dropper, robotState),
                         new IntakeOpenAction(intake)
                 )
         );
