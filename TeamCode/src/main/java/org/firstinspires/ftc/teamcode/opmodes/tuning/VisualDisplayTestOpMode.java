@@ -16,6 +16,9 @@ import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 public class VisualDisplayTestOpMode extends BaseOpMode {
 
     public static double voltage = 14;
+    public static double lateralFine = 0;
+    public static double forwardFine = 0;
+
     private RobotState robotState;
     private VisualDisplaySubsystem visualDisplaySubsystem;
 
@@ -28,6 +31,12 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
         registerSubsystems(visualDisplaySubsystem);
 
         robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+    }
+
+    @Override
+    public void update() {
         robotState.setVoltage(voltage);
+        robotState.setBlockLateralFine(lateralFine);
+        robotState.setBlockForwardFine(forwardFine);
     }
 }
