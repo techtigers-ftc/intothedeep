@@ -25,5 +25,6 @@ public class CheckmarkSprite extends Sprite {
         leds[getX() + 1][getY()] = getColor();
         leds[getX() + 2][getY() + 1] = getColor();
         leds[getX() + 3][getY() + 2] = getColor();
+        leds[getX() + 4][getY() + 3] = getColor();
     }
 }
