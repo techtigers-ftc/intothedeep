@@ -370,7 +370,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide POS",
                 dropper.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 //        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));

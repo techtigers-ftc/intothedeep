@@ -304,7 +304,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
         if (result != null) {
             double[] results = result.getPythonOutput();
 
-            robotState.setBlockLateralFine(results[1] / PIXELS_PER_INCH - WIDTH_RANGE / 2.0);
+//            robotState.setBlockLateralFine(results[1] / PIXELS_PER_INCH - WIDTH_RANGE / 2.0);
+            robotState.setBlockLateralFine(results[1]);
             robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
             robotState.setBlockOrientation((results[3]+180) % 180);
             RobotLog.dd("claw rotation value", String.valueOf(results[3]));
