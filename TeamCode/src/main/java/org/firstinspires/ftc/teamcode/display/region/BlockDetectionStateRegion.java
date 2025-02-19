@@ -36,7 +36,7 @@ public class BlockDetectionStateRegion extends DisplayRegion {
         super(x, y, 5, 7);
         this.robotState = robotState;
 
-        notDetectedSprite = new XSprite(0, 3, 4, 4);
+        notDetectedSprite = new XSprite(0, 2, 5, 5);
 //        detectedSprite = new RectangleSprite(1, 0, 2, 4);
         detectedSprite = new CheckmarkSprite(0, 2, 4, 3);
         upArrowSprite = new UpArrowSprite(1, 0, 3, 5);

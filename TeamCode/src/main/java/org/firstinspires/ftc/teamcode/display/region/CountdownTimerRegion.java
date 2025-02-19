@@ -88,7 +88,7 @@ public class CountdownTimerRegion extends DisplayRegion {
             color = Color.ORANGE;
         } else if (timerTime < 90) {
             displayedTime = 90 - timerTime;
-            color = Color.WHITE;
+            color = Color.PURPLE;
         } else {
             displayedTime = 77;
             color = Color.BLACK;

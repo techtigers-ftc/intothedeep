@@ -39,12 +39,16 @@ public class ColorPreferenceRegion extends DisplayRegion {
             this.rectangleSprite.setColor(Color.YELLOW);
         } else if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
             if (robotState.isBlue()) {
-                this.rectangleSprite.setColor(Color.BLUE);
+                rectangleSprite.setColor(Color.BLUE);
             } else {
-                this.rectangleSprite.setColor(Color.RED);
+                rectangleSprite.setColor(Color.RED);
             }
         } else {
-            this.rectangleSprite.setColor(Color.WHITE);
+            if(robotState.isBlue()) {
+                rectangleSprite.setColor(Color.GREEN);
+            } else {
+                rectangleSprite.setColor(Color.ORANGE);
+            }
         }
     }
 
