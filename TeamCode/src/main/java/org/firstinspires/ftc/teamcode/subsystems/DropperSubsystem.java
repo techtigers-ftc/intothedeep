@@ -43,13 +43,14 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
     public static final double PITCH_FRONT_SLAP_POSITION = 80;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
-    public static final double PITCH_WALL_INTAKE_POSITION = 305;
+    public static final double PITCH_WALL_INTAKE_POSITION = 297;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 15;
+    public static final double ROTATION_TRANSFER_POSITION = 215;
     public static final double ROTATION_BASKET_POSITION = 215;
-    public static final double ROTATION_FRONT_SLAP_POSITION = 15;
-    public static final double ROTATION_BACK_SLAP_POSITION = 215;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 215;
+    public static final double ROTATION_BACK_SLAP_POSITION = 15;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 15;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -120,19 +121,22 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (robotState.isAuto()) {
-            init();
+            closeClaw();
+            resetSlides();
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         }
     }
 
     @Override
     public void init() {
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        if (robotState.isAuto()) {
-            closeClaw();
-            resetSlides();
-        } else if (getCurrentSlidePositionInches() > 5) {
-            moveSlidesAbsolute(getCurrentSlidePositionInches());
-            closeClaw();
+        if (!robotState.isAuto()) {
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            if (getCurrentSlidePositionInches() > 5) {
+                moveSlidesAbsolute(getCurrentSlidePositionInches());
+                closeClaw();
+            } else {
+                openClaw();
+            }
         }
     }
 

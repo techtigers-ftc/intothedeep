@@ -1,23 +1,20 @@
 package org.firstinspires.ftc.teamcode.pedropathing.tuners_tests.automatic;
 
 
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -25,6 +22,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -51,20 +49,18 @@ import java.util.List;
  */
 @Config
 @Autonomous(name = "Strafe Velocity Tuner", group = "Automatic Tuners")
-public class StrafeVelocityTuner extends OpMode {
-    private ArrayList<Double> velocities = new ArrayList<>();
+@Disabled
 
+public class StrafeVelocityTuner extends OpMode {
+    public static double DISTANCE = 48;
+    public static double RECORD_NUMBER = 10;
+    private ArrayList<Double> velocities = new ArrayList<>();
     private DcMotorEx leftFront;
     private DcMotorEx leftRear;
     private DcMotorEx rightFront;
     private DcMotorEx rightRear;
     private List<DcMotorEx> motors;
-
     private PoseUpdater poseUpdater;
-
-    public static double DISTANCE = 48;
-    public static double RECORD_NUMBER = 10;
-
     private Telemetry telemetryA;
 
     private boolean end;
