@@ -44,7 +44,7 @@ public class ColorPreferenceRegion extends DisplayRegion {
                 this.rectangleSprite.setColor(Color.RED);
             }
         } else {
-            this.rectangleSprite.setColor(Color.GREEN);
+            this.rectangleSprite.setColor(Color.WHITE);
         }
     }
 
