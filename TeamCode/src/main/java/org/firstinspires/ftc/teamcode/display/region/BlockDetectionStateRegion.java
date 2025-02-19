@@ -32,7 +32,7 @@ public class BlockDetectionStateRegion extends DisplayRegion {
         this.robotState = robotState;
 
         notDetectedSprite = new XSprite(0, 0, 3, 3);
-        detectedSprite = new RectangleSprite(0, 0, 3, 4);
+        detectedSprite = new RectangleSprite(1, 0, 2, 4);
         upArrowSprite = new UpArrowSprite(0, 0, 3, 4);
 
         notDetectedSprite.setColor(Color.ORANGE);
