@@ -34,7 +34,7 @@ public class VoltageIndicatorPartOneRegion extends DisplayRegion {
     private final Sprite[] sprites;
 
     /**
-     * Creates a new VoltageIndicatorRegion
+     * Creates a new VoltageIndicatorRegionPartOne
      *
      * @param x          the x position of the region
      * @param y          the y position of the region
