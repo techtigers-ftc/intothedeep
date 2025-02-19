@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
@@ -227,7 +228,9 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 
         // Dropper State Transitions
         DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
-        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, robotState);
+        DropperWallIntakeAction dropperWallIntakeAction =
+                new DropperWallIntakeAction(dropper, intake, robotState);
+        DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
         DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
@@ -253,7 +256,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
         Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
         Trigger transfer =
-                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER);
+                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
         Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
         Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
@@ -267,7 +270,8 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
 
         // Wall Intake
-        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeNoTransferAction);
         dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
 
         // Dropper specimen movements

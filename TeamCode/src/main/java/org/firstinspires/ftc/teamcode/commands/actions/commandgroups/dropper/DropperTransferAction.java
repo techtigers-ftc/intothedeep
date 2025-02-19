@@ -30,7 +30,8 @@ public class DropperTransferAction extends ParallelCommandGroup {
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION,
                         300),
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
-                new DropperSlidesAbsoluteAction(dropper, 0, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_TRANSFER_POSITION,
+                        0.5),
                 new DropperOpenAction(dropper)
         );
     }
@@ -39,7 +40,7 @@ public class DropperTransferAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setDropperState(DropperState.PRE_TRANSFER);
+            robotState.setDropperState(DropperState.TRANSFER);
         }
     }
 }

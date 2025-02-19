@@ -135,8 +135,8 @@ public class DriveSubsystem extends CloseableSubsystem {
         double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER * 0.9;
 
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
-            strafeSpeed *= GEAR_MULTIPLIER;
-            forwardSpeed *= GEAR_MULTIPLIER;
+//            strafeSpeed *= GEAR_MULTIPLIER;
+//            forwardSpeed *= GEAR_MULTIPLIER;
             turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
         }
 

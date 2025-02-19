@@ -5,6 +5,9 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
@@ -12,10 +15,12 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
+import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -47,7 +52,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
                 new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 200),
+                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION-20, 200),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
@@ -60,9 +65,10 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new IntakeLoosenAction(intake, 350)
+//                                new IntakeCloseAction(intake, 50)
                         ),
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1.2)
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 )
         );
     }
@@ -83,7 +89,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        if (!interrupted) {
+        if (!interrupted || robotState.getDropperState() == DropperState.TRANSFER) {
             robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);
             robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
@@ -93,6 +99,9 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
+            if (!robotState.isManualIntakeSelected()) {
+                intake.moveSlidesRelative(-3);
+            }
         }
     }
 }
