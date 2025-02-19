@@ -1,6 +1,8 @@
 package team.techtigers.base.visualdisplay;
 
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import java.util.HashMap;
 
 import team.techtigers.base.CloseableSubsystem;
@@ -56,15 +58,7 @@ public class VisualDisplaySubsystem extends CloseableSubsystem {
      * @return the index of the LED in the array
      */
     protected int findLedArrayIndex(int ledX, int ledY) {
-        if (ledX < 8) {
-            ledX = 7 - ledX;
-        } else if (ledX > 39) {
-            ledX = ledX - 40;
-            ledX = 7 - ledX;
-            ledX = ledX + 40;
-        } else {
-            ledY = 7 - ledY;
-        }
+        ledY = 7 - ledY;
 
         if (ledX % 2 == 0) {
             return ledX * 8 + ledY;
@@ -81,6 +75,7 @@ public class VisualDisplaySubsystem extends CloseableSubsystem {
         visualDisplay.clearLeds();
         for (DisplayRegion region : activeView.getRegions()) {
             region.update();
+            RobotLog.dd(tag, "updated");
         }
 
         for (DisplayRegion region : activeView.getRegions()) {
@@ -91,6 +86,7 @@ public class VisualDisplaySubsystem extends CloseableSubsystem {
                         throw new RuntimeException("color is null:" + x + " " + y);
                     }
                     int ledIndex = findLedArrayIndex(region.getX() + x, region.getY() + y);
+                    RobotLog.dd(tag, "ledIndex: " + ledIndex);
                     visualDisplay.setLeds(ledIndex, colors[x][y]);
                 }
             }
