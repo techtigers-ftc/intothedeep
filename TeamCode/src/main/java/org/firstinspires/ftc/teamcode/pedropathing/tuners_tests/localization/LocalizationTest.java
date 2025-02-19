@@ -1,22 +1,17 @@
 package org.firstinspires.ftc.teamcode.pedropathing.tuners_tests.localization;
 
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -26,6 +21,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;

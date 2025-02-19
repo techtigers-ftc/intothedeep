@@ -3,16 +3,13 @@ package org.firstinspires.ftc.teamcode.pedropathing.tuners_tests.localization;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -36,13 +33,10 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 @Autonomous(name = "Forward Localizer Tuner", group = ".Localization")
 @Disabled
 public class ForwardTuner extends OpMode {
+    public static double DISTANCE = 48;
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
-
     private Telemetry telemetryA;
-
-    public static double DISTANCE = 48;
-
     private GoBodometrySubsystem odometry;
 
     /**

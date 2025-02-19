@@ -21,7 +21,6 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.PoseUpdater;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
@@ -52,19 +51,15 @@ import java.util.List;
 @Autonomous(name = "Forward Velocity Tuner", group = "Automatic Tuners")
 @Disabled
 public class ForwardVelocityTuner extends OpMode {
+    public static double DISTANCE = 48;
+    public static double RECORD_NUMBER = 10;
     private ArrayList<Double> velocities = new ArrayList<>();
-
     private DcMotorEx leftFront;
     private DcMotorEx leftRear;
     private DcMotorEx rightFront;
     private DcMotorEx rightRear;
     private List<DcMotorEx> motors;
-
     private PoseUpdater poseUpdater;
-
-    public static double DISTANCE = 48;
-    public static double RECORD_NUMBER = 10;
-
     private Telemetry telemetryA;
 
     private boolean end;
