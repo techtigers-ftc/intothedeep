@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.Pinpo
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -51,6 +52,8 @@ import java.util.List;
  */
 @Config
 @Autonomous(name = "Strafe Velocity Tuner", group = "Automatic Tuners")
+@Disabled
+
 public class StrafeVelocityTuner extends OpMode {
     private ArrayList<Double> velocities = new ArrayList<>();
 

@@ -12,6 +12,8 @@ import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConst
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,6 +29,7 @@ import java.util.List;
 
 
 @TeleOp(name = "Motor Directions", group = "Teleop Test")
+@Disabled
 public class MotorDirections extends OpMode {
     private Telemetry telemetryA;
 

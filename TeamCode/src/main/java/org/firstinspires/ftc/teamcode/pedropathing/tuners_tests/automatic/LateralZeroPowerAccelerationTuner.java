@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.Pinpo
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -50,6 +51,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 @Config
 @Autonomous(name = "Lateral Zero Power Acceleration Tuner", group = "Automatic Tuners")
+@Disabled
 public class LateralZeroPowerAccelerationTuner extends OpMode {
     private ArrayList<Double> accelerations = new ArrayList<>();
 

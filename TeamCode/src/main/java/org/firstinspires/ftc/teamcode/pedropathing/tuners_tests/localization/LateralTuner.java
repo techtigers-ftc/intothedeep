@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.Pinpo
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -33,6 +34,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 @Config
 @Autonomous(name = "Lateral Localizer Tuner", group = ".Localization")
+@Disabled
 public class LateralTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
