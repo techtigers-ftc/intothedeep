@@ -82,23 +82,23 @@ public class VoltageIndicatorRegion extends DisplayRegion {
         if (currentVoltage < L1_THRESHOLD) {
             disableAllButSelectedSprites(0);
         } else if (currentVoltage < L2_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1);
+            disableAllButSelectedSprites(0);
         } else if (currentVoltage < L3_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2);
+            disableAllButSelectedSprites(0, 1);
         } else if (currentVoltage < L4_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3);
+            disableAllButSelectedSprites(0, 1, 2);
         } else if (currentVoltage < L5_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4);
+            disableAllButSelectedSprites(0, 1, 2, 3);
         } else if (currentVoltage < L6_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4);
         } else if (currentVoltage < L7_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
         } else if (currentVoltage < L8_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6);
         } else if (currentVoltage < L9_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7);
         } else if (currentVoltage < L10_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5, 6, 7, 8);
         } else {
             enableAllSprites();
         }
