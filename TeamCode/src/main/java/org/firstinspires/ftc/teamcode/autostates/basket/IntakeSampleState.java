@@ -32,18 +32,15 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      * @param name           The name of the state
      * @param intake         The intake subsystem
      * @param dropper        The dropper subsystem
-     * @param targetSlidePos the target position for the slides to move to
      * @param robotState     The robot state
      */
-    public IntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
+    public IntakeSampleState(String name,  IntakeSubsystem intake,
                              DropperSubsystem dropper,
-                             DoubleSupplier targetSlidePos,
                              RobotState robotState) {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
-                new WaitCommand(1000),
-                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
+                new IntakeFullReadyToTransferNoVisionAction(intake, dropper, robotState)
         );
     }
 
