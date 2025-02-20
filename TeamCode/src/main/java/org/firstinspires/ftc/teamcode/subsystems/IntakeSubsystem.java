@@ -41,7 +41,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
-    public static final double WRIST_PITCH_PECK_POSITION = 159;
+    public static final double WRIST_PITCH_PECK_POSITION = 165;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 109;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
@@ -56,9 +56,9 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    private static final double CLAW_OPEN_POSITION = 0.6;
-    private static final double CLAW_LOOSE_POSITION = 0.81;
-    private static final double CLAW_CLOSED_POSITION = 0.845;
+    private static final double CLAW_OPEN_POSITION = 0.7;
+    private static final double CLAW_LOOSE_POSITION = 0.87;
+    private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double FORWARD_KP = 0.007;
     public static double FORWARD_KI = 0.0;
@@ -122,7 +122,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        claw.setDirection(Servo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.REVERSE);
         clawRotation.setDirection(Servo.Direction.REVERSE);
         isDirectControlEnabled = false;
 

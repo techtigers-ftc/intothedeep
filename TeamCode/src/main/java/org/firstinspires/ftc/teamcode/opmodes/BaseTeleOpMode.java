@@ -84,13 +84,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         AscentSubsystem ascent = new AscentSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
-
-
-        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
-        displayDriver.initialize(224, 3);
-        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
-
         GoBodometrySubsystem odometry;
+
+//        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
+//        displayDriver.initialize(224, 3);
+//        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
+
         try {
             odometry = new GoBodometrySubsystem(hardwareMap, robotState, (Waypoint) RobotSaveState.getInstance().getState("robotCurrentPose"));
         } catch (Exception e) {
@@ -98,7 +97,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }
 
         registerSubsystems(intake, drive, dropper, limelight,
-                odometry, ascent, sensor, visualDisplaySubsystem);
+                odometry, ascent, sensor);
 
         // ASCENT
         Trigger startAscentTrigger =
@@ -145,7 +144,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, () -> 5, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
+                intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper, robotState, null
         );
         IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);
@@ -172,7 +171,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
-        Trigger blockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger blockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(prepareToPickupManual);
@@ -193,7 +192,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
         autoExtendTrigger.and(inTuck).whenActive(readyToPickupManual);
         (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
-        autoExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransfer);
+        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).whenActive(fullReadyToTransfer);
+//        autoExtendTrigger.and(inReadyToPickup).and(blockDetected.negate()).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
 
 //        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
@@ -382,7 +382,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide POS",
                 dropper.getCurrentSlidePositionInches());
         telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 //        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
         telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));

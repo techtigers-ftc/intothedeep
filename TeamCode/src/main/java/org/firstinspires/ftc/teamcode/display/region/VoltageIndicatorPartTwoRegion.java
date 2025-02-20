@@ -20,7 +20,7 @@ public class VoltageIndicatorPartTwoRegion extends DisplayRegion {
     private final RectangleSprite L12Sprite;
 
     private final static double MIN_VOLTAGE_THRESHOLD = 8;
-    private final static double MAX_VOLTAGE_THRESHOLD = 11.66;
+    private final static double MAX_VOLTAGE_THRESHOLD = 13.5;
 
     private final static double STEP = (MAX_VOLTAGE_THRESHOLD - MIN_VOLTAGE_THRESHOLD) / 18;
 
@@ -66,17 +66,18 @@ public class VoltageIndicatorPartTwoRegion extends DisplayRegion {
     public void update() {
         double currentVoltage = robotState.getVoltage();
         if (currentVoltage < L7_THRESHOLD) {
-            disableAllButSelectedSprites(0);
+//            disableAllButSelectedSprites(0);
+            disableAllSprites();
         } else if (currentVoltage < L8_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1);
+            disableAllButSelectedSprites(0);
         } else if (currentVoltage < L9_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2);
+            disableAllButSelectedSprites(0, 1);
         } else if (currentVoltage < L10_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3);
+            disableAllButSelectedSprites(0, 1, 2);
         } else if (currentVoltage < L11_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4);
+            disableAllButSelectedSprites(0, 1, 2, 3);
         } else if (currentVoltage < L12_THRESHOLD) {
-            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
+            disableAllButSelectedSprites(0, 1, 2, 3, 4);
         }  else {
             enableAllSprites();
         }
