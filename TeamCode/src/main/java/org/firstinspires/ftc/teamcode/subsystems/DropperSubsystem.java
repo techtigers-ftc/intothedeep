@@ -33,7 +33,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDE_MAX = 27;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 1;
-    public static final double SLIDES_CHAMBER_POSITION = 4.75;
+    public static final double SLIDES_CHAMBER_POSITION = 4.5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
