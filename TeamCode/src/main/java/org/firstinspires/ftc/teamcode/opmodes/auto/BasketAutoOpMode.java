@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
@@ -68,6 +67,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "driveToPreloadDrop",
                 drive,
                 dropper,
+                intake,
+                14,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -227,26 +228,28 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(firstLevelAscent)
                 .addState(endState)
 
-                .addTransition(driveToPreloadDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToFirstIntake, AutoState.SAMPLE_PRELOAD_DROP_COMPLETE)
-                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
-                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToFirstDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToSecondIntake, AutoState.SAMPLE_1_DROP_COMPLETE)
-                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
-                .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToSecondDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToThirdIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
-                .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
-                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(driveToThirdDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, driveToFourthIntake, AutoState.SAMPLE_3_DROP_COMPLETE)
-                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.DRIVE_END)
-                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.TIMEOUT)
-                .addTransition(submersiblePickup, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_COMPLETE)
-                .addTransition(submersiblePickup, firstLevelAscent, AutoState.NO_TIME)
-                .addTransition(driveToFourthDrop, dropSample, AutoState.DRIVE_END)
-                .addTransition(dropSample, endState, AutoState.SAMPLE_4_DROP_COMPLETE)
+                .addTransition(driveToPreloadDrop, driveToFirstIntake,
+                        AutoState.DRIVE_END)
+//                .addTransition(dropSample, driveToFirstIntake, AutoState.SAMPLE_PRELOAD_DROP_COMPLETE)
+                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
+//                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
+//                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToFirstDrop, dropSample, AutoState.DRIVE_END)
+//                .addTransition(dropSample, driveToSecondIntake, AutoState.SAMPLE_1_DROP_COMPLETE)
+//                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
+//                .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToSecondDrop, dropSample, AutoState.DRIVE_END)
+//                .addTransition(dropSample, driveToThirdIntake, AutoState.SAMPLE_2_DROP_COMPLETE)
+//                .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
+//                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToThirdDrop, dropSample, AutoState.DRIVE_END)
+//                .addTransition(dropSample, driveToFourthIntake, AutoState.SAMPLE_3_DROP_COMPLETE)
+//                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.DRIVE_END)
+//                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.TIMEOUT)
+//                .addTransition(submersiblePickup, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_COMPLETE)
+//                .addTransition(submersiblePickup, firstLevelAscent, AutoState.NO_TIME)
+//                .addTransition(driveToFourthDrop, dropSample, AutoState.DRIVE_END)
+//                .addTransition(dropSample, endState, AutoState.SAMPLE_4_DROP_COMPLETE)
 
 //                .addTransition(dropSample, driveToFifthIntake, AutoState.SAMPLE_4_DROP_COMPLETE)
 //                .addTransition(driveToFifthIntake, submersiblePickup, AutoState.DRIVE_END)
