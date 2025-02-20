@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.WaitCommand;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,16 +35,15 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      * @param targetSlidePos the target position for the slides to move to
      * @param robotState     The robot state
      */
-    public IntakeSampleState(String name, IntakeSubsystem intake,
+    public IntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
                              DropperSubsystem dropper,
                              DoubleSupplier targetSlidePos,
                              RobotState robotState) {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
-                new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
-                new IntakeTrackingAction(intake, 1, robotState),
-                new SmallCameraVisionPickup(intake, dropper, robotState, this)
+                new WaitCommand(1000),
+                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
     }
 

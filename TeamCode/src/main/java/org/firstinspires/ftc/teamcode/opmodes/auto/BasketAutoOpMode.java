@@ -85,6 +85,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
+                drive,
                 intake,
                 dropper,
                 distToIntakeTarget(robotState, new Waypoint(22.5, 41.75)),
@@ -108,6 +109,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
+                drive,
                 intake,
                 dropper,
                 distToIntakeTarget(robotState, new Waypoint(12.5, 44.75)),
@@ -131,6 +133,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
+                drive,
                 intake,
                 dropper,
                 distToIntakeTarget(robotState, new Waypoint(2.5, 44.75)),
@@ -231,8 +234,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, driveToFirstIntake,
                         AutoState.DRIVE_END)
 //                .addTransition(dropSample, driveToFirstIntake, AutoState.SAMPLE_PRELOAD_DROP_COMPLETE)
-                .addTransition(driveToFirstIntake, endState, AutoState.DRIVE_END)
-//                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
+                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
+                .addTransition(intakeFirstSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
 //                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 //                .addTransition(driveToFirstDrop, dropSample, AutoState.DRIVE_END)
 //                .addTransition(dropSample, driveToSecondIntake, AutoState.SAMPLE_1_DROP_COMPLETE)

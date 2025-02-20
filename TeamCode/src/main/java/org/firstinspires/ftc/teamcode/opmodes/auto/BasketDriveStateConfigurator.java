@@ -25,13 +25,9 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropState state) {
-//        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-//        state.setHeadingPIDF(1, 0, 0.03, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-//        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
-//        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.0045, 0, 0.0035, 0.6, 0);
+        state.setHeadingPIDF(0.9, 0, 0.015, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -56,20 +52,20 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToFirstSampleIntakeState to configure
      */
     public static void configFirstSampleIntake(DriveToGeneralSampleIntakeState state) {
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
+//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+//        state.setHeadingPIDF(1, 0, 0.03, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+//        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
+//        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(11, 12),
-                                        new Point(14, 19)
+                                        new Point(14, 18)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(72),
