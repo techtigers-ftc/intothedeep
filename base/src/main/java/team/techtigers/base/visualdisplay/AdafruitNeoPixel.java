@@ -41,8 +41,8 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     /**
      * Creates a new Adafruit NeoPixel driver.
      *
-     * @param i2cDeviceSynch      this item is traditioanally created through the hardwareMap
-     * @param deviceClientIsOwned this item is traditioanally created through the hardwareMap
+     * @param i2cDeviceSynch      this item is traditionally created through the hardwareMap
+     * @param deviceClientIsOwned this item is traditionally created through the hardwareMap
      */
     public AdafruitNeoPixel(I2cDeviceSynch i2cDeviceSynch, boolean deviceClientIsOwned) {
         super(i2cDeviceSynch, deviceClientIsOwned);
