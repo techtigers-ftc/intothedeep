@@ -6,7 +6,9 @@ import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteLeft;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteRight;
 import org.firstinspires.ftc.teamcode.display.sprite.HollowRectangleWithCrosshairSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
+import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -18,8 +20,11 @@ public class VisionStreamRegion extends DisplayRegion {
     private final RectangleSprite horizontalBlock;
     private final DiagonalBlockSpriteLeft diagonalBlockLeft;
     private final DiagonalBlockSpriteRight diagonalBlockRight;
+    private final XSprite noBlockDetected;
+
     private final Sprite[] sprites;
     private RobotState robotState;
+
     private int blockX;
     private int blockY;
     private double blockOrientation;
@@ -35,6 +40,7 @@ public class VisionStreamRegion extends DisplayRegion {
         horizontalBlock = new RectangleSprite(1, 1, 4, 2);
         diagonalBlockLeft = new DiagonalBlockSpriteLeft(1, 1);
         diagonalBlockRight = new DiagonalBlockSpriteRight(1, 1);
+        noBlockDetected = new XSprite(1, 1, 11, 6);
 
         frame.setColor(Color.WHITE);
         verticalBlock.setColor(Color.YELLOW);
@@ -43,7 +49,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft.setColor(Color.YELLOW);
         frame.enable();
 
-        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame};
+        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected};
     }
 
     @Override
@@ -52,7 +58,10 @@ public class VisionStreamRegion extends DisplayRegion {
         blockX = (int) ((robotState.getBlockLateralFine() + (LATERAL_INCHES_LIMIT / 2)) / (LATERAL_INCHES_LIMIT) * 10);
         blockOrientation = robotState.getBlockOrientation();
 
-        if (0 <= blockOrientation && blockOrientation < 22.5) {
+        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+            disableAllBlocks();
+            noBlockDetected.enable();
+        } else if (0 <= blockOrientation && blockOrientation < 22.5) {
             disableAllBlocks();
             horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
             horizontalBlock.enable();
