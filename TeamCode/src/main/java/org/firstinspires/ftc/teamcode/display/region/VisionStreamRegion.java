@@ -40,13 +40,14 @@ public class VisionStreamRegion extends DisplayRegion {
         horizontalBlock = new RectangleSprite(1, 1, 4, 2);
         diagonalBlockLeft = new DiagonalBlockSpriteLeft(1, 1);
         diagonalBlockRight = new DiagonalBlockSpriteRight(1, 1);
-        noBlockDetected = new XSprite(1, 1, 11, 6);
+        noBlockDetected = new XSprite(3, 1, 6, 6);
 
         frame.setColor(Color.WHITE);
         verticalBlock.setColor(Color.YELLOW);
         horizontalBlock.setColor(Color.YELLOW);
         diagonalBlockRight.setColor(Color.YELLOW);
         diagonalBlockLeft.setColor(Color.YELLOW);
+        noBlockDetected.setColor(Color.RED);
         frame.enable();
 
         sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected};
@@ -94,5 +95,6 @@ public class VisionStreamRegion extends DisplayRegion {
         horizontalBlock.disable();
         diagonalBlockLeft.disable();
         diagonalBlockRight.disable();
+        noBlockDetected.disable();
     }
 }

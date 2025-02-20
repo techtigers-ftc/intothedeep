@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 
 import team.techtigers.base.BaseOpMode;
@@ -19,6 +20,7 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
     public static double lateralFine = 0;
     public static double forwardFine = 0;
     public static double orientation = 0;
+    public static boolean blockDetected = true;
 
     private RobotState robotState;
     private VisualDisplaySubsystem visualDisplaySubsystem;
@@ -40,5 +42,7 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
         robotState.setBlockLateralFine(lateralFine);
         robotState.setBlockForwardFine(forwardFine);
         robotState.setBlockOrientation(orientation);
+        if (blockDetected) robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+        else robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
     }
 }
