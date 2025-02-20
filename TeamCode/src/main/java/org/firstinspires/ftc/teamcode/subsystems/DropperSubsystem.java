@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -376,7 +375,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     private double getVoltageCompensatedMotorPower(double power) {
-        if(robotState.getVoltage() != 0) {
+        if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
             RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
