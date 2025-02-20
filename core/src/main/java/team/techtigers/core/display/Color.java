@@ -5,13 +5,13 @@ package team.techtigers.core.display;
  */
 public class Color {
     public static final Color BLACK = new Color((byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00);
-    public static final Color WHITE = new Color((byte) 0x08, (byte) 0x08, (byte) 0x08, (byte) 0x00);
+    public static final Color WHITE = new Color((byte) 0x06, (byte) 0x06, (byte) 0x06, (byte) 0x00);
 
 
     public static final Color ORANGE = new Color((byte) 0x06, (byte) 0x01, (byte) 0x00, (byte) 0x00);
     public static final Color YELLOW = new Color((byte) 0x0B, (byte) 0x08, (byte) 0x00, (byte) 0x00);
 
-    public static final Color RED = new Color((byte) 0x0A, (byte) 0x00, (byte) 0x00, (byte) 0x00);
+    public static final Color RED = new Color((byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00);
 
     public static final Color GREEN = new Color((byte) 0x01, (byte) 0x0A, (byte) 0x01, (byte) 0x00);
 
