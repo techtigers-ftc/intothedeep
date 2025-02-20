@@ -39,5 +39,6 @@ public class VisualDisplayTestOpMode extends BaseOpMode {
         robotState.setVoltage(voltage);
         robotState.setBlockLateralFine(lateralFine);
         robotState.setBlockForwardFine(forwardFine);
+        robotState.setBlockOrientation(orientation);
     }
 }

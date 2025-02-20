@@ -7,7 +7,7 @@ import team.techtigers.core.display.Sprite;
 /**
  * A class which represents a hollow rectangle sprite
  */
-public class HollowRectangleSprite extends Sprite {
+public class HollowRectangleWithCrosshairSprite extends Sprite {
 
     /**
      * Creates a new hollow rectangle sprite
@@ -17,7 +17,7 @@ public class HollowRectangleSprite extends Sprite {
      * @param width  the width of the line
      * @param height the height of the line
      */
-    public HollowRectangleSprite(int x, int y, int width, int height) {
+    public HollowRectangleWithCrosshairSprite(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
@@ -33,5 +33,8 @@ public class HollowRectangleSprite extends Sprite {
             leds[getX()][getY() + row] = getColor();
             leds[getX() + getWidth() - 1][getY() + row] = getColor();
         }
+
+        leds[getX() + (getWidth() / 2)][getY() + getHeight() / 2] = Color.GREEN;
+        leds[getX() + (getWidth() / 2)][getY() + getHeight() / 2 - 1] = Color.GREEN;
     }
 }
