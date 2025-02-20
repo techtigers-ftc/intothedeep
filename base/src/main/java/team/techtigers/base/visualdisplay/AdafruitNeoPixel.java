@@ -171,6 +171,7 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         writeDevicePin((byte) 0x0F);
 
         // Set NeoPixel protocol frequency to 800khz
+        // TODO: Try running this at 1200khz (0x02) and see if it improves cycle time. It didn't seem to break when I tested it
         writeDeviceSpeed((byte) 0x01);
 
         // Set the buffer length to the number of LEDs * bytes per LED
