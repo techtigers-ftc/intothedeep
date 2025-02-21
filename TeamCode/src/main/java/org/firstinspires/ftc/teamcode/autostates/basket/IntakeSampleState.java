@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-
-import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
@@ -24,22 +23,21 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
     /**
      * Constructor for the IntakeSampleState
      *
-     * @param name           The name of the state
-     * @param intake         The intake subsystem
-     * @param dropper        The dropper subsystem
-     * @param targetSlidePos the target position for the slides to move to
-     * @param robotState     The robot state
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param intake     The intake subsystem
+     * @param dropper    The dropper subsystem
+     * @param robotState The robot state
      */
-    public IntakeSampleState(String name, IntakeSubsystem intake,
+    public IntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
                              DropperSubsystem dropper,
-                             DoubleSupplier targetSlidePos,
                              RobotState robotState) {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
-                new IntakePrepareToPickupAction(intake, dropper, targetSlidePos, robotState),
-                new IntakeTrackingAction(intake, 1, robotState),
-                new SmallCameraVisionPickup(intake, dropper, robotState, this)
+                // TODO: Tune this wait time
+                new WaitCommand(200),
+                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
     }
 

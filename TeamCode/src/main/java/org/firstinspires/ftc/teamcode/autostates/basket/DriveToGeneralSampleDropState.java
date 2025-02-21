@@ -1,7 +1,14 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -25,11 +32,29 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
      * @param intake     The intake subsystem
      * @param robotState The robot state
      */
-    public DriveToGeneralSampleDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+    public DriveToGeneralSampleDropState(String name, DriveSubsystem drive,
+                                         DropperSubsystem dropper,
+                                         IntakeSubsystem intake,
+                                         double targetSlidePos,
+                                         RobotState robotState) {
+        super(name, drive, robotState, 3);
         addCommands(
                 autoDriveCommand,
-                new DropperHighBasketAction(dropper, intake, robotState)
+                new SequentialCommandGroup(
+                        new TransferAction(dropper, intake, robotState),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
+                                        new IntakeReadyToPickupAction(intake,
+                                                robotState, () -> targetSlidePos,
+                                                () -> 90)
+                                ),
+                                new SequentialCommandGroup(
+                                        new DropperHighBasketNoTransferAction(dropper, robotState),
+                                        new DropperOpenAction(dropper, 100)
+                                )
+                        )
+                )
         );
     }
 
@@ -38,7 +63,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
-        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
 

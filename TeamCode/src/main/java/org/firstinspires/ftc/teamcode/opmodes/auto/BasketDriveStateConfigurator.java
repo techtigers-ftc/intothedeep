@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 public class BasketDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 3;
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
-    private static final double SMALL_TOLERANCE = 1.5;
+    private static final double SMALL_TOLERANCE = 2;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
 
     /**
@@ -25,23 +26,20 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropState state) {
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.0045, 0, 0.0035, 0.6, 0);
+        state.setHeadingPIDF(0.9, 0, 0.015, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(29.75, 7.25),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
-                                Math.toRadians(45))
+                                Math.toRadians(72))
                         .build()
         );
 
@@ -55,23 +53,21 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToFirstSampleIntakeState to configure
      */
     public static void configFirstSampleIntake(DriveToGeneralSampleIntakeState state) {
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setHeadingPIDF(0.5, 0, 0.035, 0);
+        state.setDrivePIDF(0.0025, 0, 0.0035, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10, 11),
-                                        new Point(16, 25)
+                                        new Point(11, 12),
+                                        new Point(17, 31)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(68))
+                        .setLinearHeadingInterpolation(Math.toRadians(72),
+                                Math.toRadians(72))
                         .build()
         );
 
@@ -91,17 +87,18 @@ public class BasketDriveStateConfigurator {
         state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
         state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
         state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(16, 25),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(68),
-                                Math.toRadians(45))
+                        .setLinearHeadingInterpolation(Math.toRadians(72),
+                                Math.toRadians(72))
                         .build()
         );
 
@@ -115,22 +112,20 @@ public class BasketDriveStateConfigurator {
      * @param state The SecondSampleIntake to configure
      */
     public static void configSecondSampleIntake(DriveToGeneralSampleIntakeState state) {
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setTranslationalPIDF(0.12, 0, 0.001, 0);
+        state.setHeadingPIDF(0.7, 0, 0.035, 0);
+        state.setDrivePIDF(0.001, 0, 0.0035, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10, 11),
-                                        new Point(12, 25)
+                                        new Point(10, 13),
+                                        new Point(11.5, 30)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                        .setLinearHeadingInterpolation(Math.toRadians(72),
                                 Math.toRadians(90))
                         .build()
         );
@@ -157,11 +152,11 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(12, 25),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
-                                Math.toRadians(45))
+                                Math.toRadians(72))
                         .build()
         );
 
@@ -187,11 +182,11 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10, 11),
+                                        new Point(10, 13),
                                         new Point(10, 25)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                        .setLinearHeadingInterpolation(Math.toRadians(72),
                                 Math.toRadians(112))
                         .build()
         );
@@ -218,10 +213,10 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(14.5, 25),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(117),
+                        .setLinearHeadingInterpolation(Math.toRadians(90),
                                 Math.toRadians(45))
                         .build()
         );
@@ -247,7 +242,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(12, 12),
+                                        new Point(10, 13),
                                         new Point(11, 58),
                                         new Point(50.5, 60)
                                 )
@@ -280,7 +275,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(50.5, 60),
                                         new Point(11, 58),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(0),
@@ -309,7 +304,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(10, 11),
+                                        new Point(10, 13),
                                         new Point(11, 58),
                                         new Point(49, 63.35)
                                 )
@@ -328,7 +323,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleDropState to configure
      */
-    public static void configFifthSampleDrop(DriveToGeneralSampleDropState state) {
+    public static void configFifthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0.01, 0);
         state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
@@ -342,7 +337,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(49, 63.35),
                                         new Point(11, 58),
-                                        new Point(10, 11)
+                                        new Point(10, 13)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(0),
@@ -371,7 +366,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(10, 11),
+                                        new Point(10, 13),
                                         new Point(11, 58),
                                         new Point(49, 61.35)
                                 )
