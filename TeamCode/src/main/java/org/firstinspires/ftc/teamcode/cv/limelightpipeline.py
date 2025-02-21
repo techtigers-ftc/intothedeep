@@ -198,7 +198,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    # llrobot[0] = 1
+    llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
     # llrobot[3] = 0
@@ -304,7 +304,7 @@ def runPipeline(frame, llrobot):
 
                 vertices = len(sep_contour)
 
-                contours_to_select_from.append([sep_contour, center])
+                contours_to_select_from.append([sep_contour, center, angle])
 
                 color = COLOR_GREEN if hierarchy[0][i][3] == -1 else COLOR_RED
 
@@ -337,14 +337,18 @@ def runPipeline(frame, llrobot):
             dist_func = dist_for_coarse
 
         min_dist = 10000000000
-        for contour, center in contours_to_select_from:
+        best_center = []
+        best_angle = 0
+        for contour, center, angle in contours_to_select_from:
             dist = dist_func(center)
             if dist < min_dist:
                 min_dist = dist
+                best_center = center
                 largest_contour = contour
+                best_angle = angle
 
         if len(game_pieces) > 0:
-            llpython = [1, center[0], center[1], angle, 0, 0, 0, 0]
+            llpython = [1, best_center[0], best_center[1], best_angle, 0, 0, 0, 0]
 
         return largest_contour, frame, llpython
 
