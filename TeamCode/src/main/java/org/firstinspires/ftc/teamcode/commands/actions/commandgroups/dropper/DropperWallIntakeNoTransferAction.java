@@ -32,7 +32,7 @@ public class DropperWallIntakeNoTransferAction extends ParallelCommandGroup {
                 new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.5),
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 200),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_BASKET_POSITION, 200),
+                        DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 200),
                 new DropperOpenAction(dropper, 100)
         );
     }

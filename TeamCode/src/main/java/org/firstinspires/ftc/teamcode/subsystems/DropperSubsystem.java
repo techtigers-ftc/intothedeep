@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -32,24 +31,25 @@ public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
     public static final double SLIDE_MAX = 28.25;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 1;
-    public static final double SLIDES_CHAMBER_POSITION = 4.75;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
+    public static final double SLIDES_CHAMBER_POSITION = 4.5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 30;
-    public static final double PITCH_BASKET_POSITION = 220;
+    public static final double PITCH_BASKET_POSITION = 225;
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
     public static final double PITCH_FRONT_SLAP_POSITION = 80;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
-    public static final double PITCH_WALL_INTAKE_POSITION = 305;
+    public static final double PITCH_WALL_INTAKE_POSITION = 297;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 15;
-    public static final double ROTATION_BASKET_POSITION = 215;
-    public static final double ROTATION_FRONT_SLAP_POSITION = 15;
-    public static final double ROTATION_BACK_SLAP_POSITION = 215;
+    public static final double ROTATION_TRANSFER_POSITION = 210;
+    public static final double ROTATION_BASKET_POSITION = 210;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 210;
+    public static final double ROTATION_BACK_SLAP_POSITION = 10;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -61,10 +61,17 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     public static double CLAW_OPENED_POSITION = 0.475;
     public static double CLAW_CLOSED_POSITION = 0.1;
-    public static double KP = 0.006;
-    public static double KI = 0;
-    public static double KD = 0;
-    public static double KF = 0;
+    public static double PRIMARY_KP = 0.006;
+    public static double PRIMARY_KI = 0;
+    public static double PRIMARY_KD = 0;
+    public static double PRIMARY_KF = 0;
+    public static double SECONDARY_KP = 0.018;
+    public static double SECONDARY_KI = 0;
+    public static double SECONDARY_KD = 0;
+    public static double SECONDARY_KF = 0;
+    private static final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private static final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
+
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
     public final DcMotor leftSlideMotor;
@@ -80,6 +87,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private final NormalizedColorSensor colorSensor;
+    private boolean inPrimarySlideMode;
 
     /**
      * Initializes dropper subsystem
@@ -97,8 +105,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "dropper_color_sensor");
 
-        PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
-        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
+        slideController = new SlideController(TICKS_PER_INCHES, PRIMARY_COEFFICIENTS);
+        inPrimarySlideMode = true;
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
         differentialController.setMaxRange(330, 215);
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
@@ -120,19 +128,22 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (robotState.isAuto()) {
-            init();
+            closeClaw();
+            resetSlides();
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         }
     }
 
     @Override
     public void init() {
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        if (robotState.isAuto()) {
-            closeClaw();
-            resetSlides();
-        } else if (getCurrentSlidePositionInches() > 5) {
-            moveSlidesAbsolute(getCurrentSlidePositionInches());
-            closeClaw();
+        if (!robotState.isAuto()) {
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            if (getCurrentSlidePositionInches() > 5) {
+                moveSlidesAbsolute(getCurrentSlidePositionInches());
+                closeClaw();
+            } else {
+                openClaw();
+            }
         }
     }
 
@@ -372,7 +383,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     private double getVoltageCompensatedMotorPower(double power) {
-        if(robotState.getVoltage() != 0) {
+        if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
             RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
@@ -384,10 +395,17 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-        double power =
-                getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
 
         if (!robotState.getIsAscending()) {
+
+            if(getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
+                inPrimarySlideMode = false;
+            } else if (getCurrentSlidePositionInches() < 23 && !inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(PRIMARY_COEFFICIENTS);
+                inPrimarySlideMode = true;
+            }
+            double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }

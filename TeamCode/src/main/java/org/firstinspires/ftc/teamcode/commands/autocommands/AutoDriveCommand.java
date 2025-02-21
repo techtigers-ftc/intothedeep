@@ -81,12 +81,18 @@ public class AutoDriveCommand extends CommandBase {
         // in the command
         if(secondaryTranslationalPIDF != null) {
             follower.setSecondaryTranslationalPIDF(secondaryTranslationalPIDF.getCoefficients());
+        } else {
+            FollowerConstants.useSecondaryTranslationalPID = false;
         }
         if(secondaryHeadingPIDF != null) {
             follower.setSecondaryHeadingPIDF(secondaryHeadingPIDF.getCoefficients());
+        } else {
+            FollowerConstants.useSecondaryHeadingPID = false;
         }
         if(secondaryDrivePIDF != null) {
             follower.setSecondaryDrivePIDF(secondaryDrivePIDF.getCoefficients());
+        } else {
+            FollowerConstants.useSecondaryDrivePID = false;
         }
 
         // Finds the final waypoint in the path chain

@@ -4,9 +4,12 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
@@ -27,12 +30,13 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralSpecimenIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, drive, robotState, 5);
+        super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(500),
-                        new DropperPreTransferAction(dropper, robotState)
+                        new WaitCommand(250),
+                        new DropperOpenAction(dropper, 100),
+                        new DropperWallIntakeNoTransferAction(dropper, robotState)
                 )
         );
     }
@@ -40,7 +44,7 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.PRE_TRANSFER) {
+                robotState.getDropperState() == DropperState.WALL_INTAKE) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

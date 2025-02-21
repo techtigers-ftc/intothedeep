@@ -21,7 +21,7 @@ public class IntakeCheckSensorAction extends CommandBase {
     @Override
     public void initialize() {
         RobotLog.dd("cancel command", "block position:%s", robotState.getBlockPosition());
-        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE) {
+        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE && !robotState.isManualIntakeSelected()) {
             command.cancel();
         }
     }

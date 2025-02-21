@@ -5,9 +5,6 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
@@ -15,7 +12,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
-import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -52,7 +48,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
                 new IntakeCloseAction(intake, 150),
                 new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION-20, 200),
+                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
@@ -63,10 +59,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new IntakeLoosenAction(intake, 350)
-//                                new IntakeCloseAction(intake, 50)
-                        ),
+                        new IntakeLoosenAction(intake, 350),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 )
@@ -99,6 +92,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
+            intake.setClawRotationAbsolute(IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
             if (!robotState.isManualIntakeSelected()) {
                 intake.moveSlidesRelative(-3);
             }

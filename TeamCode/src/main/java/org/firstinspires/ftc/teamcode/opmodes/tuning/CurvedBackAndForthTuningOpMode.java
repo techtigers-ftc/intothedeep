@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
@@ -35,6 +36,7 @@ import team.techtigers.base.BaseOpMode;
  */
 @Config
 @Autonomous(name = "Curved Back And Forth", group = "PIDF Tuning")
+@Disabled
 public class CurvedBackAndForthTuningOpMode extends BaseOpMode {
     public static double DISTANCE = 20;
     public static boolean useSecondaryPIDs = false;

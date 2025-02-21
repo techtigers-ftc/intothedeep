@@ -61,6 +61,8 @@ For support, contact tech@gobilda.com
 
 
 @TeleOp(name="goBILDA® PinPoint Odometry Example", group="Teleop Test")
+@Disabled
+
 
 public class SensorGoBildaPinpointExample extends LinearOpMode {
 
