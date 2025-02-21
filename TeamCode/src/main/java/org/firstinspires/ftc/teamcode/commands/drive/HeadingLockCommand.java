@@ -17,7 +17,7 @@ import team.techtigers.core.paths.Waypoint;
 
 public class HeadingLockCommand extends CommandBase {
     private static final PIDCoefficients ROTATIONAL_COEFFICIENTS =
-            new PIDCoefficients(0.5, 0, 0.1);
+            new PIDCoefficients(0.8, 0, 0.05);
     private final DriveSubsystem subsystem;
     private final GamepadEx gamepad;
     private final RobotState robotState;
@@ -54,7 +54,7 @@ public class HeadingLockCommand extends CommandBase {
      * Converts from 0 - 2PI to -PI to PI range
      */
     private double convertHeading(double heading) {
-        heading = (heading + 3 * Math.PI) % (2 * Math.PI);
+        heading = (heading + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
 
         return heading;
     }
@@ -64,12 +64,13 @@ public class HeadingLockCommand extends CommandBase {
         Waypoint currentPose = robotState.getRobotCurrentPose();
 
         // Calculate heading power
-        double headingDiff = convertHeading(targetHeading - currentPose.getHeading());
-        // NOTE: Using heading diff in the spot of set point in order for the error to be calculated
+        double headingDiff =
+                convertHeading(currentPose.getHeading() - targetHeading);
         // correctly, as we convert the heading to -pi to pi range
         double headingPower = rotationalController.calculate(0, headingDiff);
 
         // Compensate forward power for change to field centric
+        // NOTE: Using heading diff in the spot of set point in order for the error to be calculated
         double strafePower = gamepad.getLeftX();
         double forwardPower = gamepad.getLeftY();
 
