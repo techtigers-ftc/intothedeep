@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -36,7 +39,7 @@ public class FlashbangRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        if (robotState.getIntakeBlockColor() == BlockColor.NONE) {
+        if (robotState.getBlockPosition() == RobotBlockPosition.NONE) {
             rectangleSprite.setColor(Color.RED);
         } else {
             rectangleSprite.setColor(Color.GREEN);

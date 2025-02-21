@@ -31,18 +31,17 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
      see: https://learn.adafruit.com/adafruit-neodriver-i2c-to-neopixel-driver */
     private static final int MAX_LEDS = 512;
     private static final int MAX_SEQUENCE_LENGTH = 30;
-
-    private int bytesPerLed;
     protected Color[] currentLedBuffer;
     protected Color[] lastLedBuffer;
     protected Color[] emptyLedBuffer;
+    private int bytesPerLed;
     private ElapsedTime timer;
 
     /**
      * Creates a new Adafruit NeoPixel driver.
      *
-     * @param i2cDeviceSynch      this item is traditionally created through the hardwareMap
-     * @param deviceClientIsOwned this item is traditionally created through the hardwareMap
+     * @param i2cDeviceSynch      this item is traditioanally created through the hardwareMap
+     * @param deviceClientIsOwned this item is traditioanally created through the hardwareMap
      */
     public AdafruitNeoPixel(I2cDeviceSynch i2cDeviceSynch, boolean deviceClientIsOwned) {
         super(i2cDeviceSynch, deviceClientIsOwned);
@@ -171,7 +170,8 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         writeDevicePin((byte) 0x0F);
 
         // Set NeoPixel protocol frequency to 800khz
-        writeDeviceSpeed((byte) 0x01);
+        writeDeviceSpeed((byte) 0x00);
+        // TODO: change to 0x01 for 800
 
         // Set the buffer length to the number of LEDs * bytes per LED
         writeDeviceBufferLength((short) (numberOfLeds * bytesPerLed));
@@ -237,16 +237,21 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         int startIndex = -1;
         int length = 0;
         boolean showLeds = false;
+        boolean needsReset = false;
+        if (timer.milliseconds() > 1000) {
+            needsReset = true;
+            timer.reset();
+        }
         for (int index = 0; index < currentLedBuffer.length; index++) {
             boolean hasChanged = !currentLedBuffer[index].equals(lastLedBuffer[index]);
-            if (hasChanged || timer.seconds() > 15) {
+//            if (hasChanged || needsReset) {
+            if (hasChanged) {
                 if (startIndex == -1) {
                     startIndex = index;
                 }
                 length++;
                 lastLedBuffer[index] = currentLedBuffer[index];
                 showLeds = true;
-                timer.reset();
             }
 
             // 1. Buffer has not changed and tracking a sequence
