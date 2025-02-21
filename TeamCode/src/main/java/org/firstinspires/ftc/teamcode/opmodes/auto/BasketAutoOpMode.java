@@ -55,12 +55,12 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         RobotSaveState.reset();
 
         // Initialize subsystems
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
-        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
+                robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
 
@@ -70,7 +70,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                4.5,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -88,6 +88,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeFirstSample = new IntakeSampleState(
                 "intakeFirstSample",
+                drive,
                 intake,
                 dropper,
                 robotState
@@ -98,7 +99,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                4.5,
                 robotState);
         BasketDriveStateConfigurator.configFirstSampleDrop(driveToFirstDrop);
 
@@ -112,6 +113,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeSecondSample = new IntakeSampleState(
                 "intakeSecondSample",
+                drive,
                 intake,
                 dropper,
                 robotState
@@ -122,7 +124,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                4.5,
                 robotState);
         BasketDriveStateConfigurator.configSecondSampleDrop(driveToSecondDrop);
 
@@ -136,6 +138,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
+                drive,
                 intake,
                 dropper,
                 robotState
