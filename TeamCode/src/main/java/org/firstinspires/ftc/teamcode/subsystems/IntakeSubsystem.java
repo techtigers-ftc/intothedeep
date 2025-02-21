@@ -31,19 +31,19 @@ import team.techtigers.base.CloseableSubsystem;
 public class IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 34;
 
-    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90
+    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
     public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = 59;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 172;
+    public static final double WRIST_PITCH_TUCK_POSITION = 50;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 180;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 79;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 70;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 180;
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
-    public static final double WRIST_PITCH_PECK_POSITION = 165;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 109;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 2;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 120;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 180;
+    public static final double WRIST_PITCH_PECK_POSITION = 155;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 10;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double SLIDES_TRANSFER_POSITION = 0.25;
