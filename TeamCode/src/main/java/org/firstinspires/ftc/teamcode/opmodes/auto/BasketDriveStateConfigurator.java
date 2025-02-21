@@ -112,10 +112,10 @@ public class BasketDriveStateConfigurator {
      * @param state The SecondSampleIntake to configure
      */
     public static void configSecondSampleIntake(DriveToGeneralSampleIntakeState state) {
-//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
-//        state.setHeadingPIDF(0.5, 0, 0.015, 0);
-//        state.setDrivePIDF(0.0035, 0, 0.0045, 0.6, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.12, 0, 0.001, 0);
+        state.setHeadingPIDF(0.7, 0, 0.035, 0);
+        state.setDrivePIDF(0.001, 0, 0.0035, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
