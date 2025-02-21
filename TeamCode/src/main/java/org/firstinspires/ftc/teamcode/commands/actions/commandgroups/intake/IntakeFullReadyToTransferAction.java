@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.TeleHoldPointCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -42,7 +42,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
                         new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
-                        new TeleHoldPointAction(drive, robotState,
+                        new TeleHoldPointCommand(drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX() +
                                         Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
                                 () -> robotState.getRobotCurrentPose().getY()
