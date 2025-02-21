@@ -237,21 +237,30 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(firstLevelAscent)
                 .addState(endState)
 
-                .addTransition(driveToPreloadDrop, driveToFirstIntake,
-                        AutoState.DRIVE_END)
-                .addTransition(driveToPreloadDrop, driveToFirstIntake,
-                        AutoState.TIMEOUT)
+                .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.DRIVE_END)
+                .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.TIMEOUT)
+
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
-
-//                .addTransition(intakeFirstSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
-
+                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.TIMEOUT)
                 .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-
-//                .addTransition(driveToFirstDrop, endState, AutoState.DRIVE_END)
 
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
+
                 .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
+                .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+
+                .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.DRIVE_END)
+                .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.TIMEOUT)
+
+                .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
+                .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
+                .addTransition(intakeThirdSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+//
+//                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.DRIVE_END)
+//                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.TIMEOUT)
 
                 .addTransition(firstLevelAscent, endState, AutoState.ASCENT_COMPLETE)
 
