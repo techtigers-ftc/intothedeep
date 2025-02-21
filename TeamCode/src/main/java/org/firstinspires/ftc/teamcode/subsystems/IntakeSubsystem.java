@@ -33,24 +33,17 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
     public static final double SLIDES_MAX = 18.75;
-    public static final double SLIDES_TRANSFER_POSITION = 0;
-
-    // DIFFERENTIAL PITCH POSITIONS
     public static final double WRIST_PITCH_TUCK_POSITION = 50;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 170;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 70;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 120;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double WRIST_PITCH_PECK_POSITION = 155;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
-
-    // DIFFERENTIAL ROTATION POSITIONS
-    public static final double WRIST_ROTATION_TUCK_POSITION = 170;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
-
-    // CLAW ROTATION POSITIONS
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;

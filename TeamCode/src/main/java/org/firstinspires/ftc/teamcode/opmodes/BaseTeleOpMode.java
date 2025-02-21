@@ -96,6 +96,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         registerSubsystems(intake, drive, dropper, limelight,
                 odometry, ascent, sensor);
 
+        gamepad1.setLedColor(0, 255, 0, Gamepad.LED_DURATION_CONTINUOUS);
         // ASCENT
         Trigger startAscentTrigger =
                 new Trigger(() -> gamepad1.touchpad_finger_2 || gamepad1.guide);
