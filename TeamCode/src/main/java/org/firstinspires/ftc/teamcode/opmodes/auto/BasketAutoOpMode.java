@@ -36,6 +36,7 @@ import team.techtigers.core.utils.RobotSaveState;
 public abstract class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
+    private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
 
@@ -57,7 +58,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
                 robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap,
+        dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
@@ -237,10 +238,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                         AutoState.DRIVE_END)
                 .addTransition(driveToPreloadDrop, driveToFirstIntake,
                         AutoState.TIMEOUT)
-//                .addTransition(dropSample, driveToFirstIntake, AutoState.SAMPLE_PRELOAD_DROP_COMPLETE)
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
 //                .addTransition(intakeFirstSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
+
                 .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+//                .addTransition(driveToFirstDrop, endState, AutoState.DRIVE_END)
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
                 .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
@@ -281,6 +283,9 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         double expectedPos = intake.getTargetPositionInches();
         telemetry.addData("Current slide position (inches)", currentPos);
         telemetry.addData("Expected slide position (inches)", expectedPos);
+        telemetry.addLine();
+        telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
+        telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
     }
 
     @Override

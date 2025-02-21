@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
@@ -27,19 +26,19 @@ public class DriveToPreloadDropState extends DriveStateBase {
     /**
      * Constructor for the DriveToPreloadDropState
      *
-     * @param name The name of the state
-     * @param drive The drive subsystem
-     * @param dropper The dropper subsystem
-     * @param intake The intake subsystem
+     * @param name           The name of the state
+     * @param drive          The drive subsystem
+     * @param dropper        The dropper subsystem
+     * @param intake         The intake subsystem
      * @param targetSlidePos The target position of the intake slides
-     * @param robotState The robot state
+     * @param robotState     The robot state
      */
     public DriveToPreloadDropState(String name, DriveSubsystem drive,
                                    DropperSubsystem dropper,
                                    IntakeSubsystem intake,
                                    double targetSlidePos,
                                    RobotState robotState) {
-        super(name, drive, robotState, 3);
+        super(name, drive, robotState, 15);
         addCommands(
                 autoDriveCommand,
                 new ParallelCommandGroup(
@@ -61,9 +60,9 @@ public class DriveToPreloadDropState extends DriveStateBase {
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET &&
-                    robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             return AutoState.DRIVE_END;
-        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
 
