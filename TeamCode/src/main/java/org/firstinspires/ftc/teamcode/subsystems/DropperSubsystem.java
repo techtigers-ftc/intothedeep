@@ -397,7 +397,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void periodic() {
 
         if (!robotState.getIsAscending()) {
-
             if(getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;
