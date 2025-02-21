@@ -102,7 +102,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
-                playerGamepad);
+                robotState, playerGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
         // MANIPULATOR

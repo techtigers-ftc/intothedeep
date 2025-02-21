@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
@@ -113,7 +114,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         isAscending.and(runningEngageAscent.negate()).whileActiveOnce(manualAscentCommand);
 
         // DRIVER TODO: Split into a different method
-        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive, driverGamepad);
+        ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
+                robotState, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
 
         CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
@@ -263,8 +265,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
         DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
         DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
-        DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
         DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
+        DropperFrontSlapNoReleaseAction dropperFrontSlapNoReleaseAction =
+                new DropperFrontSlapNoReleaseAction(dropper, robotState);
         DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
         DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
         DropperForwardCarryNoTransferAction dropperForwardCarryNoTransferAction = new DropperForwardCarryNoTransferAction(dropper, robotState);
@@ -286,7 +289,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
 
         Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
-        Trigger backwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.BACKWARD_CARRY);
         Trigger transfer =
                 new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
         Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
@@ -307,9 +309,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
 
         // Dropper specimen movements
-        back.and(backwardCarry).whenActive(dropperBackSlapAction);
-        back.and(blockInIntake).and(transfer).whenActive(dropperBackwardCarryAction);
-        back.and(backwardCarry.negate()).and(blockInDropper).whenActive(dropperBackwardCarryNoTransferAction);
+        back.and(forwardCarry).whenActive(dropperFrontSlapNoReleaseAction);
 
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
         dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);

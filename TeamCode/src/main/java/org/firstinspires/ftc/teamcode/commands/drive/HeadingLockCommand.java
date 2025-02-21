@@ -16,7 +16,8 @@ import team.techtigers.core.paths.Waypoint;
  */
 
 public class HeadingLockCommand extends CommandBase {
-    private static final PIDCoefficients ROTATIONAL_COEFFICIENTS = new PIDCoefficients(0.7, 0, 0.1);
+    private static final PIDCoefficients ROTATIONAL_COEFFICIENTS =
+            new PIDCoefficients(0.5, 0, 0.1);
     private final DriveSubsystem subsystem;
     private final GamepadEx gamepad;
     private final RobotState robotState;
@@ -53,7 +54,7 @@ public class HeadingLockCommand extends CommandBase {
      * Converts from 0 - 2PI to -PI to PI range
      */
     private double convertHeading(double heading) {
-        heading = (heading + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+        heading = (heading + 3 * Math.PI) % (2 * Math.PI);
 
         return heading;
     }

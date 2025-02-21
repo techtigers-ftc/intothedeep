@@ -55,6 +55,7 @@ public class RobotState extends GlobalState {
     private double voltage;
     private boolean isCameraRunning;
     private boolean isCoarseCameraMode;
+    private boolean isVisionAligning;
 
     /**
      * Initializes a new RobotState
@@ -97,6 +98,7 @@ public class RobotState extends GlobalState {
         voltage = 0;
         isCameraRunning = false;
         isCoarseCameraMode = false;
+        isVisionAligning = false;
     }
 
     /**
@@ -695,5 +697,19 @@ public class RobotState extends GlobalState {
      */
     public void setCoarseCameraMode(boolean courseCameraMode) {
         isCoarseCameraMode = courseCameraMode;
+    }
+
+    /**
+     * @return whether the robot is aligning with vision
+     */
+    public boolean isVisionAligning() {
+        return isVisionAligning;
+    }
+
+    /**
+     * Sets whether the robot is aligning with vision to intake
+     */
+    public void setVisionAligning(boolean visionAligning) {
+        isVisionAligning = visionAligning;
     }
 }

@@ -18,8 +18,8 @@ import team.techtigers.core.paths.Waypoint;
  * A action which uses pedro pathing to hold to a given point
  */
 @Config
-public class TeleHoldPointCommand extends TimeoutCommand {
-    private static final String LOG_TAG = TeleHoldPointCommand.class.getSimpleName();
+public class TeleHoldPointAction extends TimeoutCommand {
+    private static final String LOG_TAG = TeleHoldPointAction.class.getSimpleName();
     public static double TIMEOUT = 0.8;
     private final double tolerance;
     private final double angleTolerance;
@@ -41,10 +41,10 @@ public class TeleHoldPointCommand extends TimeoutCommand {
      * @param tolerance       the tolerance for the distance to the target
      * @param angleTolerance  the tolerance for the angle to the target
      */
-    public TeleHoldPointCommand(DriveSubsystem drive, RobotState robotState,
-                                DoubleSupplier xSupplier,
-                                DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
-                                double tolerance, double angleTolerance) {
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                               DoubleSupplier xSupplier,
+                               DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                               double tolerance, double angleTolerance) {
         super(TIMEOUT);
         this.drive = drive;
         this.robotState = robotState;
@@ -54,7 +54,7 @@ public class TeleHoldPointCommand extends TimeoutCommand {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
-        addRequirements(drive);
+//        addRequirements(drive);
     }
 
     /**
@@ -68,10 +68,10 @@ public class TeleHoldPointCommand extends TimeoutCommand {
      * @param tolerance      the tolerance for the distance to the target
      * @param angleTolerance the tolerance for the angle to the target
      */
-    public TeleHoldPointCommand(DriveSubsystem drive, RobotState robotState,
-                                double x,
-                                double y, double heading,
-                                double tolerance, double angleTolerance) {
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                               double x,
+                               double y, double heading,
+                               double tolerance, double angleTolerance) {
         this(drive, robotState, () -> x, () -> y, () -> heading, tolerance, angleTolerance);
     }
 
