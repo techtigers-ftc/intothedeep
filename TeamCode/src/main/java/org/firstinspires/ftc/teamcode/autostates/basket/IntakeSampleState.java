@@ -35,6 +35,7 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
+                // TODO: Tune this wait time
                 new WaitCommand(200),
                 new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
