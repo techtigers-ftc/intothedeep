@@ -33,7 +33,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
 
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
     public static final double SLIDES_MAX = 18.75;
-    public static final double SLIDES_TRANSFER_POSITION = 0.25;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
 
     // DIFFERENTIAL PITCH POSITIONS
     public static final double WRIST_PITCH_TUCK_POSITION = 50;

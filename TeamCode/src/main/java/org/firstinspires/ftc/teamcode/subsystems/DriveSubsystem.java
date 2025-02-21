@@ -191,6 +191,10 @@ public class DriveSubsystem extends CloseableSubsystem {
         frontRight.setPower(fr);
         backLeft.setPower(bl);
         backRight.setPower(br);
+        RobotLog.dd(tag, "Front Left Motor Power: %f", fl);
+        RobotLog.dd(tag, "Front Right Motor Power: %f", fr);
+        RobotLog.dd(tag, "Rear Left Motor Power: %f", bl);
+        RobotLog.dd(tag, "Rear Right Motor Power: %f", br);
     }
 
     /**

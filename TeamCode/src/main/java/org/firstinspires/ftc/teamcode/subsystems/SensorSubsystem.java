@@ -26,7 +26,7 @@ public class SensorSubsystem extends CloseableSubsystem {
     public SensorSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
         voltage = hardwareMap.voltageSensor.iterator().next();
-        voltageAverage = new SlidingAverageCalculator(50);
+        voltageAverage = new SlidingAverageCalculator(200);
         voltageAverage.clear();
     }
 
