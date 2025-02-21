@@ -92,6 +92,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
             intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION);
             intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION);
             intake.openClaw();
+            intake.setClawRotationAbsolute(IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
             if (!robotState.isManualIntakeSelected()) {
                 intake.moveSlidesRelative(-3);
             }
