@@ -170,8 +170,7 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         writeDevicePin((byte) 0x0F);
 
         // Set NeoPixel protocol frequency to 800khz
-        writeDeviceSpeed((byte) 0x00);
-        // TODO: change to 0x01 for 800
+        writeDeviceSpeed((byte) 0x01);
 
         // Set the buffer length to the number of LEDs * bytes per LED
         writeDeviceBufferLength((short) (numberOfLeds * bytesPerLed));
