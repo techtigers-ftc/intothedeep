@@ -30,7 +30,7 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     /* Device will only allow 512 LEDs to be written to,
      see: https://learn.adafruit.com/adafruit-neodriver-i2c-to-neopixel-driver */
     private static final int MAX_LEDS = 512;
-    private static final int MAX_SEQUENCE_LENGTH = 30;
+    private static final int MAX_SEQUENCE_LENGTH = 6;
 
     private int bytesPerLed;
     protected Color[] currentLedBuffer;
@@ -244,7 +244,7 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         }
         for (int index = 0; index < currentLedBuffer.length; index++) {
             boolean hasChanged = !currentLedBuffer[index].equals(lastLedBuffer[index]);
-            if (hasChanged) {
+            if (hasChanged || needsReset) {
                 if (startIndex == -1) {
                     startIndex = index;
                 }
