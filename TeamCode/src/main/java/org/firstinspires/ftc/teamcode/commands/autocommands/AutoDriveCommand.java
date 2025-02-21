@@ -103,7 +103,7 @@ public class AutoDriveCommand extends CommandBase {
 
         // Sets the robot's final pose to the final waypoint found
         robotState.setRobotFinalPose(target);
-        follower.followPath(pathChain, false);
+        follower.followPath(pathChain, true);
     }
 
     @Override

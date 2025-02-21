@@ -31,14 +31,14 @@ public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
     public static final double SLIDE_MAX = 28.25;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 1;
-    public static final double SLIDES_CHAMBER_POSITION = 4.75;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
+    public static final double SLIDES_CHAMBER_POSITION = 4.5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 30;
-    public static final double PITCH_BASKET_POSITION = 220;
+    public static final double PITCH_BASKET_POSITION = 225;
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
     public static final double PITCH_FRONT_SLAP_POSITION = 80;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
@@ -383,7 +383,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     }
 
     private double getVoltageCompensatedMotorPower(double power) {
-        if(robotState.getVoltage() != 0) {
+        if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
             RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);

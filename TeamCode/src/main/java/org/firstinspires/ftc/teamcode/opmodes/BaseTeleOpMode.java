@@ -40,7 +40,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.drive.HeadingLockCommand;
-import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -57,8 +56,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.BaseOpMode;
-import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
-import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
