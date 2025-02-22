@@ -258,14 +258,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
-//                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-//                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(intakeThirdSample, endState, AutoState.DRIVE_END)
-//
+                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+
 //                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.DRIVE_END)
 //                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.TIMEOUT)
 
-                .addTransition(firstLevelAscent, endState, AutoState.ASCENT_COMPLETE)
+//                .addTransition(firstLevelAscent, endState, AutoState.ASCENT_COMPLETE)
+                .addTransition(driveToThirdDrop, endState, AutoState.DRIVE_END)
 
                 .setCurrentState(driveToPreloadDrop);
 
