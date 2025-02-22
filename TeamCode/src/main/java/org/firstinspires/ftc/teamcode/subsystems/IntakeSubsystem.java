@@ -68,8 +68,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;
-    private static final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
-    private static final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
+    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -445,7 +445,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
             if(getCurrentSlidePositionInches() > 17 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;
-            } else if (getCurrentSlidePositionInches() < 17 && !inPrimarySlideMode) {
+            } else if (getCurrentSlidePositionInches() <= 17 && !inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(PRIMARY_COEFFICIENTS);
                 inPrimarySlideMode = true;
             }
