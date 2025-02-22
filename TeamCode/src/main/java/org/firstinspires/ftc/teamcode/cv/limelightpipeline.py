@@ -76,7 +76,8 @@ HSV_YELLOW_RANGE = ([10, 30, 150], [40, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 7000
+SMALL_CONTOUR_AREA_FINE = 30000
+LARGE_CONTOUR_AREA_FINE = 90000
 SMALL_CONTOUR_AREA_COARSE = 200
 
 
@@ -86,7 +87,7 @@ MIN_BRIGHTNESS_THRESHOLD = 20
 
 # Drawing color
 FONT_NAME = cv2.FONT_HERSHEY_SIMPLEX
-FONT_SIZE = 0.25
+FONT_SIZE = 0.75
 FONT_THICKNESS = 1
 
 
@@ -198,7 +199,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[0] = 1
+    # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
     # llrobot[3] = 0
@@ -282,11 +283,15 @@ def runPipeline(frame, llrobot):
             small_contour_area = (
                 SMALL_CONTOUR_AREA_FINE if isFine == 1 else SMALL_CONTOUR_AREA_COARSE
             )
+
             if cv2.contourArea(contour) < small_contour_area:
                 continue
 
             frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
+                if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
+                    continue
+
                 mask = np.zeros(gray.shape, dtype=np.uint8)
                 cv2.drawContours(mask, [sep_contour], -1, 255, -1)
 
@@ -298,6 +303,9 @@ def runPipeline(frame, llrobot):
                 if M["m00"] != 0:
                     center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
                 else:
+                    continue
+
+                if center[0] < width * 1.5/10 or center[0] > width * 8.5/10 or center[1] < height * 1.5/10 or center[1] > height * 8.5/10:
                     continue
 
                 area = cv2.contourArea(sep_contour)
@@ -329,7 +337,7 @@ def runPipeline(frame, llrobot):
             return (width / 2 - center[0]) ** 2 + (3 * height / 2 - center[1]) ** 2
 
         def dist_for_coarse(center):
-            return height - center[1]
+            return (height - center[1])**2 + (width - 2 * center[0]) ** 2
 
         if isFine:
             dist_func = dist_for_fine
