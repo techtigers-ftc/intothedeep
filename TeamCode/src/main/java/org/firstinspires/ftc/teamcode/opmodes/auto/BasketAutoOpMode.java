@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -136,7 +137,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleIntake(driveToThirdIntake);
 
-        IntakeSampleState intakeThirdSample = new IntakeSampleState(
+        IntakeSampleWallState intakeThirdSample = new IntakeSampleWallState(
                 "intakeThirdSample",
                 drive,
                 intake,
@@ -258,7 +259,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
-                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
 //                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.DRIVE_END)
