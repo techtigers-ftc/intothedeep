@@ -51,7 +51,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                 ),
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new DropperOpenAction(dropper, 100)
+                                        new DropperOpenAction(dropper, 300)
                                 )
                         )
                 )
