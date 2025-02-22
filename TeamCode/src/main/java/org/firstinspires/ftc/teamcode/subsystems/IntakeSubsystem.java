@@ -442,10 +442,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         if (!isDirectControlEnabled) {
-            if(getCurrentSlidePositionInches() > 17 && inPrimarySlideMode) {
+            if(getCurrentSlidePositionInches() > 15 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;
-            } else if (getCurrentSlidePositionInches() <= 17 && !inPrimarySlideMode) {
+            } else if (getCurrentSlidePositionInches() <= 15 && !inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(PRIMARY_COEFFICIENTS);
                 inPrimarySlideMode = true;
             }
