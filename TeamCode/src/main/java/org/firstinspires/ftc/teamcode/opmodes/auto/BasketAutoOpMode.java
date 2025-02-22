@@ -74,7 +74,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                16,
+                15,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -103,7 +103,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                16,
+                15,
                 robotState);
         BasketDriveStateConfigurator.configFirstSampleDrop(driveToFirstDrop);
 
