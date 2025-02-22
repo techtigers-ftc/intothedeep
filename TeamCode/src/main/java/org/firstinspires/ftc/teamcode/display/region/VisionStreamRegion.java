@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.display.sprite.HollowRectangleWithCrosshai
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.core.display.Color;
@@ -66,22 +67,27 @@ public class VisionStreamRegion extends DisplayRegion {
             disableAllBlocks();
             horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
             horizontalBlock.enable();
+            setColor();
         } else if (22.5 < blockOrientation && blockOrientation < 67.5) {
             disableAllBlocks();
             diagonalBlockLeft.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
             diagonalBlockLeft.enable();
+            setColor();
         } else if (67.5 < blockOrientation && blockOrientation < 112.5) {
             disableAllBlocks();
             verticalBlock.setPosition(Range.clip(blockX + 1, 1, 10), Range.clip(blockY + 1, 1, 3));
             verticalBlock.enable();
+            setColor();
         } else if (112.5 < blockOrientation && blockOrientation < 157.5) {
             disableAllBlocks();
             diagonalBlockRight.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
             diagonalBlockRight.enable();
+            setColor();
         } else if (157.5 < blockOrientation && blockOrientation <= 180) {
             disableAllBlocks();
             horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
             horizontalBlock.enable();
+            setColor();
         }
     }
 
@@ -96,5 +102,27 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft.disable();
         diagonalBlockRight.disable();
         noBlockDetected.disable();
+    }
+
+    // TODO: Make this use color from Govind's pipeline
+    private void setColor() {
+        if (robotState.getBlockColorPreference() == BlockColorPreference.ALLIANCE) {
+            if (robotState.isBlue()) {
+                verticalBlock.setColor(Color.BLUE);
+                horizontalBlock.setColor(Color.BLUE);
+                diagonalBlockLeft.setColor(Color.BLUE);
+                diagonalBlockRight.setColor(Color.BLUE);
+            } else {
+                verticalBlock.setColor(Color.RED);
+                horizontalBlock.setColor(Color.RED);
+                diagonalBlockLeft.setColor(Color.RED);
+                diagonalBlockRight.setColor(Color.RED);
+            }
+        } else {
+            verticalBlock.setColor(Color.YELLOW);
+            horizontalBlock.setColor(Color.YELLOW);
+            diagonalBlockLeft.setColor(Color.YELLOW);
+            diagonalBlockRight.setColor(Color.YELLOW);
+        }
     }
 }
