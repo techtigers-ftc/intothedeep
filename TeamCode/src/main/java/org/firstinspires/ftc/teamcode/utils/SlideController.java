@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.util.RobotLog;
 
 /**
  * This class encapsulates the logic for setting slides to a given position into one class so that
@@ -13,7 +12,7 @@ public class SlideController {
     public double targetTicks;
     private final double ticksPerInch;
     private final PIDFController pidfController;
-    private final double kF;
+    private double kF;
 
     /**
      * Initializes the SlideController and PIDs movement of the slides
@@ -35,7 +34,8 @@ public class SlideController {
      * @param coefficients the new PIDF coefficients
      */
     public void setPIDFCoefficients(PIDFCoefficients coefficients) {
-        pidfController.setPIDF(coefficients.p, coefficients.i, coefficients.d, coefficients.f);
+        pidfController.setPIDF(coefficients.p, coefficients.i, coefficients.d, 0);
+        kF = coefficients.f;
     }
 
     /**
