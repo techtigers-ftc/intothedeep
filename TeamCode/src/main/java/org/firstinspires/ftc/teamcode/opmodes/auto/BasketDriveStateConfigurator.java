@@ -63,7 +63,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(11, 12),
-                                        new Point(17, 31)
+                                        new Point(16, 29)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(72),
@@ -170,24 +170,25 @@ public class BasketDriveStateConfigurator {
      * @param state The ThirdSampleIntake to configure
      */
     public static void configThirdSampleIntake(DriveToGeneralSampleIntakeState state) {
-        state.setPIDSToTuning();
-        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setHeadingPIDF(0.85, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+//        state.setPIDSToTuning();
+//        state.setTranslationalPIDF(0.1, 0, 0.01, 0);
+//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+//        state.setHeadingPIDF(0.85, 0, 0.03, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+//        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
+//        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
                                         new Point(10, 13),
-                                        new Point(9, 18)
+                                        new Point(8, 17)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(72),
-                                Math.toRadians(102))
+                                Math.toRadians(97))
                         .build()
         );
 
