@@ -65,7 +65,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0;
     public static double PRIMARY_KF = 0;
-    public static double SECONDARY_KP = 0.018;
+    public static double SECONDARY_KP = 0.006;
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;

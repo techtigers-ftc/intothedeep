@@ -28,7 +28,7 @@ import team.techtigers.base.CloseableSubsystem;
  * two motors that control the horizontal slides.
  */
 @Config
-public class IntakeSubsystem extends CloseableSubsystem {
+public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 34;
 
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
