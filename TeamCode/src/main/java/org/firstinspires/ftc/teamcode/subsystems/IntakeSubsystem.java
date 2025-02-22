@@ -57,7 +57,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.7;
-    private static final double CLAW_LOOSE_POSITION = 0.87;
+    private static final double CLAW_LOOSE_POSITION = 0.89;
     private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.005;

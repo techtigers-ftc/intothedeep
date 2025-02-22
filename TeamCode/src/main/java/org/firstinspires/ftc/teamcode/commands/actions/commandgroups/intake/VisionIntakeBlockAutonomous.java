@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * Command to move intake to Ready To Transfer.
  */
-public class IntakeFullReadyToTransferWallAction extends SequentialCommandGroup {
+public class VisionIntakeBlockAutonomous extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
@@ -30,10 +30,10 @@ public class IntakeFullReadyToTransferWallAction extends SequentialCommandGroup 
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakeFullReadyToTransferWallAction(DriveSubsystem drive,
-                                               IntakeSubsystem intake,
-                                               DropperSubsystem dropper,
-                                               RobotState robotState, CommandBase command) {
+    public VisionIntakeBlockAutonomous(DriveSubsystem drive,
+                                       IntakeSubsystem intake,
+                                       DropperSubsystem dropper,
+                                       RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
         lastClawRotation = 90;
@@ -41,17 +41,17 @@ public class IntakeFullReadyToTransferWallAction extends SequentialCommandGroup 
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
-                new IntakeSlidesAbsoluteAction(intake,
-                        () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
-                new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
-                new TeleHoldPointAction(drive, robotState,
-                        () -> robotState.getRobotCurrentPose().getX() +
-                                Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                        () -> robotState.getRobotCurrentPose().getY()
-                                - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                        () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
+                    new IntakeSlidesAbsoluteAction(intake,
+                            () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
+                    new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
+                    new TeleHoldPointAction(drive, robotState,
+                            () -> robotState.getRobotCurrentPose().getX() +
+                                    Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                            () -> robotState.getRobotCurrentPose().getY()
+                                    - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                            () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
                 ),
-                new IntakeFullReadyToTransferNoVisionWallAction(intake, dropper,
+                new IntakeBlockAutonomous(intake, dropper,
                         robotState, command == null ? this : command)
         );
     }
@@ -63,10 +63,10 @@ public class IntakeFullReadyToTransferWallAction extends SequentialCommandGroup 
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeFullReadyToTransferWallAction(DriveSubsystem drive,
-                                               IntakeSubsystem intake,
-                                               DropperSubsystem dropper,
-                                               RobotState robotState) {
+    public VisionIntakeBlockAutonomous(DriveSubsystem drive,
+                                       IntakeSubsystem intake,
+                                       DropperSubsystem dropper,
+                                       RobotState robotState) {
         this(drive, intake, dropper, robotState, null);
     }
 }

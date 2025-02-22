@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.VisionIntakeBlockAutonomous;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -36,8 +37,8 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 // TODO: Tune this wait time
-                new WaitCommand(100),
-                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
+                new WaitCommand(200),
+                new VisionIntakeBlockAutonomous(drive, intake, dropper, robotState)
         );
     }
 

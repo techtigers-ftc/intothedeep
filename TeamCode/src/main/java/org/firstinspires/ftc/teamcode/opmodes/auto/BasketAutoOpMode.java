@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
+import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -30,6 +31,8 @@ import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
+import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
+import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
@@ -60,10 +63,10 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
                 robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
 
         // Creating states
         DriveToPreloadDropState driveToPreloadDrop = new DriveToPreloadDropState(
@@ -71,7 +74,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                16,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -100,7 +103,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                9.5,
+                16,
                 robotState);
         BasketDriveStateConfigurator.configFirstSampleDrop(driveToFirstDrop);
 
@@ -243,14 +246,13 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.TIMEOUT)
-//                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-//
-//                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
-//                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
-//
-//
-//                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
-//                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
+                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+
+                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
+                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
+
+                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
 //
 //                .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 //
