@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -55,14 +57,13 @@ public class IntakeBlockAutonomous extends SequentialCommandGroup {
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new IntakeWristRotationAction(intake,
-                                        IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
-                                new IntakeLoosenAction(intake, 350)
-                        ),
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
+                        new IntakeLoosenAction(intake, 300),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
-                )
+                ),
+                new WaitCommand(100)
         );
     }
 

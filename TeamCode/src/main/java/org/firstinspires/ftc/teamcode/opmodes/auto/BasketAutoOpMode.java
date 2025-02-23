@@ -295,30 +295,30 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
     public void update() {
-        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
-        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
-        telemetry.addLine();
-        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
-        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
-        telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
-        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
-        telemetry.addLine();
-        telemetry.addData("block forward distance", robotState.getBlockForwardCoarse());
-        telemetry.addData("block lateral distance", robotState.getBlockLateralCoarse());
-        telemetry.addLine();
+//        telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
+//        telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
+//        telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+//        telemetry.addLine();
+//        telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
+//        telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
+//        telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
+//        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
+//        telemetry.addLine();
+//        telemetry.addData("block forward distance", robotState.getBlockForwardCoarse());
+//        telemetry.addData("block lateral distance", robotState.getBlockLateralCoarse());
+//        telemetry.addLine();
         double currentPos = intake.getCurrentSlidePositionInches();
         double expectedPos = intake.getTargetPositionInches();
         telemetry.addData("Current slide position (inches)", currentPos);
         telemetry.addData("Expected slide position (inches)", expectedPos);
-        telemetry.addLine();
-        telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
-        telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
+//        telemetry.addLine();
+//        telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
+//        telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
     }
 
     @Override
