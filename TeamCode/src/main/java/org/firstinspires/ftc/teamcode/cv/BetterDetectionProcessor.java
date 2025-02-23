@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.cv;
 import android.graphics.Canvas;
 
 import com.arcrobotics.ftclib.geometry.Translation2d;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -525,8 +523,6 @@ public class BetterDetectionProcessor implements VisionProcessor {
             }
 
             if (!gamePieces.isEmpty()) {
-//                RobotLog.dd("detection pipeline", "Contour size: %f", contours.size());
-                RobotLog.dd("detection pipeline", "detecting block");
                 Map<String, Object> bestPiece = gamePieces.get(0);
                 for (Map<String, Object> piece : gamePieces) {
                     Point piecePosition = (Point) piece.get("position");
@@ -543,18 +539,14 @@ public class BetterDetectionProcessor implements VisionProcessor {
                 robotState.setBlockForwardFine(-((((Point) bestPiece.get("position")).y / PIXELS_PER_INCH) - HEIGHT_MIDPOINT));
 
                 robotState.setBlockLateralFine((((Point) bestPiece.get("position")).x / PIXELS_PER_INCH) - WIDTH_MIDPOINT);
-                RobotLog.dd("detection pipeline", "detection complete");
-                RobotLog.dd("detection pipeline", "Block Color: %s", bestPiece.get("color"));
 
             } else {
-                RobotLog.dd("detection pipeline", "not detecting block");
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             }
 
 
             return contour_frame;
         } catch (Exception e) {
-            RobotLog.dd("detection pipeline", "catching error: %s", e.getMessage());
 //            System.out.println(frame + " Error: " + e.getMessage());
             return frame;
         }

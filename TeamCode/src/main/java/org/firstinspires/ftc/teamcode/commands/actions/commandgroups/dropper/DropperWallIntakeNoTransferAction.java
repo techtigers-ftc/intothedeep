@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -39,7 +37,6 @@ public class DropperWallIntakeNoTransferAction extends ParallelCommandGroup {
 
     @Override
     public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
         robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
         super.initialize();
     }

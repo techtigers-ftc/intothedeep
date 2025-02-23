@@ -61,8 +61,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -533,9 +531,7 @@ public class Follower {
 
         if (!teleopDrive) {
             if (currentPath != null) {
-                RobotLog.dd("FollowerDEBUG", "Current path not null");
                 if (holdingPosition) {
-                    RobotLog.dd("FollowerDEBUG", "Holding position");
                     closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), 1);
 
                     currentDriveVectors = new DriveVectors(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), getPose().getHeading());
@@ -552,9 +548,7 @@ public class Follower {
 //                        }
 //                    }
                 } else {
-                    RobotLog.dd("FollowerDEBUG", "NOT Holding position");
                     if (isBusy) {
-                        RobotLog.dd("FollowerDEBUG", "BUSY");
                         closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_SEARCH_LIMIT);
 
                         if (followingPathChain) updateCallbacks();
@@ -587,14 +581,12 @@ public class Follower {
 
                     if (currentPath.isAtParametricEnd() ||
                             (zeroVelocityDetectedTimer != null && zeroVelocityDetectedTimer.milliseconds() > 500.0)) {
-                        RobotLog.dd("FollowerDEBUG", "Parametric End DONE");
                         if (followingPathChain && chainIndex < currentPathChain.size() - 1) {
 
                             if (logDebug) {
                                 Log.d("Follower_logger", "chainIndex: " + chainIndex + " | Pose: " + getPose());
                             }
                             // Not at last path, keep going
-                            RobotLog.dd("FollowerDEBUG", "Follower not at last path, KEEP GOING");
                             breakFollowing();
                             pathStartTimes[chainIndex] = System.currentTimeMillis();
                             isBusy = true;
@@ -603,7 +595,6 @@ public class Follower {
                             currentPath = currentPathChain.getPath(chainIndex);
                             closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_SEARCH_LIMIT);
                         } else {
-                            RobotLog.dd("FollowerDEBUG", "Follower IS AT last path");
                             // At last path, run some end detection stuff
                             // set isBusy to false if at end
                             if (!reachedParametricPathEnd) {
@@ -617,10 +608,8 @@ public class Follower {
                                             MathFunctions.getSmallestAngleDifference(poseUpdater.getPose().getHeading(), currentPath.getClosestPointHeadingGoal()) < currentPath.getPathEndHeadingConstraint())) {
                                 if (holdPositionAtEnd) {
                                     holdPositionAtEnd = false;
-                                    RobotLog.dd("FollowerDEBUG", "Holding position");
                                     holdPoint(new BezierPoint(currentPath.getLastControlPoint()), currentPath.getHeadingGoal(1));
                                 } else {
-                                    RobotLog.dd("FollowerDEBUG", "Broke following");
                                     if (logDebug && isBusy) {
                                         Log.d("Follower_final_logger::", "isAtParametricEnd:" + currentPath.isAtParametricEnd()
                                                 + " | isBusy: " + isBusy
