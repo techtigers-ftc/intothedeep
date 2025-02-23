@@ -1,6 +1,7 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.robotcore.robot.RobotState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class StateMachine<T> {
     private final HashMap<String, ArrayList<Transition<T>>> transitionMap;
     private State<T> currentState;
     private ArrayList<Transition<T>> currentTransitions;
+    private RobotState robotState;
 
     /**
      * Initializes a new StateMachine
@@ -132,5 +134,8 @@ public class StateMachine<T> {
                 break;
             }
         }
+    }
+    public State<T> getCurrentState() {
+        return currentState;
     }
 }

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
+import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -37,6 +38,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
+    private AutoSubsystem auto;
 
     protected abstract boolean isBlue();
 
@@ -61,7 +63,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
-        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
+        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
 
         // Creating states
         DriveToPreloadDropSpecimenState driveChamberPreload = new DriveToPreloadDropSpecimenState(
@@ -321,6 +323,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
+        robotState.setCurrentAutoState(auto.getState());
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
