@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import org.firstinspires.ftc.teamcode.display.sprite.DiagonalRectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;

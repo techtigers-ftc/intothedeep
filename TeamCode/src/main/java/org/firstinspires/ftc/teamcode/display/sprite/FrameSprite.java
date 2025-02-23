@@ -7,7 +7,7 @@ import team.techtigers.core.display.Sprite;
 /**
  * A class which represents a hollow rectangle sprite
  */
-public class HollowRectangleWithCrosshairSprite extends Sprite {
+public class FrameSprite extends Sprite {
 
     /**
      * Creates a new hollow rectangle sprite
@@ -17,7 +17,7 @@ public class HollowRectangleWithCrosshairSprite extends Sprite {
      * @param width  the width of the line
      * @param height the height of the line
      */
-    public HollowRectangleWithCrosshairSprite(int x, int y, int width, int height) {
+    public FrameSprite(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 

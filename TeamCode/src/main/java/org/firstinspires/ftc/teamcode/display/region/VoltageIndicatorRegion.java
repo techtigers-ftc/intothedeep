@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import org.firstinspires.ftc.teamcode.display.sprite.DiagonalRectangleSprite;
+import org.firstinspires.ftc.teamcode.display.sprite.VoltageMeterSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.core.display.Color;
@@ -25,16 +25,16 @@ public class VoltageIndicatorRegion extends DisplayRegion {
     private final static double L9_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 9 * STEP;
     private final static double L10_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 10 * STEP;
     private final RobotState robotState;
-    private final DiagonalRectangleSprite L1Sprite;
-    private final DiagonalRectangleSprite L2Sprite;
-    private final DiagonalRectangleSprite L3Sprite;
-    private final DiagonalRectangleSprite L4Sprite;
-    private final DiagonalRectangleSprite L5Sprite;
-    private final DiagonalRectangleSprite L6Sprite;
-    private final DiagonalRectangleSprite L7Sprite;
-    private final DiagonalRectangleSprite L8Sprite;
-    private final DiagonalRectangleSprite L9Sprite;
-    private final DiagonalRectangleSprite L10Sprite;
+    private final VoltageMeterSprite L1Sprite;
+    private final VoltageMeterSprite L2Sprite;
+    private final VoltageMeterSprite L3Sprite;
+    private final VoltageMeterSprite L4Sprite;
+    private final VoltageMeterSprite L5Sprite;
+    private final VoltageMeterSprite L6Sprite;
+    private final VoltageMeterSprite L7Sprite;
+    private final VoltageMeterSprite L8Sprite;
+    private final VoltageMeterSprite L9Sprite;
+    private final VoltageMeterSprite L10Sprite;
     private final Sprite[] sprites;
 
     /**
@@ -47,16 +47,16 @@ public class VoltageIndicatorRegion extends DisplayRegion {
     public VoltageIndicatorRegion(int x, int y, RobotState robotState) {
         super(x, y, 11, 2);
         this.robotState = robotState;
-        L1Sprite = new DiagonalRectangleSprite(0, 0);
-        L2Sprite = new DiagonalRectangleSprite(1, 0);
-        L3Sprite = new DiagonalRectangleSprite(2, 0);
-        L4Sprite = new DiagonalRectangleSprite(3, 0);
-        L5Sprite = new DiagonalRectangleSprite(4, 0);
-        L6Sprite = new DiagonalRectangleSprite(5, 0);
-        L7Sprite = new DiagonalRectangleSprite(6, 0);
-        L8Sprite = new DiagonalRectangleSprite(7, 0);
-        L9Sprite = new DiagonalRectangleSprite(8, 0);
-        L10Sprite = new DiagonalRectangleSprite(9, 0);
+        L1Sprite = new VoltageMeterSprite(0, 0);
+        L2Sprite = new VoltageMeterSprite(1, 0);
+        L3Sprite = new VoltageMeterSprite(2, 0);
+        L4Sprite = new VoltageMeterSprite(3, 0);
+        L5Sprite = new VoltageMeterSprite(4, 0);
+        L6Sprite = new VoltageMeterSprite(5, 0);
+        L7Sprite = new VoltageMeterSprite(6, 0);
+        L8Sprite = new VoltageMeterSprite(7, 0);
+        L9Sprite = new VoltageMeterSprite(8, 0);
+        L10Sprite = new VoltageMeterSprite(9, 0);
 
 
         sprites = new Sprite[]{L1Sprite, L2Sprite, L3Sprite, L4Sprite,

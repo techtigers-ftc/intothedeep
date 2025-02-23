@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteLeft;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteRight;
-import org.firstinspires.ftc.teamcode.display.sprite.HollowRectangleWithCrosshairSprite;
+import org.firstinspires.ftc.teamcode.display.sprite.FrameSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -16,7 +16,7 @@ import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
 public class VisionStreamRegion extends DisplayRegion {
-    private final HollowRectangleWithCrosshairSprite frame;
+    private final FrameSprite frame;
     private final RectangleSprite verticalBlock;
     private final RectangleSprite horizontalBlock;
     private final DiagonalBlockSpriteLeft diagonalBlockLeft;
@@ -35,7 +35,7 @@ public class VisionStreamRegion extends DisplayRegion {
     public VisionStreamRegion(int x, int y, RobotState robotState) {
         super(x, y, 13, 8);
         this.robotState = robotState;
-        frame = new HollowRectangleWithCrosshairSprite(0, 0, 13, 8);
+        frame = new FrameSprite(0, 0, 13, 8);
 
         verticalBlock = new RectangleSprite(1, 1, 2, 4);
         horizontalBlock = new RectangleSprite(1, 1, 4, 2);
