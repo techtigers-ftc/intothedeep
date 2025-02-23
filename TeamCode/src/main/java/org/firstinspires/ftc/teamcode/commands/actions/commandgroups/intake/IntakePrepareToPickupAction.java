@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -71,7 +70,6 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
     }
 
     @Override

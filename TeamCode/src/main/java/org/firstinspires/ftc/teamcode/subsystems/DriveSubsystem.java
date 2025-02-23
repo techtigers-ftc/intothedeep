@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
@@ -127,9 +126,6 @@ public class DriveSubsystem extends CloseableSubsystem {
      * @param heading  The robot's heading
      */
     public void driveFieldCentric(double forward, double strafe, double rotation, double heading) {
-        RobotLog.dd(tag, "----------------------------------");
-        RobotLog.dd(tag, "Forward: %f, Strafe: %f, Turn: %f",
-                forward, strafe, rotation);
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
         double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER * 0.9;
@@ -139,9 +135,6 @@ public class DriveSubsystem extends CloseableSubsystem {
 //            forwardSpeed *= GEAR_MULTIPLIER;
             turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
         }
-
-        RobotLog.dd(tag, "Forward: %f, Strafe: %f, Turn: %f",
-                forwardSpeed, strafeSpeed, turnSpeed);
 
         Vector2d input = new Vector2d(strafeSpeed, forwardSpeed);
         input = input.rotateBy(-heading);
@@ -157,24 +150,15 @@ public class DriveSubsystem extends CloseableSubsystem {
         wheelSpeeds[1] = Math.sin(theta - Math.PI / 4);
         //Back Right
         wheelSpeeds[3] = Math.sin(theta + Math.PI / 4);
-        RobotLog.dd(tag, "FL: %f, BL: %f, FR: %f, BR: %f",
-                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         normalize(wheelSpeeds, input.magnitude());
-        RobotLog.dd(tag, "FL: %f, BL: %f, FR: %f, BR: %f",
-                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         wheelSpeeds[0] += turnSpeed;
         wheelSpeeds[2] -= turnSpeed;
         wheelSpeeds[1] += turnSpeed;
         wheelSpeeds[3] -= turnSpeed;
-        RobotLog.dd(tag, "FL: %f, BL: %f, FR: %f, BR: %f",
-                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
 
         normalize(wheelSpeeds);
-        RobotLog.dd(tag, "FL: %f, BL: %f, FR: %f, BR: %f",
-                wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
-
         setMotorPowers(wheelSpeeds[0], wheelSpeeds[1], wheelSpeeds[2], wheelSpeeds[3]);
     }
 
@@ -221,8 +205,5 @@ public class DriveSubsystem extends CloseableSubsystem {
         backRightSlideCurrentAverage.add(currentBackRight.getCurrent(CurrentUnit.AMPS));
 
         robotstate.setDriverCurrent(frontLeftSlideCurrentAverage.getAverage() + frontRightSlideCurrentAverage.getAverage() + backLeftSlideCurrentAverage.getAverage() + backRightSlideCurrentAverage.getAverage());
-
-        RobotLog.dd(tag, "Front Left Current: %f, Front Right Current: %f, Back Left Current: %f, Back Right Current: %f",
-                frontLeftSlideCurrentAverage.getAverage(), frontRightSlideCurrentAverage.getAverage(), backLeftSlideCurrentAverage.getAverage(), backRightSlideCurrentAverage.getAverage());
     }
 }

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intak
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -39,7 +38,6 @@ public class IntakeSlidesAbsoluteAction extends CommandBase {
     @Override
     public void initialize() {
         targetPosition = targetPositionSupplier.getAsDouble();
-        RobotLog.dd(LOG_TAG, "Target pos: %f", targetPosition);
         intake.moveSlidesAbsolute(targetPosition);
         timer.reset();
     }
