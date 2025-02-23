@@ -30,7 +30,7 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveToGeneralSampleIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 1.25);
         addCommands(
                 autoDriveCommand,
                 new InstantCommand(() -> robotState.setIntakeState(IntakeState.READY_TO_PICKUP)),

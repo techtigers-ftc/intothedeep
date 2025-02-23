@@ -58,7 +58,7 @@ public class IntakeBlockAutonomous extends SequentialCommandGroup {
                 ),
                 new ParallelCommandGroup(
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 0),
                         new IntakeLoosenAction(intake, 300),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
