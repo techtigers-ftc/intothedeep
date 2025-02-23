@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -57,8 +55,6 @@ public class GrabSampleState extends SequentialCommandGroupState<AutoState> {
     @Override
     public void initialize() {
         super.initialize();
-        RobotLog.dd(LOG_TAG, "Target slide pos: %s Target Claw pos %s",
-                slidePos.getAsDouble(), clawPos.getAsDouble());
     }
 
     /**

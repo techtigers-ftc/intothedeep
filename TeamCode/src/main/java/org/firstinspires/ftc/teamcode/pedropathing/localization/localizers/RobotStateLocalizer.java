@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.localizers;
 
 import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Localizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;
@@ -72,8 +70,6 @@ public class RobotStateLocalizer extends Localizer {
         previousHeading = currentPose.getHeading();
         currentVelocity =
                 PoseTranslator.waypointToPose(robotState.getRobotVelocity());
-
-        RobotLog.dd("Pinpoint", "Pose: %s", currentPose);
     }
 
     /**

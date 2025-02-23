@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
@@ -125,14 +123,6 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public boolean isFinished() {
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
-
-        RobotLog.dd(LOG_TAG, "Current Position: %s", current.toString());
-        RobotLog.dd(LOG_TAG, "Final Position: %s", target.toString());
-        RobotLog.dd(LOG_TAG, "Distance to Target: %f", distToTarget(current, target));
-        RobotLog.dd(LOG_TAG, "Distance to Angle Target: %f", angleDistance(current.getHeading(), target.getHeading()));
-        RobotLog.dd(LOG_TAG, "Tolerance: %f, Angle tolerance: %f",
-                tolerance, angleTolerance);
-
 
         return
                 (distToTarget(current, target) < tolerance

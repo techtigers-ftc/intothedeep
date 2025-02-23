@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -140,7 +139,6 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         moveSlidesAbsolute(getCurrentSlidePositionInches());
 
-        RobotLog.dd("IntakeSubsystem", "TicksPerInch: %f", MOTOR_TICKS_PER_INCH);
     }
 
     @Override
@@ -426,11 +424,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     private double getVoltageCompensatedMotorPower(double power) {
         if (robotState.getVoltage() != 0) {
-            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
-            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
         } else {
-            RobotLog.dd(tag, "Voltage Is Not Set");
             return power;
         }
     }
@@ -465,13 +460,5 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             updateBlockPosition();
         }
-
-        RobotLog.dd(tag, "Wrist Pitch: %f Wrist Rotation: %f", wristAngles[0], wristAngles[1]);
-        RobotLog.dd(tag, "Actual Left Wrist: %f Actual Right Wrist: %f", leftWrist.getPosition(), rightWrist.getPosition());
-        RobotLog.dd(tag, "Calculated Left Wrist: %f Calculated Right Wrist: %f", wristPositions[0], wristPositions[1]);
-        RobotLog.dd(tag, "Current Slide Position: %f", getCurrentSlidePositionInches());
-        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Intake Break-beam : %s", breakBeamSensor.getState());
     }
 }
