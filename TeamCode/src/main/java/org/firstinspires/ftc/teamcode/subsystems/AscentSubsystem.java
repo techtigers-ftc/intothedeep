@@ -13,14 +13,13 @@ import team.techtigers.base.CloseableSubsystem;
 public class AscentSubsystem extends CloseableSubsystem {
     public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 14;
     public static final double JACKS_SLIDES_DISENGAGE_HEIGHT = 9;
-    public static final double ASCENT_UNENGAGED_POSITION = 0.5;
-    public static final double ASCENT_ENGAGED_POSITION = 0.99;
+    public static final double ASCENT_UNENGAGED_POSITION = 0.2;
+    public static final double ASCENT_ENGAGED_POSITION = 0.76;
     public static final double JACKS_UNENGAGED_POSITION = 0;
     public static final double JACKS_ENGAGED_POSITION = 0.84;
     private final Servo changingTransmission;
     private final Servo leftJackServo;
     private final Servo rightJackServo;
-    private final RobotState robotState;
     private boolean jacksEngaged;
 
     /**
@@ -30,7 +29,6 @@ public class AscentSubsystem extends CloseableSubsystem {
      * @param robotState  The state of the robot
      */
     public AscentSubsystem(HardwareMap hardwareMap, RobotState robotState) {
-        this.robotState = robotState;
         changingTransmission = hardwareMap.get(Servo.class,
                 "transmission_switch");
         leftJackServo = hardwareMap.get(Servo.class, "left_jack");
