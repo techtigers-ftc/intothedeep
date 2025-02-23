@@ -60,10 +60,16 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.87;
     private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double FORWARD_KP = 0.007;
-    public static double FORWARD_KI = 0.0;
-    public static double FORWARD_KD = 0.0001;
-    public static double FORWARD_KF = 0.001;
+    public static double PRIMARY_KP = 0.007;
+    public static double PRIMARY_KI = 0;
+    public static double PRIMARY_KD = 0.0001;
+    public static double PRIMARY_KF = 0.001;
+    public static double SECONDARY_KP = 0.014;
+    public static double SECONDARY_KI = 0;
+    public static double SECONDARY_KD = 0;
+    public static double SECONDARY_KF = 0;
+    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
     private final RobotState robotState;
     private final DcMotor leftSlideMotor;
     private final DcMotor rightSlideMotor;
@@ -80,6 +86,7 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private final SlidingAverageCalculator rightSlideCurrentAverage;
     private boolean isDirectControlEnabled;
     private final DigitalChannel breakBeamSensor;
+    private boolean inPrimarySlideMode;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -100,7 +107,8 @@ public class IntakeSubsystem extends CloseableSubsystem {
         clawRotation = hardwareMap.get(Servo.class, "intake_claw_rotation");
         breakBeamSensor = hardwareMap.get(DigitalChannel.class, "intake_break_beam");
 
-        slideController = new SlideController(MOTOR_TICKS_PER_INCH, new PIDFCoefficients(FORWARD_KP, FORWARD_KI, FORWARD_KD, FORWARD_KF));
+        slideController = new SlideController(MOTOR_TICKS_PER_INCH, PRIMARY_COEFFICIENTS);
+        inPrimarySlideMode = true;
         differentialController = new DifferentialController(DIFFERENTIAL_GEAR_RATIO, 270, SERVO_GEAR_RATIO);//TODO: Find max servo angle
         differentialController.setMaxRange(180, 180);
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
@@ -433,8 +441,15 @@ public class IntakeSubsystem extends CloseableSubsystem {
      */
     @Override
     public void periodic() {
-        double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(encoderMotor.getCurrentPosition()));
         if (!isDirectControlEnabled) {
+            if(getCurrentSlidePositionInches() > 15 && inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
+                inPrimarySlideMode = false;
+            } else if (getCurrentSlidePositionInches() <= 15 && !inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(PRIMARY_COEFFICIENTS);
+                inPrimarySlideMode = true;
+            }
+            double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(encoderMotor.getCurrentPosition()));
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }
