@@ -50,24 +50,23 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void execute() {
-        double currentPosition = robotState.getBlockForwardFine();
-        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            currentPosition = -2.5;
-        }
-        double movePower = pidfController.calculate(currentPosition, TARGET_Y);
-        intake.setMotorPower(movePower);
+//        double currentPosition = robotState.getBlockForwardFine();
+//        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+//            currentPosition = -2.5;
+//        }
+//        double movePower = pidfController.calculate(currentPosition, TARGET_Y);
+        intake.setMotorPower(0.35);
     }
 
     @Override
     public boolean isFinished() {
-        return ((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) < tolerance)
-                && robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED)
-                || isTimeoutReached();
+        return //((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) <
+        // tolerance)
+                robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED || isTimeoutReached();
     }
 
     @Override
     public void end(boolean interrupted) {
-        robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         intake.moveSlidesRelative(0);

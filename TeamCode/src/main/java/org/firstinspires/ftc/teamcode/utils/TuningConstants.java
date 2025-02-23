@@ -8,7 +8,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class TuningConstants {
     public static double aTranslationalP = 0.6;
-    public static double bTranslationalD = 0.035;
+    public static double bTranslationalD = 0.1;
     public static double cDriveP = 0.001;
     public static double dDriveD = 0.0035;
     public static double eHeadingP = 3;

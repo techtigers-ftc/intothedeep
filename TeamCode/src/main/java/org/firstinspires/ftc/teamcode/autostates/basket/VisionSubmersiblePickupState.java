@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.autostates;
+package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightLateralBoundsAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -36,13 +35,13 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
      * @param robotState the robot state
      */
     public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, LimelightSubsystem limelight, RobotState robotState) {
-        super(name, 5);
+        super(name, 6);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
         addCommands(
                 new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
-                new WaitCommand(200),
+                new IntakeTrackingAction(intake, 1, robotState),
                 new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
     }
@@ -59,9 +58,9 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
-                if (!intake.isBlockInIntake()) {
-                    return AutoState.NO_TIME;
-                }
+//                if (!intake.isBlockInIntake()) {
+//                    return AutoState.NO_TIME;
+//                }
                 if (runCounter == 1) {
                     return AutoState.SAMPLE_4_INTAKE_COMPLETE;
                 } else {
