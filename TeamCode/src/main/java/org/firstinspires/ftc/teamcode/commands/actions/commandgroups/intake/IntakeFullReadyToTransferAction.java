@@ -42,7 +42,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                 new IntakeSlidesAbsoluteAction(intake,
-                        () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
+                        () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 4, 0.5),
                 new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
                 new TeleHoldPointAction(drive, robotState,
                         () -> robotState.getRobotCurrentPose().getX() +
