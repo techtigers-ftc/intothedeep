@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * Drive state that drives the robot to a sample drop from an intake
@@ -54,6 +55,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
                                         new WaitCommand(100),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
                                         new DropperOpenAction(dropper, 200)
                                 )
                         )
@@ -64,7 +66,8 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperClawState() == ClawState.OPEN) {
+                robotState.getDropperClawState() == ClawState.OPEN &&
+                    robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
