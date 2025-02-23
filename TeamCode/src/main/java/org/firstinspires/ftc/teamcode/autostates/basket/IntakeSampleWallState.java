@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.VisionIntakeBlockAutonomous;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -16,13 +15,13 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 /**
  * A state to intake a sample for the basket auto
  */
-public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
+public class IntakeSampleWallState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            IntakeSampleState.class.getSimpleName();
+            IntakeSampleWallState.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Constructor for the IntakeSampleState
+     * Constructor for the IntakeSampleWallState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
@@ -30,14 +29,14 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public IntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
-                             DropperSubsystem dropper,
-                             RobotState robotState) {
+    public IntakeSampleWallState(String name, DriveSubsystem drive, IntakeSubsystem intake,
+                                 DropperSubsystem dropper,
+                                 RobotState robotState) {
         super(name, 10);
         this.robotState = robotState;
         addCommands(
                 // TODO: Tune this wait time
-                new WaitCommand(200),
+                new WaitCommand(100),
                 new VisionIntakeBlockAutonomous(drive, intake, dropper, robotState)
         );
     }

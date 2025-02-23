@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.DropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
+import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -62,10 +63,10 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
                 robotState, new Waypoint(29.75, 7.25, Math.toRadians(90)));
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
-        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
 
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
@@ -77,7 +78,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                4.5,
+                15,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -106,7 +107,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                4.5,
+                15,
                 robotState);
         BasketDriveStateConfigurator.configFirstSampleDrop(driveToFirstDrop);
 
@@ -131,7 +132,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                4.5,
+                17,
                 robotState);
         BasketDriveStateConfigurator.configSecondSampleDrop(driveToSecondDrop);
 
@@ -143,7 +144,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleIntake(driveToThirdIntake);
 
-        IntakeSampleState intakeThirdSample = new IntakeSampleState(
+        IntakeSampleWallState intakeThirdSample = new IntakeSampleWallState(
                 "intakeThirdSample",
                 drive,
                 intake,
@@ -156,7 +157,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                0,
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleDrop(driveToThirdDrop);
 
@@ -182,7 +183,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                7,
+                0,
                 robotState
         );
         BasketDriveStateConfigurator.configFourthSampleDrop(driveToFourthDrop);
@@ -263,13 +264,21 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
-                .addTransition(intakeThirdSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
-//                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-//
-//                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.DRIVE_END)
-//                .addTransition(driveToThirdDrop, firstLevelAscent, AutoState.TIMEOUT)
+                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
-                .addTransition(firstLevelAscent, endState, AutoState.ASCENT_COMPLETE)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
+
+                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.DRIVE_END)
+                .addTransition(driveToFourthIntake, submersiblePickup, AutoState.TIMEOUT)
+                .addTransition(submersiblePickup, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_COMPLETE)
+                .addTransition(submersiblePickup, driveToFourthDrop, AutoState.TIMEOUT)
+
+                .addTransition(driveToFourthDrop, driveToSubmersible, AutoState.DRIVE_END)
+                .addTransition(driveToFourthDrop, driveToSubmersible, AutoState.TIMEOUT)
+
+                .addTransition(driveToSubmersible, endState, AutoState.DRIVE_END)
+                .addTransition(driveToSubmersible, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveToPreloadDrop);
 

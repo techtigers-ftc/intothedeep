@@ -28,9 +28,8 @@ import team.techtigers.base.CloseableSubsystem;
  * two motors that control the horizontal slides.
  */
 @Config
-public class IntakeSubsystem extends CloseableSubsystem {
-    public static double CLAW_ROTATION_BUFFER = 34;
-
+public class  IntakeSubsystem extends CloseableSubsystem {
+    public static double CLAW_ROTATION_BUFFER = 40;
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 50;
@@ -57,10 +56,10 @@ public class IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.7;
-    private static final double CLAW_LOOSE_POSITION = 0.87;
+    private static final double CLAW_LOOSE_POSITION = 0.89;
     private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double PRIMARY_KP = 0.007;
+    public static double PRIMARY_KP = 0.005;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0.001;

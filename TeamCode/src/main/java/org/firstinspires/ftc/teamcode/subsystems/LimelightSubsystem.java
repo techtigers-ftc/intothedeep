@@ -319,7 +319,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         LLResult result = limelight.getLatestResult();
         if (result != null) {
             double[] results = result.getPythonOutput();
-            if (results[1] == 0 && results[2] ==0 && results[3] ==0) {
+            if (results[1] == 0 && results[2] == 0 && results[3] == 0) {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else {
                 robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
