@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -66,6 +67,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
+    private ElapsedTime timer;
 
     protected abstract boolean isBlue();
 
@@ -84,6 +86,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
+
+        timer = new ElapsedTime();
 
 //        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
 //        displayDriver.initialize(224, 3);
@@ -370,6 +374,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     @Override
     public void justAfterStart() {
         robotState.resetTimer();
+
+        timer.reset();
     }
 
     @Override
@@ -401,5 +407,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
         telemetry.addLine();
         telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
+        telemetry.addData("Cycle time", timer.milliseconds());
+        timer.reset();
     }
 }
