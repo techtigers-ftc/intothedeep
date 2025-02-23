@@ -86,7 +86,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
-    private final NormalizedColorSensor colorSensor;
     private boolean inPrimarySlideMode;
 
     /**
@@ -103,7 +102,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightWrist = hardwareMap.get(Servo.class, "right_dropper_wrist");
         //Claw zero is open
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "dropper_color_sensor");
 
         slideController = new SlideController(TICKS_PER_INCHES, PRIMARY_COEFFICIENTS);
         inPrimarySlideMode = true;
@@ -337,51 +335,6 @@ public class DropperSubsystem extends CloseableSubsystem {
         return leftSlideCurrentAverage.getAverage();
     }
 
-    /**
-     * Updates the block color of the color sensor
-     */
-    private void updateBlockColor() {
-        double sensorRed = getSensorRed();
-        double sensorGreen = getSensorGreen();
-        double sensorBlue = getSensorBlue();
-        double colorsSum = sensorRed + sensorGreen + sensorBlue;
-        double normalizedBlue = sensorBlue / colorsSum;
-        double normalizedGreen = sensorGreen / colorsSum;
-        double normalizedRed = sensorRed / colorsSum;
-        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
-
-        if (magnitude < 30) {
-            robotState.setIntakeBlockColor(BlockColor.NONE);
-        } else if (normalizedBlue > 0.53) {
-            robotState.setIntakeBlockColor(BlockColor.BLUE);
-        } else if (normalizedRed > 0.43) {
-            robotState.setIntakeBlockColor(BlockColor.RED);
-        } else if (normalizedBlue < 0.165) {
-            robotState.setIntakeBlockColor(BlockColor.YELLOW);
-        }
-    }
-
-    /**
-     * @return the blue value of the color sensor
-     */
-    public double getSensorBlue() {
-        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
-    }
-
-    /**
-     * @return the red value of the color sensor
-     */
-    public double getSensorRed() {
-        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
-    }
-
-    /**
-     * @return the green value of the color sensor
-     */
-    public double getSensorGreen() {
-        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
-    }
-
     private double getVoltageCompensatedMotorPower(double power) {
         if (robotState.getVoltage() != 0) {
             RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
@@ -395,7 +348,6 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-
         if (!robotState.getIsAscending()) {
             if(getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
