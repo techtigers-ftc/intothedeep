@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -384,11 +383,8 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     private double getVoltageCompensatedMotorPower(double power) {
         if (robotState.getVoltage() != 0) {
-            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
-            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
             return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
         } else {
-            RobotLog.dd(tag, "Voltage Is Not Set");
             return power;
         }
     }
@@ -421,10 +417,5 @@ public class DropperSubsystem extends CloseableSubsystem {
 //        }
 
 
-        RobotLog.dd(tag, "Current: %f Target %f",
-                getCurrentSlidePositionInches(), getTargetPositionInches());
-        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Dropper Block Color: %s", robotState.getDropperBlockColor().toString());
     }
 }

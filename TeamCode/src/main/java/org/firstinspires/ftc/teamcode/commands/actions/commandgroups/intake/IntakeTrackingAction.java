@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
@@ -57,8 +55,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
             currentPosition = -2.5;
         }
         double movePower = pidfController.calculate(currentPosition, TARGET_Y);
-        RobotLog.dd("tracking action", "error: %f", currentPosition - TARGET_Y);
-        RobotLog.dd("tracking action", "move power: %f", movePower);
         intake.setMotorPower(movePower);
     }
 
@@ -71,7 +67,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void end(boolean interrupted) {
-        RobotLog.dd("tracking action", "ending tracking action");
         robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);

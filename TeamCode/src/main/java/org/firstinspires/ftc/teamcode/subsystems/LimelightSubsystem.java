@@ -5,7 +5,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
@@ -94,14 +93,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private double getClawAngle(LLResultTypes.DetectorResult detection) {
         double blockWidth = getBlockWidth(detection);
-        RobotLog.dd(tag, "block width detection:%f", blockWidth);
         double distance = getBlockDistances(detection)[1];
 //        double widthScalar = 0.000523061 * Math.pow(distance, 4)-0.0227837 * Math.pow(distance, 3)+0.348316 * Math.pow(distance, 2)-2.09751 * distance+5.15031;
         double widthScalar = 0.000447842 * Math.pow(distance, 4) - 0.020271 * Math.pow(distance, 3) + 0.320859 * Math.pow(distance, 2) - 1.98378 * distance + 5.00345;
-        RobotLog.dd(tag, "width scalar: %f", widthScalar);
 //        double widthScalar = ORIENTATION_V_COMPRESS * Math.pow(ORIENTATION_BASE, distance);
         double normalizedBlockWidth = blockWidth * widthScalar;
-        RobotLog.dd(tag, "block width normalized:%f", normalizedBlockWidth);
         if (normalizedBlockWidth > ORIENTATION_TURN_THRESHOLD) {
             return IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION;
         } else {
@@ -165,7 +161,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double yDist = LIMELIGHT_VERTICAL_HEIGHT * (1 / Math.tan(Math.toRadians(ty))) - LIMELIGHT_INTAKE_OFFSET;
         // Uses a logistic correction function to correct the y distance to the final y distance
         double YCorrectiveFactor = (FORWARD_C / (1 + FORWARD_H_STRETCH * Math.pow(Math.E, -FORWARD_RATE * yDist))) + FORWARD_FLOOR;
-        RobotLog.dd(tag, "Forward Corrective Factor:%f", YCorrectiveFactor);
         double finalYDist = yDist - YCorrectiveFactor + 0.375;
         // Gets the raw tx values and converts them to rough lateral distances
         double rawTx = detection.getTargetXDegrees();
@@ -327,8 +322,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
                 robotState.setBlockOrientation((results[3]+180) % 180);
             }
-            RobotLog.dd("claw rotation value", String.valueOf(results[3]));
-            RobotLog.dd("new claw rotation value", String.valueOf(results[3] + 180));
         }
     }
 

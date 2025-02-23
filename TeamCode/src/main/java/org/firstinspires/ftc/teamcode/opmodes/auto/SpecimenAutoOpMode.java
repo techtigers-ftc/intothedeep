@@ -310,6 +310,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
+
+        disableUpdate();
     }
 
     @Override

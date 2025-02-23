@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -55,13 +53,9 @@ public class ManualAscentCommand extends CommandBase {
     @Override
     public void execute() {
         double power = powerSupplier.getAsDouble();
-        RobotLog.dd(ManualAscentCommand.class.getSimpleName(), "Raw Power: %f",
-                power);
         if (dropper.getCurrentSlidePositionInches() > DropperSubsystem.SLIDE_MAX) {
             power = Math.min(0, power);
         }
-        RobotLog.dd(ManualAscentCommand.class.getSimpleName(), "Limited " +
-                        "Power: %f");
 
         dropper.leftSlideMotor.setPower(power);
         dropper.rightSlideMotor.setPower(power);
