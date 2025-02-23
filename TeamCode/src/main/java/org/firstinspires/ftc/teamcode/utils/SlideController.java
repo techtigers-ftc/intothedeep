@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  * duplicating code.
  */
 public class SlideController {
-    public double targetTicks;
+    private double targetTicks;
     private final double ticksPerInch;
     private final PIDFController pidfController;
     private double kF;
@@ -67,5 +67,13 @@ public class SlideController {
         double currentPower = pidfController.calculate(currentTicks, targetTicks);
         int sign = (int) (Math.abs(currentPower) / currentPower);
         return (Math.abs(currentPower) + Math.abs(kF)) * sign;
+    }
+
+    /**
+     *
+     * @return the target ticks for the slides
+     */
+    public double getTargetTicks() {
+        return targetTicks;
     }
 }

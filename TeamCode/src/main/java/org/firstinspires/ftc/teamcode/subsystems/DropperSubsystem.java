@@ -218,7 +218,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
+        return slideController.getTargetTicks() * INCHES_PER_MOTOR_TICK;
     }
 
     /**

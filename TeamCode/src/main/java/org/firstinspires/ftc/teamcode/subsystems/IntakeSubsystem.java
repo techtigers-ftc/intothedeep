@@ -229,7 +229,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks / MOTOR_TICKS_PER_INCH;
+        return slideController.getTargetTicks() / MOTOR_TICKS_PER_INCH;
     }
 
     /**
