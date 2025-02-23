@@ -25,10 +25,10 @@ public class ColorPreferenceRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public ColorPreferenceRegion(int x, int y, RobotState robotState) {
-        super(x, y, 4, 2);
+        super(x, y, 2, 4);
         this.robotState = robotState;
         rectangleSpriteOne = new RectangleSprite(0, 0, 2, 2);
-        rectangleSpriteTwo = new RectangleSprite(2, 0, 2, 2);
+        rectangleSpriteTwo = new RectangleSprite(0, 2, 2, 2);
         rectangleSpriteOne.enable();
         rectangleSpriteTwo.enable();
 

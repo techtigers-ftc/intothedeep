@@ -30,13 +30,11 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     /* Device will only allow 512 LEDs to be written to,
      see: https://learn.adafruit.com/adafruit-neodriver-i2c-to-neopixel-driver */
     private static final int MAX_LEDS = 512;
-    private static final int MAX_SEQUENCE_LENGTH = 6;
-
-    private int bytesPerLed;
+    private static final int MAX_SEQUENCE_LENGTH = 30;
     protected Color[] currentLedBuffer;
     protected Color[] lastLedBuffer;
     protected Color[] emptyLedBuffer;
-    private ElapsedTime timer;
+    private int bytesPerLed;
 
     /**
      * Creates a new Adafruit NeoPixel driver.
@@ -52,7 +50,6 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         bytesPerLed = 3;
         currentLedBuffer = new Color[]{};
         lastLedBuffer = new Color[]{};
-        timer = new ElapsedTime();
     }
 
     @Override
@@ -175,8 +172,6 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
         // Set the buffer length to the number of LEDs * bytes per LED
         writeDeviceBufferLength((short) (numberOfLeds * bytesPerLed));
-
-        timer.reset();
     }
 
     /**
@@ -237,14 +232,9 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         int startIndex = -1;
         int length = 0;
         boolean showLeds = false;
-        boolean needsReset = false;
-        if(timer.milliseconds() > 1000) {
-            needsReset = true;
-            timer.reset();
-        }
         for (int index = 0; index < currentLedBuffer.length; index++) {
             boolean hasChanged = !currentLedBuffer[index].equals(lastLedBuffer[index]);
-            if (hasChanged || needsReset) {
+            if (hasChanged) {
                 if (startIndex == -1) {
                     startIndex = index;
                 }
@@ -271,6 +261,5 @@ public class AdafruitNeoPixel extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         if (showLeds) {
             writeDeviceShow();
         }
-        RobotLog.dd("DriverDashboard", String.valueOf(timer.milliseconds()));
     }
 }

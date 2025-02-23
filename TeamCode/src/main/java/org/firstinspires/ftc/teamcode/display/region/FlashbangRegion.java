@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -11,7 +14,7 @@ import team.techtigers.core.display.Sprite;
 /**
  * A region that flashes the sprite when the intake picks up a block
  */
-public class IntakeFlashbangRegion extends DisplayRegion {
+public class FlashbangRegion extends DisplayRegion {
     private final RobotState robotState;
     private final RectangleSprite rectangleSprite;
     private final Sprite[] sprites;
@@ -23,7 +26,7 @@ public class IntakeFlashbangRegion extends DisplayRegion {
      * @param y          the y position of the region on the display
      * @param robotState the robot state
      */
-    public IntakeFlashbangRegion(int x, int y, RobotState robotState) {
+    public FlashbangRegion(int x, int y, RobotState robotState) {
         super(x, y, 2, 8);
         this.robotState = robotState;
 
@@ -36,7 +39,7 @@ public class IntakeFlashbangRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        if (robotState.getIntakeBlockColor() == BlockColor.NONE) {
+        if (robotState.getBlockPosition() == RobotBlockPosition.NONE) {
             rectangleSprite.setColor(Color.RED);
         } else {
             rectangleSprite.setColor(Color.GREEN);

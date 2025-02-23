@@ -46,28 +46,28 @@ public class CountdownTimerRegion extends DisplayRegion {
      * @param robotState the robot state used to access the intake height
      */
     public CountdownTimerRegion(int x, int y, RobotState robotState) {
-        super(x, y, 6, 5);
+        super(x, y, 7, 5);
         this.robotState = robotState;
         tensZeroSprite = new ZeroSprite(0, 0);
-        onesZeroSprite = new ZeroSprite(3, 0);
+        onesZeroSprite = new ZeroSprite(4, 0);
         tensOneSprite = new OneSprite(0, 0);
-        onesOneSprite = new OneSprite(3, 0);
+        onesOneSprite = new OneSprite(4, 0);
         tensTwoSprite = new TwoSprite(0, 0);
-        onesTwoSprite = new TwoSprite(3, 0);
+        onesTwoSprite = new TwoSprite(4, 0);
         tensThreeSprite = new ThreeSprite(0, 0);
-        onesThreeSprite = new ThreeSprite(3, 0);
+        onesThreeSprite = new ThreeSprite(4, 0);
         tensFourSprite = new FourSprite(0, 0);
-        onesFourSprite = new FourSprite(3, 0);
+        onesFourSprite = new FourSprite(4, 0);
         tensFiveSprite = new FiveSprite(0, 0);
-        onesFiveSprite = new FiveSprite(3, 0);
+        onesFiveSprite = new FiveSprite(4, 0);
         tensSixSprite = new SixSprite(0, 0);
-        onesSixSprite = new SixSprite(3, 0);
+        onesSixSprite = new SixSprite(4, 0);
         tensSevenSprite = new SevenSprite(0, 0);
-        onesSevenSprite = new SevenSprite(3, 0);
+        onesSevenSprite = new SevenSprite(4, 0);
         tensEightSprite = new EightSprite(0, 0);
-        onesEightSprite = new EightSprite(3, 0);
+        onesEightSprite = new EightSprite(4, 0);
         tensNineSprite = new NineSprite(0, 0);
-        onesNineSprite = new NineSprite(3, 0);
+        onesNineSprite = new NineSprite(4, 0);
         sprites = new Sprite[]{tensZeroSprite, tensOneSprite, tensTwoSprite, tensThreeSprite, tensFourSprite,
                 tensFiveSprite, tensSixSprite, tensSevenSprite, tensEightSprite, tensNineSprite,
                 onesZeroSprite, onesOneSprite, onesTwoSprite, onesThreeSprite, onesFourSprite,

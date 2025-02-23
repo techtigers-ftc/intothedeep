@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.comp.Check;
-
 import org.firstinspires.ftc.teamcode.display.sprite.CheckmarkSprite;
-import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.UpArrowSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
