@@ -21,7 +21,7 @@ public class IntakeSampleWallState extends SequentialCommandGroupState<AutoState
     private final RobotState robotState;
 
     /**
-     * Constructor for the IntakeSampleState
+     * Constructor for the IntakeSampleWallState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem

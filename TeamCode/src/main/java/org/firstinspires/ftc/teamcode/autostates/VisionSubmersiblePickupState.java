@@ -41,8 +41,6 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.intake = intake;
         runCounter = 0;
         addCommands(
-//                new LimelightLateralBoundsAction(limelight, -5, 1),
-//                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading())
                 new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
                 new WaitCommand(200),
                 new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)

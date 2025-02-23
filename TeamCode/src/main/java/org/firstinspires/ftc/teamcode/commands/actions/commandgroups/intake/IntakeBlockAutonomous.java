@@ -30,7 +30,7 @@ public class IntakeBlockAutonomous extends SequentialCommandGroup {
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakeFullReadyToTransferAction
+     * Creates a new IntakeBlockAutonomous
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem

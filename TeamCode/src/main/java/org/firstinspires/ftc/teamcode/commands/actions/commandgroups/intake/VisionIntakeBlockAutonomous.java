@@ -23,7 +23,7 @@ public class VisionIntakeBlockAutonomous extends SequentialCommandGroup {
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakeFullReadyToTransferAction
+     * Creates a new VisionIntakeBlockAutonomous
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
