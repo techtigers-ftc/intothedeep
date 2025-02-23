@@ -1,7 +1,6 @@
 package team.techtigers.base.statemachine;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,16 +124,11 @@ public class StateMachine<T> {
         }
         T currentCondition = currentState.getCurrentCondition();
 
-        RobotLog.dd("StateMachine", "Current State %s is in condition %s",
-                currentState.getName(), currentCondition);
-
         for (Transition<T> transition : currentTransitions) {
             if (transition.meetsCondition(currentCondition)) {
-                RobotLog.ii("StateMachine", "Ending %s state", currentState.getName());
                 CommandScheduler.getInstance().cancel(currentState);
                 setCurrentState(transition.getNextState());
                 CommandScheduler.getInstance().schedule(currentState);
-                RobotLog.ii("StateMachine", "Switching to %s state", currentState.getName());
                 break;
             }
         }
