@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightLateralBoundsAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -37,8 +41,11 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.intake = intake;
         runCounter = 0;
         addCommands(
-                new LimelightLateralBoundsAction(limelight, -5, 1),
-                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading())
+//                new LimelightLateralBoundsAction(limelight, -5, 1),
+//                new IntakeVisionPickupAction(intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading())
+                new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
+                new WaitCommand(200),
+                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
     }
 

@@ -39,7 +39,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                          IntakeSubsystem intake,
                                          double targetSlidePos,
                                          RobotState robotState) {
-        super(name, drive, robotState, 3);
+        super(name, drive, robotState, 8);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(

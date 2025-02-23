@@ -39,13 +39,13 @@ public class DriveToSubmersible extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new WaitCommand(500),
                         new ParallelCommandGroup(
                                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION,
                                         300),
                                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                                 new IntakeTuckAction(intake, robotState),
-                                new DropperSlidesAbsoluteAction(dropper, 14, 1)
+                                new DropperSlidesAbsoluteAction(dropper, 17, 1)
                         )
                 )
         );

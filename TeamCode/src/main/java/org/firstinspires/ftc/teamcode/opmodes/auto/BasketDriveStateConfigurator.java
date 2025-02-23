@@ -177,7 +177,10 @@ public class BasketDriveStateConfigurator {
 //        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
 //        state.setDrivePIDF(0.004, 0, 0.00035, 0.6, 0);
 //        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
-        state.setPrimaryPIDSToTuning();
+//        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.12, 0, 0.001, 0);
+        state.setHeadingPIDF(0.7, 0, 0.035, 0);
+        state.setDrivePIDF(0.001, 0, 0.0035, 0.6, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -233,11 +236,12 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFourthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0, 0);
+//        state.setSecondaryTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.01, 0, 0.006, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.01, 0, 0.006, 0.6, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
+//        state.setSecondaryDrivePIDF(0.01, 0, 0.006, 0.6, 0);
+//        state.setPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -245,7 +249,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(10, 13),
                                         new Point(11, 58),
-                                        new Point(50.5, 60)
+                                        new Point(47, 62.5)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -253,7 +257,7 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -294,12 +298,10 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
     public static void configFifthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
-        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
+//        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
+//        state.setHeadingPIDF(1, 0, 0.03, 0);
+//        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -315,7 +317,7 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -356,13 +358,11 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToSubmersible to configure
      */
     public static void configDriveToSubmersible(DriveToSubmersible state) {
-        state.setTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryTranslationalPIDF(0.25, 0, 0.01, 0);
-        state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setDrivePIDF(0.0025, 0, 0.00035, 0.6, 0);
-        state.setSecondaryDrivePIDF(0.008, 0, 0.0002, 0.6, 0);
-
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+//        state.setSecondaryTranslationalPIDF(0.15, 0, 0, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+//        state.setSecondaryHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
@@ -377,8 +377,8 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
 }
