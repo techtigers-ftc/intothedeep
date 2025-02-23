@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions.drive;
+package org.firstinspires.ftc.teamcode.commands.drive;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;

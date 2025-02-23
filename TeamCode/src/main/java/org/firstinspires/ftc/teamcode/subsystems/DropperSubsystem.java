@@ -40,9 +40,9 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_TRANSFER_POSITION = 30;
     public static final double PITCH_BASKET_POSITION = 225;
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
-    public static final double PITCH_FRONT_SLAP_POSITION = 80;
+    public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
-    public static final double PITCH_WALL_INTAKE_POSITION = 297;
+    public static final double PITCH_WALL_INTAKE_POSITION = 310;
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 210;
@@ -69,8 +69,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;
-    private static final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
-    private static final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
+    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
 
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
@@ -218,7 +218,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
+        return slideController.getTargetTicks() * INCHES_PER_MOTOR_TICK;
     }
 
     /**
@@ -397,7 +397,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     public void periodic() {
 
         if (!robotState.getIsAscending()) {
-
             if(getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;

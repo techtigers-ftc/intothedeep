@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.drive.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -38,16 +39,17 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
+                new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake,
-                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
-                        new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
-                        new TeleHoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX() +
-                                        Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                                () -> robotState.getRobotCurrentPose().getY()
-                                        - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                                () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
+                new IntakeSlidesAbsoluteAction(intake,
+                        () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
+                new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
+                new TeleHoldPointAction(drive, robotState,
+                        () -> robotState.getRobotCurrentPose().getX() +
+                                Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                        () -> robotState.getRobotCurrentPose().getY()
+                                - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                        () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
                 ),
                 new IntakeFullReadyToTransferNoVisionAction(intake, dropper,
                         robotState, command == null ? this : command)

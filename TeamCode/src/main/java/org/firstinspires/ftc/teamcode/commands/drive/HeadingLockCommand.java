@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions.drive;
+package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -16,7 +16,8 @@ import team.techtigers.core.paths.Waypoint;
  */
 
 public class HeadingLockCommand extends CommandBase {
-    private static final PIDCoefficients ROTATIONAL_COEFFICIENTS = new PIDCoefficients(0.7, 0, 0.1);
+    private static final PIDCoefficients ROTATIONAL_COEFFICIENTS =
+            new PIDCoefficients(0.8, 0, 0.05);
     private final DriveSubsystem subsystem;
     private final GamepadEx gamepad;
     private final RobotState robotState;
@@ -63,12 +64,13 @@ public class HeadingLockCommand extends CommandBase {
         Waypoint currentPose = robotState.getRobotCurrentPose();
 
         // Calculate heading power
-        double headingDiff = convertHeading(targetHeading - currentPose.getHeading());
-        // NOTE: Using heading diff in the spot of set point in order for the error to be calculated
+        double headingDiff =
+                convertHeading(currentPose.getHeading() - targetHeading);
         // correctly, as we convert the heading to -pi to pi range
         double headingPower = rotationalController.calculate(0, headingDiff);
 
         // Compensate forward power for change to field centric
+        // NOTE: Using heading diff in the spot of set point in order for the error to be calculated
         double strafePower = gamepad.getLeftX();
         double forwardPower = gamepad.getLeftY();
 
