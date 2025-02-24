@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
+import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -70,7 +71,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
-        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
+        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
 
         // Creating states
         DriveToPreloadDropState driveToPreloadDrop = new DriveToPreloadDropState(
@@ -292,7 +293,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.update();
 
         // Register subsystems + Create state machine subsystem
-        AutoSubsystem auto = new AutoSubsystem(stateMachine);
+        AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
         disableUpdate();
@@ -303,6 +304,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+        telemetry.addLine();
+        telemetry.addData("Current Auto State: ", robotState.getCurrentAutoState());
         telemetry.addLine();
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
