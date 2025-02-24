@@ -64,7 +64,7 @@ public class VoltageIndicatorRegion extends DisplayRegion {
         };
 
         for (int i = 0; i < 3; i++) {
-            sprites[i].setColor(Color.RED);
+            sprites[i].setColor(Color.PINK);
         }
         for (int i = 0; i < 3; i++) {
             sprites[i + 3].setColor(Color.YELLOW);
