@@ -20,7 +20,7 @@ public class AutoStateRegion extends DisplayRegion {
     private State<AutoState> lastState;
 
     /**
-     * Creates a new IntakeFlashbangRegion
+     * Creates a new AutoStateRegion
      *
      * @param x          the x position of the region on the display
      * @param y          the y position of the region on the display
