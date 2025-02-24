@@ -58,7 +58,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.89;
     private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double PRIMARY_KP = 0.005;
+    public static double PRIMARY_KP = 0.0085;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0.001;
