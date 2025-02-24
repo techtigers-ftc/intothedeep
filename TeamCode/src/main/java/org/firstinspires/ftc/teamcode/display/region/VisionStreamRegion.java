@@ -58,7 +58,6 @@ public class VisionStreamRegion extends DisplayRegion {
     @Override
     public void update() {
         blockX = (int) ((robotState.getBlockLateralFine() + (LATERAL_INCHES_LIMIT / 2)) / (LATERAL_INCHES_LIMIT) * 10);
-//        blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT - 0.5)) / (2 * VERTICAL_INCHES_LIMIT - 0.5) * 2);
         blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 3) - 1;
         blockOrientation = robotState.getBlockOrientation();
 
