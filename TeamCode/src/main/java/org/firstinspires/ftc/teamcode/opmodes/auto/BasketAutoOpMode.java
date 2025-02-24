@@ -42,7 +42,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
-    private AutoSubsystem auto;
 
     protected abstract boolean isBlue();
 
@@ -294,7 +293,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.update();
 
         // Register subsystems + Create state machine subsystem
-        auto = new AutoSubsystem(stateMachine, robotState);
+        AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
         disableUpdate();

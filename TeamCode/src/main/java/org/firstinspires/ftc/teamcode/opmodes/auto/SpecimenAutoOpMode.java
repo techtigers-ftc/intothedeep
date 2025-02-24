@@ -38,8 +38,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
-    private AutoSubsystem auto;
-
     protected abstract boolean isBlue();
 
     @Override
@@ -297,7 +295,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
 
         // Register subsystems + Create state machine subsystem
-        auto = new AutoSubsystem(stateMachine, robotState);
+        AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, limelight, sensor, visualDisplaySubsystem);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());

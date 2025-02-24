@@ -11,9 +11,13 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.DisplayView;
 
+/**
+ * A view for autonomous stage of the game
+ */
 public class AutoView extends DisplayView {
     /**
      * Creates a new view for autonomous
+     * @param robotState the robot state
      */
     public AutoView(RobotState robotState) {
         super(new DisplayRegion[]{

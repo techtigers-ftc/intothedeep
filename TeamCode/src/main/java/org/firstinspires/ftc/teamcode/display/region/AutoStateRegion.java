@@ -10,7 +10,8 @@ import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
 /**
- * A region that flashes the sprite when the intake picks up a block
+ * A region that changes color when the auto state changes
+ * This region is also used for debugging
  */
 public class AutoStateRegion extends DisplayRegion {
     private final RobotState robotState;
