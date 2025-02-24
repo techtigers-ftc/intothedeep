@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
@@ -41,22 +39,22 @@ public class IntakeSlidesAbsoluteAction extends TimeoutCommand {
         intake.moveSlidesAbsolute(targetPosition);
     }
 
-    @Override
-    public void execute() {
-        RobotLog.dd(LOG_TAG, "Distance to target position: %f", intake.getCurrentSlidePositionInches() - targetPosition);
-        RobotLog.dd(LOG_TAG, "Current Time Elapsed: %f", getRunningTime());
-    }
+//    @Override
+//    public void execute() {
+//        RobotLog.dd(LOG_TAG, "Distance to target position: %f", intake.getCurrentSlidePositionInches() - targetPosition);
+//        RobotLog.dd(LOG_TAG, "Current Time Elapsed: %f", getRunningTime());
+//    }
 
     @Override
     public boolean isFinished() {
         return (Math.abs(intake.getCurrentSlidePositionInches() - targetPosition) < tolerance) || isTimeoutReached();
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        RobotLog.dd(LOG_TAG, "Time elapsed to run full command: %f", getRunningTime());
-        if (isTimeoutReached()) {
-            RobotLog.dd(LOG_TAG, "Command timed out");
-        }
-    }
+//    @Override
+//    public void end(boolean interrupted) {
+//        RobotLog.dd(LOG_TAG, "Time elapsed to run full command: %f", getRunningTime());
+//        if (isTimeoutReached()) {
+//            RobotLog.dd(LOG_TAG, "Command timed out");
+//        }
+//    }
 }
