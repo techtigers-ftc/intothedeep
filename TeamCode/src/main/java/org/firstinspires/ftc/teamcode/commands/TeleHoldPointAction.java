@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
@@ -99,7 +100,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void initialize() {
         super.initialize();
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.6, 0, 0.035, 0));
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.7, 0, 0.035, 0));
         follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
 
 //        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));
@@ -117,6 +118,12 @@ public class TeleHoldPointAction extends TimeoutCommand {
     @Override
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
+
+        Waypoint current = robotState.getRobotCurrentPose();
+        Waypoint target = robotState.getRobotFinalPose();
+//        RobotLog.dd("Tele Hold Point","Distance From Target: %f", distToTarget(current, target));
+//        RobotLog.dd("Tele Hold Point","Angular Distance From Target: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
+//        RobotLog.dd("Tele Hold Point", "Running Time of Hold Point: %f", getRunningTime());
     }
 
     @Override
@@ -133,5 +140,9 @@ public class TeleHoldPointAction extends TimeoutCommand {
     @Override
     public void end(boolean interrupted) {
         drive.driveRobotCentric(0, 0, 0);
+//        RobotLog.dd("Tele Hold Point","Time elapsed to run full command: %f", getRunningTime());
+//        if(isTimeoutReached()) {
+//            RobotLog.dd("Tele Hold Point","Command timed out");
+//        }
     }
 }

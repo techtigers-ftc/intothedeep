@@ -42,14 +42,14 @@ public class VisionIntakeBlockAutonomous extends SequentialCommandGroup {
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                     new IntakeSlidesAbsoluteAction(intake,
-                            () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.5),
+                            () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75),
                     new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
                     new TeleHoldPointAction(drive, robotState,
                             () -> robotState.getRobotCurrentPose().getX() +
                                     Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
                             () -> robotState.getRobotCurrentPose().getY()
                                     - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                            () -> robotState.getRobotCurrentPose().getHeading(), 0.3, Math.toRadians(2))
+                            () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
                 new IntakeBlockAutonomous(intake, dropper,
                         robotState, command == null ? this : command)
