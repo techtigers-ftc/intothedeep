@@ -15,6 +15,7 @@ import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
+// TODO: Show something when robot is going for a block
 public class VisionStreamRegion extends DisplayRegion {
     private final FrameSprite frame;
     private final RectangleSprite verticalBlock;
@@ -29,7 +30,7 @@ public class VisionStreamRegion extends DisplayRegion {
     private int blockX;
     private int blockY;
     private double blockOrientation;
-    private double LATERAL_INCHES_LIMIT = 6;
+    private double LATERAL_INCHES_LIMIT = 4.6;
     private double VERTICAL_INCHES_LIMIT = 2;
 
     public VisionStreamRegion(int x, int y, RobotState robotState) {
@@ -48,7 +49,7 @@ public class VisionStreamRegion extends DisplayRegion {
         horizontalBlock.setColor(Color.YELLOW);
         diagonalBlockRight.setColor(Color.YELLOW);
         diagonalBlockLeft.setColor(Color.YELLOW);
-        noBlockDetected.setColor(Color.RED);
+        noBlockDetected.setColor(Color.ORANGE);
         frame.enable();
 
         sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected};
@@ -56,8 +57,8 @@ public class VisionStreamRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 2);
         blockX = (int) ((robotState.getBlockLateralFine() + (LATERAL_INCHES_LIMIT / 2)) / (LATERAL_INCHES_LIMIT) * 10);
+        blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 3) - 1;
         blockOrientation = robotState.getBlockOrientation();
 
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {

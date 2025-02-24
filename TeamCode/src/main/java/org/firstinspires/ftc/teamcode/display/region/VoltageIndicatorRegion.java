@@ -11,7 +11,7 @@ import team.techtigers.core.display.Sprite;
  * A region which shows an indicator that shows the current status of the battery's voltage
  */
 public class VoltageIndicatorRegion extends DisplayRegion {
-    private final static double MIN_VOLTAGE_THRESHOLD = 8;
+    private final static double MIN_VOLTAGE_THRESHOLD = 9.5;
     private final static double MAX_VOLTAGE_THRESHOLD = 13.5;
     private final static double STEP = (MAX_VOLTAGE_THRESHOLD - MIN_VOLTAGE_THRESHOLD) / 10;
     private final static double L1_THRESHOLD = MIN_VOLTAGE_THRESHOLD + STEP;
@@ -63,14 +63,14 @@ public class VoltageIndicatorRegion extends DisplayRegion {
                 L5Sprite, L6Sprite, L7Sprite, L8Sprite, L9Sprite, L10Sprite
         };
 
-        for (int i = 0; i < 2; i++) {
-            sprites[i].setColor(Color.RED);
+        for (int i = 0; i < 3; i++) {
+            sprites[i].setColor(Color.PINK);
         }
         for (int i = 0; i < 3; i++) {
-            sprites[i + 2].setColor(Color.YELLOW);
+            sprites[i + 3].setColor(Color.YELLOW);
         }
-        for (int i = 0; i < 5; i++) {
-            sprites[i + 5].setColor(Color.GREEN);
+        for (int i = 0; i < 4; i++) {
+            sprites[i + 6].setColor(Color.GREEN);
         }
     }
 

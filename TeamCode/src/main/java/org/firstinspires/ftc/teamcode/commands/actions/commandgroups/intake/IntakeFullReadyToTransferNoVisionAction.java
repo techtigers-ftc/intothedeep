@@ -84,6 +84,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
+        robotState.setVisionAligning(false);
         if (!interrupted || robotState.getDropperState() == DropperState.TRANSFER) {
             robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
             robotState.setBlockPosition(RobotBlockPosition.INTAKE);

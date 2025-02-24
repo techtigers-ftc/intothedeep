@@ -26,6 +26,20 @@ public class TimeoutCommand extends CommandBase {
     }
 
     /**
+     * @return the amount of time that the command has been running for
+     */
+    protected final double getRunningTime() {
+        return timer.seconds();
+    }
+
+    /**
+     * @return the amount of time that the command has remaining until the timeout is reached
+     */
+    protected final double getRemainingTime() {
+        return timeout - timer.seconds();
+    }
+
+    /**
      * @return if timeout is valid and is exceeded returns true
      */
     protected final boolean isTimeoutReached(){

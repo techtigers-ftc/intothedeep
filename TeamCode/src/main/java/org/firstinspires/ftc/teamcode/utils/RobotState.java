@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -10,6 +11,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import team.techtigers.base.statemachine.State;
+import team.techtigers.core.display.Color;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -56,6 +59,8 @@ public class RobotState extends GlobalState {
     private boolean isCameraRunning;
     private boolean isCoarseCameraMode;
     private boolean isVisionAligning;
+    private State<AutoState> currentAutoState;
+    private Color debugColor;
 
     /**
      * Initializes a new RobotState
@@ -99,6 +104,8 @@ public class RobotState extends GlobalState {
         isCameraRunning = false;
         isCoarseCameraMode = false;
         isVisionAligning = false;
+        currentAutoState = null;
+        debugColor = Color.BLACK;
     }
 
     /**
@@ -711,5 +718,33 @@ public class RobotState extends GlobalState {
      */
     public void setVisionAligning(boolean visionAligning) {
         isVisionAligning = visionAligning;
+    }
+
+    /**
+     * @return the current state of the autonomous command
+     */
+    public State<AutoState> getCurrentAutoState() {
+        return currentAutoState;
+    }
+
+    /**
+     * Sets the current state of the autonomous command
+     */
+    public void setCurrentAutoState(State<AutoState> currentAutoState) {
+        this.currentAutoState = currentAutoState;
+    }
+
+    /**
+     * Sets the current debug color
+     */
+    public void setDebugColor(Color color) {
+        this.debugColor = color;
+    }
+
+    /**
+     * @return the current debug color
+     */
+    public Color getDebugColor() {
+        return debugColor;
     }
 }
