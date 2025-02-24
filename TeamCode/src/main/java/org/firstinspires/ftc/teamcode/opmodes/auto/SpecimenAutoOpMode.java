@@ -297,7 +297,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
 
         // Register subsystems + Create state machine subsystem
-        AutoSubsystem auto = new AutoSubsystem(stateMachine);
+        auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, limelight, sensor, visualDisplaySubsystem);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
@@ -323,7 +323,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        robotState.setCurrentAutoState(auto.getState());
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));

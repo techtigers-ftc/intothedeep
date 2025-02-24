@@ -294,7 +294,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.update();
 
         // Register subsystems + Create state machine subsystem
-        auto = new AutoSubsystem(stateMachine);
+        auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
         disableUpdate();
@@ -302,10 +302,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        robotState.setCurrentAutoState(auto.getState());
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+        telemetry.addLine();
+        telemetry.addData("Current Auto State: ", robotState.getCurrentAutoState());
         telemetry.addLine();
         telemetry.addData("Expected X", robotState.getRobotFinalPose().getX());
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());

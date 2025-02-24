@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.display.region;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -19,8 +17,7 @@ public class AutoStateRegion extends DisplayRegion {
     private final RectangleSprite stateSprite;
     private final RectangleSprite debugSprite;
     private final Sprite[] sprites;
-    private State<AutoState> currentState;
-    private ElapsedTime timer;
+    private State<AutoState> lastState;
 
     /**
      * Creates a new IntakeFlashbangRegion
@@ -37,24 +34,20 @@ public class AutoStateRegion extends DisplayRegion {
         stateSprite.enable();
         debugSprite = new RectangleSprite(0, 4, 2, 4);
         debugSprite.enable();
+        sprites = new Sprite[]{stateSprite, debugSprite};
 
-        this.sprites = new Sprite[]{stateSprite};
-        this.currentState = robotState.getCurrentAutoState();
-        this.timer = new ElapsedTime();
+        lastState = robotState.getCurrentAutoState();
         stateSprite.setColor(Color.GREEN);
-        stateSprite.setColor(Color.BLACK);
-        timer.reset();
+        debugSprite.setColor(Color.BLACK);
     }
-
 
     @Override
     public void update() {
-        if (this.currentState != robotState.getCurrentAutoState()) {
-            stateSprite.setColor(Color.ORANGE);
-            timer.reset();
-            timer.startTime();
-        }else if (timer.milliseconds() > 500 && this.currentState == robotState.getCurrentAutoState()) {
-            stateSprite.setColor(Color.GREEN);
+        State<AutoState> currentState = robotState.getCurrentAutoState();
+        if (lastState != currentState) {
+            lastState = currentState;
+            Color newColor = stateSprite.getColor() == Color.GREEN ? Color.ORANGE : Color.GREEN;
+            stateSprite.setColor(newColor);
         }
         debugSprite.setColor(robotState.getDebugColor());
     }
