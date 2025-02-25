@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.EndState;
+import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -161,7 +161,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 drive,
-                limelight,
                 robotState
         );
 
@@ -174,12 +173,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFourthSampleIntake(driveToFourthIntake);
 
-        DriveToGeneralSampleDropState driveToFourthDrop = new DriveToGeneralSampleDropState(
+        DriveFromSubmersibleSampleDropState driveToFourthDrop = new DriveFromSubmersibleSampleDropState(
                 "driveToFourthDrop",
                 drive,
                 dropper,
                 intake,
-                0,
                 robotState
         );
         BasketDriveStateConfigurator.configFourthSampleDrop(driveToFourthDrop);

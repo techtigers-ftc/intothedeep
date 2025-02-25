@@ -263,7 +263,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleDropState to configure
      */
-    public static void configFourthSampleDrop(DriveToGeneralSampleDropState state) {
+    public static void configFourthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setSecondaryTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);

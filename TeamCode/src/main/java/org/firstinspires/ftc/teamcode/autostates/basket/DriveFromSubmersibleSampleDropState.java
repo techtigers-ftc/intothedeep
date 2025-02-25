@@ -1,7 +1,16 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -15,7 +24,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
-    // TODO: Test this state
 
     /**
      * Constructor for the DriveFromSubmersibleSampleDropState
@@ -23,14 +31,27 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
-     * @param intake     The intake subsystem
      * @param robotState The robot state
      */
     public DriveFromSubmersibleSampleDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
-                new DropperHighBasketAction(dropper, intake, robotState)
+                new SequentialCommandGroup(
+                        new ParallelCommandGroup(
+                                new IntakeLoosenAction(intake, 300),
+                                new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
+                        ),
+                        new TransferAction(dropper, intake, robotState),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new DropperHighBasketNoTransferAction(dropper, robotState),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
+                                        new DropperOpenAction(dropper, 100)
+                                ),
+                                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                        )
+                )
         );
     }
 
@@ -39,7 +60,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             return AutoState.DRIVE_END;
-        } else if(super.getCurrentCondition() == AutoState.TIMEOUT) {
+        } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
 

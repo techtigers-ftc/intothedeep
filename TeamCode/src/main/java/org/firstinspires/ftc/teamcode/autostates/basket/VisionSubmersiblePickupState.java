@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.VisionIntakeBlockAutonomous;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -30,18 +32,17 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param drive      the drive subsystem
-     * @param limelight  the limelight subsystem
      * @param robotState the robot state
      */
-    public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, LimelightSubsystem limelight, RobotState robotState) {
+    public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
         super(name, 6);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
         addCommands(
                 new IntakeTrackingAction(intake, 1, robotState),
-                new WaitCommand(500),
-                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
+                new WaitCommand(100),
+                new IntakePrepareToTransferAction(drive, intake, dropper, robotState)
         );
     }
 
@@ -56,7 +57,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
-            if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
 //                if (!intake.isBlockInIntake()) {
 //                    return AutoState.NO_TIME;
 //                }
