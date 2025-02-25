@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -50,10 +48,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_BACK_SLAP_POSITION = 10;
     public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.837 * Math.PI;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.758 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 1.051;
+    private static final double ERROR_FACTOR = 1;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
@@ -68,12 +66,11 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;
-    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
-    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
-
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
     public final DcMotor leftSlideMotor;
+    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
     private final DcMotor encoderMotor;
     private final DcMotorEx currentMotorRight;
     private final DcMotorEx currentMotorLeft;
@@ -345,7 +342,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         if (!robotState.getIsAscending()) {
-            if(getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
+            if (getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;
             } else if (getCurrentSlidePositionInches() < 23 && !inPrimarySlideMode) {
