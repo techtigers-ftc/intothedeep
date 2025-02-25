@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.StartAscentAction;
@@ -31,11 +30,11 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
+import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -121,7 +120,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
-        SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper,robotState, null
+        SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper, robotState, null
         );
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);

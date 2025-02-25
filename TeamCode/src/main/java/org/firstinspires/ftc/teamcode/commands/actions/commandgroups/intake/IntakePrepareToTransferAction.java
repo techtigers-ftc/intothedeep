@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
@@ -83,9 +82,9 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public IntakePrepareToTransferAction(DriveSubsystem drive,
-                                           IntakeSubsystem intake,
-                                           DropperSubsystem dropper,
-                                           RobotState robotState) {
+                                         IntakeSubsystem intake,
+                                         DropperSubsystem dropper,
+                                         RobotState robotState) {
         this(drive, intake, dropper, robotState, null);
     }
 
