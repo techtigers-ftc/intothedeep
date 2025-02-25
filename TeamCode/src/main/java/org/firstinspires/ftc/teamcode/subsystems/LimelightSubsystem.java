@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.techtigers.base.CloseableSubsystem;
+import team.techtigers.core.display.Color;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
@@ -316,8 +317,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
             double[] results = result.getPythonOutput();
             if (results[1] == 0 && results[2] == 0 && results[3] == 0) {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+                robotState.setDebugColor(Color.BLUE);
             } else {
                 robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+                robotState.setDebugColor(Color.BLACK);
                 robotState.setBlockLateralFine(getCorrectedLateralFine(results[1]));
                 robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
                 robotState.setBlockOrientation((results[3]+180) % 180);

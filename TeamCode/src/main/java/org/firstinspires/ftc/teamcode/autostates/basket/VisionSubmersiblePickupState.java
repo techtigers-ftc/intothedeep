@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -40,8 +39,8 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.intake = intake;
         runCounter = 0;
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
                 new IntakeTrackingAction(intake, 1, robotState),
+                new WaitCommand(500),
                 new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
         );
     }

@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
+
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
@@ -55,13 +55,13 @@ public class IntakeTrackingAction extends TimeoutCommand {
 //            currentPosition = -2.5;
 //        }
 //        double movePower = pidfController.calculate(currentPosition, TARGET_Y);
-        intake.setMotorPower(0.35);
+        intake.setMotorPower(0.2);
     }
 
     @Override
     public boolean isFinished() {
         return //((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) <
-        // tolerance)
+                // tolerance)
                 robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED || isTimeoutReached();
     }
 
