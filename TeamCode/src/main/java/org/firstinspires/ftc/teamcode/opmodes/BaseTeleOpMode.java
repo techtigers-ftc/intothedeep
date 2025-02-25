@@ -149,7 +149,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper, robotState, null
         );
-        IntakePrepareToTransferAction prepareToTransferAction = new IntakePrepareToTransferAction(intake, dropper, robotState);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
         IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(
