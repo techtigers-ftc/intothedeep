@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autostates.specimen;
+package org.firstinspires.ftc.teamcode.autostates;
 
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
