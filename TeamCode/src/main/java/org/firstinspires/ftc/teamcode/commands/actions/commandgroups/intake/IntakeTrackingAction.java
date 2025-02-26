@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -40,8 +38,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void execute() {
-//        intake.setMotorPower(0.4);
-        if(robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+        if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
             frameCount++;
             intake.setMotorPower(0.2);
         } else {
