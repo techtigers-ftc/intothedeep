@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
-import team.techtigers.base.statemachine.State;
 import team.techtigers.core.display.Color;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
@@ -20,6 +18,8 @@ import team.techtigers.core.utils.GlobalState;
  * Implementation of a global state for the robot
  */
 public class RobotState extends GlobalState {
+    private final boolean isBlue;
+    private final boolean isAuto;
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
     private Waypoint robotFinalPose;
@@ -52,8 +52,6 @@ public class RobotState extends GlobalState {
     private DriveGears driveGears;
     private IntakeState intakeState;
     private int robotError;
-    private final boolean isBlue;
-    private final boolean isAuto;
     private double visionIntakeHeading;
     private double voltage;
     private boolean isCameraRunning;
@@ -563,6 +561,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current driver current
+     *
      * @param driverCurrent the current driver current
      */
     public void setDriverCurrent(double driverCurrent) {
@@ -578,6 +577,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current intake current
+     *
      * @param intakeCurrent the current intake current
      */
     public void setIntakeCurrent(double intakeCurrent) {
@@ -593,6 +593,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current dropper current
+     *
      * @param dropperCurrent the current dropper current
      */
     public void setDropperCurrent(double dropperCurrent) {
@@ -608,6 +609,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets intake control to be manual or autonomous (with vision)
+     *
      * @param manualIntakeSelected Whether the intake should be manual or not
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
@@ -616,6 +618,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Get the alliance color
+     *
      * @return Is alliance blue?
      */
     public boolean isBlue() {
@@ -624,6 +627,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Get the opmode mode
+     *
      * @return Is mode auto?
      */
     public boolean isAuto() {
@@ -655,6 +659,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the vision intake heading to use
+     *
      * @param visionIntakeHeading the supplier for the vision intake heading to use
      */
     public void setVisionIntakeHeading(double visionIntakeHeading) {
@@ -670,6 +675,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current voltage of the robot
+     *
      * @param voltage the current voltage of the robot
      */
     public void setVoltage(double voltage) {
@@ -751,16 +757,16 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * Sets the current debug color
-     */
-    public void setDebugColor(Color color) {
-        this.debugColor = color;
-    }
-
-    /**
      * @return the current debug color
      */
     public Color getDebugColor() {
         return debugColor;
+    }
+
+    /**
+     * Sets the current debug color
+     */
+    public void setDebugColor(Color color) {
+        this.debugColor = color;
     }
 }

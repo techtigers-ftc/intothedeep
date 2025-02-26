@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.display.region;
 
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
-import team.techtigers.base.statemachine.State;
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
