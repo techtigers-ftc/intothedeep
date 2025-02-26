@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * Command to move intake to Ready To Transfer.
  */
@@ -20,36 +22,36 @@ public class VisionIntakeBlockAutonomous extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
-    private double lastClawRotation;
 
     /**
      * Creates a new VisionIntakeBlockAutonomous
      *
-     * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
-     * @param robotState the robot state
-     * @param command    the command to cancel
+     * @param intake               the intake subsystem
+     * @param dropper              the dropper subsystem
+     * @param clawRotationSupplier the supplier for the claw rotation
+     * @param robotState           the robot state
+     * @param command              the command to cancel
      */
     public VisionIntakeBlockAutonomous(DriveSubsystem drive,
                                        IntakeSubsystem intake,
                                        DropperSubsystem dropper,
+                                       DoubleSupplier clawRotationSupplier,
                                        RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
-        lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
-                    new IntakeSlidesAbsoluteAction(intake,
-                            () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75),
-                    new IntakeClawRotationAction(intake, robotState::getBlockOrientation, 300),
-                    new TeleHoldPointAction(drive, robotState,
-                            () -> robotState.getRobotCurrentPose().getX() +
-                                    Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                            () -> robotState.getRobotCurrentPose().getY()
-                                    - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                            () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75),
+                        new IntakeClawRotationAction(intake, clawRotationSupplier, 300),
+                        new TeleHoldPointAction(drive, robotState,
+                                () -> robotState.getRobotCurrentPose().getX() +
+                                        Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                                () -> robotState.getRobotCurrentPose().getY()
+                                        - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
+                                () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
                 new IntakeBlockAutonomous(intake, dropper,
                         robotState, command == null ? this : command)
@@ -59,14 +61,16 @@ public class VisionIntakeBlockAutonomous extends SequentialCommandGroup {
     /**
      * Overload constructor for if the command doesn't receive a command to cancel
      *
-     * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
-     * @param robotState the robot state
+     * @param intake               the intake subsystem
+     * @param dropper              the dropper subsystem
+     * @param clawRotationSupplier the supplier for the claw rotation
+     * @param robotState           the robot state
      */
     public VisionIntakeBlockAutonomous(DriveSubsystem drive,
                                        IntakeSubsystem intake,
                                        DropperSubsystem dropper,
+                                       DoubleSupplier clawRotationSupplier,
                                        RobotState robotState) {
-        this(drive, intake, dropper, robotState, null);
+        this(drive, intake, dropper, clawRotationSupplier, robotState,null);
     }
 }

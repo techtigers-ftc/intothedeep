@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibl
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
-import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -138,7 +137,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleIntake(driveToThirdIntake);
 
-        IntakeSampleWallState intakeThirdSample = new IntakeSampleWallState(
+        IntakeSampleState intakeThirdSample = new IntakeSampleState(
                 "intakeThirdSample",
                 drive,
                 intake,

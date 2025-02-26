@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.VisionIntakeBlockAutonomous;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
@@ -32,12 +33,12 @@ public class IntakeSampleState extends SequentialCommandGroupState<AutoState> {
     public IntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
                              DropperSubsystem dropper,
                              RobotState robotState) {
-        super(name, 10);
+        super(name, 3);
         this.robotState = robotState;
         addCommands(
                 // TODO: Tune this wait time
-                new WaitCommand(100),
-                new VisionIntakeBlockAutonomous(drive, intake, dropper, robotState)
+                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new VisionIntakeBlockAutonomous(drive, intake, dropper, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
     }
 
