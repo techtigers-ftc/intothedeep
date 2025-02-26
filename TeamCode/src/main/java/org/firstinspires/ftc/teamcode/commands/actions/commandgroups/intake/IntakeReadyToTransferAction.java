@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -36,17 +37,18 @@ public class IntakeReadyToTransferAction extends SequentialCommandGroup {
         addCommands(
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
                         new IntakeWristPitchAction(intake,
                                 IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-                        new IntakeLoosenAction(intake, 350),
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 0),
+                        new IntakeLoosenAction(intake, 300),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
-                )
+                ),
+                new WaitCommand(100)
         );
     }
 

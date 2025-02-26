@@ -172,8 +172,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 robotState
         );
 
-        FailedSubmersibleIntakeState failedIntakeFourthSample = new FailedSubmersibleIntakeState(
-                "failedIntakeFourthSample",
+        FailedSubmersibleIntakeState failedIntakeSubmersible = new FailedSubmersibleIntakeState(
+                "failedIntakeSubmersible",
                 drive,
                 intake,
                 dropper,
@@ -200,14 +200,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         SubmersibleIntakeState intakeFifthSample = new SubmersibleIntakeState(
                 "intakeFifthSample",
-                drive,
-                intake,
-                dropper,
-                robotState
-        );
-
-        FailedSubmersibleIntakeState failedIntakeFifthSample = new FailedSubmersibleIntakeState(
-                "failedIntakeFifthSample",
                 drive,
                 intake,
                 dropper,
@@ -257,11 +249,10 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(intakeThirdSample)
                 .addState(driveToThirdDrop)
                 .addState(intakeFourthSample)
-                .addState(failedIntakeFourthSample)
+                .addState(failedIntakeSubmersible)
                 .addState(driveToFourthIntake)
                 .addState(driveToFourthDrop)
                 .addState(intakeFifthSample)
-                .addState(failedIntakeFifthSample)
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
                 .addState(driveToSubmersible)
@@ -309,20 +300,25 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.TIMEOUT)
-                .addTransition(intakeFourthSample, failedIntakeFourthSample, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(failedIntakeFourthSample, driveToFourthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+
+                .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFourthSample, driveToFourthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(intakeFourthSample, driveToFourthDrop, AutoState.TIMEOUT)
+                .addTransition(failedIntakeSubmersible, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_RECOVERED)
+                .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.TIMEOUT)
 
                 .addTransition(driveToFourthDrop, driveToFifthIntake, AutoState.DRIVE_END)
                 .addTransition(driveToFourthDrop, driveToFifthIntake, AutoState.TIMEOUT)
 
-                .addTransition(driveToFifthIntake, intakeFourthSample, AutoState.DRIVE_END)
-                .addTransition(driveToFifthIntake, intakeFourthSample, AutoState.TIMEOUT)
-                .addTransition(intakeFifthSample, failedIntakeFifthSample, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(failedIntakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(driveToFifthIntake, intakeFifthSample, AutoState.DRIVE_END)
+                .addTransition(driveToFifthIntake, intakeFifthSample, AutoState.TIMEOUT)
+
+                .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.TIMEOUT)
+                .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_RECOVERED)
+                .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.TIMEOUT)
 
                 .addTransition(driveToFifthDrop, driveToSubmersible, AutoState.DRIVE_END)
                 .addTransition(driveToFifthDrop, driveToSubmersible, AutoState.TIMEOUT)

@@ -34,7 +34,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
      * @param robotState the robot state
      */
     public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 6);
+        super(name, 4);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;

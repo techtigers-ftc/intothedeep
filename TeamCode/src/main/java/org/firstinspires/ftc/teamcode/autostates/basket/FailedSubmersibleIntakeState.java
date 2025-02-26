@@ -25,6 +25,8 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     private static final String LOG_TAG = FailedSubmersibleIntakeState.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
+    private int runCounter;
+    private String previousAutoState;
 
     /**
      * Creates a new FailedSubmersibleIntakeState
@@ -36,9 +38,11 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
      * @param robotState the robot state
      */
     public FailedSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 6);
+        super(name, 4);
         this.robotState = robotState;
         this.intake = intake;
+        runCounter = 0;
+        previousAutoState = "";
         addCommands(
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake, () -> 3, 0.75),
@@ -60,10 +64,19 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-                    return AutoState.SAMPLE_INTAKE_COMPLETE;
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
+                if (runCounter == 0) {
+                    previousAutoState = robotState.getPreviousAutoState();
+                }
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
+                    runCounter = 0;
+                    if (previousAutoState.equals("intakeFourthSample")) {
+                        return AutoState.SAMPLE_4_INTAKE_RECOVERED;
+                    } else {
+                        return AutoState.SAMPLE_5_INTAKE_RECOVERED;
+                    }
                 } else {
+                    runCounter++;
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {
