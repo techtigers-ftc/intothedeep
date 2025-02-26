@@ -41,7 +41,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
                 ),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 55),
-                        new IntakeSlidesAbsoluteAction(intake, () -> 4.5, 1)
+                        new IntakeSlidesAbsoluteAction(intake, () -> 3, 1)
                 )
         );
     }

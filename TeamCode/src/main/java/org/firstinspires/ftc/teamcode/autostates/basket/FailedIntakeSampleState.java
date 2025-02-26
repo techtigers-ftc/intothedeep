@@ -56,13 +56,20 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
      */
     @Override
     public AutoState getCurrentCondition() {
+        if (runCounter == 0) {
+            previousAutoState = robotState.getPreviousAutoState();
+        }
         if (super.isTimeoutReached()) {
-            return AutoState.TIMEOUT;
+            runCounter = 0;
+            if (previousAutoState.equals("intakeFirstSample")) {
+                return AutoState.FAILED_SAMPLE_1_TIMEOUT;
+            } else if (previousAutoState.equals("intakeSecondSample")) {
+                return AutoState.FAILED_SAMPLE_2_TIMEOUT;
+            } else {
+                return AutoState.FAILED_SAMPLE_3_TIMEOUT;
+            }
         } else {
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (runCounter == 0) {
-                    previousAutoState = robotState.getPreviousAutoState();
-                }
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 0.5) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
                     runCounter = 0;
                     if (previousAutoState.equals("intakeFirstSample")) {

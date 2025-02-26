@@ -61,13 +61,18 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
 
     @Override
     public AutoState getCurrentCondition() {
+        if (runCounter == 0) {
+            previousAutoState = robotState.getPreviousAutoState();
+        }
         if (super.isTimeoutReached()) {
-            return AutoState.TIMEOUT;
+            runCounter = 0;
+            if (previousAutoState.equals("intakeFourthSample")) {
+                return AutoState.FAILED_SAMPLE_4_TIMEOUT;
+            } else {
+                return AutoState.FAILED_SAMPLE_5_TIMEOUT;
+            }
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (runCounter == 0) {
-                    previousAutoState = robotState.getPreviousAutoState();
-                }
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
                     runCounter = 0;
                     if (previousAutoState.equals("intakeFourthSample")) {
