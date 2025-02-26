@@ -395,7 +395,6 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      */
     public boolean isBlockInIntake() {
         return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
-
     }
 
     /**

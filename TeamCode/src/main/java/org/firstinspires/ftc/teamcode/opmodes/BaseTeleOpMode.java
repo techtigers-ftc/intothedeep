@@ -35,7 +35,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
 import org.firstinspires.ftc.teamcode.commands.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
@@ -146,8 +145,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
-        SmallCameraVisionPickup readyToPickupAuto = new SmallCameraVisionPickup(intake, dropper, robotState, null
-        );
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
         IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(

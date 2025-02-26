@@ -34,6 +34,7 @@ public class AutoSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         stateMachine.update();
+        robotState.setPreviousAutoState(stateMachine.getPreviousState());
         robotState.setCurrentAutoState(stateMachine.getCurrentState());
     }
 }

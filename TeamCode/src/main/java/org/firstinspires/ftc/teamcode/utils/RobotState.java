@@ -59,7 +59,8 @@ public class RobotState extends GlobalState {
     private boolean isCameraRunning;
     private boolean isCoarseCameraMode;
     private boolean isVisionAligning;
-    private State<AutoState> currentAutoState;
+    private String currentAutoState;
+    private String previousAutoState;
     private Color debugColor;
 
     /**
@@ -104,7 +105,8 @@ public class RobotState extends GlobalState {
         isCameraRunning = false;
         isCoarseCameraMode = false;
         isVisionAligning = false;
-        currentAutoState = null;
+        currentAutoState = "";
+        previousAutoState = "";
         debugColor = Color.BLACK;
     }
 
@@ -723,15 +725,29 @@ public class RobotState extends GlobalState {
     /**
      * @return the current state of the autonomous command
      */
-    public State<AutoState> getCurrentAutoState() {
+    public String getCurrentAutoState() {
         return currentAutoState;
     }
 
     /**
      * Sets the current state of the autonomous command
      */
-    public void setCurrentAutoState(State<AutoState> currentAutoState) {
+    public void setCurrentAutoState(String currentAutoState) {
         this.currentAutoState = currentAutoState;
+    }
+
+    /**
+     * @return the previous state of the autonomous command
+     */
+    public String getPreviousAutoState() {
+        return previousAutoState;
+    }
+
+    /**
+     * Sets the previous state of the autonomous command
+     */
+    public void setPreviousAutoState(String previousAutoState) {
+        this.previousAutoState = previousAutoState;
     }
 
     /**

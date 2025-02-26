@@ -1,0 +1,86 @@
+package org.firstinspires.ftc.teamcode.autostates.basket;
+
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+
+import team.techtigers.base.statemachine.SequentialCommandGroupState;
+
+/**
+ * A state to intake one of the three samples off the floor using vision in auto if the first intake fails
+ */
+public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoState> {
+    private static final String LOG_TAG =
+            FailedIntakeSampleState.class.getSimpleName();
+    private final RobotState robotState;
+    private int runCounter;
+    private String previousAutoState;
+
+    /**
+     * Constructor for the FailedIntakeSampleState
+     *
+     * @param name       The name of the state
+     * @param drive      The drive subsystem
+     * @param intake     The intake subsystem
+     * @param dropper    The dropper subsystem
+     * @param robotState The robot state
+     */
+    public FailedIntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
+                                   DropperSubsystem dropper,
+                                   RobotState robotState) {
+        super(name, 3);
+        this.robotState = robotState;
+        runCounter = 0;
+        previousAutoState = "";
+        addCommands(
+//                new IntakeSlidesAbsoluteAction(intake, () -> intake.getCurrentSlidePositionInches() - 4, 0.75),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 4, () -> 90),
+                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new IntakePrepareToTransferAction(drive, intake, dropper, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+        );
+    }
+
+    /**
+     * Get the current condition of the robot
+     *
+     * @return the current condition of the robot using the AutoState enum
+     */
+    @Override
+    public AutoState getCurrentCondition() {
+        if (super.isTimeoutReached()) {
+            return AutoState.TIMEOUT;
+        } else {
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
+                if (runCounter == 0) {
+                    previousAutoState = robotState.getPreviousAutoState();
+                }
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
+                    runCounter = 0;
+                    if (previousAutoState.equals("intakeFirstSample")) {
+                        return AutoState.SAMPLE_1_INTAKE_RECOVERED;
+                    } else if (previousAutoState.equals("intakeSecondSample")) {
+                        return AutoState.SAMPLE_2_INTAKE_RECOVERED;
+                    } else {
+                        return AutoState.SAMPLE_3_INTAKE_RECOVERED;
+                    }
+                } else {
+                    runCounter++;
+                    return AutoState.SAMPLE_INTAKE_FAILED;
+                }
+            } else {
+                return AutoState.RUNNING;
+            }
+        }
+    }
+}

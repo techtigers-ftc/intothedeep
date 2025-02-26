@@ -18,7 +18,7 @@ public class AutoStateRegion extends DisplayRegion {
     private final RectangleSprite stateSprite;
     private final RectangleSprite debugSprite;
     private final Sprite[] sprites;
-    private State<AutoState> lastState;
+    private String lastState;
 
     /**
      * Creates a new AutoStateRegion
@@ -44,7 +44,7 @@ public class AutoStateRegion extends DisplayRegion {
 
     @Override
     public void update() {
-        State<AutoState> currentState = robotState.getCurrentAutoState();
+        String currentState = robotState.getCurrentAutoState();
         if (lastState != currentState) {
             lastState = currentState;
             Color newColor = stateSprite.getColor() == Color.GREEN ? Color.ORANGE : Color.GREEN;
