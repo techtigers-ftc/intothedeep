@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferVisionAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -39,7 +39,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         addCommands(
                 new IntakeTrackingAction(intake, robotState),
                 new WaitCommand(100),
-                new IntakePrepareToTransferAction(drive, intake, dropper, robotState)
+                new IntakePrepareToTransferVisionAction(drive, intake, dropper, robotState)
         );
     }
 
@@ -55,9 +55,6 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-//                if (!intake.isBlockInIntake()) {
-//                    return AutoState.NO_TIME;
-//                }
                 if (runCounter == 1) {
                     return AutoState.SAMPLE_4_INTAKE_COMPLETE;
                 } else {
