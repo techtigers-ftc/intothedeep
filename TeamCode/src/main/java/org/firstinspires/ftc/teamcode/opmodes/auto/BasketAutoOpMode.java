@@ -265,7 +265,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.TIMEOUT)
 
                 .addTransition(intakeFirstSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.TIMEOUT)
+                .addTransition(intakeFirstSample, failedIntakeSample, AutoState.TIMEOUT)
                 .addTransition(intakeFirstSample, driveToFirstDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(failedIntakeSample, driveToFirstDrop, AutoState.SAMPLE_1_INTAKE_RECOVERED)
@@ -278,7 +278,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
 
                 .addTransition(intakeSecondSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.TIMEOUT)
+                .addTransition(intakeSecondSample, failedIntakeSample, AutoState.TIMEOUT)
                 .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToSecondDrop, AutoState.TIMEOUT)
@@ -290,7 +290,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
 
                 .addTransition(intakeThirdSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.TIMEOUT)
+                .addTransition(intakeThirdSample, failedIntakeSample, AutoState.TIMEOUT)
                 .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.SAMPLE_3_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.TIMEOUT)

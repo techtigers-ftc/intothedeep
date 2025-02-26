@@ -40,7 +40,6 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                 autoDriveCommand,
                 new SequentialCommandGroup(
                         new IntakeReadyToTransferAction(intake, dropper, robotState),
-                        new WaitCommand(100),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(

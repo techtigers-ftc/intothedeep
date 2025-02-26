@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -45,7 +46,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         previousAutoState = "";
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, () -> 3, 0.75),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 3, () -> 90),
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),

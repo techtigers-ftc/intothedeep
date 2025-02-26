@@ -38,13 +38,12 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void execute() {
-//        intake.setMotorPower(0.4);
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
             frameCount++;
             intake.setMotorPower(0.15);
         } else {
             frameCount = 0;
-            intake.setMotorPower(0.3);
+            intake.setMotorPower(0.4);
         }
     }
 
