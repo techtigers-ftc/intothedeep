@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 /**
  * Command to align to a block using fine camera vision and pick it up
  */
-public class IntakePrepareToTransferAction extends SequentialCommandGroup {
+public class IntakePrepareToTransferVisionAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
@@ -38,9 +39,9 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakePrepareToTransferAction(DriveSubsystem drive, IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
-                                         RobotState robotState, CommandBase command) {
+    public IntakePrepareToTransferVisionAction(DriveSubsystem drive, IntakeSubsystem intake,
+                                               DropperSubsystem dropper,
+                                               RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
         addRequirements(intake, dropper);
@@ -57,11 +58,11 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                         - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
                 new IntakeCloseAction(intake, 150),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
-//                new IntakeCheckSensorAction(robotState, command == null ? this : command),
+                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
@@ -81,10 +82,10 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakePrepareToTransferAction(DriveSubsystem drive,
-                                         IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
-                                         RobotState robotState) {
+    public IntakePrepareToTransferVisionAction(DriveSubsystem drive,
+                                               IntakeSubsystem intake,
+                                               DropperSubsystem dropper,
+                                               RobotState robotState) {
         this(drive, intake, dropper, robotState, null);
     }
 
