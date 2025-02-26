@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleInta
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
-import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.IntakeSampleWallState;
 import org.firstinspires.ftc.teamcode.autostates.EndState;
@@ -127,7 +126,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                17,
+                16,
                 robotState);
         BasketDriveStateConfigurator.configSecondSampleDrop(driveToSecondDrop);
 
@@ -209,13 +208,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configDriveToSubmersible(driveToSubmersible);
 
-        FirstLevelAscentState firstLevelAscent = new FirstLevelAscentState(
-                "firstLevelAscent",
-                dropper,
-                intake,
-                robotState
-        );
-
         EndState endState = new EndState("endState");
 
         // Create the state machine
@@ -236,7 +228,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
                 .addState(driveToSubmersible)
-                .addState(firstLevelAscent)
                 .addState(endState)
 
                 .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.DRIVE_END)

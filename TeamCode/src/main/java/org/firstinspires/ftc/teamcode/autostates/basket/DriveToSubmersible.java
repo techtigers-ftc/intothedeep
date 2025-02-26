@@ -22,8 +22,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveToSubmersible extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToSubmersible.class.getSimpleName();
-    private static final double TOLERANCE = 1.5;
-    private static final double ANGULAR_TOLERANCE = Math.toRadians(5);
 
     /**
      * Constructor for the DriveToSubmersible

@@ -37,7 +37,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         this.intake = intake;
         runCounter = 0;
         addCommands(
-                new IntakeTrackingAction(intake, 1, robotState),
+                new IntakeTrackingAction(intake, robotState),
                 new WaitCommand(100),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState)
         );

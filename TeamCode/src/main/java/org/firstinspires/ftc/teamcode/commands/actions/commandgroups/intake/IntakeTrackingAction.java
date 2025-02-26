@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -13,33 +14,22 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
  */
 @Config
 public class IntakeTrackingAction extends TimeoutCommand {
-    private static final double TARGET_Y = 0;
-    public static double FORWARD_KP = 0.2;
-    public static double FORWARD_KI = 0;
-    public static double FORWARD_KD = 0.01;
-    public static double FORWARD_KF = 0;
-    public final PIDFController pidfController;
     private final IntakeSubsystem intake;
     private final RobotState robotState;
-    private double tolerance;
+    private double frameCount;
 
     /**
      * Constructs a new IntakeTrackingAction
      *
      * @param intake     the intake subsystem
-     * @param tolerance  the tolerance for the command (in pixels)
      * @param robotState robot state
      */
-    public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
-        super(10);
+    public IntakeTrackingAction(IntakeSubsystem intake, RobotState robotState) {
+        super(1.5);
         addRequirements(intake);
         this.intake = intake;
-        this.tolerance = tolerance;
         this.robotState = robotState;
-        pidfController = new PIDFController(FORWARD_KP,
-                FORWARD_KI,
-                FORWARD_KD,
-                FORWARD_KF);
+        frameCount = 0;
     }
 
     @Override
@@ -50,19 +40,19 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void execute() {
-//        double currentPosition = robotState.getBlockForwardFine();
-//        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-//            currentPosition = -2.5;
-//        }
-//        double movePower = pidfController.calculate(currentPosition, TARGET_Y);
-        intake.setMotorPower(0.2);
+//        intake.setMotorPower(0.4);
+        if(robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+            frameCount++;
+            intake.setMotorPower(0.2);
+        } else {
+            frameCount = 0;
+            intake.setMotorPower(0.4);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return //((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) <
-                // tolerance)
-                robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED || isTimeoutReached();
+        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 3;
     }
 
     @Override
