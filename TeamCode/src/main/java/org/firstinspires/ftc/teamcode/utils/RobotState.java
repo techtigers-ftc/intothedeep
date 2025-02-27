@@ -57,6 +57,7 @@ public class RobotState extends GlobalState {
     private boolean isCameraRunning;
     private boolean isCoarseCameraMode;
     private boolean isVisionAligning;
+    private boolean isIntakeTracking;
     private String currentAutoState;
     private String previousAutoState;
     private Color debugColor;
@@ -103,6 +104,7 @@ public class RobotState extends GlobalState {
         isCameraRunning = false;
         isCoarseCameraMode = false;
         isVisionAligning = false;
+        isIntakeTracking = false;
         currentAutoState = "";
         previousAutoState = "";
         debugColor = Color.BLACK;
@@ -768,5 +770,21 @@ public class RobotState extends GlobalState {
      */
     public void setDebugColor(Color color) {
         this.debugColor = color;
+    }
+
+    /**
+     * @return whether or not the intake is tracking
+     */
+    public boolean isIntakeTracking() {
+        return isIntakeTracking;
+    }
+
+    /**
+     * Sets whether or not the intake is tracking
+     *
+     * @param intakeTracking whether or not the intake is tracking
+     */
+    public void setIntakeTracking(boolean intakeTracking) {
+        isIntakeTracking = intakeTracking;
     }
 }

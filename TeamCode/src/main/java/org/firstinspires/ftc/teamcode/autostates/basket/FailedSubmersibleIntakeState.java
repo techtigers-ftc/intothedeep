@@ -45,16 +45,16 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         previousAutoState = "";
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 3, () -> 90),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 2.5, () -> 90),
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),
-                                () -> robotState.getRobotCurrentPose().getY() + 3,
-                                () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2)
+                                () -> robotState.getRobotCurrentPose().getY() + 4,
+                                () -> robotState.getRobotCurrentPose().getHeading(), 1, Math.toRadians(5)
                         )
                 ),
                 new IntakeTrackingAction(intake, robotState),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+//                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
         );
     }
@@ -64,7 +64,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (super.isTimeoutReached()) {
+        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2 && robotState.isIntakeTracking())) {
             runCounter = 0;
             if (previousAutoState.equals("intakeFourthSample")) {
                 return AutoState.FAILED_SAMPLE_4_TIMEOUT;

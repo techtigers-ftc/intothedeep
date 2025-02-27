@@ -44,7 +44,7 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
@@ -64,7 +64,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(10, 13),
-                                        new Point(12.5, 19)
+                                        new Point(14.5, 19)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(72),
@@ -94,7 +94,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(12.5, 19),
+                                        new Point(14.5, 19),
                                         new Point(10, 13)
                                 )
                         )

@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAct
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SubmersibleIntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -38,7 +39,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, dropper, robotState),
+                        new SubmersibleIntakeReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(

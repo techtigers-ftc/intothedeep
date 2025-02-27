@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
  * Command to move the slides until the small camera sees the block is in the right place
  */
 @Config
-public class IntakeTrackingAction extends TimeoutCommand {
+public class IntakeTrackingAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private double frameCount;
@@ -23,7 +24,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
      * @param robotState robot state
      */
     public IntakeTrackingAction(IntakeSubsystem intake, RobotState robotState) {
-        super(1.5);
         addRequirements(intake);
         this.intake = intake;
         this.robotState = robotState;
@@ -32,8 +32,8 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public void initialize() {
-        super.initialize();
         intake.setDirectControl(true);
+        robotState.setIntakeTracking(true);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class IntakeTrackingAction extends TimeoutCommand {
 
     @Override
     public boolean isFinished() {
-        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 5;
+        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 3;
     }
 
     @Override
@@ -57,5 +57,6 @@ public class IntakeTrackingAction extends TimeoutCommand {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         intake.moveSlidesRelative(0);
+        robotState.setIntakeTracking(false);
     }
 }

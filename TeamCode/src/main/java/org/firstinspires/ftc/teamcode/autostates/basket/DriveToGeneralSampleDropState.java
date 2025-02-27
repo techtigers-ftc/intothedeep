@@ -43,11 +43,11 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                          RobotState robotState) {
         super(name, drive, robotState, 8);
         addCommands(
-                autoDriveCommand,
                 new SequentialCommandGroup(
                         new IntakeReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
+                                autoDriveCommand,
                                 new SequentialCommandGroup(
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
                                         new IntakeReadyToPickupAction(intake,

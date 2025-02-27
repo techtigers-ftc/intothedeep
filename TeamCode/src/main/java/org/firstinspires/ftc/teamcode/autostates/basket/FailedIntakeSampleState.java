@@ -42,10 +42,9 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         runCounter = 0;
         previousAutoState = "";
         addCommands(
-//                new IntakeSlidesAbsoluteAction(intake, () -> intake.getCurrentSlidePositionInches() - 4, 0.75),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 4, () -> 90),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5, () -> 90),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakePrepareToTransferAction(drive, intake, dropper, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
         );
     }
 
@@ -69,7 +68,7 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
                 return AutoState.FAILED_SAMPLE_3_TIMEOUT;
             }
         } else {
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 0.5) {
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
                     runCounter = 0;
                     if (previousAutoState.equals("intakeFirstSample")) {
