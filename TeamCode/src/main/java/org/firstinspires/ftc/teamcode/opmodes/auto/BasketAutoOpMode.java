@@ -240,8 +240,12 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
 
-                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
-                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
+                // TODO TO REMOVE
+                .addTransition(driveToSecondIntake, endState, AutoState.DRIVE_END)
+                .addTransition(driveToSecondIntake, endState, AutoState.TIMEOUT)
+
+//                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
+//                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
                 .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
                 .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.DRIVE_END)
@@ -288,7 +292,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override

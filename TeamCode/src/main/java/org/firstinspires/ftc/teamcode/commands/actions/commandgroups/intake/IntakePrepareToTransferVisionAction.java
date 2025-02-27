@@ -62,7 +62,6 @@ public class IntakePrepareToTransferVisionAction extends SequentialCommandGroup 
                 new IntakeCloseAction(intake, 150),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
-                new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),

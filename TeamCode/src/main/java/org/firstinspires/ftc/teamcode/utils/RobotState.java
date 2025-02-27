@@ -105,7 +105,7 @@ public class RobotState extends GlobalState {
         isCoarseCameraMode = false;
         isVisionAligning = false;
         currentAutoState = null;
-        debugColor = Color.BLACK;
+        debugColor = Color.GREEN;
     }
 
     /**
