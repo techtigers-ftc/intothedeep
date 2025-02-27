@@ -4,8 +4,8 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSubmersible;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
  * A class used to configure BasketDriveStates.
  */
 public class BasketDriveStateConfigurator {
+    private static final double MEGA_TOLERANCE = 7;
+    private static final double MEGA_ANGLE_TOLERANCE = Math.toRadians(10);
     private static final double LARGE_TOLERANCE = 3;
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     private static final double SMALL_TOLERANCE = 2;
@@ -36,7 +38,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(29.75, 7.25),
-                                        new Point(10, 13)
+                                        new Point(9, 13)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
@@ -63,7 +65,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10, 13),
+                                        new Point(9, 13),
                                         new Point(14.5, 19)
                                 )
                         )
@@ -258,7 +260,7 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFourthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setDrivePIDF(0.008, 0, 0.007, 0.6, 0);
+        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -268,7 +270,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(47, 62.5),
                                         new Point(35, 60),
-                                        new Point(12, 12)
+                                        new Point(11, 11)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(0),
@@ -295,7 +297,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(12, 12),
+                                        new Point(11, 11),
                                         new Point(25, 60),
                                         new Point(47, 64.5)
                                 )
@@ -316,7 +318,7 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFifthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setDrivePIDF(0.008, 0, 0.007, 0.6, 0);
+        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -326,7 +328,7 @@ public class BasketDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(47, 64.5),
                                         new Point(35, 60),
-                                        new Point(12, 12)
+                                        new Point(11, 11)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(0),
@@ -339,23 +341,23 @@ public class BasketDriveStateConfigurator {
     }
 
     /**
-     * Configures the DriveToSubmersible.
+     * Configures the DriveToPark.
      *
-     * @param state The DriveToSubmersible to configure
+     * @param state The DriveToPark to configure
      */
-    public static void configDriveToSubmersible(DriveToSubmersible state) {
+    public static void configDriveToPark(DriveToPark state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-//        state.setSecondaryTranslationalPIDF(0.15, 0, 0, 0);
+        state.setDrivePIDF(0.01, 0, 0.005, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
+
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(12, 12),
-                                        new Point(11, 58),
-                                        new Point(49, 61.35)
+                                        new Point(11, 11),
+                                        new Point(25, 60),
+                                        new Point(49, 59)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(45),
@@ -363,8 +365,8 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+        state.setTolerance(MEGA_TOLERANCE);
+        state.setAngleTolerance(MEGA_ANGLE_TOLERANCE);
     }
 
 }

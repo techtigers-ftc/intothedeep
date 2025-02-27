@@ -34,13 +34,12 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
      * @param robotState the robot state
      */
     public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 4);
+        super(name, 3);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
         addCommands(
                 new IntakeTrackingAction(intake, robotState),
-//                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
         );
     }
@@ -53,7 +52,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1.5 && robotState.isIntakeTracking())) {
+        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2 && robotState.isIntakeTracking())) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {

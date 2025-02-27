@@ -19,12 +19,12 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * A State to drive to the submersible position
  */
-public class DriveToSubmersible extends DriveStateBase {
+public class DriveToPark extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToSubmersible.class.getSimpleName();
+            DriveToPark.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToSubmersible
+     * Constructor for the DriveToPark
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
@@ -32,7 +32,7 @@ public class DriveToSubmersible extends DriveStateBase {
      * @param intake     The intake subsystem
      * @param robotState The robot state
      */
-    public DriveToSubmersible(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToPark(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
@@ -51,8 +51,7 @@ public class DriveToSubmersible extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.PRE_TRANSFER) {
+        if (super.getCurrentCondition() == AutoState.DRIVE_END) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

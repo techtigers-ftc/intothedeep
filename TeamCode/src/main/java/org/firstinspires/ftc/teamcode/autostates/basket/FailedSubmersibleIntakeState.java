@@ -38,7 +38,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
      * @param robotState the robot state
      */
     public FailedSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 4);
+        super(name, 3);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
@@ -54,7 +54,6 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                         )
                 ),
                 new IntakeTrackingAction(intake, robotState),
-//                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
         );
     }
@@ -64,7 +63,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1.5 && robotState.isIntakeTracking())) {
+        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2 && robotState.isIntakeTracking())) {
             runCounter = 0;
             if (previousAutoState.equals("intakeFourthSample")) {
                 return AutoState.FAILED_SAMPLE_4_TIMEOUT;

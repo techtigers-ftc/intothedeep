@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -40,10 +39,10 @@ public class IntakeTrackingAction extends CommandBase {
     public void execute() {
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
             frameCount++;
-            intake.setMotorPower(0.15);
+            intake.setMotorPower(0);
         } else {
             frameCount = 0;
-            intake.setMotorPower(0.35);
+            intake.setMotorPower(0.3 + 0.02 * intake.getCurrentSlidePositionInches());
         }
     }
 
