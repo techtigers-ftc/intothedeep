@@ -1,15 +1,12 @@
-package org.firstinspires.ftc.teamcode.autostates;
+package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightLateralBoundsAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferVisionAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -32,18 +29,17 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param drive      the drive subsystem
-     * @param limelight  the limelight subsystem
      * @param robotState the robot state
      */
-    public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, LimelightSubsystem limelight, RobotState robotState) {
-        super(name, 5);
+    public VisionSubmersiblePickupState(String name, IntakeSubsystem intake, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
+        super(name, 6);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
-                new WaitCommand(200),
-                new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState)
+                new IntakeTrackingAction(intake, robotState),
+                new WaitCommand(100),
+                new IntakePrepareToTransferVisionAction(drive, intake, dropper, robotState)
         );
     }
 
@@ -58,10 +54,7 @@ public class VisionSubmersiblePickupState extends SequentialCommandGroupState<Au
         if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
-            if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER) {
-                if (!intake.isBlockInIntake()) {
-                    return AutoState.NO_TIME;
-                }
+            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (runCounter == 1) {
                     return AutoState.SAMPLE_4_INTAKE_COMPLETE;
                 } else {

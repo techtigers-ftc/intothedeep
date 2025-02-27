@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import java.util.function.DoubleSupplier;
 
@@ -100,8 +101,14 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void initialize() {
         super.initialize();
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.7, 0, 0.035, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+        if (!robotState.isAuto()) {
+            follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.7, 0, 0.035, 0));
+            follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+        } else {
+            follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.4, 0, 0.055, 0));
+            follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+        }
+        follower.disableSecondaryPIDS();
 
 //        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));
 //        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP, 0, TuningConstants.dDriveD, 0.6, 0));
@@ -119,8 +126,8 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
 
-        Waypoint current = robotState.getRobotCurrentPose();
-        Waypoint target = robotState.getRobotFinalPose();
+//        Waypoint current = robotState.getRobotCurrentPose();
+//        Waypoint target = robotState.getRobotFinalPose();
 //        RobotLog.dd("Tele Hold Point","Distance From Target: %f", distToTarget(current, target));
 //        RobotLog.dd("Tele Hold Point","Angular Distance From Target: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
 //        RobotLog.dd("Tele Hold Point", "Running Time of Hold Point: %f", getRunningTime());

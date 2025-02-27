@@ -46,7 +46,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
         lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
                 new IntakeCloseAction(intake, 150),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),

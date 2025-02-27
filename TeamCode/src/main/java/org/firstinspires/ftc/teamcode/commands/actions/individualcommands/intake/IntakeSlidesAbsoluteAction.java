@@ -35,8 +35,8 @@ public class IntakeSlidesAbsoluteAction extends TimeoutCommand {
     @Override
     public void initialize() {
         super.initialize();
-        targetPosition = targetPositionSupplier.getAsDouble();
-        intake.moveSlidesAbsolute(targetPosition);
+        intake.moveSlidesAbsolute(targetPositionSupplier.getAsDouble());
+        targetPosition = intake.getTargetPositionInches();
     }
 
 //    @Override

@@ -58,11 +58,11 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double CLAW_LOOSE_POSITION = 0.89;
     private static final double CLAW_CLOSED_POSITION = 0.91;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double PRIMARY_KP = 0.0085;
+    public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0.0001;
+    public static double PRIMARY_KD = 0.0002;
     public static double PRIMARY_KF = 0.001;
-    public static double SECONDARY_KP = 0.014;
+    public static double SECONDARY_KP = 0.011;
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;
@@ -417,8 +417,9 @@ public class  IntakeSubsystem extends CloseableSubsystem {
             if ((getCurrentSlidePositionInches() > SLIDES_MAX && power > 0) || (getCurrentSlidePositionInches() < 0 && power < 0)) {
                 power = 0;
             }
-            leftSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
-            rightSlideMotor.setPower(getVoltageCompensatedMotorPower(power));
+            power = getVoltageCompensatedMotorPower(power);
+            leftSlideMotor.setPower(power);
+            rightSlideMotor.setPower(power);
         }
     }
 
