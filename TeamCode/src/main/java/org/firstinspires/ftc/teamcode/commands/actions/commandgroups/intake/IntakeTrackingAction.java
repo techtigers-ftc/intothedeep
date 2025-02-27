@@ -43,7 +43,7 @@ public class IntakeTrackingAction extends CommandBase {
             intake.setMotorPower(0.15);
         } else {
             frameCount = 0;
-            intake.setMotorPower(0.4);
+            intake.setMotorPower(0.35);
         }
     }
 

@@ -44,7 +44,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                 autoDriveCommand,
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
+                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 25),
                                 new IntakeReadyToPickupAction(intake,
                                         robotState, () -> targetSlidePos,
                                         () -> 90)

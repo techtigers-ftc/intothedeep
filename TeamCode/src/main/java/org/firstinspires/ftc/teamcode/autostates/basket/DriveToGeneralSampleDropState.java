@@ -49,14 +49,14 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                         new ParallelCommandGroup(
                                 autoDriveCommand,
                                 new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 16),
                                         new IntakeReadyToPickupAction(intake,
                                                 robotState, () -> targetSlidePos,
                                                 () -> 90)
                                 ),
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitCommand(100),
+//                                        new WaitCommand(100),
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
                                         new DropperOpenAction(dropper, 200)
                                 )
