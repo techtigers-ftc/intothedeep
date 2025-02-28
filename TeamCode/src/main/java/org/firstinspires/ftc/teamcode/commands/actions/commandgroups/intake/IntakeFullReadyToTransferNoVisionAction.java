@@ -47,7 +47,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
         addRequirements(intake, dropper);
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
-                new IntakeCloseAction(intake, 150),
+                new IntakeCloseAction(intake, 50),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
