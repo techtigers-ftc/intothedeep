@@ -24,12 +24,18 @@ public class IntakeSlidesAbsoluteAction extends TimeoutCommand {
      */
     public IntakeSlidesAbsoluteAction(IntakeSubsystem intake,
                                       DoubleSupplier targetPositionSupplier,
-                                      double tolerance) {
-        super(1);
+                                      double tolerance, double timeout) {
+        super(timeout);
         this.intake = intake;
         this.targetPositionSupplier = targetPositionSupplier;
         this.tolerance = tolerance;
         targetPosition = targetPositionSupplier.getAsDouble();
+    }
+
+    public IntakeSlidesAbsoluteAction(IntakeSubsystem intake,
+                                      DoubleSupplier targetPositionSupplier,
+                                      double tolerance) {
+        this(intake, targetPositionSupplier, tolerance, 1);
     }
 
     @Override

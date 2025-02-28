@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
@@ -53,7 +54,11 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new ParallelCommandGroup(
-                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
+                        new SequentialCommandGroup(
+                                new IntakeClawRotationAction(intake, () -> 30, 0),
+                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
+                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                        ),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
                         new IntakeWristPitchAction(intake,

@@ -56,7 +56,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.68;
     private static final double CLAW_LOOSE_POSITION = 0.89;
-    private static final double CLAW_CLOSED_POSITION = 0.91;
+    private static final double CLAW_CLOSED_POSITION = 0.93;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
@@ -161,14 +161,14 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     /**
      * @return the pitch of the wrist in degrees
      */
-    public double getPitch() {
+    public double getWristPitch() {
         return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[0];
     }
 
     /**
      * @return the rotation of the wrist in degrees
      */
-    public double getRotation() {
+    public double getWristRotation() {
         return differentialController.getPitchAndRotation(leftWrist.getPosition(), rightWrist.getPosition())[1];
     }
 
@@ -294,7 +294,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired change in rotation of the differential claw
      */
     public void setWristRelative(double pitchAngle, double rotationAngle) {
-        setWristAbsolute(getPitch() + pitchAngle, getRotation() + rotationAngle);
+        setWristAbsolute(getWristPitch() + pitchAngle, getWristRotation() + rotationAngle);
     }
 
     /**
@@ -303,7 +303,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @param pitchAngle the desired pitch of the wrist
      */
     public void setWristPitchAbsolute(double pitchAngle) {
-        setWristAbsolute(pitchAngle, getRotation());
+        setWristAbsolute(pitchAngle, getWristRotation());
     }
 
     /**
@@ -332,7 +332,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @param rotationAngle the desired rotation of the wrist
      */
     public void setWristRotationAbsolute(double rotationAngle) {
-        setWristAbsolute(getPitch(), rotationAngle);
+        setWristAbsolute(getWristPitch(), rotationAngle);
     }
 
     /**
