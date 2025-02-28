@@ -17,6 +17,7 @@ public class DistanceSensorTestOpMode extends BaseOpMode {
         robotState = new RobotState(true, false);
         sensorSubsystem = new SensorSubsystem(hardwareMap, robotState);
         registerSubsystems(sensorSubsystem);
+        robotState.setRunDistanceSensor(true);
     }
 
     @Override
