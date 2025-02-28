@@ -114,7 +114,7 @@ public class RobotState extends GlobalState {
         previousAutoState = "";
         debugColor = Color.BLACK;
         runDistanceSensor = false;
-        distanceSensorValue = 0;
+        distanceSensorValue = -1;
     }
 
     /**
