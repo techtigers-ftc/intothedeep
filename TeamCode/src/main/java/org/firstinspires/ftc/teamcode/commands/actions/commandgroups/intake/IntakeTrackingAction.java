@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -47,8 +46,8 @@ public class IntakeTrackingAction extends CommandBase {
             frameCount = 0;
             power = 0.3 + 0.003 * intake.getCurrentSlidePositionInches();
         }
-        RobotLog.dd("tracking action", "Setting motor power: %f", power);
-        RobotLog.dd("tracking action", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+//        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
+//        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
         intake.setMotorPower(power);
     }
 
