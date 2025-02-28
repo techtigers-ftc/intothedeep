@@ -62,6 +62,11 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
 
+
+
+    private boolean runDistanceSensor;
+    private double distanceSensorValue;
+
     /**
      * Initializes a new RobotState
      */
@@ -108,6 +113,8 @@ public class RobotState extends GlobalState {
         currentAutoState = "";
         previousAutoState = "";
         debugColor = Color.BLACK;
+        runDistanceSensor = false;
+        distanceSensorValue = 0;
     }
 
     /**
@@ -786,5 +793,37 @@ public class RobotState extends GlobalState {
      */
     public void setIntakeTracking(boolean intakeTracking) {
         isIntakeTracking = intakeTracking;
+    }
+
+    /**
+     *
+     * @return whether or not the distance sensor is running
+     */
+    public boolean isRunDistanceSensor() {
+        return runDistanceSensor;
+    }
+
+    /**
+     * sets whether or not the distance sensor is running
+     * @param runDistanceSensor whether or not the distance sensor is running
+     */
+    public void setRunDistanceSensor(boolean runDistanceSensor) {
+        this.runDistanceSensor = runDistanceSensor;
+    }
+
+    /**
+     *
+     * @return get the distance sensor value
+     */
+    public double getDistanceSensorValue() {
+        return distanceSensorValue;
+    }
+
+    /**
+     * sets the distance sensor value
+     * @param distanceSensorValue the distance sensor value
+     */
+    public void setDistanceSensorValue(double distanceSensorValue) {
+        this.distanceSensorValue = distanceSensorValue;
     }
 }
