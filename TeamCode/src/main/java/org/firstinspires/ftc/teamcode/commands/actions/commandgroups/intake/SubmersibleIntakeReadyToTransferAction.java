@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -35,7 +36,11 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
         addRequirements(intake);
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
+                        new SequentialCommandGroup(
+                                new IntakeClawRotationAction(intake, () -> 30, 0),
+                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
+                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                        ),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeWristPitchAction(intake,

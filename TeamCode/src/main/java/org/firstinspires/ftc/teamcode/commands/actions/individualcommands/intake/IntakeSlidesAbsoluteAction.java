@@ -21,15 +21,29 @@ public class IntakeSlidesAbsoluteAction extends TimeoutCommand {
      * @param intake                 the intake subsystem
      * @param targetPositionSupplier the supplier for the target position
      * @param tolerance              the tolerance for the target position
+     * @param timeout                the timeout for the command
      */
     public IntakeSlidesAbsoluteAction(IntakeSubsystem intake,
                                       DoubleSupplier targetPositionSupplier,
-                                      double tolerance) {
-        super(1);
+                                      double tolerance, double timeout) {
+        super(timeout);
         this.intake = intake;
         this.targetPositionSupplier = targetPositionSupplier;
         this.tolerance = tolerance;
         targetPosition = targetPositionSupplier.getAsDouble();
+    }
+
+    /**
+     * Overloaded constructor which sets the timeout to 1 by default
+     *
+     * @param intake                 the intake subsystem
+     * @param targetPositionSupplier the supplier for the target position
+     * @param tolerance              the tolerance for the target position
+     */
+    public IntakeSlidesAbsoluteAction(IntakeSubsystem intake,
+                                      DoubleSupplier targetPositionSupplier,
+                                      double tolerance) {
+        this(intake, targetPositionSupplier, tolerance, 1);
     }
 
     @Override

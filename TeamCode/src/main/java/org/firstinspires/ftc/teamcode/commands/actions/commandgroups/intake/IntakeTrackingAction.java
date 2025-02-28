@@ -37,13 +37,18 @@ public class IntakeTrackingAction extends CommandBase {
 
     @Override
     public void execute() {
+        double power;
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
             frameCount++;
-            intake.setMotorPower(0);
+            power = 0;
+
         } else {
             frameCount = 0;
-            intake.setMotorPower(0.3 + 0.02 * intake.getCurrentSlidePositionInches());
+            power = 0.3 + 0.003 * intake.getCurrentSlidePositionInches();
         }
+//        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
+//        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        intake.setMotorPower(power);
     }
 
     @Override

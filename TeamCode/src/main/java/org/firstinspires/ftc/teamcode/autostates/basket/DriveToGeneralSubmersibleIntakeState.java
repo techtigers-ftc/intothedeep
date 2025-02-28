@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -41,7 +41,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
                 ),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 55),
-                        new IntakeSlidesAbsoluteAction(intake, () -> 1.75, 1)
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 1.75, () -> 90)
                 )
         );
     }
@@ -54,7 +54,6 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
-
         return AutoState.RUNNING;
     }
 }

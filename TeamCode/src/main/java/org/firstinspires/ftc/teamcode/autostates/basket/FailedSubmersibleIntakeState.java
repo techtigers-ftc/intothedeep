@@ -61,7 +61,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2 && robotState.isIntakeTracking())) {
+        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
             runCounter = 0;
             if (previousAutoState.equals("intakeFourthSample")) {
                 return AutoState.FAILED_SAMPLE_4_TIMEOUT;

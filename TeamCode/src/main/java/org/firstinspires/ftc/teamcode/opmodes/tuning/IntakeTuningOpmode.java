@@ -106,8 +106,8 @@ public class IntakeTuningOpmode extends BaseOpMode {
         telemetry.addData("Slide position error (inches)", error);
         telemetry.addLine();
         telemetry.addData("Claw rotation angle", intakeSubsystem.getClawRotation());
-        telemetry.addData("Claw diff pitch", intakeSubsystem.getPitch());
-        telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
+        telemetry.addData("Claw diff pitch", intakeSubsystem.getWristPitch());
+        telemetry.addData("Claw diff rotation", intakeSubsystem.getWristRotation());
         telemetry.addData("Slides position", intakeSubsystem.getCurrentSlidePositionInches());
         telemetry.addLine();
         telemetry.addData("Left slide motor current", intakeSubsystem.getSlideCurrentLeft());
