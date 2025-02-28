@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -42,6 +45,10 @@ public class SensorSubsystem extends CloseableSubsystem {
         }
     }
 
+    /**
+     * Updates the robotState value of the distance detected by the back distance sensor
+     * @return the distance detected by the back distance sensor
+     */
     public double updateDistance(){
         robotState.setDistanceSensorValue(distanceSensor.getDistance(DistanceUnit.INCH));
         return robotState.getDistanceSensorValue();
