@@ -63,7 +63,6 @@ public class RobotState extends GlobalState {
     private Color debugColor;
 
 
-
     private boolean runDistanceSensor;
     private double distanceSensorValue;
 
@@ -796,7 +795,6 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     *
      * @return whether or not the distance sensor is running
      */
     public boolean isRunDistanceSensor() {
@@ -805,6 +803,7 @@ public class RobotState extends GlobalState {
 
     /**
      * sets whether or not the distance sensor is running
+     *
      * @param runDistanceSensor whether or not the distance sensor is running
      */
     public void setRunDistanceSensor(boolean runDistanceSensor) {
@@ -812,7 +811,6 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     *
      * @return get the distance sensor value
      */
     public double getDistanceSensorValue() {
@@ -821,6 +819,7 @@ public class RobotState extends GlobalState {
 
     /**
      * sets the distance sensor value
+     *
      * @param distanceSensorValue the distance sensor value
      */
     public void setDistanceSensorValue(double distanceSensorValue) {
