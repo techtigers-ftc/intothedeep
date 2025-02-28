@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
- * An action which drives the robot forward/backward at a specific power for a certain amount of time
+ * An action which drives the robot forward/backward at a specific power until distance
  */
 public class RawPowerToDistanceDriveAction extends CommandBase {
     private DriveSubsystem drive;
@@ -27,6 +27,7 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
         this.power = power;
         this.robotState = robotState;
         this.distance = distance;
+        robotState.setRunDistanceSensor(true);
     }
 
     @Override
@@ -42,5 +43,6 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drive.driveRobotCentric(0, 0, 0);
+        robotState.setRunDistanceSensor(false);
     }
 }
