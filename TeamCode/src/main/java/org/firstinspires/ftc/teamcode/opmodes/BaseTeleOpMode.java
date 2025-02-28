@@ -139,8 +139,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, dropper, robotState, 5);
-        IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
-                intake, dropper, () -> robotState.getBlockForwardCoarse(), robotState);
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
                 intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
@@ -176,37 +174,20 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
 
-        // Uses the full vision pickup if the block is detected, runs the manual one if not
-//        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected).whenActive(fullReadyToPickupAuto);
-//        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(
-//                () -> {
-//                    prepareToPickupManual.schedule();
-//                    gamepad2.rumbleBlips(3);
-//                }
-//        );
-
         // Extend Trigger Bindings
-        manualExtendTrigger.and(inTuck).whenActive(prepareToPickupManual);
-        autoExtendTrigger.and(inTuck).whenActive(readyToPickupManual);
-        (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
-        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).whenActive(fullReadyToTransfer);
-//        autoExtendTrigger.and(inReadyToPickup).and(blockDetected.negate()).whenActive(fullReadyToTransferNoVision);
-        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
 
-//        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).whenActive(fullReadyToTransfer);
+        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
-        // Uses the full vision pickup if the block is detected, runs the manual one if not
-//        autoExtendTrigger.and(inTuck).and(blockDetected).whenActive(fullReadyToPickupAuto);
-//        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(
-//                () -> {
-//                    prepareToPickupManual.schedule();
-//                    gamepad2.rumbleBlips(3);
-//                }
-//        );
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).whenActive(readyToPickupManual);
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
 
-        // TODO: Make auto later when small cam works
-//        autoExtendTrigger.and(inPrepareToPickup).whenActive(readyToPickupAuto);
+        Trigger velocityTrigger = new Trigger(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10);
+        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
+            gamepad1.rumbleBlips(1);
+            gamepad2.rumbleBlips(1);
+        }));
+        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
 
         // Other Intake Stuff
 
@@ -370,8 +351,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Intake State", robotState.getIntakeState());
-        telemetry.addData("Dropper State", robotState.getDropperState());
+//        telemetry.addData("Intake State", robotState.getIntakeState());
+//        telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Intake Slide POS",
                 intake.getCurrentSlidePositionInches());
         telemetry.addData("Dropper Slide POS",
@@ -380,22 +361,22 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
         telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 //        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
-        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
-        telemetry.addLine();
+//        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
+//        telemetry.addLine();
         telemetry.addData("Velocity: ", robotState.getRobotVelocity().getPoint().magnitude());
         telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
         telemetry.addLine();
-        telemetry.addData("Runtime: ", robotState.getRunTime());
-        telemetry.addData("Voltage: ", robotState.getVoltage());
-        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
-        telemetry.addLine();
+//        telemetry.addData("Runtime: ", robotState.getRunTime());
+//        telemetry.addData("Voltage: ", robotState.getVoltage());
+//        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
+//        telemetry.addLine();
         telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
-        telemetry.addLine();
-        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
+//        telemetry.addLine();
+//        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
     }
 }
