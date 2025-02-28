@@ -44,13 +44,4 @@ public class SensorSubsystem extends CloseableSubsystem {
             robotState.setDistanceSensorValue(distanceSensor.getDistance(DistanceUnit.INCH));
         }
     }
-
-    /**
-     * Updates the robotState value of the distance detected by the back distance sensor
-     * @return the distance detected by the back distance sensor
-     */
-    public double updateDistance(){
-        robotState.setDistanceSensorValue(distanceSensor.getDistance(DistanceUnit.INCH));
-        return robotState.getDistanceSensorValue();
-    }
 }
