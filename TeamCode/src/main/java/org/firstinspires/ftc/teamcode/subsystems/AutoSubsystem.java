@@ -17,8 +17,8 @@ public class AutoSubsystem extends CloseableSubsystem {
      * Constructor for the AutoSubsystem
      *
      * @param stateMachine The state machine for the autonomous command
-     * @param robotState   Reference to the robot state - will be updated with the current state of
-     *                     the state machine.
+     * @param robotState   Reference to the robot state - will be updated with the current and
+     *                     previous state of the state machine.
      */
     public AutoSubsystem(StateMachine<AutoState> stateMachine, RobotState robotState) {
         this.stateMachine = stateMachine;

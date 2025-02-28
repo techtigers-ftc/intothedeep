@@ -55,7 +55,6 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                 ),
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-//                                        new WaitCommand(100),
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
                                         new DropperOpenAction(dropper, 200)
                                 )

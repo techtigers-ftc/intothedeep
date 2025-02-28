@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
 /**
- * A state to bring up the slides so the wire guide touches the second bar for a level 1 ascent
+ * A state to bring up the slides so the wire guide touches the first bar for a level 1 ascent
  */
 public class FirstLevelAscentState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =

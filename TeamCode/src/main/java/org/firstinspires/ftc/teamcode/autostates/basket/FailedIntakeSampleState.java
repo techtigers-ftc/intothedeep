@@ -48,11 +48,6 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         );
     }
 
-    /**
-     * Get the current condition of the robot
-     *
-     * @return the current condition of the robot using the AutoState enum
-     */
     @Override
     public AutoState getCurrentCondition() {
         if (runCounter == 0) {

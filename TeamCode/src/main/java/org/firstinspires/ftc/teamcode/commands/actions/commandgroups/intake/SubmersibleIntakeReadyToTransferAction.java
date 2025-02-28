@@ -16,14 +16,14 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to move intake to ready to transfer state.
+ * Command to move intake to ready to transfer state from the submersible
  */
 public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = SubmersibleIntakeReadyToTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeReadyToTransferAction
+     * Creates a new SubmersibleIntakeReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
