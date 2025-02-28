@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -44,7 +43,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                 autoDriveCommand,
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
+                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 25),
                                 new IntakeReadyToPickupAction(intake,
                                         robotState, () -> targetSlidePos,
                                         () -> 90)

@@ -17,6 +17,7 @@ public class StateMachine<T> {
     private final ArrayList<State<T>> stateList;
     private final HashMap<String, ArrayList<Transition<T>>> transitionMap;
     private State<T> currentState;
+    private State<T> previousState;
     private ArrayList<Transition<T>> currentTransitions;
     private RobotState robotState;
 
@@ -27,6 +28,7 @@ public class StateMachine<T> {
         stateList = new ArrayList<>();
         transitionMap = new HashMap<>();
         currentState = null;
+        previousState = null;
         currentTransitions = null;
     }
 
@@ -99,7 +101,9 @@ public class StateMachine<T> {
             throw new IllegalArgumentException("State: " + state + " does not exist");
         }
 
+        previousState = currentState;
         currentState = state;
+
         currentTransitions = transitionMap.get(currentState.getName());
     }
 
@@ -135,7 +139,24 @@ public class StateMachine<T> {
             }
         }
     }
-    public State<T> getCurrentState() {
-        return currentState;
+
+    /**
+     * @return the name of the current state running in the state machine
+     */
+    public String getCurrentState() {
+        if(currentState != null ) {
+            return currentState.getName();
+        }
+        return "";
+    }
+
+    /**
+     * @return the name of the previous state of the state machine
+     */
+    public String getPreviousState() {
+        if(previousState != null) {
+            return previousState.getName();
+        }
+        return "";
     }
 }

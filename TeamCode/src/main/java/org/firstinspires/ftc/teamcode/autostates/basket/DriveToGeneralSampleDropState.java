@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -42,12 +42,13 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                          RobotState robotState) {
         super(name, drive, robotState, 8);
         addCommands(
-                autoDriveCommand,
                 new SequentialCommandGroup(
+                        new IntakeReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
+                                autoDriveCommand,
                                 new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 16),
                                         new IntakeReadyToPickupAction(intake,
                                                 robotState, () -> targetSlidePos,
                                                 () -> 90)
@@ -65,8 +66,9 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
+                robotState.getDropperState() == DropperState.HIGH_BASKET &&
                 robotState.getDropperClawState() == ClawState.OPEN &&
-                    robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
