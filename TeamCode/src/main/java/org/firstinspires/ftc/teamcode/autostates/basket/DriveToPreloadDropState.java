@@ -50,7 +50,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                         ),
                         new SequentialCommandGroup(
                                 new DropperHighBasketNoTransferAction(dropper, robotState),
-                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
+                                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 13),
                                 new DropperOpenAction(dropper, 100)
                         )
                 )
