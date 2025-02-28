@@ -27,7 +27,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private final IntakeSubsystem intake;
 
     /**
-     * Creates a new IntakePrepareToTransferVisionAction
+     * Creates a new IntakePrepareToTransferAction
      *
      * @param drive                the drive subsystem
      * @param intake               the intake subsystem
