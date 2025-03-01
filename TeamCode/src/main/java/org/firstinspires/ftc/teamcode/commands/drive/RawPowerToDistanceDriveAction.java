@@ -32,6 +32,7 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
     @Override
     public void initialize() {
         robotState.setRunDistanceSensor(true);
+        robotState.setDistanceSensorValue(100);
     }
 
     @Override

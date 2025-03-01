@@ -116,6 +116,14 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configThirdIntake(thirdIntake);
 
+        DriveToPoseState thirdPush = new DriveToPoseState(
+                "thirdPush",
+                drive,
+                robotState,
+                3
+        );
+        SpecimenDriveStateConfigurator.configThirdPush(thirdPush);
+
         DriveToPoseState driveToFirstSpecimenIntake = new DriveToPoseState(
                 "driveToFirstSpecimenIntake",
                 drive,
@@ -218,6 +226,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(secondIntake)
                 .addState(secondPush)
                 .addState(thirdIntake)
+                .addState(thirdPush)
                 .addState(driveToFirstSpecimenIntake)
                 .addState(clipSpecimen)
                 .addState(intakeSpecimen)
@@ -248,9 +257,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 // Drives out to a position to push the third sample
                 .addTransition(secondPush, thirdIntake, AutoState.DRIVE_END)
                 .addTransition(secondPush, thirdIntake, AutoState.TIMEOUT)
+                // Drives to the third push
+                .addTransition(thirdIntake, thirdPush, AutoState.DRIVE_END)
+                .addTransition(thirdIntake, thirdPush, AutoState.TIMEOUT)
                 // Drives to the first specimen intake
-                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
-                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
+                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
+                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
                 // Intakes the first specimen
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
@@ -310,7 +322,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override

@@ -65,7 +65,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierCurve(
                                 new Point(74.75, 42),
                                 new Point(77.25, 22),
-                                new Point(122, 24),
+                                new Point(123, 24),
                                 new Point(90.25, 59.5),
                                 new Point(117.25, 53)
                         )
@@ -177,10 +177,35 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierCurve(
                                 new Point(126, 19),
                                 new Point(110.5, 57),
-                                new Point(135, 53)
+                                new Point(136, 53)
                         )
-//                        .setConstantHeadingInterpolation(Math.toRadians(90))
-                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(110))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the drive state with a path to push the third sample into the observation zone
+     *
+     * @param state the state to configure
+     */
+    public static void configThirdPush(DriveToPoseState state) {
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        // Push third sample
+                        .addBezierLine(
+                                new Point(136, 53),
+                                new Point(132, 25)
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -202,11 +227,10 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(134, 53),
-                                new Point(133, 9)
+                                new Point(132, 25),
+                                new Point(127, 9)
                         )
-//                        .setConstantHeadingInterpolation(Math.toRadians(90))
-                        .setLinearHeadingInterpolation(Math.toRadians(110), Math.toRadians(90))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
