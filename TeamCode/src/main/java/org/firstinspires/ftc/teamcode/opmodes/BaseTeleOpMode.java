@@ -168,6 +168,43 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
         Trigger blockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
 
+        // Dropper States
+        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
+        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
+        DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
+        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
+        DropperFrontSlapNoReleaseAction dropperFrontSlapNoReleaseAction =
+                new DropperFrontSlapNoReleaseAction(dropper, robotState);
+        DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
+        DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
+        DropperForwardCarryNoTransferAction dropperForwardCarryNoTransferAction = new DropperForwardCarryNoTransferAction(dropper, robotState);
+        DropperForwardCarryAction dropperForwardCarryAction = new DropperForwardCarryAction(dropper, intake, robotState);
+        DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
+        DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
+        DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
+        DropperTransferAction dropperTransferAction = new DropperTransferAction(dropper, robotState);
+
+        // Dropper Triggers
+        Trigger dpadLeft =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
+        Trigger dpadRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
+        Trigger dpadLeftAndRight =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
+        Trigger back =
+                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.BACK);
+        Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
+        Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
+
+        Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
+        Trigger transfer =
+                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
+        Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
+        Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
+        Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
+
+
+
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(prepareToPickupManual);
 
@@ -179,7 +216,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
-        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).whenActive(readyToPickupManual);
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry).whenActive(() -> {
+            readyToPickupManual.schedule();
+            dropperFrontSlapAction.schedule();
+        });
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry.negate()).whenActive(readyToPickupManual);
         (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
 
         Trigger velocityTrigger = new Trigger(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10);
@@ -236,42 +277,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 new ChangeBlockColorPreferenceCommand(robotState, manipulatorGamepad);
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 changeBlockColorPreferenceCommand);
-
-        // Dropper TODO: Split into a different method
-
-        // Dropper State Transitions
-        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
-        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
-        DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
-        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
-        DropperFrontSlapNoReleaseAction dropperFrontSlapNoReleaseAction =
-                new DropperFrontSlapNoReleaseAction(dropper, robotState);
-        DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
-        DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
-        DropperForwardCarryNoTransferAction dropperForwardCarryNoTransferAction = new DropperForwardCarryNoTransferAction(dropper, robotState);
-        DropperForwardCarryAction dropperForwardCarryAction = new DropperForwardCarryAction(dropper, intake, robotState);
-        DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
-        DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
-        DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
-        DropperTransferAction dropperTransferAction = new DropperTransferAction(dropper, robotState);
-
-        Trigger dpadLeft =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT);
-        Trigger dpadRight =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT);
-        Trigger dpadLeftAndRight =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).and(manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT));
-        Trigger back =
-                manipulatorGamepad.getGamepadButton(GamepadKeys.Button.BACK);
-        Trigger dpadUp = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP);
-        Trigger dpadDown = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
-
-        Trigger forwardCarry = new Trigger(() -> robotState.getDropperState() == DropperState.FORWARD_CARRY);
-        Trigger transfer =
-                new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
-        Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
-        Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
-        Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
         // Back down
         dpadDown.and(blockInIntake).whenActive(dropperTransferAction);
