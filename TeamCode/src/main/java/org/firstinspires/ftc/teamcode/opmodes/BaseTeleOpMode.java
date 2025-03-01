@@ -379,4 +379,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 //        telemetry.addLine();
 //        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
     }
+
+    @Override
+    public void end() {
+        RobotSaveState.getInstance().setState("robotCurrentPose", robotState.getRobotCurrentPose());
+    }
 }
