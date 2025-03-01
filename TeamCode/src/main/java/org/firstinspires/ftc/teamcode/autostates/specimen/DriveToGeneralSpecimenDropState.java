@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
+import team.techtigers.core.display.Color;
+
 /**
  * Drives to general specimen drop
  */
@@ -35,11 +37,19 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        robotState.setDebugColor(Color.BLACK);
+    }
+
+    @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperState() == DropperState.FORWARD_CARRY) {
+            robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            robotState.setDebugColor(Color.GREEN);
             return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
