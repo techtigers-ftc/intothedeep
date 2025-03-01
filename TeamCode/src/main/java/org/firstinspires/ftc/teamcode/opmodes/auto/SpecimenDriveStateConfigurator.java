@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
@@ -305,7 +307,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(111, 7.5),
+                                new Point(111, 9),
                                 new Point(80, 16),
                                 new Point(70, 41.5)
                         )
@@ -335,6 +337,35 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(111, 15)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the Sample Drop.
+     *
+     * @param state The DriveToGeneralSampleDropState to configure
+     */
+    public static void configSampleDrop(DriveFromSubmersibleSampleDropState state) {
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+//        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(70, 41.5),
+                                        new Point(60, 35),
+                                        new Point(11, 11)
+                                )
+                        )
+                        .setLinearHeadingInterpolation(Math.toRadians(90),
+                                Math.toRadians(45))
                         .build()
         );
 

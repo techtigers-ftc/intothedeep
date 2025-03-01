@@ -4,6 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.SubmersibleIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndTrackState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
@@ -215,6 +218,23 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configDriveToPark(driveToPark);
 
+        DriveFromSubmersibleSampleDropState driveToSampleDrop = new DriveFromSubmersibleSampleDropState(
+                "driveToSampleDrop",
+                drive,
+                dropper,
+                intake,
+                robotState
+        );
+        SpecimenDriveStateConfigurator.configSampleDrop(driveToSampleDrop);
+
+        ClipAndTrackState intakeSample = new ClipAndTrackState(
+                "intakeSample",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
+
         EndState endState = new EndState("end");
 
         // Create the state machine
@@ -238,6 +258,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToFourthSpecimenIntake)
                 .addState(driveToFourthSpecimenDrop)
                 .addState(driveToPark)
+                .addState(driveToSampleDrop)
+                .addState(intakeSample)
                 .addState(endState)
 
                 // Drives to the preload and clips it
@@ -295,8 +317,10 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fourth specimen and clips it
                 .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
-                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.DRIVE_END)
+                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
+
+                .addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 // Drives to the park in the observation zone
                 .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_4_DROP_COMPLETE)
                 .addTransition(driveToPark, endState, AutoState.DRIVE_END)

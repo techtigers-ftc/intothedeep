@@ -41,6 +41,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                          RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
+        // TODO: Remove dropper from here
         addRequirements(intake, dropper);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
