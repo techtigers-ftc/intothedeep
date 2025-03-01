@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -43,13 +44,13 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
         addCommands(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new RawPowerDriveAction(drive, 0.4, 0.1),
+                                new RawPowerDriveAction(drive, 0.8, 0.1),
                                 new DropperPitchAction(dropper,
                                         DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                                new WaitCommand(300)
+                                new WaitCommand(150),
+                                new DropperOpenAction(dropper)
                         ),
                         new SequentialCommandGroup(
-                                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90),
                                 new IntakeTrackingAction(intake, robotState))
                 ),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)

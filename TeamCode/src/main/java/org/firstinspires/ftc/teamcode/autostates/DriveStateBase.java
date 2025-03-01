@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -224,6 +226,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
 
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
+
+        RobotLog.dd(LOG_TAG, "Current State: %s", robotState.getCurrentAutoState());
+        RobotLog.dd(LOG_TAG, "Distance: %f", distToTarget(current, target));
+        RobotLog.dd(LOG_TAG, "Angular Distance: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
 
         if (distToTarget(current, target) < tolerance
                 && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {

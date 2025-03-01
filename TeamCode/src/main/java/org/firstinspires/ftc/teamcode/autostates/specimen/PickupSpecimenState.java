@@ -25,7 +25,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
      * Constructor for the PickupSpecimenState
      *
      * @param name       The name of the state
-     * @param drive      the drive subsystem
+     * @param drive      the drive subsystemZ
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
@@ -36,8 +36,8 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         runCounter = 0;
         addCommands(
                 new RawPowerToDistanceDriveAction(drive, robotState, -0.5, 2.5),
-                new DropperCloseAction(dropper, 100),
-                new DropperSlidesAbsoluteAction(dropper, 4, 1)
+                new DropperCloseAction(dropper, 50),
+                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
         );
     }
 
@@ -57,7 +57,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED && dropper.getCurrentSlidePositionInches() > 3) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED && dropper.getCurrentSlidePositionInches() > 1.5) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {

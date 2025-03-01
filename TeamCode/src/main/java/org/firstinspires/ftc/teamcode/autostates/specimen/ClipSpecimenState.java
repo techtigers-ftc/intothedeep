@@ -36,7 +36,7 @@ public class ClipSpecimenState extends SequentialCommandGroupState<AutoState> {
                 new RawPowerDriveAction(drive, 0.8, 0.1),
                 new DropperPitchAction(dropper,
                         DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                new WaitCommand(300)
+                new WaitCommand(50)
         );
     }
 

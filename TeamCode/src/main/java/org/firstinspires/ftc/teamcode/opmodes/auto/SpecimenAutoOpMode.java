@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
@@ -200,7 +201,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configFourthSpecimenIntake(driveToFourthSpecimenIntake);
 
-        DriveToGeneralSpecimenDropState driveToFourthSpecimenDrop = new DriveToGeneralSpecimenDropState(
+        DriveToLastGeneralSpecimenDropState driveToFourthSpecimenDrop = new DriveToLastGeneralSpecimenDropState(
                 "driveToFourthSpecimenDrop",
                 drive,
                 dropper,

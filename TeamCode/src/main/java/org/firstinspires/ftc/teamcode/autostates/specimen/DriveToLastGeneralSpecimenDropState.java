@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -17,9 +15,9 @@ import team.techtigers.core.display.Color;
 /**
  * Drives to general specimen drop
  */
-public class DriveToGeneralSpecimenDropState extends DriveStateBase {
+public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToGeneralSpecimenDropState.class.getSimpleName();
+            DriveToLastGeneralSpecimenDropState.class.getSimpleName();
 
     /**
      * Constructor for the DriveToGeneralSpecimenDropState
@@ -30,12 +28,13 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      * @param robotState The robot state
      * @param intake     The intake subsystem
      */
-    public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToLastGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 3.5);
         // TODO: delete intake
         addCommands(
                 autoDriveCommand,
-                new DropperForwardCarryWallAction(dropper, robotState)
+                new DropperForwardCarryWallAction(dropper, robotState),
+                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                 );
     }
 
