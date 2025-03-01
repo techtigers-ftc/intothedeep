@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -30,7 +29,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     private IntakeSubsystem intake;
 
     /**
-     * Constructor for the ClipSpecimenState
+     * Constructor for the ClipAndTrackState
      *
      * @param name       The name of the state
      * @param dropper    The dropper subsystem
@@ -50,12 +49,9 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                                 new WaitCommand(150),
                                 new DropperOpenAction(dropper)
                         ),
-                        new SequentialCommandGroup(
-//                                new IntakeReadyToPickupAction(intake, robotState, () -> 1.5, () -> 90),
-                                new IntakeTrackingAction(intake, robotState)
-                        )
+                        new IntakeTrackingAction(intake, robotState)
                 ),
-                new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
+                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
@@ -70,7 +66,11 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+                if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
+                } else {
+                    return AutoState.SAMPLE_INTAKE_FAILED;
+                }
             } else {
                 return AutoState.RUNNING;
             }

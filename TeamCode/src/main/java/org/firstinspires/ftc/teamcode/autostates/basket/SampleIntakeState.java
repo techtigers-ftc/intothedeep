@@ -38,7 +38,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakePrepareToTransferAction(drive, intake, dropper, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new IntakePrepareToTransferAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
     }
 

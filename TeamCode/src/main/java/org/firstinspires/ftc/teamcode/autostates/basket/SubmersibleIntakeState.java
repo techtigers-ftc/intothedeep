@@ -27,17 +27,16 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
      * @param name       the name of the state
      * @param drive      the drive subsystem
      * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
         this.intake = intake;
         runCounter = 0;
         addCommands(
                 new IntakeTrackingAction(intake, robotState),
-                new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
+                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 

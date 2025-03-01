@@ -49,7 +49,6 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-//                        new IntakeLoosenAction(intake, 350),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 ),

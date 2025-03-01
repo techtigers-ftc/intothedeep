@@ -52,7 +52,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                         )
                 ),
                 new IntakeTrackingAction(intake, robotState),
-                new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
+                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 

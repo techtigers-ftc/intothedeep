@@ -34,7 +34,6 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
      */
     public DriveToLastGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 3.5);
-        // TODO: delete intake
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryWallAction(dropper, robotState),

@@ -36,13 +36,12 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      * @param robotState           the robot state
      */
     public IntakePrepareToTransferAction(DriveSubsystem drive, IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
                                          DoubleSupplier clawRotationSupplier,
                                          RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
         // TODO: Remove dropper from here
-        addRequirements(intake, dropper);
+        addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
