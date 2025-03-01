@@ -99,7 +99,7 @@ public class SpecimenDriveStateConfigurator {
                         // Push first sample
                         .addBezierLine(
                                 new Point(117.25, 52),
-                                new Point(117.25, 22)
+                                new Point(117.25, 21)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
 
@@ -125,7 +125,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         // Curve to second sample
                         .addBezierCurve(
-                                new Point(119.25, 22),
+                                new Point(119.25, 21),
                                 new Point(110, 52),
                                 new Point(126, 48)
                         )
@@ -462,16 +462,16 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToGeneralSampleDropState to configure
      */
     public static void configSampleDrop(DriveFromSubmersibleSampleDropState state) {
-        state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
-        state.setHeadingPIDF(1, 0, 0, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.15, 0, 0, 0);
+//        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
+//        state.setHeadingPIDF(1, 0, 0, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(70, 41.5),
+                                        new Point(67, 41.5),
                                         new Point(60, 35),
                                         new Point(11, 11)
                                 )
