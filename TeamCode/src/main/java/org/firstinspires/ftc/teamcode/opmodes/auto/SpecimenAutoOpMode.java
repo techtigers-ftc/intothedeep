@@ -161,7 +161,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToSecondSpecimenIntake);
+        SpecimenDriveStateConfigurator.configSecondSpecimenIntake(driveToSecondSpecimenIntake);
 
         DriveToGeneralSpecimenDropState driveToSecondSpecimenDrop = new DriveToGeneralSpecimenDropState(
                 "driveToSecondSpecimenDrop",
@@ -170,7 +170,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToSecondSpecimenDrop);
+        SpecimenDriveStateConfigurator.configSecondSpecimenDrop(driveToSecondSpecimenDrop);
 
         DriveToGeneralSpecimenIntakeState driveToThirdSpecimenIntake = new DriveToGeneralSpecimenIntakeState(
                 "driveToThirdSpecimenIntake",
@@ -178,7 +178,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToThirdSpecimenIntake);
+        SpecimenDriveStateConfigurator.configThirdSpecimenIntake(driveToThirdSpecimenIntake);
 
         DriveToGeneralSpecimenDropState driveToThirdSpecimenDrop = new DriveToGeneralSpecimenDropState(
                 "driveToThirdSpecimenDrop",
@@ -187,7 +187,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToThirdSpecimenDrop);
+        SpecimenDriveStateConfigurator.configThirdSpecimenDrop(driveToThirdSpecimenDrop);
 
         DriveToGeneralSpecimenIntakeState driveToFourthSpecimenIntake = new DriveToGeneralSpecimenIntakeState(
                 "driveToFourthSpecimenIntake",
@@ -195,7 +195,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToFourthSpecimenIntake);
+        SpecimenDriveStateConfigurator.configFourthSpecimenIntake(driveToFourthSpecimenIntake);
 
         DriveToGeneralSpecimenDropState driveToFourthSpecimenDrop = new DriveToGeneralSpecimenDropState(
                 "driveToFourthSpecimenDrop",
@@ -204,7 +204,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToFourthSpecimenDrop);
+        SpecimenDriveStateConfigurator.configFourthSpecimenDrop(driveToFourthSpecimenDrop);
 
         DriveToPark driveToPark = new DriveToPark(
                 "driveToPark",

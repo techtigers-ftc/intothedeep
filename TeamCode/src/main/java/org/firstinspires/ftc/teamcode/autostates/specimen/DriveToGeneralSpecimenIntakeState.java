@@ -34,8 +34,8 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(250),
-                        new DropperOpenAction(dropper, 100),
+//                        new WaitCommand(250),
+//                        new DropperOpenAction(dropper, 100),
                         new DropperWallIntakeNoTransferAction(dropper, robotState)
                 )
         );
