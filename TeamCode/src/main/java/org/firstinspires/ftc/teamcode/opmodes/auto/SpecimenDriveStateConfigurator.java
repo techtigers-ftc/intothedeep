@@ -90,20 +90,19 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configFirstPush(DriveToPoseState state) {
-//        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-//        state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
-//        state.setHeadingPIDF(0.7, 0, 0.015, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         // Push first sample
                         .addBezierLine(
                                 new Point(117.25, 52),
-                                new Point(117.25, 19)
+                                new Point(117.25, 22)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
-
                         .build()
         );
 
@@ -126,7 +125,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         // Curve to second sample
                         .addBezierCurve(
-                                new Point(119.25, 21),
+                                new Point(119.25, 22),
                                 new Point(110, 52),
                                 new Point(126, 48)
                         )
