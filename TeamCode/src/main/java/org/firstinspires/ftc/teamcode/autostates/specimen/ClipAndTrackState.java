@@ -51,7 +51,9 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                                 new DropperOpenAction(dropper)
                         ),
                         new SequentialCommandGroup(
-                                new IntakeTrackingAction(intake, robotState))
+//                                new IntakeReadyToPickupAction(intake, robotState, () -> 1.5, () -> 90),
+                                new IntakeTrackingAction(intake, robotState)
+                        )
                 ),
                 new IntakePrepareToTransferAction(drive, intake, dropper, robotState::getBlockOrientation, robotState)
         );

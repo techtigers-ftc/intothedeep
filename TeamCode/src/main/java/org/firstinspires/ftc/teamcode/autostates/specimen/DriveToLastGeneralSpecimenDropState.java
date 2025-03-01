@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -9,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.core.display.Color;
 
@@ -34,7 +38,10 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryWallAction(dropper, robotState),
-                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 88),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                )
                 );
     }
 
@@ -47,7 +54,8 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
+                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {

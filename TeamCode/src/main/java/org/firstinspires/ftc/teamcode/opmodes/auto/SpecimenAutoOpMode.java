@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.SubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndTrackState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
@@ -219,7 +220,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configDriveToPark(driveToPark);
 
-        DriveFromSubmersibleSampleDropState driveToSampleDrop = new DriveFromSubmersibleSampleDropState(
+        DriveFromChamberSampleDropState driveToSampleDrop = new DriveFromChamberSampleDropState(
                 "driveToSampleDrop",
                 drive,
                 dropper,

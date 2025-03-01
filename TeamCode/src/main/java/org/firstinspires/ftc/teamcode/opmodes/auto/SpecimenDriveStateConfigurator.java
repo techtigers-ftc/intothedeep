@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
@@ -99,14 +100,14 @@ public class SpecimenDriveStateConfigurator {
                         // Push first sample
                         .addBezierLine(
                                 new Point(117.25, 52),
-                                new Point(117.25, 21)
+                                new Point(117.25, 19)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
 
                         .build()
         );
 
-        state.setTolerance(HUMUNGOUS_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
@@ -259,7 +260,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(129, 9),
-                                new Point(74, 41.5)
+                                new Point(66, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -283,7 +284,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(74, 41.5),
+                                new Point(66, 41.5),
 //                                new Point(82, 43.5),
 //                                new Point(73.25, 16),
 //                                new Point(116.25, 40),
@@ -313,7 +314,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierCurve(
                                 new Point(113, 13),
 //                                new Point(80, 16),
-                                new Point(72, 41.5)
+                                new Point(70, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -337,7 +338,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(72, 41.5),
+                                new Point(70, 41.5),
 //                                new Point(82, 43.5),
 //                                new Point(73.25, 16),
 //                                new Point(116.25, 40),
@@ -367,7 +368,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierCurve(
                                 new Point(113, 13),
 //                                new Point(80, 16),
-                                new Point(70, 41.5)
+                                new Point(72, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -391,7 +392,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(70, 41.5),
+                                new Point(72, 41.5),
 //                                new Point(82, 43.5),
 //                                new Point(73.25, 16),
 //                                new Point(116.25, 40),
@@ -421,7 +422,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierCurve(
                                 new Point(113, 13),
 //                                new Point(80, 16),
-                                new Point(67, 41.5)
+                                new Point(75, 41.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -445,7 +446,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(67, 41.5),
+                                new Point(75, 41.5),
                                 new Point(115, 15)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
@@ -461,7 +462,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleDropState to configure
      */
-    public static void configSampleDrop(DriveFromSubmersibleSampleDropState state) {
+    public static void configSampleDrop(DriveFromChamberSampleDropState state) {
 //        state.setTranslationalPIDF(0.15, 0, 0, 0);
 //        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
 //        state.setHeadingPIDF(1, 0, 0, 0);
@@ -471,7 +472,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(67, 41.5),
+                                        new Point(75, 41.5),
                                         new Point(60, 35),
                                         new Point(11, 11)
                                 )

@@ -28,7 +28,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
     public static final double SLIDE_MAX = 28.25;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 0;
+    public static final double SLIDES_TRANSFER_POSITION = 1;
     public static final double SLIDES_CHAMBER_POSITION = 5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
@@ -56,8 +56,8 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
-    public static double CLAW_OPENED_POSITION = 0.5;
-    public static double CLAW_CLOSED_POSITION = 0.22;
+    public static double CLAW_OPENED_POSITION = 0.6;
+    public static double CLAW_CLOSED_POSITION = 0.24;
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0;
