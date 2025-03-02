@@ -16,7 +16,8 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
-    private static final double NO_TIME_THRESHOLD = 5.5;
+    private static final double TIME_TO_INTAKE = 1;
+    private static final double TIME_TO_DROP = 3;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private int runCounter;
@@ -51,12 +52,15 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
         if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
             return AutoState.TIMEOUT;
         } else {
-            if(robotState.getRunTime() / 1000f > NO_TIME_THRESHOLD) {
-                return AutoState.NO_TIME;
-            }
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+            if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
+                return AutoState.PARK;
+            } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-                    return AutoState.SAMPLE_INTAKE_COMPLETE;
+                    if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
+                        return AutoState.NO_TIME;
+                    } else {
+                        return AutoState.SAMPLE_INTAKE_COMPLETE;
+                    }
                 } else {
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }

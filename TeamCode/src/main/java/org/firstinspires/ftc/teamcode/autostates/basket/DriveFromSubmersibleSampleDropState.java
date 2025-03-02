@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
+    private static final double TIME_TO_INTAKE = 5;
 
     /**
      * Constructor for the DriveFromSubmersibleSampleDropState
@@ -57,11 +58,14 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
                 robotState.getDropperClawState() == ClawState.OPEN &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
-            return AutoState.DRIVE_END;
+            if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE) {
+                return AutoState.PARK;
+            } else {
+                return AutoState.DRIVE_END;
+            }
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
-
         return AutoState.RUNNING;
     }
 }

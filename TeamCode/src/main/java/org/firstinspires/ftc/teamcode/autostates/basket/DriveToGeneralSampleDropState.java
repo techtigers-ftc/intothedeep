@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 public class DriveToGeneralSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToGeneralSampleDropState.class.getSimpleName();
+    private static final double TIME_TO_INTAKE = 5;
 
     /**
      * Constructor for the DriveToGeneralSampleDropState
@@ -69,11 +70,14 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                 robotState.getDropperState() == DropperState.HIGH_BASKET &&
                 robotState.getDropperClawState() == ClawState.OPEN &&
                 robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-            return AutoState.DRIVE_END;
+            if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE) {
+                return AutoState.PARK;
+            } else {
+                return AutoState.DRIVE_END;
+            }
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
-
         return AutoState.RUNNING;
     }
 }
