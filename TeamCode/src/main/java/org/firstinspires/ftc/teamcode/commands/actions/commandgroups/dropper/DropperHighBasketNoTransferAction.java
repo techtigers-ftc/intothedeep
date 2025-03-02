@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -46,6 +47,7 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setDropperState(DropperState.HIGH_BASKET);
+            RobotLog.dd(LOG_TAG, "High basket action completed");
         }
     }
 }
