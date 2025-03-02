@@ -1,0 +1,189 @@
+package org.firstinspires.ftc.teamcode.commands.drive;
+
+import com.arcrobotics.ftclib.command.CommandBase;
+
+import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
+import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+
+import team.techtigers.core.paths.Waypoint;
+
+/**
+ * A class for autonomous drive commands that use PedroPathing.
+ */
+public class TeleDriveCommand extends TimeoutCommand {
+    private static final String LOG_TAG =
+            TeleDriveCommand.class.getSimpleName();
+    public final Follower follower;
+    private final DriveSubsystem drive;
+    private final RobotState robotState;
+    private final Pose targetPosition;
+    private PathChain pathChain;
+
+    // Primary PIDF Controllers
+    private PIDFController translationalPIDF;
+    private PIDFController headingPIDF;
+    private FilteredPIDFController drivePIDF;
+
+    private double tolerance;
+    private double angleTolerance;
+
+    /**
+     * Constructs a new AutoDriveCommand.
+     *
+     * @param drive      The drive subsystem
+     * @param robotState The robot state
+     */
+    public TeleDriveCommand(DriveSubsystem drive,
+                            CustomPIDFCoefficients translationalPIDF,
+                            CustomFilteredPIDFCoefficients drivePIDF,
+                            CustomPIDFCoefficients headingPIDF,
+                            Pose targetPosition,
+                            RobotState robotState,
+                            double tolerance,
+                            double angleTolerance,
+                            double timeout) {
+        super(timeout);
+        this.drive = drive;
+        this.robotState = robotState;
+        RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
+        follower = new Follower(localizer);
+        this.translationalPIDF.setCoefficients(translationalPIDF);
+        this.headingPIDF.setCoefficients(headingPIDF);
+        this.drivePIDF.setCoefficients(drivePIDF);
+        this.targetPosition = targetPosition;
+        this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
+        addRequirements(drive);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        // Makes sure that all primary PIDF coefficients are set
+        if (translationalPIDF == null) {
+            throw new IllegalArgumentException("Translational PIDF coefficients not set");
+        }
+        if (headingPIDF == null) {
+            throw new IllegalArgumentException("Heading PIDF coefficients not set");
+        }
+        if (drivePIDF == null) {
+            throw new IllegalArgumentException("Drive PIDF coefficients not set");
+        }
+
+        // Makes sure that a path chain is set
+        if (pathChain == null) {
+            throw new IllegalArgumentException("Path chain not set");
+        }
+
+        // Sets the primary PIDF coefficients
+        follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
+        follower.setHeadingPIDF(headingPIDF.getCoefficients());
+        follower.setDrivePIDF(drivePIDF.getCoefficients());
+        follower.disableSecondaryPIDS();
+
+        pathChain = new PathBuilder()
+                .addBezierLine(
+                        new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
+                        new Point(targetPosition.getX(), targetPosition.getY())
+                )
+                .setLinearHeadingInterpolation(robotState.getRobotCurrentPose().getHeading(), targetPosition.getHeading())
+                .build();
+
+        // Finds the final waypoint in the path chain
+        Path finalPath = pathChain.getPath(pathChain.size() - 1);
+        Waypoint target =
+                PoseTranslator.pointToWaypoint(finalPath.getLastControlPoint());
+        target = new Waypoint(target.getX(), target.getY(), finalPath.getEndHeading());
+
+        // Sets the robot's final pose to the final waypoint found
+        robotState.setRobotFinalPose(target);
+        follower.followPath(pathChain, true);
+    }
+
+    /**
+     * Calculate the distance to the target
+     *
+     * @param current current waypoint
+     * @param target  target waypoint
+     * @return the distance to the target
+     */
+    protected double distToTarget(Waypoint current, Waypoint target) {
+        return Math.hypot(target.getX() - current.getX(),
+                target.getY() - current.getY());
+    }
+
+    /**
+     * Calculate the angle distance to the target
+     *
+     * @param currentHeading current heading
+     * @param targetHeading  target heading
+     * @return the angle distance to the target
+     */
+    protected double angleDistance(double currentHeading, double targetHeading) {
+        return Math.abs(currentHeading - targetHeading);
+    }
+
+    /**
+     * Returns whether the robot is stuck. This is calculated by when the
+     * robot isn't moving for a period of time
+     *
+     * @return whether the robot is stuck
+     */
+    public boolean isRobotStuck() {
+        return follower.isRobotStuck();
+    }
+
+    @Override
+    public void execute() {
+        drive.drivePedroPath(follower.getCurrentDriveVectors());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.driveRobotCentric(0, 0, 0);
+    }
+
+    @Override
+    public boolean isFinished() {
+        if (tolerance < 0 || angleTolerance < 0) {
+            throw new IllegalStateException("Tolerance and angle tolerance must be set");
+        }
+
+        if (isTimeoutReached()) {
+            return true;
+        }
+
+        Waypoint current = robotState.getRobotCurrentPose();
+        Waypoint target = robotState.getRobotFinalPose();
+
+//        RobotLog.dd(LOG_TAG, "Current State: %s", robotState.getCurrentAutoState());
+//        RobotLog.dd(LOG_TAG, "Distance: %f", distToTarget(current, target));
+//        RobotLog.dd(LOG_TAG, "Angular Distance: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
+
+        if (distToTarget(current, target) < tolerance
+                && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
+            return true;
+        }
+
+        if (isRobotStuck()) {
+            return true;
+        }
+
+        return false;
+    }
+}
