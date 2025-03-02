@@ -47,7 +47,7 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setDropperState(DropperState.HIGH_BASKET);
-            RobotLog.dd(LOG_TAG, "High basket action completed");
+//            RobotLog.dd(LOG_TAG, "High basket action completed");
         }
     }
 }

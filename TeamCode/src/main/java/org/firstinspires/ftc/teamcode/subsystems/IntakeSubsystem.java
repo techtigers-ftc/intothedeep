@@ -424,7 +424,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     private double getVoltageCompensatedMotorPower(double power) {
         if (robotState.getVoltage() != 0) {
-            return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
+            return Range.clip(power / (robotState.getVoltage() / 10.0), -1, 1);
         } else {
             return power;
         }
