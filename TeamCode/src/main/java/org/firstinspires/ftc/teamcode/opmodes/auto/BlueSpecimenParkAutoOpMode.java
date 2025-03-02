@@ -6,9 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * An autonomous opmode on the specimen side of the blue alliance, clipping 5 specimens and parking
  */
 @Autonomous(name = "Blue Specimen 5+0", group = "Specimen Auto")
-public class BlueSpecimenAutoOpMode extends SpecimenAutoOpMode {
+public class BlueSpecimenParkAutoOpMode extends SpecimenAutoOpMode {
     @Override
     protected boolean isBlue() {
         return true;
+    }
+
+    @Override
+    protected boolean doSample() {
+        return false;
     }
 }
