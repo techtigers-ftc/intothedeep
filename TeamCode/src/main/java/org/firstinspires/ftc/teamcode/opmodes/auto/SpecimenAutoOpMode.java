@@ -4,15 +4,18 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
+import org.firstinspires.ftc.teamcode.autostates.EndState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndTrackState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -37,6 +40,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
+
     protected abstract boolean isBlue();
 
     @Override
@@ -116,6 +120,14 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configThirdIntake(thirdIntake);
 
+        DriveToPoseState thirdPush = new DriveToPoseState(
+                "thirdPush",
+                drive,
+                robotState,
+                3
+        );
+        SpecimenDriveStateConfigurator.configThirdPush(thirdPush);
+
         DriveToPoseState driveToFirstSpecimenIntake = new DriveToPoseState(
                 "driveToFirstSpecimenIntake",
                 drive,
@@ -142,7 +154,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToFirstSpecimenDrop",
                 drive,
                 dropper,
-                intake,
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstSpecimenDrop(driveToFirstSpecimenDrop);
@@ -153,16 +164,15 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToSecondSpecimenIntake);
+        SpecimenDriveStateConfigurator.configSecondSpecimenIntake(driveToSecondSpecimenIntake);
 
         DriveToGeneralSpecimenDropState driveToSecondSpecimenDrop = new DriveToGeneralSpecimenDropState(
                 "driveToSecondSpecimenDrop",
                 drive,
                 dropper,
-                intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToSecondSpecimenDrop);
+        SpecimenDriveStateConfigurator.configSecondSpecimenDrop(driveToSecondSpecimenDrop);
 
         DriveToGeneralSpecimenIntakeState driveToThirdSpecimenIntake = new DriveToGeneralSpecimenIntakeState(
                 "driveToThirdSpecimenIntake",
@@ -170,16 +180,15 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToThirdSpecimenIntake);
+        SpecimenDriveStateConfigurator.configThirdSpecimenIntake(driveToThirdSpecimenIntake);
 
         DriveToGeneralSpecimenDropState driveToThirdSpecimenDrop = new DriveToGeneralSpecimenDropState(
                 "driveToThirdSpecimenDrop",
                 drive,
                 dropper,
-                intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToThirdSpecimenDrop);
+        SpecimenDriveStateConfigurator.configThirdSpecimenDrop(driveToThirdSpecimenDrop);
 
         DriveToGeneralSpecimenIntakeState driveToFourthSpecimenIntake = new DriveToGeneralSpecimenIntakeState(
                 "driveToFourthSpecimenIntake",
@@ -187,16 +196,16 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenIntake(driveToFourthSpecimenIntake);
+        SpecimenDriveStateConfigurator.configFourthSpecimenIntake(driveToFourthSpecimenIntake);
 
-        DriveToGeneralSpecimenDropState driveToFourthSpecimenDrop = new DriveToGeneralSpecimenDropState(
+        DriveToLastGeneralSpecimenDropState driveToFourthSpecimenDrop = new DriveToLastGeneralSpecimenDropState(
                 "driveToFourthSpecimenDrop",
                 drive,
                 dropper,
                 intake,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configGeneralSpecimenDrop(driveToFourthSpecimenDrop);
+        SpecimenDriveStateConfigurator.configFourthSpecimenDrop(driveToFourthSpecimenDrop);
 
         DriveToPark driveToPark = new DriveToPark(
                 "driveToPark",
@@ -206,6 +215,23 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
         SpecimenDriveStateConfigurator.configDriveToPark(driveToPark);
+
+        DriveFromChamberSampleDropState driveToSampleDrop = new DriveFromChamberSampleDropState(
+                "driveToSampleDrop",
+                drive,
+                dropper,
+                intake,
+                robotState
+        );
+        SpecimenDriveStateConfigurator.configSampleDrop(driveToSampleDrop);
+
+        ClipAndTrackState intakeSample = new ClipAndTrackState(
+                "intakeSample",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
 
         EndState endState = new EndState("end");
 
@@ -218,6 +244,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(secondIntake)
                 .addState(secondPush)
                 .addState(thirdIntake)
+                .addState(thirdPush)
                 .addState(driveToFirstSpecimenIntake)
                 .addState(clipSpecimen)
                 .addState(intakeSpecimen)
@@ -229,6 +256,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToFourthSpecimenIntake)
                 .addState(driveToFourthSpecimenDrop)
                 .addState(driveToPark)
+                .addState(driveToSampleDrop)
+                .addState(intakeSample)
                 .addState(endState)
 
                 // Drives to the preload and clips it
@@ -248,9 +277,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 // Drives out to a position to push the third sample
                 .addTransition(secondPush, thirdIntake, AutoState.DRIVE_END)
                 .addTransition(secondPush, thirdIntake, AutoState.TIMEOUT)
+                // Drives to the third push
+                .addTransition(thirdIntake, thirdPush, AutoState.DRIVE_END)
+                .addTransition(thirdIntake, thirdPush, AutoState.TIMEOUT)
                 // Drives to the first specimen intake
-                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
-                .addTransition(thirdIntake, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
+                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.DRIVE_END)
+                .addTransition(thirdPush, driveToFirstSpecimenIntake, AutoState.TIMEOUT)
                 // Intakes the first specimen
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
@@ -283,12 +315,21 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fourth specimen and clips it
                 .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
-                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToFourthSpecimenDrop, clipSpecimen, AutoState.TIMEOUT)
-                // Drives to the park in the observation zone
-                .addTransition(clipSpecimen, driveToPark, AutoState.SPECIMEN_4_DROP_COMPLETE)
+                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.DRIVE_END)
+                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
+
+                // Intakes the sample from the submersible and drives to the basket to drop it off
+                .addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+
+                // Goes to park if the sample intake times out or fails
+                .addTransition(intakeSample, driveToPark, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(intakeSample, driveToPark, AutoState.TIMEOUT)
+
+                //Transitions to end state when done with either park or sample drop drive
                 .addTransition(driveToPark, endState, AutoState.DRIVE_END)
                 .addTransition(driveToPark, endState, AutoState.TIMEOUT)
+                .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
+                .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveChamberPreload);
 
@@ -310,7 +351,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override

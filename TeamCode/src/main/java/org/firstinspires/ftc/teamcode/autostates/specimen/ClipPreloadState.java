@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -29,7 +32,10 @@ public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 new RawPowerDriveAction(drive, 0.4, 0.1),
-                new DropperFrontSlapAction(dropper, robotState)
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                new WaitCommand(100),
+                new DropperOpenAction(dropper)
         );
     }
 

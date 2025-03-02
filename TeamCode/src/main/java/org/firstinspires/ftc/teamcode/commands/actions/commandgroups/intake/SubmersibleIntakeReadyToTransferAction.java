@@ -39,7 +39,8 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
                         new SequentialCommandGroup(
                                 new IntakeClawRotationAction(intake, () -> 30, 0),
                                 new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
+                                new IntakeLoosenAction(intake)
                         ),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
@@ -48,7 +49,6 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-                        new IntakeLoosenAction(intake, 350),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 ),
