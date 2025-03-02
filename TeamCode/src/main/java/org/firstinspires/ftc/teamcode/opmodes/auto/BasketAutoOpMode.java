@@ -223,14 +223,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFifthSampleDrop(driveToFifthDrop);
 
-        DriveToSamplePark driveToSamplePark = new DriveToSamplePark(
+        DriveToSamplePark driveToPark = new DriveToSamplePark(
                 "driveToPark",
                 drive,
                 dropper,
                 intake,
                 robotState
         );
-        BasketDriveStateConfigurator.configDriveToPark(driveToSamplePark);
+        BasketDriveStateConfigurator.configDriveToPark(driveToPark);
 
         DriveToGeneralSubmersibleIntakeState driveToSixthIntake = new DriveToGeneralSubmersibleIntakeState(
                 "driveToSixthIntake",
