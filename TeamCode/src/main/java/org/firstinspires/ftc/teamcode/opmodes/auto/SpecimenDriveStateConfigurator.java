@@ -461,10 +461,10 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToGeneralSampleDropState to configure
      */
     public static void configSampleDrop(DriveFromChamberSampleDropState state) {
-//        state.setTranslationalPIDF(0.15, 0, 0, 0);
-//        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
-//        state.setHeadingPIDF(1, 0, 0, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.06, 0, 0, 0);
+        state.setDrivePIDF(0.007, 0, 0.0065, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
