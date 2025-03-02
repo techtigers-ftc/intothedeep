@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
@@ -31,17 +30,16 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      *
      * @param drive                the drive subsystem
      * @param intake               the intake subsystem
-     * @param dropper              the dropper subsystem
      * @param clawRotationSupplier the supplier for the claw rotation
      * @param robotState           the robot state
      */
     public IntakePrepareToTransferAction(DriveSubsystem drive, IntakeSubsystem intake,
-                                         DropperSubsystem dropper,
                                          DoubleSupplier clawRotationSupplier,
                                          RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
-        addRequirements(intake, dropper);
+        // TODO: Remove dropper from here
+        addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(

@@ -168,7 +168,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFourthSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 
@@ -202,7 +201,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFifthSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 

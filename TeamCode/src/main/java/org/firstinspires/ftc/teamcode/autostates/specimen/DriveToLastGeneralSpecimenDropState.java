@@ -1,36 +1,47 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.core.display.Color;
 
 /**
- * Drives to general specimen drop
+ * Drives to the last specimen drop, to bring out the intake after the robot reaches past a certain point
  */
-public class DriveToGeneralSpecimenDropState extends DriveStateBase {
+public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToGeneralSpecimenDropState.class.getSimpleName();
+            DriveToLastGeneralSpecimenDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToGeneralSpecimenDropState
+     * Constructor for the DriveToLastSpecimenDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
+     * @param intake     The intake subsystem
      */
-    public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToLastGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
-                new DropperForwardCarryWallAction(dropper, robotState)
-        );
+                new DropperForwardCarryWallAction(dropper, robotState),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 88),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                )
+                );
     }
 
     @Override
@@ -42,7 +53,8 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
+                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
