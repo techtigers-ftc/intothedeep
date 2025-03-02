@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
@@ -49,6 +50,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                 );
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
+                new WaitCommand(100),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75),
