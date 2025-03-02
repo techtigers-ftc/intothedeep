@@ -11,10 +11,11 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the ascent mechanism.
  */
 public class AscentSubsystem extends CloseableSubsystem {
+    public static final double JOSH_FAILSAFE_LIMIT = -1;
     public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 14;
     public static final double JACKS_SLIDES_DISENGAGE_HEIGHT = 9;
-    public static final double ASCENT_UNENGAGED_POSITION = 0.2;
-    public static final double ASCENT_ENGAGED_POSITION = 0.76;
+    public static final double ASCENT_UNENGAGED_POSITION = 0.4;
+    public static final double ASCENT_ENGAGED_POSITION = 0.91;
     public static final double JACKS_UNENGAGED_POSITION = 0;
     public static final double JACKS_ENGAGED_POSITION = 0.84;
     private final Servo changingTransmission;
