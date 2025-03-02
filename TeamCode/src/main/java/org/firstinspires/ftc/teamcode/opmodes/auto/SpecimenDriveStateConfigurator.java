@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeStat
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -435,7 +435,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configDriveToPark(DriveToPark state) {
+    public static void configDriveToPark(DriveToSpecimenPark state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
         state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
