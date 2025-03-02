@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import team.techtigers.core.display.Color;
 
 /**
- * Drives to general specimen drop
+ * Drives to the last specimen drop, to bring out the intake after the robot reaches past a certain point
  */
 public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToLastGeneralSpecimenDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToGeneralSpecimenDropState
+     * Constructor for the DriveToLastSpecimenDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem

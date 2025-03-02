@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to clip a specimen onto the chamber
+ * A state to clip a specimen onto the chamber, track a sample, and pick it up
  */
 public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
@@ -32,8 +32,9 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * Constructor for the ClipAndTrackState
      *
      * @param name       The name of the state
-     * @param dropper    The dropper subsystem
      * @param drive      The drive subsystem
+     * @param intake     The intake subsystem
+     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
     public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
@@ -58,7 +59,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     /**
      * Get the current condition of the state
      *
-     * @return the current condition of the state based on run counter
+     * @return the current condition of the state
      */
     @Override
     public AutoState getCurrentCondition() {
@@ -66,7 +67,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-                if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
                     return AutoState.SAMPLE_INTAKE_FAILED;

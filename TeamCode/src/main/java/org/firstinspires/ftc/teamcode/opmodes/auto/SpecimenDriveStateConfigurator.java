@@ -231,7 +231,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                // 40 is correct for the y, don't change it
+                                // 100 is correct for the y, don't change it
                                 new Point(135, 100),
                                 new Point(129, 13)
                         )
