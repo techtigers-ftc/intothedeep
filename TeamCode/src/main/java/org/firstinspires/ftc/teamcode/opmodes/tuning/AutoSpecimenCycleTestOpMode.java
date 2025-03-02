@@ -5,12 +5,17 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.AutoSpecimenCycleAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
+import team.techtigers.core.paths.Waypoint;
 
 @TeleOp
 public class AutoSpecimenCycleTestOpMode extends BaseOpMode {
@@ -20,12 +25,27 @@ public class AutoSpecimenCycleTestOpMode extends BaseOpMode {
     public void initialize() {
         robotState = new RobotState(false, false);
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
-        registerSubsystems(drive, dropper, sensor);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(113,13, Math.toRadians(90)));
+        registerSubsystems(drive, dropper, sensor, odometry);
 
         AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(autoSpecimenCycle);
+
+        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(dropperWallIntakeAction);
+
+        DropperOpenAction openAction = new DropperOpenAction(dropper, 100);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(openAction);
+    }
+
+    @Override
+    public void update(){
+        telemetry.addData("X: ", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Y: ", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Heading (deg): ", robotState.getRobotCurrentPose().getHeading());
     }
 }

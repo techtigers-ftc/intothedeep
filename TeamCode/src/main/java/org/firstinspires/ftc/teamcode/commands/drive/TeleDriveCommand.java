@@ -62,12 +62,12 @@ public class TeleDriveCommand extends TimeoutCommand {
         this.robotState = robotState;
         RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
         follower = new Follower(localizer);
-        this.translationalPIDF.setCoefficients(translationalPIDF);
-        this.headingPIDF.setCoefficients(headingPIDF);
-        this.drivePIDF.setCoefficients(drivePIDF);
         this.targetPosition = targetPosition;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
+        this.translationalPIDF = new PIDFController(translationalPIDF);
+        this.headingPIDF = new PIDFController(headingPIDF);
+        this.drivePIDF = new FilteredPIDFController(drivePIDF);
         addRequirements(drive);
     }
 
@@ -83,11 +83,6 @@ public class TeleDriveCommand extends TimeoutCommand {
         }
         if (drivePIDF == null) {
             throw new IllegalArgumentException("Drive PIDF coefficients not set");
-        }
-
-        // Makes sure that a path chain is set
-        if (pathChain == null) {
-            throw new IllegalArgumentException("Path chain not set");
         }
 
         // Sets the primary PIDF coefficients

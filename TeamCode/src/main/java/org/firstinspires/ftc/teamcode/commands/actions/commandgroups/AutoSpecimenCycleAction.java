@@ -32,7 +32,12 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                         new TeleDriveCommand(drive,
                                 new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
                                 new CustomFilteredPIDFCoefficients(0.0055, 0, 0.0035, 0.6, 0),
-                                new CustomPIDFCoefficients(0.9, 0, 0.015, 0), new Pose(68, 41.5, 90), robotState, SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE, SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE, 3
+                                new CustomPIDFCoefficients(0.9, 0, 0.015, 0),
+                                new Pose(68, 41.5, 90),
+                                        robotState,
+                                        SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE,
+                                        SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
+                                3
                         ),
                         new DropperForwardCarryWallAction(dropper, robotState)
                 ),
