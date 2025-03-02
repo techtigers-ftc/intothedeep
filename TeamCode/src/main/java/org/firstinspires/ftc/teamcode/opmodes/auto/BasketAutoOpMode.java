@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedIntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedSubmersibleIntakeState;
@@ -222,14 +222,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFifthSampleDrop(driveToFifthDrop);
 
-        DriveToPark driveToPark = new DriveToPark(
+        DriveToSamplePark driveToSamplePark = new DriveToSamplePark(
                 "driveToPark",
                 drive,
                 dropper,
                 intake,
                 robotState
         );
-        BasketDriveStateConfigurator.configDriveToPark(driveToPark);
+        BasketDriveStateConfigurator.configDriveToPark(driveToSamplePark);
 
         FirstLevelAscentState firstLevelAscent = new FirstLevelAscentState(
                 "firstLevelAscent",
@@ -259,7 +259,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(intakeFifthSample)
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
-                .addState(driveToPark)
+                .addState(driveToSamplePark)
                 .addState(firstLevelAscent)
 
                 // Drives to the preload, drops it off, and goes to the first intake
@@ -340,11 +340,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.FAILED_SAMPLE_5_TIMEOUT)
 
                 // Drives to the park position
-                .addTransition(driveToFifthDrop, driveToPark, AutoState.DRIVE_END)
-                .addTransition(driveToFifthDrop, driveToPark, AutoState.TIMEOUT)
+                .addTransition(driveToFifthDrop, driveToSamplePark, AutoState.DRIVE_END)
+                .addTransition(driveToFifthDrop, driveToSamplePark, AutoState.TIMEOUT)
 
-                .addTransition(driveToPark, firstLevelAscent, AutoState.DRIVE_END)
-                .addTransition(driveToPark, firstLevelAscent, AutoState.TIMEOUT)
+                .addTransition(driveToSamplePark, firstLevelAscent, AutoState.DRIVE_END)
+                .addTransition(driveToSamplePark, firstLevelAscent, AutoState.TIMEOUT)
 
                 .setCurrentState(driveToPreloadDrop);
 

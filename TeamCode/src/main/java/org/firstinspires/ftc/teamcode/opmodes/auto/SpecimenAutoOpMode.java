@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeStat
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
@@ -208,14 +208,14 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configFourthSpecimenDrop(driveToFourthSpecimenDrop);
 
-        DriveToPark driveToPark = new DriveToPark(
+        DriveToSpecimenPark driveToSpecimenPark = new DriveToSpecimenPark(
                 "driveToPark",
                 intake,
                 drive,
                 dropper,
                 robotState
         );
-        SpecimenDriveStateConfigurator.configDriveToPark(driveToPark);
+        SpecimenDriveStateConfigurator.configDriveToPark(driveToSpecimenPark);
 
         DriveFromChamberSampleDropState driveToSampleDrop = new DriveFromChamberSampleDropState(
                 "driveToSampleDrop",
@@ -256,7 +256,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToThirdSpecimenDrop)
                 .addState(driveToFourthSpecimenIntake)
                 .addState(driveToFourthSpecimenDrop)
-                .addState(driveToPark)
+                .addState(driveToSpecimenPark)
                 .addState(driveToSampleDrop)
                 .addState(intakeSample)
                 .addState(endState)
@@ -320,12 +320,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
 
                 // Goes to park if the sample intake times out or fails
-                .addTransition(intakeSample, driveToPark, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeSample, driveToPark, AutoState.TIMEOUT)
+                .addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(intakeSample, driveToSpecimenPark, AutoState.TIMEOUT)
 
                 //Transitions to end state when done with either park or sample drop drive
-                .addTransition(driveToPark, endState, AutoState.DRIVE_END)
-                .addTransition(driveToPark, endState, AutoState.TIMEOUT)
+                .addTransition(driveToSpecimenPark, endState, AutoState.DRIVE_END)
+                .addTransition(driveToSpecimenPark, endState, AutoState.TIMEOUT)
                 .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
                 .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
