@@ -23,7 +23,7 @@ public class DriveToSamplePark extends DriveStateBase {
             DriveToSamplePark.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToPark
+     * Constructor for the DriveToSamplePark
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
