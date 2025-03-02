@@ -18,9 +18,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 /**
  * A State to drive to the submersible position
  */
-public class DriveToPark extends DriveStateBase {
+public class DriveToSamplePark extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToPark.class.getSimpleName();
+            DriveToSamplePark.class.getSimpleName();
 
     /**
      * Constructor for the DriveToPark
@@ -31,7 +31,7 @@ public class DriveToPark extends DriveStateBase {
      * @param intake     The intake subsystem
      * @param robotState The robot state
      */
-    public DriveToPark(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToSamplePark(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
