@@ -21,7 +21,7 @@ public class StartAscentCommandGroup extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem, used to move the slides
      */
     public StartAscentCommandGroup(RobotState robotState, AscentSubsystem ascent, DropperSubsystem dropper) {
-//        addRequirements(ascent, dropper);
+        addRequirements(ascent, dropper);
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper,
                         AscentSubsystem.ASCENT_SLIDES_INITIAL_HEIGHT + 1, 0.5),
