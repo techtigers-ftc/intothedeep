@@ -137,10 +137,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeToObservationZoneAction intakeToObservation =
                 new IntakeToObservationZoneAction(intake, dropper, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
-        IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, 5);
-        IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
-                intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
@@ -206,10 +202,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
 
         // Retract Trigger bindings
-        (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(prepareToPickupManual);
+        (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
 
-        (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck)).whenActive(tuck);
-        (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToPickup).whenActive(prepareToPickupNoSlides);
+        (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck).or(inReadyToPickup)).whenActive(tuck);
 
         // Extend Trigger Bindings
 
