@@ -46,7 +46,6 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                         new RawPowerDriveAction(drive, 0.8, 0.25),
                         new SequentialCommandGroup(
                                 new WaitCommand(100),
-//                                new RawPowerDriveAction(drive, 0.8, 0.1),
                                 new DropperPitchAction(dropper,
                                         DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                                 new WaitCommand(150),

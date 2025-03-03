@@ -44,7 +44,6 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-//                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
                                         new DropperOpenAction(dropper, 100)
                                 ),
                                 new SequentialCommandGroup(
