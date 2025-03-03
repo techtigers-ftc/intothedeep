@@ -6,6 +6,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.AutoDropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -39,7 +42,12 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
                 new AutoDropperForwardCarryAction(dropper, robotState),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 88),
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 0),
+                        new IntakeWristPitchAction(intake,
+                                IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 0),
+                        new IntakeOpenAction(intake, 0)
+//                        new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                 )
         );
     }
@@ -53,12 +61,9 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
-                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-            robotState.setDebugColor(Color.BLUE);
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
-            robotState.setDebugColor(Color.GREEN);
             return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
