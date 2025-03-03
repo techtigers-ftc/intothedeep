@@ -48,6 +48,11 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_BACK_SLAP_POSITION = 10;
     public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
+    // CLAW POSITIONS
+    public static double CLAW_OPENED_POSITION = 0.6;
+    public static double CLAW_CLOSED_POSITION = 0.26;
+    // Axon Micro closed position: 0.24 (for reference)
+
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.758 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
     private static final double TICKS_PER_ROTATION = 384.5;
@@ -56,8 +61,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
-    public static double CLAW_OPENED_POSITION = 0.6;
-    public static double CLAW_CLOSED_POSITION = 0.24;
+
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0;
