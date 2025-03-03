@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
@@ -11,12 +12,12 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
-import team.techtigers.base.statemachine.SequentialCommandGroupState;
+import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
 /**
  * A state to clip the preload specimen to the chamber
  */
-public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
+public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipPreloadState.class.getSimpleName();
     private final RobotState robotState;
@@ -31,11 +32,14 @@ public class ClipPreloadState extends SequentialCommandGroupState<AutoState> {
         super(name);
         this.robotState = robotState;
         addCommands(
-                new RawPowerDriveAction(drive, 0.4, 0.1),
-                new DropperPitchAction(dropper,
-                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                new WaitCommand(100),
-                new DropperOpenAction(dropper)
+                new RawPowerDriveAction(drive, 0.4, 0.2),
+                new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        new DropperPitchAction(dropper,
+                                DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                        new WaitCommand(100),
+                        new DropperOpenAction(dropper)
+                )
         );
     }
 

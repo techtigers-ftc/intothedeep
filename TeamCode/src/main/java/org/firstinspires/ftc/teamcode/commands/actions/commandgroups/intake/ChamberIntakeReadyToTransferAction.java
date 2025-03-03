@@ -17,21 +17,21 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to move intake to ready to transfer state from the submersible
+ * Command to move intake to ready to transfer state from the chamber
  */
-public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = SubmersibleIntakeReadyToTransferAction.class.getSimpleName();
+public class ChamberIntakeReadyToTransferAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = ChamberIntakeReadyToTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new SubmersibleIntakeReadyToTransferAction
+     * Creates a new ChamberIntakeReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public SubmersibleIntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper,
-                                                  RobotState robotState) {
+    public ChamberIntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper,
+                                              RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
@@ -44,10 +44,15 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
-                        new DropperTransferAction(dropper, robotState)
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 200),
+                        new SequentialCommandGroup(
+                                new WaitCommand(150),
+                                new DropperTransferAction(dropper, robotState)
+                        )
                 ),
                 new ParallelCommandGroup(
+                        new IntakeWristPitchAction(intake,
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeLoosenAction(intake, 200),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
