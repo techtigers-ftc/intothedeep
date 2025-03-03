@@ -26,7 +26,7 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
             DriveFromChamberSampleDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveFromSubmersibleSampleDropState
+     * Constructor for the DriveFromChamberSampleDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem

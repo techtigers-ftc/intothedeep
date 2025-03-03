@@ -45,7 +45,6 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
                         new IntakeWristPitchAction(intake,
                                 IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 0),
                         new IntakeOpenAction(intake, 0)
-//                        new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                 )
         );
     }
