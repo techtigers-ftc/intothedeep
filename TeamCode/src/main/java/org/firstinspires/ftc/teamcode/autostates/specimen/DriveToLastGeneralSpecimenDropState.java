@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.AutoDropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -36,12 +36,12 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
         super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
-                new DropperForwardCarryWallAction(dropper, robotState),
+                new AutoDropperForwardCarryAction(dropper, robotState),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 88),
                         new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                 )
-                );
+        );
     }
 
     @Override
