@@ -55,8 +55,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.68;
-    private static final double CLAW_LOOSE_POSITION = 0.89;
-    private static final double CLAW_CLOSED_POSITION = 0.93;
+    private static final double CLAW_LOOSE_POSITION = 0.92;
+    private static final double CLAW_CLOSED_POSITION = 0.95;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
@@ -128,7 +128,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         rightWrist.setDirection(Servo.Direction.FORWARD);
         leftWrist.setDirection(Servo.Direction.REVERSE);
 
-        claw.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.FORWARD);
         clawRotation.setDirection(Servo.Direction.REVERSE);
         isDirectControlEnabled = false;
 
