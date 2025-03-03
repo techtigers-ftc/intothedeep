@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -38,8 +40,17 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         this.intake = intake;
         lastClawRotation = 90;
         addRequirements(intake, dropper);
+
+        TeleHoldPointAction holdPointAction =
+                new TeleHoldPointAction(drive, robotState,
+                        () -> robotState.getRobotCurrentPose().getX(),
+                        () -> robotState.getRobotCurrentPose().getY(),
+                        () -> robotState.getRobotCurrentPose().getHeading(),
+                        0, Math.toRadians(0)
+                );
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
+                new WaitCommand(100),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75),
@@ -51,8 +62,15 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                         - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
-                new IntakeFullReadyToTransferNoVisionAction(intake, dropper,
-                        robotState, command == null ? this : command)
+                new ParallelCommandGroup(
+                        new SequentialCommandGroup(
+                                holdPointAction,
+                                new WaitUntilCommand(robotState::isVisionAligning),
+                                new InstantCommand(holdPointAction::stop)
+                        ),
+                        new IntakeFullReadyToTransferNoVisionAction(intake,
+                                dropper, robotState, command == null ? this : command)
+                )
         );
     }
 

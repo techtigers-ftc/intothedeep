@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ascent.StartAscentAction;
+import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
@@ -90,12 +90,12 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -playerGamepad.getRightY(), ascent, dropper, drive);
-        StartAscentAction startAscentAction = new StartAscentAction(robotState, ascent, dropper);
+        StartAscentCommandGroup startAscentCommandGroup = new StartAscentCommandGroup(robotState, ascent, dropper);
 
-        startAscentTrigger.whenActive(startAscentAction);
+        startAscentTrigger.whenActive(startAscentCommandGroup);
 
         Trigger runningEngageAscent =
-                new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentAction));
+                new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentCommandGroup));
         isAscending.and(runningEngageAscent.negate()).whileActiveOnce(manualAscentCommand);
 
         // DRIVER TODO: Split into a different method
