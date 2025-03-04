@@ -40,7 +40,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 120;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double WRIST_PITCH_PECK_POSITION = 155;
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 95;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 0;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
@@ -55,7 +55,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     private static final double CLAW_OPEN_POSITION = 0.68;
-    private static final double CLAW_LOOSE_POSITION = 0.92;
+    private static final double CLAW_LOOSE_POSITION = 0.91;
     private static final double CLAW_CLOSED_POSITION = 0.95;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
@@ -424,7 +424,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     private double getVoltageCompensatedMotorPower(double power) {
         if (robotState.getVoltage() != 0) {
-            return Range.clip(power / (robotState.getVoltage() / 10.0), -1, 1);
+            return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
         } else {
             return power;
         }

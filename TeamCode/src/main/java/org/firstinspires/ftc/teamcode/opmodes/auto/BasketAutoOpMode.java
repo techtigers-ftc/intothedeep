@@ -353,6 +353,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFourthSample, driveToFourthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(intakeFourthSample, firstLevelAscent, AutoState.PARK)
                 .addTransition(intakeFourthSample, firstLevelAscentTransfer, AutoState.NO_TIME)
+                .addTransition(failedIntakeSubmersible, firstLevelAscentTransfer, AutoState.NO_TIME)
+                .addTransition(failedIntakeSubmersible, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.FAILED_SAMPLE_4_TIMEOUT)
@@ -403,7 +405,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override

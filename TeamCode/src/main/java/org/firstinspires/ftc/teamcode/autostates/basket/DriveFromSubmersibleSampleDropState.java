@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -25,6 +26,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
     private static final double TIME_TO_INTAKE = 5;
+    private boolean isOpenFinished;
 
     /**
      * Constructor for the DriveFromSubmersibleSampleDropState
@@ -45,7 +47,8 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
-                                        new DropperOpenAction(dropper, 100)
+                                        new DropperOpenAction(dropper, 50),
+                                        new InstantCommand(() -> isOpenFinished = true)
                                 ),
                                 new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                         )
@@ -54,9 +57,15 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        isOpenFinished = false;
+    }
+
+    @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperClawState() == ClawState.OPEN &&
+                isOpenFinished &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE) {
                 return AutoState.PARK;

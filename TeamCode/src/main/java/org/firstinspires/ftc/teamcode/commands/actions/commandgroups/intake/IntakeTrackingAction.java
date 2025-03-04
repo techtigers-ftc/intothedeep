@@ -44,7 +44,7 @@ public class IntakeTrackingAction extends CommandBase {
 
         } else {
             frameCount = 0;
-            power = 0.3 + 0.003 * intake.getCurrentSlidePositionInches();
+            power = 0.35 + 0.003 * intake.getCurrentSlidePositionInches();
         }
 //        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
 //        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());

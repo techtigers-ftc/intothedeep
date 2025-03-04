@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -53,10 +55,12 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
+                RobotLog.dd(LOG_TAG, "Going to park");
                 return AutoState.PARK;
             } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
+                        RobotLog.dd(LOG_TAG, "no time");
                         return AutoState.NO_TIME;
                     } else {
                         return AutoState.SAMPLE_INTAKE_COMPLETE;

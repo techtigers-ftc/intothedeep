@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeTuckAfterTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
@@ -38,6 +39,7 @@ public class FirstLevelAscentTransferState extends ParallelCommandGroupState<Aut
                 new RawPowerDriveAction(drive, 1, 10),
                 new SequentialCommandGroup(
                         new SubmersibleIntakeReadyToTransferAction(intake, dropper, robotState),
+                        new WaitCommand(1000),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new IntakeTuckAfterTransferAction(dropper, intake, robotState),
