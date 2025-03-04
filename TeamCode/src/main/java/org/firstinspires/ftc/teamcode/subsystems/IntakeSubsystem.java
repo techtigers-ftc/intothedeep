@@ -37,14 +37,14 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 70;
     public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
     public static double CLAW_ROTATION_PICKUP_POSITION = 88;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 139;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
     public static final double WRIST_PITCH_PECK_POSITION = 160;
     public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 88;
 
-    public static final double SLIDES_TRANSFER_POSITION = 0.25;
+    public static final double SLIDES_TRANSFER_POSITION = 1;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -55,8 +55,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     public static double CLAW_OPEN_POSITION = 0.68;
-    public static double CLAW_LOOSE_POSITION = 0.89;
-    public static double CLAW_CLOSED_POSITION = 0.9;
+    public static double CLAW_LOOSE_POSITION = 0.91;
+    public static double CLAW_CLOSED_POSITION = 0.92;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
