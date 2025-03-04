@@ -18,7 +18,7 @@ public class IntakeTrackingAction extends CommandBase {
     private final RobotState robotState;
     private double frameCount;
 
-    private double BASE_POWER = 0.3;
+    private double BASE_POWER = 0.35;
     private double INCREMENTAL_POWER = 0.003;
 
     /**
