@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * A command group that moves the dropper to forward carry for the autonomous
+ * A command group that moves the dropper to forward carry for the autonomous. It forgoes the
  */
 public class AutoDropperForwardCarryAction extends ParallelCommandGroup {
-    private final RobotState robotState;
     private static final String LOG_TAG = AutoDropperForwardCarryAction.class.getSimpleName();
+    private final RobotState robotState;
 
     /**
      * Creates a new AutoDropperForwardCarryAction
