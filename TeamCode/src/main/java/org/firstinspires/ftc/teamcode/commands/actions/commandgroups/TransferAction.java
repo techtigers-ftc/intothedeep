@@ -21,7 +21,7 @@ public class TransferAction extends SequentialCommandGroup {
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperTransferAction.
+     * Creates a new TransferAction.
      *
      * @param dropper    The dropper subsystem.
      * @param intake     The intake subsystem.

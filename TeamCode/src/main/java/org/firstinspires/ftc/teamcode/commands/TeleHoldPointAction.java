@@ -60,7 +60,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
     }
 
     /**
-     * Creates a new HoldPointAction (overload constructor)
+     * Creates a new TeleHoldPointAction (overload constructor)
      *
      * @param drive          the drive subsystem
      * @param robotState     the robot state

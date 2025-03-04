@@ -13,14 +13,13 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * A command group that moves the dropper system to the high basket drop position
- * The NT stands for "No Transfer"
  */
 public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = DropperHighBasketNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperHighBasketNTAction
+     * Creates a new DropperHighBasketNoTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state

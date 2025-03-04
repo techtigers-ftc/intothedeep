@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * Command to move intake to observation zone, dropping its block in the zone
- * and moving to ready to intake
+ * Command to move intake to observation zone. This command sends the slides out and puts the intake
+ * into the prepare to pickup position.
  */
 public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeToObservationZoneAction.class.getSimpleName();

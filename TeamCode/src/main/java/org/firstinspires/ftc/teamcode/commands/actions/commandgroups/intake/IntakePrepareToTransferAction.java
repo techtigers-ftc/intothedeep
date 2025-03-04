@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to align to a block using fine camera vision and pick it up
+ * Command to align to a block using fine camera vision, pick it up, and
  */
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
