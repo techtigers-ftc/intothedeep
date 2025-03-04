@@ -8,13 +8,18 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 /**
- * Command to move the slides until the small camera sees the block is in the right place
+ * Command to creep the slides forward until the Limelight sees the block. This command makes sure
+ * the Limelight sees the block for a few frames before picking it up to make sure there is no
+ * ghost block detected.
  */
 @Config
 public class IntakeTrackingAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private double frameCount;
+
+    private double BASE_POWER = 0.3;
+    private double INCREMENTAL_POWER = 0.003;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -44,7 +49,7 @@ public class IntakeTrackingAction extends CommandBase {
 
         } else {
             frameCount = 0;
-            power = 0.3 + 0.003 * intake.getCurrentSlidePositionInches();
+            power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
         }
 //        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
 //        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
