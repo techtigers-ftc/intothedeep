@@ -44,5 +44,6 @@ public class AscentEngageAction extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         robotState.setIsAscending(true);
+        ascent.engageAscent();
     }
 }

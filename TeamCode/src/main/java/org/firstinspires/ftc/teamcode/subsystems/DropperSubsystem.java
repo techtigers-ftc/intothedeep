@@ -37,6 +37,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_TRANSFER_POSITION = 40;
     public static final double PITCH_BASKET_POSITION = 230;
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
+    public static final double AUTO_PITCH_CHAMBER_POSITION = 180;
     public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
     public static final double PITCH_WALL_INTAKE_POSITION = 310;
@@ -56,8 +57,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
+    // Old values for an axon micro: closed 0.6, open 0.24
+    // New values for an injora: closed 0.6, open 0.26
     public static double CLAW_OPENED_POSITION = 0.6;
-    public static double CLAW_CLOSED_POSITION = 0.24;
+    public static double CLAW_CLOSED_POSITION = 0.28;
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0;

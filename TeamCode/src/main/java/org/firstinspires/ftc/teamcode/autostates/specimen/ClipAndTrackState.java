@@ -38,13 +38,14 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 10);
+        super(name, 2.5);
         this.robotState = robotState;
         this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
+                        new RawPowerDriveAction(drive, 0.8, 0.25),
                         new SequentialCommandGroup(
-                                new RawPowerDriveAction(drive, 0.8, 0.1),
+                                new WaitCommand(100),
                                 new DropperPitchAction(dropper,
                                         DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                                 new WaitCommand(150),
