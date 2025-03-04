@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to move intake to ready to transfer state from the chamber
+ * Command to move intake to ready to transfer state from the chamber side of the submersible
  */
 public class ChamberIntakeReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = ChamberIntakeReadyToTransferAction.class.getSimpleName();
