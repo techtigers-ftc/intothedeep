@@ -33,7 +33,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakeFullReadyToTransferAction
+     * Creates a new IntakeFullReadyToTransferNoVisionAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem

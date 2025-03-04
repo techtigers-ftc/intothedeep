@@ -16,7 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
- * Command to use vision to align the robot to a block and hover over it
+ * Command to use vision to align the robot to a block, pick it up, and bring it to the transfer
+ * position. It does a tele hold point when the vision is not aligning
  */
 public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
