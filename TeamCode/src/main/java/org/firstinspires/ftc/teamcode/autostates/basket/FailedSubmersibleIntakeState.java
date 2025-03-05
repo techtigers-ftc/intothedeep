@@ -73,13 +73,11 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
             }
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
-                RobotLog.dd(LOG_TAG, "Going to park");
                 return AutoState.PARK;
             } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 3) {
                     runCounter = 0;
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-                        RobotLog.dd(LOG_TAG, "no time");
                         return AutoState.NO_TIME;
                     } else {
                         if (previousAutoState.equals("intakeFourthSample")) {
