@@ -23,7 +23,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * Command to move intake to Ready To Transfer without vision
+ * Command to pick up a sample once the robot is hovered over a block, and bring the intake to the
+ * transfer position. The block is ready to be picked up by the dropper.
  */
 public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
@@ -32,7 +33,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakeFullReadyToTransferAction
+     * Creates a new IntakeFullReadyToTransferNoVisionAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
@@ -48,7 +49,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
         addRequirements(intake, dropper);
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
-                new IntakeCloseAction(intake, 50),
+                new IntakeCloseAction(intake, 100),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),

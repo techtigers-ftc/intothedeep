@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -26,17 +27,18 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
-    public static final double SLIDE_MAX = 28.25;
+    public static final double SLIDE_MAX = 27;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 1;
+    public static final double SLIDES_TRANSFER_POSITION = 0.75;
     public static final double SLIDES_CHAMBER_POSITION = 5;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
-    public static final double PITCH_TRANSFER_POSITION = 35;
+    public static final double PITCH_TRANSFER_POSITION = 40;
     public static final double PITCH_BASKET_POSITION = 230;
     public static final double PITCH_CHAMBER_POSITION = 155; // 180
+    public static final double AUTO_PITCH_CHAMBER_POSITION = 180;
     public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
     public static final double PITCH_WALL_INTAKE_POSITION = 310;
@@ -56,8 +58,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
+    // Old values for an axon micro: closed 0.6, open 0.24
+    // New values for an injora: closed 0.6, open 0.26
     public static double CLAW_OPENED_POSITION = 0.6;
-    public static double CLAW_CLOSED_POSITION = 0.24;
+    public static double CLAW_CLOSED_POSITION = 0.28;
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0;
@@ -350,6 +354,7 @@ public class DropperSubsystem extends CloseableSubsystem {
                 inPrimarySlideMode = true;
             }
             double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
+//            RobotLog.dd("dropper subsystem", "slides power: %f", power);
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }

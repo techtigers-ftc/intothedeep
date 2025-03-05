@@ -8,11 +8,12 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedIntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
+import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentTransferState;
 import org.firstinspires.ftc.teamcode.autostates.basket.SampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.SubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
@@ -77,7 +78,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                14.5,
+                13,
                 robotState);
         BasketDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
@@ -160,7 +161,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                0,
+                1,
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleDrop(driveToThirdDrop);
 
@@ -222,7 +223,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFifthSampleDrop(driveToFifthDrop);
 
-        DriveToPark driveToPark = new DriveToPark(
+        DriveToSamplePark driveToPark = new DriveToSamplePark(
                 "driveToPark",
                 drive,
                 dropper,
@@ -277,6 +278,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(failedIntakeSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(failedIntakeSample, driveToFirstDrop, AutoState.SAMPLE_1_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToFirstDrop, AutoState.FAILED_SAMPLE_1_TIMEOUT)
+                .addTransition(driveToFirstDrop, driveToPark, AutoState.PARK)
 
                 // Drives to the first drop, drops it off, and goes to the second intake
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
@@ -292,6 +294,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeSecondSample, driveToSecondDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, driveToSecondDrop, AutoState.SAMPLE_2_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToSecondDrop, AutoState.FAILED_SAMPLE_2_TIMEOUT)
+                .addTransition(driveToSecondDrop, driveToPark, AutoState.PARK)
 
                 // Drives to the second drop, drops it off, and goes to the third intake
                 .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.DRIVE_END)
@@ -307,6 +310,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.SAMPLE_3_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.FAILED_SAMPLE_3_TIMEOUT)
+                .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
 
                 // Drives to the third drop, drops it off, and goes to the fourth intake
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
@@ -320,9 +324,12 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFourthSample, driveToFourthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(intakeFourthSample, firstLevelAscent, AutoState.PARK)
+                .addTransition(failedIntakeSubmersible, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.FAILED_SAMPLE_4_TIMEOUT)
+                .addTransition(driveToFourthDrop, driveToPark, AutoState.PARK)
 
                 // Drives to the fourth drop, drops it off, and goes to the fifth intake
                 .addTransition(driveToFourthDrop, driveToFifthIntake, AutoState.DRIVE_END)
@@ -336,10 +343,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(intakeFifthSample, driveToPark, AutoState.NO_TIME)
+                .addTransition(intakeFifthSample, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.FAILED_SAMPLE_5_TIMEOUT)
-
-                // Drives to the park position
+                .addTransition(driveToFifthDrop, driveToPark, AutoState.PARK)
                 .addTransition(driveToFifthDrop, driveToPark, AutoState.DRIVE_END)
                 .addTransition(driveToFifthDrop, driveToPark, AutoState.TIMEOUT)
 

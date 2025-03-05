@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
@@ -345,7 +345,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToPark to configure
      */
-    public static void configDriveToPark(DriveToPark state) {
+    public static void configDriveToPark(DriveToSamplePark state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setDrivePIDF(0.01, 0, 0.005, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
@@ -368,5 +368,4 @@ public class BasketDriveStateConfigurator {
         state.setTolerance(MEGA_TOLERANCE);
         state.setAngleTolerance(MEGA_ANGLE_TOLERANCE);
     }
-
 }

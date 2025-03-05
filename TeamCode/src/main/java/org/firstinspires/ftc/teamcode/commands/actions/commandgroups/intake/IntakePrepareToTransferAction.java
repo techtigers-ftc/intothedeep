@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to align to a block using fine camera vision and pick it up
+ * Command to align to a block using fine camera vision, pick it up, and
  */
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
@@ -38,7 +38,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                          RobotState robotState) {
         this.robotState = robotState;
         this.intake = intake;
-        // TODO: Remove dropper from here
         addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
@@ -54,12 +53,12 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
-                new IntakeCloseAction(intake, 50),
+                new IntakeCloseAction(intake, 100),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200)
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 10, 200)
                 )
         );
     }

@@ -15,14 +15,14 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to move intake to ready to pickup state
+ * Command to move the intake to ready to pickup state, with the claw open
  */
 public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakeReadyToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeReadyToPickupCommand
+     * Creates a new IntakeReadyToPickupAction
      *
      * @param intake                the intake subsystem
      * @param robotState            the robot state

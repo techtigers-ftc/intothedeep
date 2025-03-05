@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * A command group that Prepare the Dropper for wall intake
+ * A command group that gets the robot ready to do a wall intake without transferring a sample
  */
 public class DropperWallIntakeNoTransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = DropperWallIntakeNoTransferAction.class.getSimpleName();

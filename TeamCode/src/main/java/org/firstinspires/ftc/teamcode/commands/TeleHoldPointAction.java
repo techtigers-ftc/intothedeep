@@ -29,6 +29,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
+    private boolean end;
 
     /**
      * Creates a new HoldPointAction
@@ -54,11 +55,12 @@ public class TeleHoldPointAction extends TimeoutCommand {
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         follower = new Follower(new RobotStateLocalizer(robotState));
+        end = false;
 //        addRequirements(drive);
     }
 
     /**
-     * Creates a new HoldPointAction (overload constructor)
+     * Creates a new TeleHoldPointAction (overload constructor)
      *
      * @param drive          the drive subsystem
      * @param robotState     the robot state
@@ -120,6 +122,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
         Waypoint target = new Waypoint(xSupplier.getAsDouble(), ySupplier.getAsDouble(), headingSupplier.getAsDouble());
         robotState.setRobotFinalPose(target);
         follower.holdPoint(PoseTranslator.waypointToPose(target));
+        end = false;
     }
 
     @Override
@@ -139,9 +142,9 @@ public class TeleHoldPointAction extends TimeoutCommand {
         Waypoint target = robotState.getRobotFinalPose();
 
         return
-                (distToTarget(current, target) < tolerance
+                end || ((distToTarget(current, target) < tolerance
                         && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance)
-                        || isTimeoutReached();
+                        || isTimeoutReached());
     }
 
     @Override
@@ -151,5 +154,12 @@ public class TeleHoldPointAction extends TimeoutCommand {
 //        if(isTimeoutReached()) {
 //            RobotLog.dd("Tele Hold Point","Command timed out");
 //        }
+    }
+
+    /**
+     * Stops the command, ending it immediately
+     */
+    public void stop() {
+        end = true;
     }
 }

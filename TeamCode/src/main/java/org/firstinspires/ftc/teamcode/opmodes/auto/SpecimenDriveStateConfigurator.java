@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeStat
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -21,7 +21,7 @@ public class SpecimenDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 5;
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     private static final double MEDIUM_TOLERANCE = 4;
-    private static final double SMALL_TOLERANCE = 1.5;
+    private static final double SMALL_TOLERANCE = 2.5;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
     private static final double MINISCULE_TOLERANCE = 1.25;
     private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
@@ -264,7 +264,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -318,7 +318,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -372,7 +372,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -426,7 +426,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setTolerance(SMALL_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -435,7 +435,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configDriveToPark(DriveToPark state) {
+    public static void configDriveToPark(DriveToSpecimenPark state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
         state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
