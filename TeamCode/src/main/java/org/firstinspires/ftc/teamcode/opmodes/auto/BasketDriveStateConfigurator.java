@@ -368,33 +368,4 @@ public class BasketDriveStateConfigurator {
         state.setTolerance(MEGA_TOLERANCE);
         state.setAngleTolerance(MEGA_ANGLE_TOLERANCE);
     }
-
-    /**
-     * Configures the SixthSampleIntake.
-     *
-     * @param state The DriveToGeneralSampleIntakeState to configure
-     */
-    public static void configSixthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
-        state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
-//        state.setPrimaryPIDSToTuning();
-
-        state.setPathChain(
-                new PathBuilder()
-                        .addPath(
-                                new BezierCurve(
-                                        new Point(11, 11),
-                                        new Point(25, 60),
-                                        new Point(47, 66.5)
-                                )
-                        )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(0))
-                        .build()
-        );
-
-        state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
-    }
 }

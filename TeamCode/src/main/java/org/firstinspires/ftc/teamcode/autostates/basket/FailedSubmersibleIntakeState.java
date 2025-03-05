@@ -76,7 +76,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 RobotLog.dd(LOG_TAG, "Going to park");
                 return AutoState.PARK;
             } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 3) {
                     runCounter = 0;
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
                         RobotLog.dd(LOG_TAG, "no time");

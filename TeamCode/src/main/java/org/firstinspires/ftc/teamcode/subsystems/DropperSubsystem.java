@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -26,7 +27,7 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
-    public static final double SLIDE_MAX = 28.25;
+    public static final double SLIDE_MAX = 27;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 0.75;
     public static final double SLIDES_CHAMBER_POSITION = 5;
@@ -353,6 +354,7 @@ public class DropperSubsystem extends CloseableSubsystem {
                 inPrimarySlideMode = true;
             }
             double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
+//            RobotLog.dd("dropper subsystem", "slides power: %f", power);
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }

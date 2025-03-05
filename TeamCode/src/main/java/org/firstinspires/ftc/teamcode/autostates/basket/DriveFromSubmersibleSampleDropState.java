@@ -64,8 +64,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                isOpenFinished &&
+        if (isOpenFinished &&
                 robotState.getDropperState() == DropperState.HIGH_BASKET) {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE) {
                 return AutoState.PARK;

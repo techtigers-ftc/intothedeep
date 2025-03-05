@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
@@ -70,8 +68,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.HIGH_BASKET &&
+        if (robotState.getDropperState() == DropperState.HIGH_BASKET &&
                 isOpenFinished &&
                 robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             return AutoState.DRIVE_END;

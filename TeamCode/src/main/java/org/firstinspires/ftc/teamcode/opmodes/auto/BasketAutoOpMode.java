@@ -161,7 +161,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                0,
+                1,
                 robotState);
         BasketDriveStateConfigurator.configThirdSampleDrop(driveToThirdDrop);
 
@@ -232,32 +232,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configDriveToPark(driveToPark);
 
-        DriveToGeneralSubmersibleIntakeState driveToSixthIntake = new DriveToGeneralSubmersibleIntakeState(
-                "driveToSixthIntake",
-                drive,
-                intake,
-                dropper,
-                robotState
-        );
-        BasketDriveStateConfigurator.configSixthSampleIntake(driveToSixthIntake);
-
-        SubmersibleIntakeState intakeSixthSample = new SubmersibleIntakeState(
-                "intakeSixthSample",
-                drive,
-                intake,
-                robotState
-        );
-
         FirstLevelAscentState firstLevelAscent = new FirstLevelAscentState(
                 "firstLevelAscent",
-                drive,
-                intake,
-                dropper,
-                robotState
-        );
-
-        FirstLevelAscentTransferState firstLevelAscentTransfer = new FirstLevelAscentTransferState(
-                "firstLevelAscentTransfer",
                 drive,
                 intake,
                 dropper,
@@ -285,10 +261,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
                 .addState(driveToPark)
-                .addState(driveToSixthIntake)
-                .addState(intakeSixthSample)
                 .addState(firstLevelAscent)
-                .addState(firstLevelAscentTransfer)
 
                 // Drives to the preload, drops it off, and goes to the first intake
                 .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.DRIVE_END)
@@ -352,8 +325,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFourthSample, driveToFourthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(intakeFourthSample, firstLevelAscent, AutoState.PARK)
-                .addTransition(intakeFourthSample, firstLevelAscentTransfer, AutoState.NO_TIME)
-                .addTransition(failedIntakeSubmersible, firstLevelAscentTransfer, AutoState.NO_TIME)
                 .addTransition(failedIntakeSubmersible, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(failedIntakeSubmersible, driveToFourthDrop, AutoState.SAMPLE_4_INTAKE_RECOVERED)
@@ -374,18 +345,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(intakeFifthSample, driveToPark, AutoState.NO_TIME)
                 .addTransition(intakeFifthSample, firstLevelAscent, AutoState.PARK)
-                .addTransition(intakeFifthSample, firstLevelAscentTransfer, AutoState.NO_TIME)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.FAILED_SAMPLE_5_TIMEOUT)
                 .addTransition(driveToFifthDrop, driveToPark, AutoState.PARK)
-                .addTransition(driveToFifthDrop, driveToSixthIntake, AutoState.DRIVE_END)
-                .addTransition(driveToFifthDrop, driveToSixthIntake, AutoState.TIMEOUT)
-
-                .addTransition(driveToSixthIntake, intakeSixthSample, AutoState.DRIVE_END)
-                .addTransition(driveToSixthIntake, intakeSixthSample, AutoState.TIMEOUT)
-                .addTransition(intakeSixthSample, driveToPark, AutoState.NO_TIME)
-                .addTransition(intakeSixthSample, firstLevelAscent, AutoState.PARK)
-                .addTransition(intakeSixthSample, firstLevelAscentTransfer, AutoState.NO_TIME)
+                .addTransition(driveToFifthDrop, driveToPark, AutoState.DRIVE_END)
+                .addTransition(driveToFifthDrop, driveToPark, AutoState.TIMEOUT)
 
                 .addTransition(driveToPark, firstLevelAscent, AutoState.DRIVE_END)
                 .addTransition(driveToPark, firstLevelAscent, AutoState.TIMEOUT)
@@ -405,7 +369,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
-//        disableUpdate();
+        disableUpdate();
     }
 
     @Override
