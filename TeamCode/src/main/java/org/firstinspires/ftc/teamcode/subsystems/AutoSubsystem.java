@@ -35,5 +35,6 @@ public class AutoSubsystem extends CloseableSubsystem {
         stateMachine.update();
         robotState.setPreviousAutoState(stateMachine.getPreviousState());
         robotState.setCurrentAutoState(stateMachine.getCurrentState());
+        robotState.setAutoRemainingTime(30 - robotState.getRunTime() / 1000.0);
     }
 }

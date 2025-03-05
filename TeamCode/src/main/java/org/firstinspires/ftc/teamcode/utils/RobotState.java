@@ -61,6 +61,7 @@ public class RobotState extends GlobalState {
     private String currentAutoState;
     private String previousAutoState;
     private Color debugColor;
+    private double autoRemainingTime;
 
 
     private boolean runDistanceSensor;
@@ -114,6 +115,7 @@ public class RobotState extends GlobalState {
         debugColor = Color.BLACK;
         runDistanceSensor = false;
         distanceSensorValue = -1;
+        autoRemainingTime = -1;
     }
 
     /**
@@ -824,5 +826,21 @@ public class RobotState extends GlobalState {
      */
     public void setDistanceSensorValue(double distanceSensorValue) {
         this.distanceSensorValue = distanceSensorValue;
+    }
+
+    /**
+     * @return the amount of time remaining in the autonomous
+     */
+    public double getAutoRemainingTime() {
+        return (double) autoRemainingTime;
+    }
+
+    /**
+     * Sets the amount of time remaining in the autonomous
+     *
+     * @param autoRemainingTime the amount of time remaining in the autonomous
+     */
+    public void setAutoRemainingTime(double autoRemainingTime) {
+        this.autoRemainingTime = autoRemainingTime;
     }
 }

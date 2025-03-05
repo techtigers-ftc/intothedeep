@@ -20,7 +20,7 @@ public class GlobalState implements Serializable {
     /**
      * @return the amount of time elapsed since the last reset
      */
-    public long getRunTime() {
+    public double getRunTime() {
         return System.currentTimeMillis() - startTime;
     }
 

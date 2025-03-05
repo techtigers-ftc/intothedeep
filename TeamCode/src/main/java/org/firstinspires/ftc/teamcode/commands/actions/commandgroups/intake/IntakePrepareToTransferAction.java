@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to align to a block using fine camera vision and pick it up
+ * Command to align to a block using fine camera vision, pick it up, and move up on the pitch
  */
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
@@ -58,7 +58,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 200)
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 10, 200)
                 )
         );
     }

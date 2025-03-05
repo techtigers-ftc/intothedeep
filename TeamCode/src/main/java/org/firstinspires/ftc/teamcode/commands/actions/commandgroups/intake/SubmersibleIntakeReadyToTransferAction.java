@@ -17,7 +17,9 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to move intake to ready to transfer state from the submersible
+ * Command to bring the intake to the ready to transfer position after picking up a block. This
+ * command is the same as the intake ready to transfer command, but it does not bring the slides
+ * in until the intake pitch is safely above the submersible
  */
 public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = SubmersibleIntakeReadyToTransferAction.class.getSimpleName();
