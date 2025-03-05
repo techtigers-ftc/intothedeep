@@ -40,7 +40,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                                    IntakeSubsystem intake,
                                    double targetSlidePos,
                                    RobotState robotState) {
-        super(name, drive, robotState, 15);
+        super(name, drive, robotState, 4);
         addCommands(
                 autoDriveCommand,
                 new ParallelCommandGroup(
