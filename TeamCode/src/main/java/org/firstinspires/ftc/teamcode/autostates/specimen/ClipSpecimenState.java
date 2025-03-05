@@ -41,7 +41,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
                         new WaitCommand(100),
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                        new WaitCommand(50),
+                        new WaitCommand(100),
                         new DropperOpenAction(dropper)
                 )
         );
