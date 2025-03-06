@@ -322,6 +322,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 // Goes to park if the sample intake times out or fails
                 .addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeSample, driveToSpecimenPark, AutoState.TIMEOUT)
+                .addTransition(intakeSample, driveToSpecimenPark, AutoState.NO_TIME)
 
                 //Transitions to end state when done with either park or sample drop drive
                 .addTransition(driveToSpecimenPark, endState, AutoState.DRIVE_END)

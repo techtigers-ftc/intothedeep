@@ -43,16 +43,18 @@ public class ChamberIntakeReadyToTransferAction extends SequentialCommandGroup {
                         ),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
-                        new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 200),
+                        new SequentialCommandGroup(
+                                new IntakeWristPitchAction(intake,
+                                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 20, 200),
+                                new IntakeWristPitchAction(intake,
+                                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100)
+                        ),
                         new SequentialCommandGroup(
                                 new WaitCommand(150),
                                 new DropperTransferAction(dropper, robotState)
                         )
                 ),
                 new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new IntakeLoosenAction(intake, 200),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)

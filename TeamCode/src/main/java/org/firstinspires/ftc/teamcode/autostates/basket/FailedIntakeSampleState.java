@@ -31,11 +31,9 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param intake     The intake subsystem
-     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
     public FailedIntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
-                                   DropperSubsystem dropper,
                                    RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;

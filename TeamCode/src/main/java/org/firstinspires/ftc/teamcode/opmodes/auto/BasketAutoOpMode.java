@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedIntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
-import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentTransferState;
 import org.firstinspires.ftc.teamcode.autostates.basket.SampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.SubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
@@ -94,7 +93,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeFirstSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 
@@ -102,7 +100,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "failedIntakeSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 
@@ -127,7 +124,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeSecondSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 
@@ -136,7 +132,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 drive,
                 dropper,
                 intake,
-                16,
+                15,
                 robotState);
         BasketDriveStateConfigurator.configSecondSampleDrop(driveToSecondDrop);
 
@@ -152,7 +148,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "intakeThirdSample",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
 
@@ -343,7 +338,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(intakeFifthSample, driveToPark, AutoState.NO_TIME)
+                .addTransition(intakeFifthSample, driveToPark, AutoState.PARK)
                 .addTransition(intakeFifthSample, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.FAILED_SAMPLE_5_TIMEOUT)

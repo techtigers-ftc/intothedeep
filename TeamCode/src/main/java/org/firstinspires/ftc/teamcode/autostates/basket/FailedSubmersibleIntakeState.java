@@ -21,8 +21,8 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = FailedSubmersibleIntakeState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 1;
-    private static final double TIME_TO_DROP = 3;
+    private static final double TIME_TO_INTAKE = 2;
+    private static final double TIME_TO_DROP = 2.5;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private int runCounter;
@@ -77,7 +77,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 3) {
                     runCounter = 0;
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-                        return AutoState.NO_TIME;
+                        return AutoState.PARK;
                     } else {
                         if (previousAutoState.equals("intakeFourthSample")) {
                             return AutoState.SAMPLE_4_INTAKE_RECOVERED;

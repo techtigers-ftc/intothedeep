@@ -40,7 +40,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                                    IntakeSubsystem intake,
                                    double targetSlidePos,
                                    RobotState robotState) {
-        super(name, drive, robotState, 15);
+        super(name, drive, robotState, 4);
         addCommands(
                 autoDriveCommand,
                 new ParallelCommandGroup(
@@ -53,7 +53,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                         new SequentialCommandGroup(
                                 new DropperHighBasketNoTransferAction(dropper, robotState),
                                 new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 15),
-                                new DropperOpenAction(dropper, 50),
+                                new DropperOpenAction(dropper, 100),
                                 new InstantCommand(() -> isOpenFinished = true)
                         )
                 )
