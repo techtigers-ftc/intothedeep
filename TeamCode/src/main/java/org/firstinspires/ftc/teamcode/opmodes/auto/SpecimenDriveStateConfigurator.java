@@ -213,7 +213,7 @@ public class SpecimenDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(HUMUNGOUS_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
