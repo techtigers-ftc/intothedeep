@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot type="FirstInspires-FTC">
+    <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
+        <LynxModule name="Expansion Hub 2" port="2">
+            <goBILDA5202SeriesMotor name="right_front" port="0" />
+            <goBILDA5202SeriesMotor name="right_back" port="1" />
+            <goBILDA5202SeriesMotor name="left_intake_slide" port="2" />
+            <goBILDA5202SeriesMotor name="right_intake_slide" port="3" />
+            <Servo name="right_intake_wrist" port="0" />
+            <Servo name="right_dropper_wrist" port="1" />
+            <Servo name="left_dropper_wrist" port="2" />
+            <Servo name="intake_claw" port="3" />
+            <Servo name="intake_claw_rotation" port="4" />
+            <DigitalDevice name="intake_break_beam" port="1" />
+            <REV_VL53L0X_RANGE_SENSOR name="back_distance_sensor" port="0" bus="2" />
+        </LynxModule>
+        <LynxModule name="Control Hub" port="173">
+            <goBILDA5202SeriesMotor name="left_back" port="0" />
+            <goBILDA5202SeriesMotor name="left_front" port="1" />
+            <goBILDA5202SeriesMotor name="right_dropper_slide" port="2" />
+            <goBILDA5202SeriesMotor name="left_dropper_slide" port="3" />
+            <Servo name="left_jack" port="0" />
+            <Servo name="right_jack" port="1" />
+            <Servo name="transmission_switch" port="2" />
+            <Servo name="left_intake_wrist" port="3" />
+            <Servo name="dropper_claw" port="5" />
+            <goBILDAPinpoint name="odo" port="0" bus="2" />
+            <AdafruitNeoPixel name="visual_display" port="0" bus="3" />
+        </LynxModule>
+    </LynxUsbDevice>
+    <EthernetDevice serialNumber="EthernetOverUsb:eth0:172.29.0.25" name="limelight" port="0" ipAddress="172.29.0.1" />
+</Robot>
+
+
