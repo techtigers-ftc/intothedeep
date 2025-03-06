@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.AutoDropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -50,5 +52,13 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
             return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        RobotLog.dd("DriveToGeneralSpecimenDropState", "Current position X: %f Y: %f Heading: %f", robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY(), robotState.getRobotCurrentPose().getHeading());
+        RobotLog.dd("DriveToGeneralSpecimenDropState", "Expected position X: %f Y: %f Heading: %f", robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY(), robotState.getRobotFinalPose().getHeading());
+
     }
 }
