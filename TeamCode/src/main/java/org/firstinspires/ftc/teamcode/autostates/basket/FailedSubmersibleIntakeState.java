@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
@@ -73,13 +72,11 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
             }
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
-                RobotLog.dd(LOG_TAG, "Going to park");
                 return AutoState.PARK;
             } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 3) {
                     runCounter = 0;
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-                        RobotLog.dd(LOG_TAG, "no time");
                         return AutoState.NO_TIME;
                     } else {
                         if (previousAutoState.equals("intakeFourthSample")) {
