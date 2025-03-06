@@ -368,5 +368,4 @@ public class BasketDriveStateConfigurator {
         state.setTolerance(MEGA_TOLERANCE);
         state.setAngleTolerance(MEGA_ANGLE_TOLERANCE);
     }
-
 }

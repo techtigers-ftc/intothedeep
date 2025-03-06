@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * A command group that transfers a block from the intake to the dropper.
+ * A command group that tucks the intake after doing a transfer
  */
 public class IntakeTuckAfterTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = TransferAction.class.getSimpleName();
 
     /**
-     * Creates a new DropperTransferAction.
+     * Creates a new IntakeTuckAfterTransferAction
      *
      * @param dropper    The dropper subsystem.
      * @param intake     The intake subsystem.

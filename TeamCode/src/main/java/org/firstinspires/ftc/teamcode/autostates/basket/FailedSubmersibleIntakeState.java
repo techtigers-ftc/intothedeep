@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
@@ -21,6 +22,8 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = FailedSubmersibleIntakeState.class.getSimpleName();
+    private static final double TIME_TO_INTAKE = 1;
+    private static final double TIME_TO_DROP = 3;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private int runCounter;
@@ -43,7 +46,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         previousAutoState = "";
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 1.75, () -> 90),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 1.25, () -> 90),
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),
@@ -69,13 +72,21 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 return AutoState.FAILED_SAMPLE_5_TIMEOUT;
             }
         } else {
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
+            if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
+                RobotLog.dd(LOG_TAG, "Going to park");
+                return AutoState.PARK;
+            } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 3) {
                     runCounter = 0;
-                    if (previousAutoState.equals("intakeFourthSample")) {
-                        return AutoState.SAMPLE_4_INTAKE_RECOVERED;
+                    if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
+                        RobotLog.dd(LOG_TAG, "no time");
+                        return AutoState.NO_TIME;
                     } else {
-                        return AutoState.SAMPLE_5_INTAKE_RECOVERED;
+                        if (previousAutoState.equals("intakeFourthSample")) {
+                            return AutoState.SAMPLE_4_INTAKE_RECOVERED;
+                        } else {
+                            return AutoState.SAMPLE_5_INTAKE_RECOVERED;
+                        }
                     }
                 } else {
                     runCounter++;

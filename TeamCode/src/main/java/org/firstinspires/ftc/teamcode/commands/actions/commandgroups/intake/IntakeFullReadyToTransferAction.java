@@ -16,13 +16,13 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
- * Command to move intake to Ready To Transfer.
+ * Command to use vision to align the robot to a block, pick it up, and bring it to the transfer
+ * position. It does a tele hold point when the vision is not aligning
  */
 public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
-    private double lastClawRotation;
 
     /**
      * Creates a new IntakeFullReadyToTransferAction
@@ -38,7 +38,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                            RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
-        lastClawRotation = 90;
         addRequirements(intake, dropper);
 
         TeleHoldPointAction holdPointAction =

@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
@@ -19,19 +19,20 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import java.util.function.DoubleSupplier;
 
 /**
- * Command to move intake to prepare to intake state.
+ * Command to move the intake to prepare to intake state. This command also moves the dropper to the
+ * pre-transfer position and opens the intake claw.
  */
 public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new IntakeToPrepareToIntakeCommand
+     * Creates a new IntakeToPrepareToIntakeAction
      *
-     * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
+     * @param intake                the intake subsystem
+     * @param dropper               the dropper subsystem
      * @param slidePositionSupplier the supplier for the target slide position
-     * @param robotState the robot state
+     * @param robotState            the robot state
      */
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DoubleSupplier slidePositionSupplier,
                                        RobotState robotState) {
@@ -57,9 +58,9 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     /**
      * Overloaded constructor that takes a target slide position instead of a supplier
      *
-     * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
-     * @param robotState the robot state
+     * @param intake        the intake subsystem
+     * @param dropper       the dropper subsystem
+     * @param robotState    the robot state
      * @param slidePosition the target slide position
      */
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, double slidePosition) {
@@ -72,11 +73,11 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
-            if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE){
+            if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
             robotState.setCurrentGear(DriveGears.ENGAGED);
