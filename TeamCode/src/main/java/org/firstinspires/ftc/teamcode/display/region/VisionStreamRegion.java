@@ -46,7 +46,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft = new DiagonalBlockSpriteLeft(1, 1);
         diagonalBlockRight = new DiagonalBlockSpriteRight(1, 1);
         noBlockDetected = new XSprite(3, 1, 6, 6);
-        checkmark = new CheckmarkSprite(3, 1);
+        checkmark = new CheckmarkSprite(2, 1);
 
         frame.setColor(Color.WHITE);
         verticalBlock.setColor(Color.YELLOW);

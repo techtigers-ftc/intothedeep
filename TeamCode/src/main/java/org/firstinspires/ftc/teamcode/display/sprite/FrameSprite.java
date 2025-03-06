@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.display.sprite;
 
 
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.Sprite;
 
@@ -33,6 +35,7 @@ public class FrameSprite extends Sprite {
             leds[getX()][getY() + row] = getColor();
             leds[getX() + getWidth() - 1][getY() + row] = getColor();
         }
+
 
         leds[getX() + (getWidth() / 2)][getY() + getHeight() / 2] = Color.GREEN;
         leds[getX() + (getWidth() / 2)][getY() + getHeight() / 2 - 1] = Color.GREEN;
