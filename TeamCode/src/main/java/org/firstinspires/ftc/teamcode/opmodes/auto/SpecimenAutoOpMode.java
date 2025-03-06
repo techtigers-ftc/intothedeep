@@ -334,6 +334,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
         if (doSample()) {
              stateMachine.addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE);
+        } else {
+             stateMachine.addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_COMPLETE);
         }
 
 
@@ -354,7 +356,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
 
-//        disableUpdate();
+        disableUpdate();
     }
 
     @Override
