@@ -42,6 +42,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
+    protected abstract boolean doSample();
 
     @Override
     public void initialize() {
@@ -318,9 +319,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.DRIVE_END)
                 .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
 
-                // Intakes the sample from the submersible and drives to the basket to drop it off
-                .addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
-
                 // Goes to park if the sample intake times out or fails
                 .addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeSample, driveToSpecimenPark, AutoState.TIMEOUT)
@@ -333,6 +331,10 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveChamberPreload);
+
+        if (doSample()) {
+             stateMachine.addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE);
+        }
 
 
         // Register subsystems + Create state machine subsystem
