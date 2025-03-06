@@ -1,0 +1,19 @@
+package org.firstinspires.ftc.teamcode.opmodes.auto;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+/**
+ * An autonomous opmode on the specimen side of the blue alliance, clipping 5 specimens and dropping a sample
+ */
+@Autonomous(name = "Blue Specimen 5+1", group = "Specimen Auto")
+public class BlueSpecimenSampleAutoOpMode extends SpecimenAutoOpMode {
+    @Override
+    protected boolean isBlue() {
+        return true;
+    }
+
+    @Override
+    protected boolean doSample() {
+        return true;
+    }
+}

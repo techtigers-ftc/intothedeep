@@ -47,7 +47,7 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
                                         new DropperOpenAction(dropper, 100)
                                 ),
                                 new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> robotState.getRunTime() > 29900 && dropper.getPitch() > 180),
+                                        new WaitUntilCommand(() -> robotState.getAutoRemainingTime() < 0.1  && dropper.getPitch() > 180),
                                         new DropperOpenAction(dropper)
                                 ),
                                 new IntakeTuckAfterTransferAction(dropper, intake, robotState)

@@ -12,14 +12,13 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * A command group that moves the dropper to the forward high chamber drop position, with the
  * specimen upside down, ready to be clipped downwards onto the high chamber.
- * The NT stands for "No Transfer"
  */
 public class DropperForwardCarryNoTransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = DropperForwardCarryNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperForwardCarryNTAction
+     * Creates a new DropperForwardCarryNoTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state

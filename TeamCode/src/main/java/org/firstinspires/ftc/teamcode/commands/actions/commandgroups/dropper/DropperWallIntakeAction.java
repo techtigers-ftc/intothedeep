@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
- * A command group that Prepare the Dropper for wall intake
+ * A command group that transfers a sample and gets the robot ready to do a wall intake
  */
 public class DropperWallIntakeAction extends SequentialCommandGroup {
     private static final String LOG_TAG = DropperWallIntakeAction.class.getSimpleName();

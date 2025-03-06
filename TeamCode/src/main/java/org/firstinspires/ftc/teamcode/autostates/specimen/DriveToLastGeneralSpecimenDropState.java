@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.core.display.Color;
 
@@ -53,6 +54,12 @@ public class DriveToLastGeneralSpecimenDropState extends DriveStateBase {
     public void initialize() {
         super.initialize();
         robotState.setDebugColor(Color.BLACK);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
     }
 
     @Override
