@@ -17,7 +17,6 @@ import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
-// TODO: Test this code
 public class VisionStreamRegion extends DisplayRegion {
     private final FrameSprite frame;
     private final RectangleSprite verticalBlock;
