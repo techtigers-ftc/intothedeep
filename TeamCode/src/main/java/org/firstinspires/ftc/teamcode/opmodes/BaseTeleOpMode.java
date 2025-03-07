@@ -349,6 +349,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
+        disableUpdate();
     }
 
     @Override
@@ -385,8 +386,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
 //        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
-
-        disableUpdate();
     }
 
     @Override
