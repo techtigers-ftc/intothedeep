@@ -37,8 +37,6 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-//                        new WaitCommand(250),
-//                        new DropperOpenAction(dropper, 100),
                         new DropperWallIntakeNoTransferAction(dropper, robotState)
                 )
         );
@@ -58,7 +56,5 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-            RobotLog.dd("DriveToGeneralSpecimenIntakeState", "Current position X: %f Y: %f Heading: %f", robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY(), robotState.getRobotCurrentPose().getHeading());
-            RobotLog.dd("DriveToGeneralSpecimenIntakeState", "Expected position X: %f Y: %f Heading: %f", robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY(), robotState.getRobotFinalPose().getHeading());
     }
 }
