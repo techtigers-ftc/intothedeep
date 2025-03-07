@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
@@ -25,7 +26,7 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndTrackState.class.getSimpleName();
-    private static final double TIME_TO_DROP = 2.5;
+    private static final double TIME_TO_DROP = 2.4;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -39,7 +40,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 2.5);
+        super(name, 5);
         this.robotState = robotState;
         this.intake = intake;
         addCommands(
@@ -66,14 +67,18 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     @Override
     public AutoState getCurrentCondition() {
         if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+            RobotLog.dd(LOG_TAG, "Timeout reached");
             return AutoState.TIMEOUT;
         } else if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
+            RobotLog.dd(LOG_TAG, "Go to park");
             return AutoState.NO_TIME;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
+                    RobotLog.dd(LOG_TAG, "Sample intake complete, intake state: %s, block position: %s", robotState.getIntakeState(), robotState.getBlockPosition());
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
+                    RobotLog.dd(LOG_TAG, "Sample intake failed, intake state: %s, block position: %s", robotState.getIntakeState(), robotState.getBlockPosition());
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {

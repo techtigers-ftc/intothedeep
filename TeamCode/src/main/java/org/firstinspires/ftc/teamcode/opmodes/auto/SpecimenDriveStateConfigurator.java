@@ -21,7 +21,7 @@ public class SpecimenDriveStateConfigurator {
     private static final double LARGE_TOLERANCE = 5;
     private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     private static final double MEDIUM_TOLERANCE = 4;
-    private static final double SMALL_TOLERANCE = 1.5;
+    private static final double SMALL_TOLERANCE = 3;
     private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
     private static final double MINISCULE_TOLERANCE = 1.25;
     private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
@@ -180,8 +180,8 @@ public class SpecimenDriveStateConfigurator {
                         // Curve to third sample
                         .addBezierCurve(
                                 new Point(126, 22),
-                                new Point(123, 52),
-                                new Point(136, 48)
+                                new Point(116, 52),
+                                new Point(136, 50)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -207,7 +207,7 @@ public class SpecimenDriveStateConfigurator {
                         // Push third sample
                         .addBezierLine(
                                 new Point(136, 48),
-                                new Point(135, 25)
+                                new Point(136, 25)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -445,7 +445,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(74, 41.5),
-                                new Point(115, 15)
+                                new Point(120, 15)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                         .build()
