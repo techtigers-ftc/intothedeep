@@ -349,6 +349,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
+        disableUpdate();
     }
 
     @Override

@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -26,7 +23,7 @@ public class SensorSubsystem extends CloseableSubsystem {
      * Constructs a new SensorSubsystem.
      *
      * @param hardwareMap The hardware map, used to get hardware references
-     * @param robotState The robot state, used to get the robot's current state
+     * @param robotState  The robot state, used to get the robot's current state
      */
     public SensorSubsystem(HardwareMap hardwareMap, RobotState robotState) {
         this.robotState = robotState;
@@ -40,7 +37,7 @@ public class SensorSubsystem extends CloseableSubsystem {
     public void periodic() {
         voltageAverage.add(voltage.getVoltage());
         robotState.setVoltage(voltageAverage.getAverage());
-        if(robotState.isRunDistanceSensor()){
+        if (robotState.isRunDistanceSensor()) {
             robotState.setDistanceSensorValue(distanceSensor.getDistance(DistanceUnit.INCH));
         }
     }
