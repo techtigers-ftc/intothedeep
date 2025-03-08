@@ -249,7 +249,7 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
@@ -307,7 +307,7 @@ public class BasketDriveStateConfigurator {
                         .build()
         );
 
-        state.setTolerance(SMALL_TOLERANCE);
+        state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 
