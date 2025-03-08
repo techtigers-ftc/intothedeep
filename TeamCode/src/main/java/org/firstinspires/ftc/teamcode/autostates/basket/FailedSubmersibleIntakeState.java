@@ -57,7 +57,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                         )
                 ),
                 new IntakeTrackingAction(intake, robotState),
-//                new WaitCommand(500),
+                new WaitCommand(100),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
