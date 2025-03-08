@@ -120,7 +120,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentCommandGroup));
         Trigger movingSlides = new Trigger(() -> gamepad2.right_stick_y != 0);
         isAscending.and(runningEngageAscent.negate()).and(movingSlides).whenActive(manualAscentCommand);
-        Trigger driverRightBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
+        Trigger driverB = driverGamepad.getGamepadButton(GamepadKeys.Button.B);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
@@ -246,6 +246,20 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 }
         );
 
+        // Toggles Break Beam Sensor
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
+                () -> {
+                    robotState.setBreakBeamEnabled(false);
+                    gamepad1.rumbleBlips(1);
+                    gamepad2.rumbleBlips(1);
+                },
+                () -> {
+                    robotState.setBreakBeamEnabled(true);
+                    gamepad1.rumbleBlips(2);
+                    gamepad2.rumbleBlips(2);
+                }
+        );
+
         // Toggles the intake claw between open and closed positions
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intake::toggleClaw);
 
@@ -301,8 +315,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
 
         // Low Basket drop
-        driverRightBumper.and(blockInIntake).whenActive(dropperLowBasketAction);
-        driverRightBumper.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
+        driverB.and(blockInIntake).whenActive(dropperLowBasketAction);
+        driverB.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
 
         //Manual Dropper Stuff
 
