@@ -55,7 +55,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        if ((super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5) && !robotState.isVisionAligning())) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
