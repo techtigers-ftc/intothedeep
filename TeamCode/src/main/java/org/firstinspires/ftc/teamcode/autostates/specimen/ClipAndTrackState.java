@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
@@ -53,7 +52,10 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                                 new WaitCommand(150),
                                 new DropperOpenAction(dropper)
                         ),
-                        new IntakeTrackingAction(intake, robotState)
+                        new SequentialCommandGroup(
+                                new IntakeTrackingAction(intake, robotState),
+                                new WaitCommand(100)
+                        )
                 ),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
