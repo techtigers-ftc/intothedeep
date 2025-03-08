@@ -67,18 +67,14 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     @Override
     public AutoState getCurrentCondition() {
         if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
-            RobotLog.dd(LOG_TAG, "Timeout reached");
             return AutoState.TIMEOUT;
         } else if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-            RobotLog.dd(LOG_TAG, "Go to park");
             return AutoState.NO_TIME;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-                    RobotLog.dd(LOG_TAG, "Sample intake complete, intake state: %s, block position: %s", robotState.getIntakeState(), robotState.getBlockPosition());
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
-                    RobotLog.dd(LOG_TAG, "Sample intake failed, intake state: %s, block position: %s", robotState.getIntakeState(), robotState.getBlockPosition());
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {
