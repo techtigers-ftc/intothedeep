@@ -121,7 +121,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger movingSlides = new Trigger(() -> gamepad2.right_stick_y != 0);
         isAscending.and(runningEngageAscent.negate()).and(movingSlides).whenActive(manualAscentCommand);
         Trigger driverRightBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
-        Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
@@ -138,10 +137,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenPressed(headingLockCommand);
 
-
-        // Low Basket drop
-        driverRightBumper.and(blockInIntake).whenActive(dropperLowBasketAction);
-        driverRightBumper.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
 
         // MANIPULATOR
 
@@ -211,6 +206,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
         Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
         Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
+        Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
@@ -303,6 +299,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
         dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
         dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
+
+        // Low Basket drop
+        driverRightBumper.and(blockInIntake).whenActive(dropperLowBasketAction);
+        driverRightBumper.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
 
         //Manual Dropper Stuff
 
