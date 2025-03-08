@@ -51,7 +51,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
                 new IntakeCloseAction(intake, 100),
                 new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 200),
+                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 300),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new ParallelCommandGroup(

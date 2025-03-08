@@ -17,9 +17,10 @@ public class IntakeTrackingAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private double frameCount;
+    private double detectedSlidePosition;
 
     private double BASE_POWER = 0.35;
-    private double INCREMENTAL_POWER = 0.003;
+    private double INCREMENTAL_POWER = 0.0015;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -32,6 +33,7 @@ public class IntakeTrackingAction extends CommandBase {
         this.intake = intake;
         this.robotState = robotState;
         frameCount = 0;
+        detectedSlidePosition = 0;
     }
 
     @Override
@@ -44,9 +46,11 @@ public class IntakeTrackingAction extends CommandBase {
     public void execute() {
         double power;
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+            if (frameCount == 0) {
+                detectedSlidePosition = intake.getCurrentSlidePositionInches();
+            }
             frameCount++;
             power = 0;
-
         } else {
             frameCount = 0;
             power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
@@ -65,7 +69,11 @@ public class IntakeTrackingAction extends CommandBase {
     public void end(boolean interrupted) {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(0);
         robotState.setIntakeTracking(false);
+        if (!interrupted) {
+            intake.moveSlidesAbsolute(detectedSlidePosition);
+        } else {
+            intake.moveSlidesRelative(0);
+        }
     }
 }
