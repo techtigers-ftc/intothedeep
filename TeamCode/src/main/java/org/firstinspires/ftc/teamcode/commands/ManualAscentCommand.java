@@ -52,7 +52,7 @@ public class ManualAscentCommand extends CommandBase {
     @Override
     public void execute() {
         double power = powerSupplier.getAsDouble();
-        if (dropper.getCurrentSlidePositionInches() > DropperSubsystem.SLIDE_MAX) {
+        if (dropper.getCurrentSlidePositionInches() > DropperSubsystem.SLIDES_MAX) {
             power = Math.min(0, power);
         }
 
