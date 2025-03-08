@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
@@ -25,7 +26,7 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndTrackState.class.getSimpleName();
-    private static final double TIME_TO_DROP = 2.5;
+    private static final double TIME_TO_DROP = 2.4;
     private RobotState robotState;
     private IntakeSubsystem intake;
 
@@ -39,7 +40,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * @param robotState The robot state
      */
     public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 2.5);
+        super(name, 5);
         this.robotState = robotState;
         this.intake = intake;
         addCommands(
