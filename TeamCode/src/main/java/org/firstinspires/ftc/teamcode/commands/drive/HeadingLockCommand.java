@@ -48,6 +48,7 @@ public class HeadingLockCommand extends CommandBase {
     public void initialize() {
         rotationalController.reset();
         rotationalController.setTolerance(Math.toRadians(1));
+        targetHeading = robotState.getRobotCurrentPose().getHeading();
     }
 
     /*

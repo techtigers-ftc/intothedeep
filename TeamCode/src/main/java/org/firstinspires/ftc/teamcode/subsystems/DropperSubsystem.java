@@ -26,7 +26,8 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
-    public static final double SLIDE_MAX = 27;
+    public static final double SLIDES_MAX = 27;
+    public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 0.75;
     public static final double SLIDES_CHAMBER_POSITION = 5;
@@ -224,7 +225,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
+        slideController.moveToInches(Range.clip(position, 0, SLIDES_MAX));
     }
 
     /**

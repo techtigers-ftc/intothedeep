@@ -18,7 +18,7 @@ public class IntakeCheckSensorAction extends CommandBase {
 
     @Override
     public void initialize() {
-        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE && !robotState.isManualIntakeSelected()) {
+        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE && robotState.isBreakBeamEnabled()) {
             command.cancel();
         }
     }

@@ -42,6 +42,7 @@ public class RobotState extends GlobalState {
     private boolean isAscending;
     private boolean isVerticalExtended;
     private boolean isManualIntakeSelected;
+    private boolean isBreakBeamEnabled;
     private double dropperClawPitch;
     private double dropperClawRotation;
     private double driverCurrent;
@@ -93,6 +94,7 @@ public class RobotState extends GlobalState {
         isAscending = false;
         isVerticalExtended = false;
         isManualIntakeSelected = false;
+        isBreakBeamEnabled = true;
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
@@ -842,5 +844,21 @@ public class RobotState extends GlobalState {
      */
     public void setAutoRemainingTime(double autoRemainingTime) {
         this.autoRemainingTime = autoRemainingTime;
+    }
+
+    /**
+     * @return whether or not the break beam is enabled
+     */
+    public boolean isBreakBeamEnabled() {
+        return isBreakBeamEnabled;
+    }
+
+    /**
+     * Sets whether or not the break beam is enabled
+     *
+     * @param breakBeamEnabled whether or not the break beam is enabled
+     */
+    public void setBreakBeamEnabled(boolean breakBeamEnabled) {
+        isBreakBeamEnabled = breakBeamEnabled;
     }
 }
