@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.commands.AscendOneLevelCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
+import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
-import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
@@ -26,6 +26,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperLowBasketAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperLowBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
@@ -49,7 +51,6 @@ import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -119,11 +120,16 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentCommandGroup));
         Trigger movingSlides = new Trigger(() -> gamepad2.right_stick_y != 0);
         isAscending.and(runningEngageAscent.negate()).and(movingSlides).whenActive(manualAscentCommand);
+        Trigger driverB = driverGamepad.getGamepadButton(GamepadKeys.Button.B);
 
         // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
                 robotState, driverGamepad);
         drive.setDefaultCommand(manualDriveCommand);
+
+        DropperLowBasketAction dropperLowBasketAction = new DropperLowBasketAction(dropper, intake, robotState);
+        DropperLowBasketNoTransferAction dropperLowBasketNoTransferAction = new DropperLowBasketNoTransferAction(dropper, robotState);
+
 
         CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
@@ -131,10 +137,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenPressed(headingLockCommand);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                () -> robotState.setCurrentGear(DriveGears.ENGAGED));
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenReleased(
-                () -> robotState.setCurrentGear(DriveGears.NOT_ENGAGED));
 
         // MANIPULATOR
 
@@ -206,8 +208,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
 
-
-
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
 
@@ -242,6 +242,20 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 },
                 () -> {
                     robotState.setManualIntakeSelected(false);
+                    gamepad2.rumbleBlips(2);
+                }
+        );
+
+        // Toggles Break Beam Sensor
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).toggleWhenPressed(
+                () -> {
+                    robotState.setBreakBeamEnabled(false);
+                    gamepad1.rumbleBlips(1);
+                    gamepad2.rumbleBlips(1);
+                },
+                () -> {
+                    robotState.setBreakBeamEnabled(true);
+                    gamepad1.rumbleBlips(2);
                     gamepad2.rumbleBlips(2);
                 }
         );
@@ -284,7 +298,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadDown.and(blockInIntake).whenActive(dropperTransferAction);
         dpadDown.and(blockInIntake.negate()).whenActive(dropperPreTransferAction);
 
-        // Basket drop
+        // High Basket drop
         dpadUp.and(blockInIntake).whenActive(dropperHighBasketAction);
         dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
 
@@ -299,6 +313,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
         dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
         dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
+
+        // Low Basket drop
+        driverB.and(blockInIntake).whenActive(dropperLowBasketAction);
+        driverB.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
 
         //Manual Dropper Stuff
 
