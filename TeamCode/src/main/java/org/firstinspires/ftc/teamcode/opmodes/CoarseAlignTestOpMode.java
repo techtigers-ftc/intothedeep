@@ -6,11 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
@@ -32,20 +35,24 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        SensorSubsystem sensorSubsystem = new SensorSubsystem(hardwareMap, robotState);
 
         robotState.setCoarseCameraMode(true);
 
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
                 new ChangeBlockColorPreferenceCommand(robotState, driverGamepad);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                changeBlockColorPreferenceCommand);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(changeBlockColorPreferenceCommand);
 
-        IntakePrepareToPickupAction prepareToPickupAction =
-                new IntakePrepareToPickupAction(intake, dropper, robotState, 0);
+        IntakePrepareToPickupAction prepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, 0);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(prepareToPickupAction);
+
+        IntakeFullReadyToTransferAction transfer = new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(transfer);
 
         IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, dropper, robotState);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(coarseAlignAction);
 
-        registerSubsystems(limelight, dropper, intake, drive);
+        registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem);
     }
 
     @Override

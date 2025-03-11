@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
@@ -129,11 +130,11 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void execute() {
         drive.drivePedroPath(follower.getCurrentDriveVectors());
 
-//        Waypoint current = robotState.getRobotCurrentPose();
-//        Waypoint target = robotState.getRobotFinalPose();
-//        RobotLog.dd("Tele Hold Point","Distance From Target: %f", distToTarget(current, target));
-//        RobotLog.dd("Tele Hold Point","Angular Distance From Target: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
-//        RobotLog.dd("Tele Hold Point", "Running Time of Hold Point: %f", getRunningTime());
+        Waypoint current = robotState.getRobotCurrentPose();
+        Waypoint target = robotState.getRobotFinalPose();
+        RobotLog.dd("Tele Hold Point","Distance From Target: %f", distToTarget(current, target));
+        RobotLog.dd("Tele Hold Point","Angular Distance From Target: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
+        RobotLog.dd("Tele Hold Point", "Running Time of Hold Point: %f", getRunningTime());
     }
 
     @Override

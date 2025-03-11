@@ -81,11 +81,6 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void initialize() {
-        super.initialize();
-    }
-
-    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
