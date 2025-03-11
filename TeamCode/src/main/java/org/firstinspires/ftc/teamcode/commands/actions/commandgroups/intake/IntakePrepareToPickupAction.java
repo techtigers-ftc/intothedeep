@@ -67,6 +67,19 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
         this(intake, dropper, () -> slidePosition, robotState);
     }
 
+
+    /**
+     * Overloaded constructor that keeps the intake slides tucked in. Used for coarse align
+     * in order to scan the field
+     *
+     * @param intake       the intake subsystem
+     * @param dropper      the dropper subsystem
+     * @param robotState   the robot state
+     */
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+        this(intake, dropper, () -> 0, robotState);
+    }
+
     @Override
     public void initialize() {
         super.initialize();

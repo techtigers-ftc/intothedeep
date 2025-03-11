@@ -5,7 +5,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
@@ -29,6 +31,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
 
         robotState.setCoarseCameraMode(true);
 
@@ -40,7 +43,9 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupAction =
                 new IntakePrepareToPickupAction(intake, dropper, robotState, 0);
 
-        registerSubsystems(limelight, dropper, intake);
+        IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, dropper, robotState);
+
+        registerSubsystems(limelight, dropper, intake, drive);
     }
 
     @Override

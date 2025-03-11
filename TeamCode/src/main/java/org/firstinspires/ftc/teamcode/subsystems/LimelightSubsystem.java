@@ -299,7 +299,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double blue = robotState.isBlue() ? 1 : 0;
         double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;
-        double courseCamera = robotState.isCoarseCameraMode() ? 1 : 0;
+        double coarseCamera = robotState.isCoarseCameraMode() ? 1 : 0;
 
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
             yellow = 1;
@@ -309,8 +309,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             yellow = 1;
         }
 
-        limelight.updatePythonInputs(yellow, red, blue, courseCamera, 0, 0,
-                0, 0);
+        limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
 
         LLResult result = limelight.getLatestResult();
         if (result != null) {
