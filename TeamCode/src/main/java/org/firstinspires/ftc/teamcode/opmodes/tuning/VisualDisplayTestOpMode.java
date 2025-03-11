@@ -70,6 +70,7 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
             robotState.setBlockLateralFine(lateralFine);
             robotState.setBlockForwardFine(forwardFine);
             robotState.setBlockOrientation(orientation);
+            robotState.setHeadingLock(true);
             if (blockDetected) robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
             else robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             if (blockInRobot) robotState.setBlockPosition(RobotBlockPosition.INTAKE);
