@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
@@ -35,6 +36,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         SensorSubsystem sensorSubsystem = new SensorSubsystem(hardwareMap, robotState);
 
         robotState.setCoarseCameraMode(true);
@@ -52,7 +54,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(coarseAlignAction);
 
-        registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem);
+        registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem, odometry);
     }
 
     @Override
