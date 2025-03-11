@@ -15,7 +15,6 @@ public class HeadingLockRegion extends DisplayRegion {
     private final RobotState robotState;
     private final RectangleSprite headingLockSprite;
     private final Sprite[] sprites;
-    private String lastState;
 
     /**
      * Creates a new AutoStateRegion
@@ -25,14 +24,13 @@ public class HeadingLockRegion extends DisplayRegion {
      * @param robotState the robot state
      */
     public HeadingLockRegion(int x, int y, RobotState robotState) {
-        super(x, y, 11, 2);
+        super(x, y, 2, 2);
         this.robotState = robotState;
 
-        headingLockSprite = new RectangleSprite(0, 0, 2, 4);
+        headingLockSprite = new RectangleSprite(0, 0, 2, 2);
         headingLockSprite.enable();
         sprites = new Sprite[]{headingLockSprite};
 
-        lastState = robotState.getCurrentAutoState();
         headingLockSprite.setColor(Color.GREEN);
     }
 
