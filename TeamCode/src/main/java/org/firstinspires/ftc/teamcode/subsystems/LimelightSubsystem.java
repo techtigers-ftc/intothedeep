@@ -132,12 +132,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
             } else {
                 if (!robotState.isCoarseCameraMode()) {
                     robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+                    robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
 //                  robotState.setDebugColor(Color.BLACK);
                     robotState.setBlockLateralFine(getCorrectedLateralFine(results[1]));
                     robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
                     robotState.setBlockOrientation((results[3] + 180) % 180);
                 } else {
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
+                    robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                     double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_OFFSET + result.getTy()));
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
                     robotState.setBlockForwardCoarse(forwardCoarse);

@@ -31,7 +31,6 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
         addRequirements(intake, dropper);
 
         addCommands(
-                new IntakePrepareToPickupAction(intake, dropper, robotState),
                 new WaitUntilCommand(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED),
                 new ParallelCommandGroup(
                         new TeleHoldPointAction(drive, robotState,
@@ -42,7 +41,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2)
                         ),
                         new IntakeReadyToPickupAction(intake, robotState,
-                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 6,
+                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 5,
                                 () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION
                         )
                 )

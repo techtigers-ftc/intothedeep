@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -59,13 +58,15 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        if (robotState.isCoarseCameraMode()) {
-            telemetry.addData("Forward Coarse", robotState.getBlockForwardCoarse());
-            telemetry.addData("Lateral Coarse", robotState.getBlockLateralCoarse());
-        } else {
-            telemetry.addData("Forward Fine", robotState.getBlockForwardFine());
-            telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
-            telemetry.addData("Orientation", robotState.getBlockOrientation());
-        }
+        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
+        telemetry.addLine();
+        telemetry.addData("Forward Coarse", robotState.getBlockForwardCoarse());
+        telemetry.addData("Lateral Coarse", robotState.getBlockLateralCoarse());
+        telemetry.addLine();
+        telemetry.addData("Forward Fine", robotState.getBlockForwardFine());
+        telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
+        telemetry.addLine();
+        telemetry.addData("Orientation", robotState.getBlockOrientation());
     }
 }

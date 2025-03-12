@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
@@ -22,7 +21,7 @@ import java.util.function.DoubleSupplier;
  * Command to move the intake to prepare to intake state. This command also moves the dropper to the
  * pre-transfer position and opens the intake claw.
  */
-public class IntakePrepareToPickupAction extends SequentialCommandGroup {
+public class IntakePrepareToPickupAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -37,21 +36,17 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DoubleSupplier slidePositionSupplier,
                                        RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(intake, dropper);
+        addRequirements(intake);
         addCommands(
-                new ParallelCommandGroup(
-                        new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
-                        new IntakeClawRotationAction(intake,
-                                () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
-                        new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200)
-                ),
-                new ParallelCommandGroup(
-                        new DropperPreTransferAction(dropper, robotState),
-                        new IntakeOpenAction(intake)
-                )
+                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
+                new IntakeWristRotationAction(intake,
+                        IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
+                new IntakeClawRotationAction(intake,
+                        () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
+                new IntakeWristPitchAction(intake,
+                        IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200),
+                new DropperPreTransferAction(dropper, robotState),
+                new IntakeOpenAction(intake)
         );
     }
 
@@ -72,9 +67,9 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
      * Overloaded constructor that keeps the intake slides tucked in. Used for coarse align
      * in order to scan the field
      *
-     * @param intake       the intake subsystem
-     * @param dropper      the dropper subsystem
-     * @param robotState   the robot state
+     * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param robotState the robot state
      */
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this(intake, dropper, () -> 0, robotState);
@@ -85,6 +80,7 @@ public class IntakePrepareToPickupAction extends SequentialCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
+            robotState.setCoarseCameraMode(true);
             if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
