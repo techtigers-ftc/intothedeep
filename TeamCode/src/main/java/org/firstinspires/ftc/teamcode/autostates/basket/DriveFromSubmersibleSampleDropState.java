@@ -49,8 +49,8 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
                                         new DropperOpenAction(dropper, 50),
                                         new InstantCommand(() -> isOpenFinished = true)
-                                ),
-                                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                                )
+//                                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
                         )
                 )
         );

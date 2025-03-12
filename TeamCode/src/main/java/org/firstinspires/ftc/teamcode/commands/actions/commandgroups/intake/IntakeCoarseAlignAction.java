@@ -23,12 +23,11 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
      * Creates a new IntakeCoarseAlignAction
      *
      * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeCoarseAlignAction(DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public IntakeCoarseAlignAction(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
-        addRequirements(intake, dropper);
+        addRequirements(intake);
 
         addCommands(
                 new WaitUntilCommand(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED),

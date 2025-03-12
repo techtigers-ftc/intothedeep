@@ -50,7 +50,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakeFullReadyToTransferAction transfer = new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(transfer);
 
-        IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, dropper, robotState);
+        IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(coarseAlignAction);
 
         registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem, odometry);

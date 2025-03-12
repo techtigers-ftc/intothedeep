@@ -5,6 +5,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
@@ -48,7 +50,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         previousAutoState = "";
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 1.25, () -> 90),
+                        new IntakePrepareToPickupAction(intake, dropper, () -> 1.25, robotState),
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),
@@ -56,8 +58,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                                 () -> robotState.getRobotCurrentPose().getHeading(), 1, Math.toRadians(5)
                         )
                 ),
-                new IntakeTrackingAction(intake, robotState),
-                new WaitCommand(100),
+                new IntakeCoarseAlignAction(drive, intake, robotState),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );

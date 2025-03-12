@@ -45,7 +45,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
                         () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200),
-                new DropperPreTransferAction(dropper, robotState),
+//                new DropperPreTransferAction(dropper, robotState),
                 new IntakeOpenAction(intake)
         );
     }

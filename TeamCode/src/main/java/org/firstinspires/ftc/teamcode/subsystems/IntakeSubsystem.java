@@ -33,7 +33,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
 
     public static final double SLIDES_MAX = 18.75;
-    public static final double SLIDES_TRANSFER_POSITION = 1;
+    public static final double SLIDES_TRANSFER_POSITION = 1.25;
 
     public static final double WRIST_PITCH_TUCK_POSITION = 50;
     public static final double WRIST_ROTATION_TUCK_POSITION = 173;
