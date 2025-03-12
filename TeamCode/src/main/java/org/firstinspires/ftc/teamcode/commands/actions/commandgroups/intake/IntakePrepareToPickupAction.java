@@ -64,8 +64,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
 
 
     /**
-     * Overloaded constructor that keeps the intake slides tucked in. Used for coarse align
-     * in order to scan the field
+     * Overloaded constructor that keeps the intake slides tucked in for prepare to pickup.
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
@@ -80,7 +79,6 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
         super.end(interrupted);
         if (!interrupted) {
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
-            robotState.setCoarseCameraMode(true);
             if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
