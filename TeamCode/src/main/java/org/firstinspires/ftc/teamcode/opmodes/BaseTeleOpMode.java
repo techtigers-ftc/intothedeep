@@ -254,6 +254,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
+        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected.negate()).whenActive(fullReadyToTransferNoVision);
 
         // Other Intake Stuff
 
@@ -390,7 +391,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override

@@ -79,6 +79,7 @@ public class IntakeReadyToPickupAction extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
+            robotState.setCoarseCameraMode(false);
             robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
         }
     }
