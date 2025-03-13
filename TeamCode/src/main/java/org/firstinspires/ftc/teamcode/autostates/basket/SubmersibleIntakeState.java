@@ -23,7 +23,6 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
     private static final double TIME_TO_INTAKE = 2;
     private static final double TIME_TO_DROP = 2.5;
-//    private static final double ARC_TIME_TO_DROP = 4; CHANGE IN BOTH SPOTS
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private boolean blockDetected;
