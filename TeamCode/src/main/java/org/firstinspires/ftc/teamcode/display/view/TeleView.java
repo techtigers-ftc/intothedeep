@@ -23,7 +23,7 @@ public class TeleView extends DisplayView {
                 new ColorPreferenceRegion(15, 0, robotState),
                 new VoltageIndicatorRegion(15, 6, robotState),
                 new CountdownTimerRegion(18, 0, robotState),
-                new HeadingLockRegion(22, 6, robotState),
+                new HeadingLockRegion(23, 6, robotState),
                 new FlashbangRegion(26, 0, robotState)
         });
     }

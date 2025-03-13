@@ -11,8 +11,8 @@ import team.techtigers.core.display.Sprite;
  * A region which shows an indicator that shows the current status of the battery's voltage
  */
 public class VoltageIndicatorRegion extends DisplayRegion {
-    private final static double MIN_VOLTAGE_THRESHOLD = 9.5;
-    private final static double MAX_VOLTAGE_THRESHOLD = 13.5;
+    private final static double MIN_VOLTAGE_THRESHOLD = 10;
+    private final static double MAX_VOLTAGE_THRESHOLD = 13;
     private final static double STEP = (MAX_VOLTAGE_THRESHOLD - MIN_VOLTAGE_THRESHOLD) / 10;
     private final static double L1_THRESHOLD = MIN_VOLTAGE_THRESHOLD + STEP;
     private final static double L2_THRESHOLD = MIN_VOLTAGE_THRESHOLD + 2 * STEP;
@@ -48,9 +48,7 @@ public class VoltageIndicatorRegion extends DisplayRegion {
 
 
 
-        sprites = new Sprite[]{L1Sprite, L2Sprite, L3Sprite, L4Sprite,
-                L5Sprite, L6Sprite
-        };
+        sprites = new Sprite[]{L1Sprite, L2Sprite, L3Sprite, L4Sprite, L5Sprite, L6Sprite};
 
         for (int i = 0; i < 2; i++) {
             sprites[i].setColor(Color.PINK);
@@ -72,15 +70,15 @@ public class VoltageIndicatorRegion extends DisplayRegion {
         if (currentVoltage < L1_THRESHOLD) {
             disableAllButSelectedSprites(0);
         } else if (currentVoltage < L2_THRESHOLD) {
-            disableAllButSelectedSprites(0);
-        } else if (currentVoltage < L3_THRESHOLD) {
             disableAllButSelectedSprites(0, 1);
-        } else if (currentVoltage < L4_THRESHOLD) {
+        } else if (currentVoltage < L3_THRESHOLD) {
             disableAllButSelectedSprites(0, 1, 2);
-        } else if (currentVoltage < L5_THRESHOLD) {
+        } else if (currentVoltage < L4_THRESHOLD) {
             disableAllButSelectedSprites(0, 1, 2, 3);
-        } else if (currentVoltage < L6_THRESHOLD) {
+        } else if (currentVoltage < L5_THRESHOLD) {
             disableAllButSelectedSprites(0, 1, 2, 3, 4);
+        } else if (currentVoltage < L6_THRESHOLD) {
+            disableAllButSelectedSprites(0, 1, 2, 3, 4, 5);
         } else {
             enableAllSprites();
         }
