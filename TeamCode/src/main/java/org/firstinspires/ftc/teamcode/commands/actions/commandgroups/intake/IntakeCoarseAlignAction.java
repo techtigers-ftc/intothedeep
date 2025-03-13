@@ -40,7 +40,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2)
                         ),
                         new IntakeReadyToPickupAction(intake, robotState,
-                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 5,
+                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 6,
                                 () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION
                         )
                 )

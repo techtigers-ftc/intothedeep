@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -65,12 +64,14 @@ public class VisionStreamRegion extends DisplayRegion {
         blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 3) - 1;
         blockOrientation = robotState.getBlockOrientation();
 
-        if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-            disableAllBlocks();
-            checkmark.enable();
-        } else if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            disableAllBlocks();
-            noBlockDetected.enable();
+        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+            if (robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED) {
+                disableAllBlocks();
+                checkmark.enable();
+            } else {
+                disableAllBlocks();
+                noBlockDetected.enable();
+            }
         } else if (0 <= blockOrientation && blockOrientation < 22.5) {
             disableAllBlocks();
             horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
