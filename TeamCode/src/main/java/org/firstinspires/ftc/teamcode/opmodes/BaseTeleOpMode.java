@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -146,8 +147,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeToObservationZoneAction intakeToObservation =
                 new IntakeToObservationZoneAction(intake, dropper, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
-        IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
+
+        ParallelCommandGroup readyToPickupManual = new ParallelCommandGroup(
+                new IntakeReadyToPickupAction(intake, robotState, () -> 8,
+                        () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION),
+                new DropperPreTransferAction(dropper, robotState)
+        );
+
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
         IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(
@@ -171,7 +177,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
-        Trigger blockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger fineBlockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger coarseBlockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Dropper States
         DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
@@ -226,11 +233,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
 
         Trigger velocityTrigger = new Trigger(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10);
-        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
+        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
             gamepad1.rumbleBlips(1);
             gamepad2.rumbleBlips(1);
         }));
-        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
+        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
 
         // Other Intake Stuff
 
