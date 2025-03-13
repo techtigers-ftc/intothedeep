@@ -28,6 +28,7 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
         public static double orientation = 0;
         public static boolean blockInRobot = false;
         public static boolean blockDetected = true;
+        public static boolean headingLockOn = false;
         private ElapsedTime timer;
         private ElapsedTime updateTimer;
 
@@ -57,19 +58,20 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
         @Override
         public void update() {
-            if (updateTimer.milliseconds() >= 250) { // 4 times per second
-                lateralFine = -3 + (6 * random.nextDouble());
-                forwardFine = -3 + (6 * random.nextDouble());
-                orientation = 180 * random.nextDouble();
-                voltage = random.nextDouble() * 5.5 + 8;
-                blockInRobot = random.nextBoolean();
-                updateTimer.reset();
-            }
+//            if (updateTimer.milliseconds() >= 250) { // 4 times per second
+//                lateralFine = -3 + (6 * random.nextDouble());
+//                forwardFine = -3 + (6 * random.nextDouble());
+//                orientation = 180 * random.nextDouble();
+//                voltage = random.nextDouble() * 5.5 + 8;
+//                blockInRobot = random.nextBoolean();
+//                updateTimer.reset();
+//            }
 
             robotState.setVoltage(voltage);
             robotState.setBlockLateralFine(lateralFine);
             robotState.setBlockForwardFine(forwardFine);
             robotState.setBlockOrientation(orientation);
+            robotState.setHeadingLock(headingLockOn);
             if (blockDetected) robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
             else robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             if (blockInRobot) robotState.setBlockPosition(RobotBlockPosition.INTAKE);

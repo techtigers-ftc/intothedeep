@@ -66,6 +66,7 @@ public class RobotState extends GlobalState {
 
 
     private boolean runDistanceSensor;
+    private boolean headingLockEnabled;
     private double distanceSensorValue;
 
     /**
@@ -118,6 +119,7 @@ public class RobotState extends GlobalState {
         runDistanceSensor = false;
         distanceSensorValue = -1;
         autoRemainingTime = -1;
+        headingLockEnabled = false;
     }
 
     /**
@@ -860,5 +862,22 @@ public class RobotState extends GlobalState {
      */
     public void setBreakBeamEnabled(boolean breakBeamEnabled) {
         isBreakBeamEnabled = breakBeamEnabled;
+    }
+
+
+    /**
+     * @return whether or not the heading lock is enabled
+     */
+    public boolean isHeadingLockEnabled() {
+        return headingLockEnabled;
+    }
+
+    /**
+     * Sets whether or not the heading lock beam is enabled
+     *
+     * @param headingLockEnabled whether or not the break beam is enabled
+     */
+    public void setHeadingLock(boolean headingLockEnabled) {
+        this.headingLockEnabled = headingLockEnabled;
     }
 }

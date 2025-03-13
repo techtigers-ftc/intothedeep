@@ -28,5 +28,6 @@ public class CheckmarkSprite extends Sprite {
         leds[getX() + 5][getY() + 3] = getColor();
         leds[getX() + 6][getY() + 4] = getColor();
         leds[getX() + 7][getY() + 5] = getColor();
+        leds[getX() + 4][getY() + 3] = Color.BLACK;
     }
 }
