@@ -41,7 +41,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
                 ),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 55),
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 1.25, () -> 90)
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 2.5, () -> 90)
                 )
         );
     }

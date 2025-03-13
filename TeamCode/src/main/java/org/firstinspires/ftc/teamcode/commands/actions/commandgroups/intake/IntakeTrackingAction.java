@@ -19,8 +19,8 @@ public class IntakeTrackingAction extends CommandBase {
     private double frameCount;
     private double detectedSlidePosition;
 
-    private double BASE_POWER = 0.35;
-    private double INCREMENTAL_POWER = 0.0015;
+    private static final double BASE_POWER = 0.275;
+    private static final double INCREMENTAL_POWER = 0.005;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -62,7 +62,7 @@ public class IntakeTrackingAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 3;
+        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 2;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class IntakeTrackingAction extends CommandBase {
         intake.setDirectControl(false);
         robotState.setIntakeTracking(false);
         if (!interrupted) {
-            intake.moveSlidesAbsolute(detectedSlidePosition);
+            intake.moveSlidesAbsolute(detectedSlidePosition - 0.5);
         } else {
             intake.moveSlidesRelative(0);
         }
