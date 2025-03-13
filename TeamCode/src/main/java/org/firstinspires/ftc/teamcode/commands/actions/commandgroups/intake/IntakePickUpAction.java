@@ -26,23 +26,23 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
  * Command to pick up a sample once the robot is hovered over a block, and bring the intake to the
  * transfer position. The block is ready to be picked up by the dropper.
  */
-public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGroup {
+public class IntakePickUpAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private double lastClawRotation;
 
     /**
-     * Creates a new IntakeFullReadyToTransferNoVisionAction
+     * Creates a new IntakePickUpAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakeFullReadyToTransferNoVisionAction(IntakeSubsystem intake,
-                                                   DropperSubsystem dropper,
-                                                   RobotState robotState, CommandBase command) {
+    public IntakePickUpAction(IntakeSubsystem intake,
+                              DropperSubsystem dropper,
+                              RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
         lastClawRotation = 90;
@@ -81,9 +81,9 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeFullReadyToTransferNoVisionAction(IntakeSubsystem intake,
-                                                   DropperSubsystem dropper,
-                                                   RobotState robotState) {
+    public IntakePickUpAction(IntakeSubsystem intake,
+                              DropperSubsystem dropper,
+                              RobotState robotState) {
         this(intake, dropper, robotState, null);
     }
 

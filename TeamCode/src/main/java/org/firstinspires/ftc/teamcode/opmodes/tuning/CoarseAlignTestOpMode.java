@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeVisionPickUpAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -47,7 +47,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, 0);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(prepareToPickupAction);
 
-        IntakeFullReadyToTransferAction transfer = new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState);
+        IntakeVisionPickUpAction transfer = new IntakeVisionPickUpAction(drive, intake, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(transfer);
 
         IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, robotState);

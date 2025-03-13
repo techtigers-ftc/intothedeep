@@ -19,23 +19,23 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * Command to use vision to align the robot to a block, pick it up, and bring it to the transfer
  * position. It does a tele hold point when the vision is not aligning
  */
-public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
+public class IntakeVisionPickUpAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
 
     /**
-     * Creates a new IntakeFullReadyToTransferAction
+     * Creates a new IntakeVisionPickUpAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
-                                           IntakeSubsystem intake,
-                                           DropperSubsystem dropper,
-                                           RobotState robotState, CommandBase command) {
+    public IntakeVisionPickUpAction(DriveSubsystem drive,
+                                    IntakeSubsystem intake,
+                                    DropperSubsystem dropper,
+                                    RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
         addRequirements(intake, dropper);
@@ -67,7 +67,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                 new WaitUntilCommand(robotState::isVisionAligning),
                                 new InstantCommand(holdPointAction::stop)
                         ),
-                        new IntakeFullReadyToTransferNoVisionAction(intake,
+                        new IntakePickUpAction(intake,
                                 dropper, robotState, command == null ? this : command)
                 )
         );
@@ -80,10 +80,10 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
-                                           IntakeSubsystem intake,
-                                           DropperSubsystem dropper,
-                                           RobotState robotState) {
+    public IntakeVisionPickUpAction(DriveSubsystem drive,
+                                    IntakeSubsystem intake,
+                                    DropperSubsystem dropper,
+                                    RobotState robotState) {
         this(drive, intake, dropper, robotState, null);
     }
 }
