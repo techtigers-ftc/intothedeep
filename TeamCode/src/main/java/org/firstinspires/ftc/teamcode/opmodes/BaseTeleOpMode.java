@@ -32,10 +32,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
@@ -148,8 +146,6 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         IntakeToObservationZoneAction intakeToObservation =
                 new IntakeToObservationZoneAction(intake, dropper, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
-        IntakePrepareToPickupAction prepareToPickup = new IntakePrepareToPickupAction(intake, dropper, robotState);
-        IntakeCoarseAlignAction coarseAlign = new IntakeCoarseAlignAction(drive, intake, robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
                 intake, robotState, () -> 8, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
@@ -175,8 +171,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
         Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
-        Trigger fineBlockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
-        Trigger coarseBlockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger blockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
 
         // Dropper States
         DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
@@ -215,13 +210,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
+
         (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck).or(inReadyToPickup)).whenActive(tuck);
-        (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck).or(inReadyToPickup)).whenActive(new InstantCommand(() -> {
-            dropperPreTransferAction.schedule();
-            tuck.schedule();
-        }));
 
         // Extend Trigger Bindings
+
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
@@ -229,32 +222,15 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
             readyToPickupManual.schedule();
             dropperFrontSlapAction.schedule();
         });
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry.negate()).whenActive(readyToPickupManual);
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
 
         Trigger velocityTrigger = new Trigger(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10);
-
-        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
+        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
             gamepad1.rumbleBlips(1);
             gamepad2.rumbleBlips(1);
         }));
-
-        autoExtendTrigger.and(inPrepareToPickup).and(fineBlockDetected).and(velocityTrigger.negate()).whenActive(new InstantCommand(() -> {
-            gamepad1.rumbleBlips(1);
-            gamepad2.rumbleBlips(1);
-        }));
-
-        autoExtendTrigger.and(inTuck).and(forwardCarry.negate()).whenActive(prepareToPickup);
-        manualExtendTrigger.and(inTuck).and(forwardCarry.negate()).whenActive(readyToPickupManual);
-
-        autoExtendTrigger.and(inPrepareToPickup).and(velocityTrigger).and(coarseBlockDetected).whenActive(coarseAlign);
-        autoExtendTrigger.and(inPrepareToPickup).and(velocityTrigger).and(coarseBlockDetected.negate()).whenActive(new InstantCommand(() -> {
-            gamepad1.rumbleBlips(1);
-            gamepad2.rumbleBlips(1);
-            readyToPickupManual.schedule();
-        }));
-
-        manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
-        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
-        autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected.negate()).whenActive(fullReadyToTransferNoVision);
+        autoExtendTrigger.and(inReadyToPickup).and(blockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
 
         // Other Intake Stuff
 
