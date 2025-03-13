@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 5;
+    private static final double TIME_TO_INTAKE = 6;
     private boolean isOpenFinished;
 
     /**
@@ -46,7 +46,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 13),
                                         new DropperOpenAction(dropper, 50),
                                         new InstantCommand(() -> isOpenFinished = true)
                                 ),
