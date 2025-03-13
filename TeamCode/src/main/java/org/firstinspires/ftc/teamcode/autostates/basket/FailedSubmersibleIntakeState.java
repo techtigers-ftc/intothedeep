@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -30,6 +31,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     private final IntakeSubsystem intake;
     private int runCounter;
     private String previousAutoState;
+    private boolean blockDetected;
 
     /**
      * Creates a new FailedSubmersibleIntakeState
@@ -46,6 +48,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         this.intake = intake;
         runCounter = 0;
         previousAutoState = "";
+        blockDetected = true;
         addCommands(
                 new ParallelCommandGroup(
                         new IntakeReadyToPickupAction(intake, robotState, () -> 1.25, () -> 90),
@@ -56,19 +59,29 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                                 () -> robotState.getRobotCurrentPose().getHeading(), 1, Math.toRadians(5)
                         )
                 ),
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10),
                 new IntakeTrackingAction(intake, robotState),
                 new WaitCommand(100),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        blockDetected = true;
+    }
+
+    @Override
     public AutoState getCurrentCondition() {
+        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5)
+                && !robotState.isVisionAligning();
+        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        if (trackingTimeout || blockNotDetected) {
             runCounter = 0;
             if (previousAutoState.equals("intakeFourthSample")) {
                 return AutoState.FAILED_SAMPLE_4_TIMEOUT;

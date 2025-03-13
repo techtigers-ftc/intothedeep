@@ -37,10 +37,10 @@ public class IntakeTuningOpmode extends BaseOpMode {
 
         // Wrist Pitch
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
-            intakeSubsystem.setWristRelative(-5, 0);
+            intakeSubsystem.setWristRelative(-1, 0);
         });
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> {
-            intakeSubsystem.setWristRelative(5, 0);
+            intakeSubsystem.setWristRelative(1, 0);
         });
 
         // Wrist Rotation

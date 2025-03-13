@@ -29,6 +29,6 @@ public class LocalizationTuningOpMode extends BaseOpMode {
         Waypoint robotPose = robotState.getRobotCurrentPose();
         telemetry.addData("Robot X: ", robotPose.getX());
         telemetry.addData("Robot Y: ", robotPose.getY());
-        telemetry.addData("Robot Heading: ", robotPose.getHeading());
+        telemetry.addData("Robot Heading (deg): ", Math.toDegrees(robotPose.getHeading()));
     }
 }

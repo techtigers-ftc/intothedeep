@@ -30,21 +30,27 @@ import team.techtigers.base.CloseableSubsystem;
 public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 40;
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
+    // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
+
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 50;
     public static final double WRIST_ROTATION_TUCK_POSITION = 173;
-    public static double CLAW_ROTATION_TUCK_POSITION = 88;
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 70;
+    public static final double CLAW_ROTATION_TUCK_POSITION = 88;
+
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 91;
     public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 173;
-    public static double CLAW_ROTATION_PICKUP_POSITION = 88;
+
+    public static final double CLAW_ROTATION_PICKUP_POSITION = 88;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 173;
+
     public static final double WRIST_PITCH_PECK_POSITION = 160;
+
     public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 3;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 88;
 
-    public static final double SLIDES_TRANSFER_POSITION = 1;
+    public static final double SLIDES_TRANSFER_POSITION = 1.25;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower

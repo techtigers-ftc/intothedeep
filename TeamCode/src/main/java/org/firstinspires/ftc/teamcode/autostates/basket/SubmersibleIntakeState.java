@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
@@ -24,7 +25,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     private static final double TIME_TO_DROP = 2.5;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
-    private int runCounter;
+    private boolean blockDetected;
 
     /**
      * Creates a new SubmersibleIntakeState
@@ -38,24 +39,28 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
         super(name, 3);
         this.robotState = robotState;
         this.intake = intake;
-        runCounter = 0;
+        blockDetected = true;
         addCommands(
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10),
                 new IntakeTrackingAction(intake, robotState),
                 new WaitCommand(100),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
     @Override
     public void initialize() {
-        runCounter++;
         super.initialize();
+        blockDetected = true;
     }
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5)
+                && !robotState.isVisionAligning();
+        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
+        if (trackingTimeout || blockNotDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
