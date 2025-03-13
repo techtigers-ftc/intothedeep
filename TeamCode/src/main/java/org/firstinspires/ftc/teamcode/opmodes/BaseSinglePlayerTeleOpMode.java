@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePickUpAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePickUpAndTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeVisionPickUpAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
@@ -121,7 +121,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
                 intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
         IntakeVisionPickUpAction fullReadyToTransfer = new IntakeVisionPickUpAction(
                 drive, intake, dropper, robotState);
-        IntakePickUpAction fullReadyToTransferNoVision = new IntakePickUpAction(
+        IntakePickUpAndTransferAction fullReadyToTransferNoVision = new IntakePickUpAndTransferAction(
                 intake, dropper, robotState);
         IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
                 intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());

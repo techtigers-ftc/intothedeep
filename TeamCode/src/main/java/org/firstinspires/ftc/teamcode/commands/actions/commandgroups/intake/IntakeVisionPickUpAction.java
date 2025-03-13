@@ -67,7 +67,7 @@ public class IntakeVisionPickUpAction extends SequentialCommandGroup {
                                 new WaitUntilCommand(robotState::isVisionAligning),
                                 new InstantCommand(holdPointAction::stop)
                         ),
-                        new IntakePickUpAction(intake,
+                        new IntakePickUpAndTransferAction(intake,
                                 dropper, robotState, command == null ? this : command)
                 )
         );
