@@ -78,6 +78,7 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
+            robotState.setCoarseCameraMode(true);
             robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
             if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
