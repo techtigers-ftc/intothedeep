@@ -5,8 +5,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePickUpAndTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SubmersibleIntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeVisionPickUpAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -29,11 +30,13 @@ public class IntakeStatesTestOpMode extends BaseOpMode {
 
         registerSubsystems(intake, dropper, sensor, drive);
 
-        SubmersibleIntakeReadyToTransferAction submersibleIntakeReadyToTransferAction = new SubmersibleIntakeReadyToTransferAction(intake, dropper, robotState);
         IntakeReadyToPickupAction intakeReadyToPickupAction = new IntakeReadyToPickupAction(intake, robotState, () -> 10, () -> 0);
+        IntakePrepareToTransferAction intakePrepareToTransferAction = new IntakePrepareToTransferAction(drive, intake, () -> 0, robotState);
+        IntakeVisionPickUpAction intakeVisionPickUpAction1 = new IntakeVisionPickUpAction(drive, intake, dropper, robotState);
         IntakePickUpAndTransferAction intakePickUpAndTransferAction = new IntakePickUpAndTransferAction(intake, dropper, robotState);
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(submersibleIntakeReadyToTransferAction);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(intakeVisionPickUpAction1);
+//        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed();
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(intakeReadyToPickupAction);
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(intakePickUpAndTransferAction);
     }
