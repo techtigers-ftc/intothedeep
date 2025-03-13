@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
@@ -16,16 +15,15 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
  * A state to clip a specimen onto the chamber, track a sample, and pick it up
  */
-public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
+public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            ClipAndTrackState.class.getSimpleName();
+            ClipAndIntakeState.class.getSimpleName();
     private static final double TIME_TO_DROP = 2.4;
     private RobotState robotState;
     private IntakeSubsystem intake;
@@ -39,7 +37,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
         this.intake = intake;
@@ -52,9 +50,9 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                                         DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                                 new WaitCommand(150),
                                 new DropperOpenAction(dropper)
-                        ),
-                        new IntakeTrackingAction(intake, robotState)
+                        )
                 ),
+                new IntakeCoarseAlignAction(drive, intake, robotState),
                 new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
@@ -66,17 +64,16 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
-        } else if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-            return AutoState.NO_TIME;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-                    return AutoState.SAMPLE_INTAKE_COMPLETE;
-                } else {
-                    return AutoState.SAMPLE_INTAKE_FAILED;
-                }
+                return AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE;
+//                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
+//                    return AutoState.SAMPLE_INTAKE_COMPLETE;
+//                } else {
+//                    return AutoState.SAMPLE_INTAKE_FAILED;
+//                }
             } else {
                 return AutoState.RUNNING;
             }

@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.AutoDropperForwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
@@ -23,11 +25,12 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToPreloadDropSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToPreloadDropSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-                new AutoDropperForwardCarryAction(dropper, robotState)
+                new AutoDropperForwardCarryAction(dropper, robotState),
+                new IntakeCoarseAlignAction(drive, intake, robotState)
         );
     }
 

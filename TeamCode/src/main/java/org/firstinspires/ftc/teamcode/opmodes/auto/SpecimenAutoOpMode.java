@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.autostates.EndState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndTrackState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
@@ -72,13 +72,15 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 "driveToChamberPreload",
                 drive,
                 dropper,
+                intake,
                 robotState);
         SpecimenDriveStateConfigurator.configPreloadDrop(driveChamberPreload);
 
-        ClipPreloadState clipPreload = new ClipPreloadState(
+        ClipAndIntakeState clipPreload = new ClipAndIntakeState(
                 "clipPreload",
-                dropper,
                 drive,
+                intake,
+                dropper,
                 robotState);
 
         DriveToFirstIntakeState driveToFirstIntake = new DriveToFirstIntakeState(
@@ -217,22 +219,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configDriveToPark(driveToSpecimenPark);
 
-        DriveFromChamberSampleDropState driveToSampleDrop = new DriveFromChamberSampleDropState(
-                "driveToSampleDrop",
-                drive,
-                dropper,
-                intake,
-                robotState
-        );
-        SpecimenDriveStateConfigurator.configSampleDrop(driveToSampleDrop);
 
-        ClipAndTrackState intakeSample = new ClipAndTrackState(
-                "intakeSample",
-                drive,
-                intake,
-                dropper,
-                robotState
-        );
 
         EndState endState = new EndState("end");
 
@@ -257,8 +244,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToFourthSpecimenIntake)
                 .addState(driveToFourthSpecimenDrop)
                 .addState(driveToSpecimenPark)
-                .addState(driveToSampleDrop)
-                .addState(intakeSample)
                 .addState(endState)
 
                 // Drives to the preload and clips it
@@ -316,27 +301,14 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fourth specimen and clips it
                 .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
-                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.DRIVE_END)
-                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
+                .addTransition(driveToFourthSpecimenDrop, driveToSpecimenPark, AutoState.DRIVE_END)
+                .addTransition(driveToFourthSpecimenDrop, driveToSpecimenPark, AutoState.TIMEOUT)
 
-                // Goes to park if the sample intake times out or fails
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.TIMEOUT)
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.NO_TIME)
-
-                //Transitions to end state when done with either park or sample drop drive
+                //Transitions to end state when done with park
                 .addTransition(driveToSpecimenPark, endState, AutoState.DRIVE_END)
                 .addTransition(driveToSpecimenPark, endState, AutoState.TIMEOUT)
-                .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
-                .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveChamberPreload);
-
-        if (doSample()) {
-             stateMachine.addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE);
-        } else {
-             stateMachine.addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_COMPLETE);
-        }
 
 
         // Register subsystems + Create state machine subsystem
