@@ -42,8 +42,8 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
         this.intake = intake;
         blockDetected = true;
         addCommands(
-                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10),
-//                new IntakeTrackingAction(intake, robotState),
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
+                new WaitCommand(100),
                 new IntakeCoarseAlignAction(drive, intake, robotState),
                 new WaitCommand(100),
                 new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),

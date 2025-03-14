@@ -53,7 +53,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                                 () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
                 ),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
-                new IntakeCloseAction(intake, 100),
+                new IntakeCloseAction(intake, 150),
                 new ParallelCommandGroup(
                         new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,

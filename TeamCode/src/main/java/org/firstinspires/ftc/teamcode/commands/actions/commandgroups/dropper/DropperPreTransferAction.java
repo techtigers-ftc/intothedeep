@@ -28,11 +28,9 @@ public class DropperPreTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION,
-                        150),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_TRANSFER_POSITION, 150),
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 150),
-                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_PRE_TRANSFER_POSITION,
-                        0.5),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_PRE_TRANSFER_POSITION, 0.5),
                 new DropperOpenAction(dropper)
         );
     }

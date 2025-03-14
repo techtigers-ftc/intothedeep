@@ -37,10 +37,10 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
                                         Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
                                 () -> robotState.getRobotCurrentPose().getY()
                                         - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralCoarse()),
-                                () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2)
+                                () -> robotState.getRobotCurrentPose().getHeading(), 1, Math.toRadians(2)
                         ),
                         new IntakeReadyToPickupAction(intake, robotState,
-                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 6,
+                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardCoarse() - 5,
                                 () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION
                         )
                 )
