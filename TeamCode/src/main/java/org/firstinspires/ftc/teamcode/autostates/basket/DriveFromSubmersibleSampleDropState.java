@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SubmersibleIntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
@@ -46,11 +47,10 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 13),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 12),
                                         new DropperOpenAction(dropper, 50),
                                         new InstantCommand(() -> isOpenFinished = true)
-                                ),
-                                new IntakeReadyToPickupAction(intake, robotState, () -> 0, () -> 90)
+                                )
                         )
                 )
         );

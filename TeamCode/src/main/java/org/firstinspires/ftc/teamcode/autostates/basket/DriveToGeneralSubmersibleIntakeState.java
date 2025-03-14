@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -39,10 +38,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
                         new WaitCommand(200),
                         new DropperPreTransferAction(dropper, robotState)
                 ),
-                new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 55),
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 2.5, () -> 90)
-                )
+                new IntakePrepareToPickupAction(intake, dropper, robotState)
         );
     }
 

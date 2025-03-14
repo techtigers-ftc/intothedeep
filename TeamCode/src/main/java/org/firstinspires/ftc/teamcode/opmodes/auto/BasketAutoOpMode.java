@@ -364,7 +364,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry, dropper, intake, sensor, limelight, visualDisplaySubsystem);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
