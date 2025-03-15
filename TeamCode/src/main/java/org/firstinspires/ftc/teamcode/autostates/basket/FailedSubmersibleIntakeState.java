@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFineAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -29,7 +28,6 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     private static final double TIME_TO_INTAKE = 2;
     private static final double TIME_TO_DROP = 2.5;
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
     private int runCounter;
     private String previousAutoState;
     private boolean blockDetected;
@@ -46,7 +44,6 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     public FailedSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
-        this.intake = intake;
         runCounter = 0;
         previousAutoState = "";
         blockDetected = true;

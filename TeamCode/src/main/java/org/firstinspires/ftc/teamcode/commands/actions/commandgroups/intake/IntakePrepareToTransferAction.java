@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 public class IntakePrepareToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Creates a new IntakePrepareToTransfer
@@ -27,7 +26,6 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
      */
     public IntakePrepareToTransferAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
-        this.intake = intake;
         addRequirements(intake);
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),

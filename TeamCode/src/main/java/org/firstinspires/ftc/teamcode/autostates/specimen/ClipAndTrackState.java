@@ -26,8 +26,8 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndTrackState.class.getSimpleName();
     private static final double TIME_TO_DROP = 2.4;
-    private RobotState robotState;
-    private IntakeSubsystem intake;
+    private final RobotState robotState;
+    private final IntakeSubsystem intake;
 
     /**
      * Constructor for the ClipAndTrackState

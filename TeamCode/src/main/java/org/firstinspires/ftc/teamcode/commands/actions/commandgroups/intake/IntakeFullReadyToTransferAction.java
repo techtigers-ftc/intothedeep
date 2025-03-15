@@ -19,8 +19,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
-    private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Creates a new IntakeFullReadyToTransferAction
@@ -34,8 +32,6 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
                                            IntakeSubsystem intake,
                                            DropperSubsystem dropper,
                                            RobotState robotState, CommandBase command) {
-        this.robotState = robotState;
-        this.intake = intake;
         addRequirements(intake, dropper);
 
         TeleHoldPointAction holdRobotPosition =

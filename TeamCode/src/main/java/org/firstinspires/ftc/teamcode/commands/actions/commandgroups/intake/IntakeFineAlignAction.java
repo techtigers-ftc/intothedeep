@@ -6,14 +6,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import java.util.function.DoubleSupplier;
 
@@ -23,7 +19,6 @@ import java.util.function.DoubleSupplier;
 public class IntakeFineAlignAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Creates a new IntakeFineAlignAction
@@ -37,7 +32,6 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                  DoubleSupplier clawRotationSupplier,
                                  RobotState robotState) {
         this.robotState = robotState;
-        this.intake = intake;
         addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),

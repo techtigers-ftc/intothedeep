@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
@@ -15,9 +14,9 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 public class DropperSafetyPreTransfer extends CommandBase {
     private final ParallelCommandGroup prepareToTransfer;
     private final InstantCommand noPrepareToTransfer;
-    private CommandBase currentCommand;
     private final DropperSubsystem dropperSubsystem;
     private final double DROPPER_SAFETY_LIMIT = 3;
+    private CommandBase currentCommand;
 
     /**
      * Constructor for DropperSafetyPreTransfer
@@ -33,13 +32,13 @@ public class DropperSafetyPreTransfer extends CommandBase {
 
     @Override
     public void initialize() {
-       currentCommand = dropperSubsystem.getCurrentSlidePositionInches() > DROPPER_SAFETY_LIMIT ? noPrepareToTransfer : prepareToTransfer;
-       currentCommand.initialize();
+        currentCommand = dropperSubsystem.getCurrentSlidePositionInches() > DROPPER_SAFETY_LIMIT ? noPrepareToTransfer : prepareToTransfer;
+        currentCommand.initialize();
     }
 
     @Override
     public void execute() {
-       currentCommand.execute();
+        currentCommand.execute();
     }
 
     @Override

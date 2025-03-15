@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -15,8 +12,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
-
-import java.util.function.DoubleSupplier;
 
 /**
  * Command to move the intake to prepare to intake state. This command also moves the dropper to the
@@ -29,9 +24,9 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
     /**
      * Creates a new IntakeToPrepareToIntakeAction
      *
-     * @param intake                the intake subsystem
-     * @param dropper               the dropper subsystem
-     * @param robotState            the robot state
+     * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param robotState the robot state
      */
     public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;

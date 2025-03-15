@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 public class DropperForwardCarryAction extends SequentialCommandGroup {
     private static final String LOG_TAG = DropperForwardCarryAction.class.getSimpleName();
-    private final RobotState robotState;
 
     /**
      * Creates a new DropperForwardCarryAction
@@ -26,7 +25,6 @@ public class DropperForwardCarryAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public DropperForwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
                 new TransferAction(dropper, intake, robotState),
