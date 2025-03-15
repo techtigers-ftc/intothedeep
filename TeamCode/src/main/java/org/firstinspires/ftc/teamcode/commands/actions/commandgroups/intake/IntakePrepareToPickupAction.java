@@ -49,6 +49,12 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
         );
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        robotState.setCoarseCameraMode(true);
+    }
+
     /**
      * Overloaded constructor that takes a target slide position instead of a supplier
      *
@@ -82,7 +88,6 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
             if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }
-            robotState.setCurrentGear(DriveGears.ENGAGED);
         }
     }
 }
