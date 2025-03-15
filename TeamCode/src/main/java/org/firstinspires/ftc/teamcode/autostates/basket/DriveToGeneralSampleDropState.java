@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAct
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.ParallelIntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -51,9 +52,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
                                 autoDriveCommand,
                                 new SequentialCommandGroup(
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 16),
-                                        new IntakeReadyToPickupAction(intake,
-                                                robotState, () -> targetSlidePos,
-                                                () -> 90)
+                                        new IntakeReadyToPickupAction(intake, robotState, () -> targetSlidePos)
                                 ),
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),

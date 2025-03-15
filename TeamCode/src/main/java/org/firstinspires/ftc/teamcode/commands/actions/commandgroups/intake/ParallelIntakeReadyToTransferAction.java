@@ -17,23 +17,21 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to bring the intake to the ready to transfer position after picking up a block. This
- * command is the same as the intake ready to transfer command, but it does not bring the slides
- * in until the intake pitch is safely above the submersible
+ * Command to move intake to ready to transfer state
  */
-public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = SubmersibleIntakeReadyToTransferAction.class.getSimpleName();
+public class ParallelIntakeReadyToTransferAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = ParallelIntakeReadyToTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new SubmersibleIntakeReadyToTransferAction
+     * Creates a new ParallelIntakeReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public SubmersibleIntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper,
-                                                  RobotState robotState) {
+    public ParallelIntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper,
+                                               RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
@@ -41,16 +39,14 @@ public class SubmersibleIntakeReadyToTransferAction extends SequentialCommandGro
                         new SequentialCommandGroup(
                                 new IntakeClawRotationAction(intake, () -> 30, 0),
                                 new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0),
+                                new IntakeLoosenAction(intake, 150)
                         ),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
-                        new DropperTransferAction(dropper, robotState)
-                ),
-                new ParallelCommandGroup(
-                        new IntakeLoosenAction(intake, 200),
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
+                        new DropperTransferAction(dropper, robotState),
+                        new IntakeWristRotationAction(intake,
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 0),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
                 ),

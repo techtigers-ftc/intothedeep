@@ -29,18 +29,12 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToGeneralSampleIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToGeneralSampleIntakeState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState, 1.25);
         addCommands(
                 autoDriveCommand,
                 new InstantCommand(() -> robotState.setIntakeState(IntakeState.READY_TO_PICKUP)),
-                new SequentialCommandGroup(
-                        new DropperPreTransferAction(dropper, robotState)
-                ),
-                new SequentialCommandGroup(
-                        new WaitCommand(100),
-                        new IntakeClawRotationAction(intake, () -> Math.toDegrees(robotState.getRobotFinalPose().getHeading()), 50)
-                )
+                new DropperPreTransferAction(dropper, robotState)
         );
     }
 }

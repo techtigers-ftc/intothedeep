@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
@@ -30,48 +31,24 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
      *
      * @param intake                the intake subsystem
      * @param dropper               the dropper subsystem
-     * @param slidePositionSupplier the supplier for the target slide position
      * @param robotState            the robot state
      */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, DoubleSupplier slidePositionSupplier,
-                                       RobotState robotState) {
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 1),
-                new IntakeWristRotationAction(intake,
-                        IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
-                new IntakeClawRotationAction(intake,
-                        () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200),
-                new DropperPreTransferAction(dropper, robotState),
+                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
+                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200),
+                new DropperSafetyPreTransfer(dropper, robotState),
                 new IntakeOpenAction(intake)
         );
     }
 
-    /**
-     * Overloaded constructor that takes a target slide position instead of a supplier
-     *
-     * @param intake        the intake subsystem
-     * @param dropper       the dropper subsystem
-     * @param robotState    the robot state
-     * @param slidePosition the target slide position
-     */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, double slidePosition) {
-        this(intake, dropper, () -> slidePosition, robotState);
-    }
-
-
-    /**
-     * Overloaded constructor that keeps the intake slides tucked in for prepare to pickup.
-     *
-     * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
-     * @param robotState the robot state
-     */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        this(intake, dropper, () -> 0, robotState);
+    @Override
+    public void initialize() {
+        super.initialize();
+        robotState.setCoarseCameraMode(true);
     }
 
     @Override

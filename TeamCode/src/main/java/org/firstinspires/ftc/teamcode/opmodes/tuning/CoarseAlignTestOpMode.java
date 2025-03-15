@@ -44,7 +44,7 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
                 new ChangeBlockColorPreferenceCommand(robotState, driverGamepad);
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(changeBlockColorPreferenceCommand);
 
-        IntakePrepareToPickupAction prepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState, 0);
+        IntakePrepareToPickupAction prepareToPickupAction = new IntakePrepareToPickupAction(intake, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(prepareToPickupAction);
 
         IntakeFullReadyToTransferAction transfer = new IntakeFullReadyToTransferAction(drive, intake, dropper, robotState);

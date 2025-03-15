@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -12,28 +12,28 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A command that moves the dropper to the pre-transfer position if it is tucked into the robot
  */
-public class IntakeReadyToTransferAction extends CommandBase {
-    private SequentialCommandGroup parallelReadyToTransfer;
-    private SequentialCommandGroup sequentialReadyToTransfer;
+public class DropperSafetyPreTransfer extends CommandBase {
+    private final ParallelCommandGroup prepareToTransfer;
+    private final InstantCommand noPrepareToTransfer;
     private CommandBase currentCommand;
-    private IntakeSubsystem intakeSubsystem;
-    private double INTAKE_SAFETY_LIMIT = 7;
+    private final DropperSubsystem dropperSubsystem;
+    private final double DROPPER_SAFETY_LIMIT = 3;
 
     /**
-     * Constructor for IntakeReadyToTransferAction
+     * Constructor for DropperSafetyPreTransfer
      *
-     * @param intake the dropper subsystem
+     * @param dropperSubsystem the dropper subsystem
      * @param robotState       the robot state
      */
-    public IntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
-        this.intakeSubsystem = intake;
-        this.parallelReadyToTransfer = new ParallelIntakeReadyToTransferAction(intake, dropper, robotState);
-        this.sequentialReadyToTransfer= new SequentialIntakeReadyToTransfer(intake, dropper, robotState);
+    public DropperSafetyPreTransfer(DropperSubsystem dropperSubsystem, RobotState robotState) {
+        this.dropperSubsystem = dropperSubsystem;
+        this.prepareToTransfer = new DropperPreTransferAction(dropperSubsystem, robotState);
+        this.noPrepareToTransfer = new InstantCommand();
     }
 
     @Override
     public void initialize() {
-       currentCommand = intakeSubsystem.getCurrentSlidePositionInches() > INTAKE_SAFETY_LIMIT ? parallelReadyToTransfer : sequentialReadyToTransfer;
+       currentCommand = dropperSubsystem.getCurrentSlidePositionInches() > DROPPER_SAFETY_LIMIT ? noPrepareToTransfer : prepareToTransfer;
        currentCommand.initialize();
     }
 

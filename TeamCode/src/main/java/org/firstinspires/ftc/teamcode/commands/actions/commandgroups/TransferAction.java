@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * A command group that transfers a block from the intake to the dropper.
  */
-public class TransferAction extends SequentialCommandGroup {
+public class TransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = TransferAction.class.getSimpleName();
     private final RobotState robotState;
 
