@@ -17,7 +17,7 @@ public class AscentSubsystem extends CloseableSubsystem {
     public static final double ASCENT_UNENGAGED_POSITION = 0.4;
     public static final double ASCENT_ENGAGED_POSITION = 0.91;
     public static final double JACKS_UNENGAGED_POSITION = 0;
-    public static final double JACKS_ENGAGED_POSITION = 0.84;
+    public static final double JACKS_ENGAGED_POSITION = 1;
     private final Servo changingTransmission;
     private final Servo leftJackServo;
     private final Servo rightJackServo;
