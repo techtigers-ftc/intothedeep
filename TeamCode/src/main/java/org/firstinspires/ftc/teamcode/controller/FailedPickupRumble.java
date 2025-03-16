@@ -26,7 +26,7 @@ public class FailedPickupRumble extends Rumble{
         boolean pickedUpBlock = previousIntakeState == IntakeState.READY_TO_PICKUP &&
                 robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER;
         boolean noBlockInIntake = robotState.getBlockPosition() != RobotBlockPosition.INTAKE;
-        if(pickedUpBlock && noBlockInIntake){
+        if(pickedUpBlock && noBlockInIntake) {
             runRumble();
         }
 
@@ -36,9 +36,9 @@ public class FailedPickupRumble extends Rumble{
     @Override
     protected void runRumble() {
         gamepad1.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
-                .addStep(1, 1, 250)
-                .addStep(0, 0, 400)
-                .addStep(1, 1, 250)
+                .addStep(0.7, 1, 75)
+                .addStep(0, 0, 150)
+                .addStep(0.7, 1, 75)
                 .build()
         );
     }
