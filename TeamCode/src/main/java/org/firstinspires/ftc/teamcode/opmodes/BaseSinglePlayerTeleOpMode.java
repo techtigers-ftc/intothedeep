@@ -117,7 +117,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
                 intake, dropper, robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
+                intake, robotState, () -> 8.0);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
         IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(
