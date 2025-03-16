@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.AscendOneLevelCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
@@ -34,8 +35,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.HeadingLockCommand;
@@ -144,7 +145,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Commands
         IntakeToObservationZoneAction intakeToObservation =
-                new IntakeToObservationZoneAction(intake, dropper, robotState);
+                new IntakeToObservationZoneAction(intake, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
 
         ParallelCommandGroup readyToPickupManual = new ParallelCommandGroup(
@@ -235,10 +236,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
 
         // Coordination between intake and dropper
-        Trigger dropperSlidesLow = new Trigger(() -> dropper.getCurrentSlidePositionInches() < DropperSubsystem.SLIDES_PRE_TRANSFER_POSITION);
-        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).and(dropperSlidesLow).whenActive(dropperPreTransferAction);
-
-        intakeInPrepareToTransfer.and(inDropperReadyToTransfer.negate()).whenActive(dropperTransferAction);
+        Trigger dropperSlidesLow = new Trigger(() -> dropper.getCurrentSlidePositionInches() < DropperSubsystem.SLIDES_PRE_TRANSFER_POSITION - 1);
+//        dropperSlidesLow.whileActiveContinuous(() -> RobotLog.dd("tele op", "dropper slides too low"));
+        manualRetractTrigger.or(autoRetractTrigger).and(inReadyToPickup.or(inPrepareToPickup)).and(dropperSlidesLow).whileActiveContinuous(dropperPreTransferAction);
 
         // Toggles manual intake mode
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
@@ -373,7 +373,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -383,8 +383,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-//        telemetry.addData("Intake State", robotState.getIntakeState());
-//        telemetry.addData("Dropper State", robotState.getDropperState());
+        telemetry.addData("Intake State", robotState.getIntakeState());
+        telemetry.addData("Dropper State", robotState.getDropperState());
         telemetry.addData("Intake Slide POS",
                 intake.getCurrentSlidePositionInches());
         telemetry.addData("Dropper Slide POS",

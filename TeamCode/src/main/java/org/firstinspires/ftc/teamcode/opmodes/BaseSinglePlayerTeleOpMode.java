@@ -108,7 +108,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 
         // Commands
         IntakeToObservationZoneAction intakeToObservation =
-                new IntakeToObservationZoneAction(intake, dropper, robotState);
+                new IntakeToObservationZoneAction(intake, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
                 intake, robotState);
