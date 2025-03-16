@@ -37,13 +37,13 @@ public class ParallelIntakeReadyToTransferAction extends SequentialCommandGroup 
         addCommands(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new IntakeClawRotationAction(intake, () -> 30, 0),
+                                new IntakeClawRotationAction(intake, () -> 60, 0),
                                 new WaitUntilCommand(() -> intake.getWristRotation() < 30),
                                 new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0),
                                 new IntakeLoosenAction(intake, 150)
                         ),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 0),
                         new DropperTransferAction(dropper, robotState),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 0),

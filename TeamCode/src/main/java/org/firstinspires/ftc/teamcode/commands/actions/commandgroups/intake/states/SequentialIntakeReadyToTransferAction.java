@@ -39,7 +39,7 @@ public class SequentialIntakeReadyToTransferAction extends SequentialCommandGrou
         addCommands(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new IntakeClawRotationAction(intake, () -> 30, 0),
+                                new IntakeClawRotationAction(intake, () -> 60, 0),
                                 new WaitUntilCommand(() -> intake.getWristRotation() < 30),
                                 new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
                         ),
