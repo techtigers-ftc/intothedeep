@@ -21,19 +21,19 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
  * command is the same as the intake ready to transfer command, but it does not bring the slides
  * in until the intake pitch is safely above the submersible
  */
-public class SequentialIntakeReadyToTransfer extends SequentialCommandGroup {
-    private static final String LOG_TAG = SequentialIntakeReadyToTransfer.class.getSimpleName();
+public class SequentialIntakeReadyToTransferAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = SequentialIntakeReadyToTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new SequentialIntakeReadyToTransfer
+     * Creates a new SequentialIntakeReadyToTransferAction
      *
      * @param intake     the intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public SequentialIntakeReadyToTransfer(IntakeSubsystem intake, DropperSubsystem dropper,
-                                           RobotState robotState) {
+    public SequentialIntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper,
+                                                 RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(

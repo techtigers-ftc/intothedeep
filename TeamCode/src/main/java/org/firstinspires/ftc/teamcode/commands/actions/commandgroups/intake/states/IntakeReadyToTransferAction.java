@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.sta
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.ParallelIntakeReadyToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SequentialIntakeReadyToTransfer;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -28,7 +26,7 @@ public class IntakeReadyToTransferAction extends CommandBase {
     public IntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this.intakeSubsystem = intake;
         this.parallelReadyToTransfer = new ParallelIntakeReadyToTransferAction(intake, dropper, robotState);
-        this.sequentialReadyToTransfer = new SequentialIntakeReadyToTransfer(intake, dropper, robotState);
+        this.sequentialReadyToTransfer = new SequentialIntakeReadyToTransferAction(intake, dropper, robotState);
     }
 
     @Override
