@@ -171,10 +171,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inTuck = new Trigger(() -> robotState.getIntakeState() == IntakeState.TUCK);
         Trigger inPrepareToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP);
         Trigger inReadyToPickup = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_PICKUP);
-        Trigger inPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
+        Trigger intakeInPrepareToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER);
         Trigger inReadyToTransfer = new Trigger(() -> robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER);
         Trigger fineBlockDetected = new Trigger(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
         Trigger coarseBlockDetected = new Trigger(() -> robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED);
+        Trigger inDropperReadyToTransfer = new Trigger(() -> robotState.getDropperState() == DropperState.TRANSFER);
 
         // Dropper States
         DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
@@ -213,11 +214,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
-
         (manualRetractTrigger.or(autoRetractTrigger)).and(inPrepareToPickup.or(inTuck).or(inReadyToPickup)).whenActive(tuck);
 
         // Extend Trigger Bindings
-
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
@@ -235,7 +234,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }));
         autoExtendTrigger.and(inReadyToPickup).and(fineBlockDetected).and(velocityTrigger).whenActive(fullReadyToTransfer);
 
-        // Other Intake Stuff
+        // Coordination between intake and dropper
+        Trigger dropperSlidesLow = new Trigger(() -> dropper.getCurrentSlidePositionInches() < DropperSubsystem.SLIDES_PRE_TRANSFER_POSITION);
+        manualExtendTrigger.or(autoExtendTrigger).and(inReadyToPickup).and(dropperSlidesLow).whenActive(dropperPreTransferAction);
+
+        intakeInPrepareToTransfer.and(inDropperReadyToTransfer.negate()).whenActive(dropperTransferAction);
 
         // Toggles manual intake mode
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
