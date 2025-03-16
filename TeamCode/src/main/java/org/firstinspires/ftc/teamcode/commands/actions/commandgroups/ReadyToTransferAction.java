@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A command that moves the dropper to the pre-transfer position if it is tucked into the robot
  */
-public class IntakeReadyToTransferAction extends CommandBase {
+public class ReadyToTransferAction extends CommandBase {
     private final SequentialCommandGroup parallelReadyToTransfer;
     private final SequentialCommandGroup sequentialReadyToTransfer;
     private CommandBase currentCommand;
@@ -18,15 +18,15 @@ public class IntakeReadyToTransferAction extends CommandBase {
     private static final double INTAKE_SAFETY_LIMIT = 12;
 
     /**
-     * Constructor for IntakeReadyToTransferAction
+     * Constructor for ReadyToTransferAction
      *
      * @param intake     the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public ReadyToTransferAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         this.intakeSubsystem = intake;
-        this.parallelReadyToTransfer = new ParallelIntakeReadyToTransferAction(intake, dropper, robotState);
-        this.sequentialReadyToTransfer = new SequentialIntakeReadyToTransferAction(intake, dropper, robotState);
+        this.parallelReadyToTransfer = new ParallelReadyToTransferAction(intake, dropper, robotState);
+        this.sequentialReadyToTransfer = new SequentialReadyToTransferAction(intake, dropper, robotState);
     }
 
     @Override

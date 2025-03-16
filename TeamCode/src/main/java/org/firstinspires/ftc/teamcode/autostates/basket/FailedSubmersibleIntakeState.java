@@ -49,7 +49,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
         blockDetected = true;
         addCommands(
                 new ParallelCommandGroup(
-                        new IntakePrepareToPickupAction(intake, dropper, robotState),
+                        new IntakePrepareToPickupAction(intake, robotState),
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),

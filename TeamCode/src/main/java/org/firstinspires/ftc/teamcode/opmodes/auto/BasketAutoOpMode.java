@@ -176,7 +176,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "driveToFourthIntake",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
         BasketDriveStateConfigurator.configFourthSampleIntake(driveToFourthIntake);
@@ -201,7 +200,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 "driveToFifthIntake",
                 drive,
                 intake,
-                dropper,
                 robotState
         );
         BasketDriveStateConfigurator.configFifthSampleIntake(driveToFifthIntake);

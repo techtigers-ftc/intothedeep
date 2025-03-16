@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAfterTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
@@ -39,7 +39,7 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, dropper, robotState),
+                        new ReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(

@@ -30,13 +30,13 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToGeneralSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToGeneralSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 3);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
                         new WaitCommand(DELAY_FOR_INTAKE),
-                        new IntakePrepareToPickupAction(intake, dropper, robotState)
+                        new IntakePrepareToPickupAction(intake, robotState)
                 )
         );
     }

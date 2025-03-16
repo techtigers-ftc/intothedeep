@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -43,7 +43,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                 new IntakePrepareToTransferAction(intake, robotState),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
-                new IntakeReadyToTransferAction(intake, dropper, robotState)
+                new ReadyToTransferAction(intake, dropper, robotState)
         );
     }
 

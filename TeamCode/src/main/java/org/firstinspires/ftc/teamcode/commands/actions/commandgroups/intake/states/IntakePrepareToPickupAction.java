@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.sta
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSafetyPreTransfer;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
@@ -26,17 +25,15 @@ public class IntakePrepareToPickupAction extends ParallelCommandGroup {
      * Creates a new IntakeToPrepareToIntakeAction
      *
      * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakePrepareToPickupAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public IntakePrepareToPickupAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
                 new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
                 new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 200),
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION, 200),
-                new DropperSafetyPreTransfer(dropper, robotState),
                 new IntakeOpenAction(intake)
         );
     }
