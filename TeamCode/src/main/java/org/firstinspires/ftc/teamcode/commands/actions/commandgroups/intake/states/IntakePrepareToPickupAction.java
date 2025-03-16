@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSafetyPreTransfer;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
