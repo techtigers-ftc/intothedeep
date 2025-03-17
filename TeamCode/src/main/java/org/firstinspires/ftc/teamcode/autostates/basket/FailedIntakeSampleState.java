@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
@@ -40,9 +39,9 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         runCounter = 0;
         previousAutoState = "";
         addCommands(
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5, () -> 90),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickUpAction(drive, intake, () -> robotState.getRobotCurrentPose().getHeading(), robotState)
         );
     }
 

@@ -29,7 +29,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_MAX = 27;
     public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 0.75;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
     public static final double SLIDES_CHAMBER_POSITION = 4.4;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
@@ -50,9 +50,9 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_BACK_SLAP_POSITION = 10;
     public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.758 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double TICKS_PER_ROTATION = 384.5;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
+    private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower
+    private static final double TICKS_PER_ROTATION = 145.1;
     private static final double ERROR_FACTOR = 1;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
@@ -113,8 +113,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
         rightWrist.setDirection(Servo.Direction.FORWARD);
 
-        leftSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotorRight = (DcMotorEx) rightSlideMotor;

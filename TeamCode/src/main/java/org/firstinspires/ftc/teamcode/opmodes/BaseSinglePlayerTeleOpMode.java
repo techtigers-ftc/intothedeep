@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeVisionPickupAction;
 import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
@@ -29,10 +28,10 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -109,22 +108,20 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 
         // Commands
         IntakeToObservationZoneAction intakeToObservation =
-                new IntakeToObservationZoneAction(intake, dropper, robotState);
+                new IntakeToObservationZoneAction(intake, robotState);
         IntakeTuckAction tuck = new IntakeTuckAction(intake, robotState);
         IntakePrepareToPickupAction prepareToPickupManual = new IntakePrepareToPickupAction(
-                intake, dropper, robotState, 5);
+                intake, robotState);
         IntakePrepareToPickupAction prepareToPickupAuto = new IntakePrepareToPickupAction(
-                intake, dropper, () -> robotState.getBlockForwardCoarse(), robotState);
+                intake, robotState);
         IntakePrepareToPickupAction prepareToPickupNoSlides = new IntakePrepareToPickupAction(
-                intake, dropper, () -> intake.getCurrentSlidePositionInches(), robotState);
+                intake, robotState);
         IntakeReadyToPickupAction readyToPickupManual = new IntakeReadyToPickupAction(
-                intake, robotState, IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION);
+                intake, robotState, () -> 8.0);
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
                 drive, intake, dropper, robotState);
         IntakeFullReadyToTransferNoVisionAction fullReadyToTransferNoVision = new IntakeFullReadyToTransferNoVisionAction(
                 intake, dropper, robotState);
-        IntakeVisionPickupAction fullReadyToPickupAuto = new IntakeVisionPickupAction(
-                intake, dropper, drive, robotState, () -> robotState.getRobotCurrentPose().getHeading());
 
         // Button Triggers + Manual trigger
         Trigger rightBumper = playerGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
