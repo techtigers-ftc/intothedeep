@@ -62,13 +62,13 @@ public class DropperSubsystem extends CloseableSubsystem {
     // New values for an injora: closed 0.6, open 0.26
     public static double CLAW_OPENED_POSITION = 0.57;
     public static double CLAW_CLOSED_POSITION = 0.25;
-    public static double PRIMARY_KP = 0.006;
+    public static double PRIMARY_KP = 0.01;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0;
+    public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0;
-    public static double SECONDARY_KP = 0.006;
+    public static double SECONDARY_KP = 0.01;
     public static double SECONDARY_KI = 0;
-    public static double SECONDARY_KD = 0;
+    public static double SECONDARY_KD = 0.0001;
     public static double SECONDARY_KF = 0;
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
