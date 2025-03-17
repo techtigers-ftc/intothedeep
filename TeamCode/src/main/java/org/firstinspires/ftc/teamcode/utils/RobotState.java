@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -63,6 +64,8 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
     private double autoRemainingTime;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private Waypoint limelightLastRobotCoords;
 
 
     private boolean runDistanceSensor;
@@ -120,6 +123,8 @@ public class RobotState extends GlobalState {
         distanceSensorValue = -1;
         autoRemainingTime = -1;
         headingLockEnabled = false;
+        absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
+        limelightLastRobotCoords = new Waypoint(0, 0, 0);
     }
 
     /**
@@ -879,5 +884,31 @@ public class RobotState extends GlobalState {
      */
     public void setHeadingLock(boolean headingLockEnabled) {
         this.headingLockEnabled = headingLockEnabled;
+    }
+
+    /**
+     * Gets the absolute coordinates of a detected block
+     *
+     * @return the detected block's absolute coordinates
+     */
+    public AbsoluteBlockCoordinates getAbsoluteBlockCoordinates() {
+        return absoluteBlockCoordinates;
+    }
+
+    /**
+     * Sets the absolute coordinates of a detected block
+     *
+     * @param absoluteBlockCoordinates the detected block's absolute coordinates
+     */
+    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates absoluteBlockCoordinates) {
+        this.absoluteBlockCoordinates = absoluteBlockCoordinates;
+    }
+
+    public Waypoint getLimelightLastRobotCoords() {
+        return limelightLastRobotCoords;
+    }
+
+    public void setLimelightLastRobotCoords(Waypoint coords) {
+        this.limelightLastRobotCoords = coords;
     }
 }

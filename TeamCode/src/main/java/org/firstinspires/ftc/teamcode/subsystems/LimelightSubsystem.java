@@ -4,12 +4,14 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.CloseableSubsystem;
+import team.techtigers.core.paths.Waypoint;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
@@ -31,6 +33,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
 
+    public Waypoint robotPositionForLastUpdate = new Waypoint(0, 0, 0);
+
     private final RobotState robotState;
     private final Limelight3A limelight;
 
@@ -38,7 +42,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double lateralLowerBound = -5;
     private double lateralUpperBound = 1;
     private double framesCached;
-
 
 
     /**
@@ -123,12 +126,17 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
 
         LLResult result = limelight.getLatestResult();
+        robotPositionForLastUpdate = robotState.getRobotCurrentPose();
+        robotState.setLimelightLastRobotCoords(robotPositionForLastUpdate);
+
         if (result != null) {
             double[] results = result.getPythonOutput();
             if (results[1] == 0 && results[2] == 0 && results[3] == 0) {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                 robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else {
+//                RobotLog.dd("VisionDebug", "Limelight's Last Robot Position" + robotPositionForLastUpdate.toString());
+//                RobotLog.dd("VisionDebug", "Robot Velocity: " + robotState.getRobotVelocity());
                 if (!robotState.isCoarseCameraMode()) {
                     robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);

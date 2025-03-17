@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -36,8 +37,16 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         addCommands(
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickUpAction(drive, intake, () -> robotState.getRobotCurrentPose().getHeading(), robotState)
+                new IntakeFinePickUpAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        RobotLog.dd("VisionDebug", "Robot Position at Drive End: " + robotState.getRobotCurrentPose());
+        RobotLog.dd("VisionDebug", "Limelight's Last Saved Robot Position: " + robotState.getLimelightLastRobotCoords());
+        RobotLog.dd("VisionDebug", "Robot Current Velocity: %f", robotState.getRobotVelocity().getPoint().magnitude());
     }
 
     /**
