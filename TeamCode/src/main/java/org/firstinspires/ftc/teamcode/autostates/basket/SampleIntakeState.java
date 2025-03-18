@@ -46,6 +46,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         super.initialize();
         RobotLog.dd("VisionDebug", "Robot Position at Drive End: " + robotState.getRobotCurrentPose());
         RobotLog.dd("VisionDebug", "Limelight's Last Saved Robot Position: " + robotState.getLimelightLastRobotCoords());
+        RobotLog.dd("VisionDebug", "Calculated Absolute Block Position: " + robotState.getAbsoluteBlockCoordinates());
         RobotLog.dd("VisionDebug", "Robot Current Velocity: %f", robotState.getRobotVelocity().getPoint().magnitude());
     }
 

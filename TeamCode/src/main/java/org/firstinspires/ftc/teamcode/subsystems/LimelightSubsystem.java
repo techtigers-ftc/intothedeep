@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -37,6 +38,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private final RobotState robotState;
     private final Limelight3A limelight;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
 
     // Lateral bounds
     private double lateralLowerBound = -5;
@@ -126,8 +128,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
 
         LLResult result = limelight.getLatestResult();
+
+        // These two lines were for debugging - to delete
         robotPositionForLastUpdate = robotState.getRobotCurrentPose();
         robotState.setLimelightLastRobotCoords(robotPositionForLastUpdate);
+
+        // Saving the robot's coordinates every update cycle (regardless of whether a block is detected)
+        absoluteBlockCoordinates.setRobotPosition(robotState.getRobotCurrentPose());
 
         if (result != null) {
             double[] results = result.getPythonOutput();
@@ -143,6 +150,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     robotState.setBlockLateralFine(getCorrectedLateralFine(results[1]));
                     robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
                     robotState.setBlockOrientation((results[3] + 180) % 180);
+
+                    // Saving the block's relative position whenever a block is seen
+                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralFine());
+                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardFine());
                 } else {
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
                     robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
@@ -150,8 +161,15 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
                     robotState.setBlockForwardCoarse(forwardCoarse);
                     robotState.setBlockLateralCoarse(lateralCoarse);
+
+                    // Saving the block's relative position whenever a block is seen
+                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralCoarse());
+                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse());
                 }
             }
+
+            // Saves the absolute block coordinates object into robot state
+            robotState.setAbsoluteBlockCoordinates(absoluteBlockCoordinates);
         }
     }
 

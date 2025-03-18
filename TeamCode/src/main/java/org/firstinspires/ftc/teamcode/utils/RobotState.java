@@ -891,17 +891,17 @@ public class RobotState extends GlobalState {
      *
      * @return the detected block's absolute coordinates
      */
-    public AbsoluteBlockCoordinates getAbsoluteBlockCoordinates() {
-        return absoluteBlockCoordinates;
+    public Waypoint getAbsoluteBlockCoordinates() {
+        return absoluteBlockCoordinates.getBlockAbsolutePosition();
     }
 
     /**
      * Sets the absolute coordinates of a detected block
      *
-     * @param absoluteBlockCoordinates the detected block's absolute coordinates
+     * @param coordinates the detected block's absolute coordinates
      */
-    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates absoluteBlockCoordinates) {
-        this.absoluteBlockCoordinates = absoluteBlockCoordinates;
+    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates coordinates) {
+        this.absoluteBlockCoordinates = coordinates;
     }
 
     public Waypoint getLimelightLastRobotCoords() {
