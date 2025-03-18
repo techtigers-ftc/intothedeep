@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.cv;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import team.techtigers.core.paths.Waypoint;
 
 public class AbsoluteBlockCoordinates {
@@ -10,12 +12,13 @@ public class AbsoluteBlockCoordinates {
 
     private double blockLateralInches;
     private double blockForwardInches;
+    private double lockOrientation;
 
     public void setRobotPosition(Waypoint robotPos) {
         this.robotPos = robotPos;
-        robotXPos = robotPos.getX();
-        robotYPos = robotPos.getY();
-        robotOrientation = robotPos.getHeading();
+        this.robotXPos = robotPos.getX();
+        this.robotYPos = robotPos.getY();
+        this.robotOrientation = robotPos.getHeading();
     }
 
     public void setBlockLateralInches(double blockLateralInches) {
@@ -26,12 +29,19 @@ public class AbsoluteBlockCoordinates {
         this.blockForwardInches = blockForwardInches;
     }
 
+    public void setblockOrientation(double blockOrientation) {
+        this.lockOrientation = blockOrientation;
+    }
+
     public Waypoint getBlockAbsolutePosition() {
         // Applying a rotational matrix to the block's position
-        double blockX = blockLateralInches * Math.cos(robotOrientation) - blockForwardInches * Math.sin(robotOrientation);
-        double blockY = blockLateralInches * Math.sin(robotOrientation) + blockForwardInches * Math.cos(robotOrientation);
+        double blockX = blockForwardInches * Math.cos(robotOrientation) + blockLateralInches * Math.sin(robotOrientation);
+        double blockY = blockForwardInches * Math.sin(robotOrientation) - blockLateralInches * Math.cos(robotOrientation);
+
+        RobotLog.dd("VisionDebug", "X: %f, Y: %f, Lateral: %f, Forward: %f", blockX, blockY, blockLateralInches, blockForwardInches);
+
 
         // Returning the translated coordinates + the robot's coordinates
-        return new Waypoint(robotXPos + blockX, robotYPos + blockY, robotOrientation);
+        return new Waypoint(robotXPos + blockX, robotYPos + blockY, lockOrientation);
     }
 }

@@ -66,6 +66,7 @@ public class RobotState extends GlobalState {
     private double autoRemainingTime;
     private AbsoluteBlockCoordinates absoluteBlockCoordinates;
     private Waypoint limelightLastRobotCoords;
+    private double intakeSlidePosition;
 
 
     private boolean runDistanceSensor;
@@ -125,6 +126,7 @@ public class RobotState extends GlobalState {
         headingLockEnabled = false;
         absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
         limelightLastRobotCoords = new Waypoint(0, 0, 0);
+        intakeSlidePosition = 0;
     }
 
     /**
@@ -910,5 +912,13 @@ public class RobotState extends GlobalState {
 
     public void setLimelightLastRobotCoords(Waypoint coords) {
         this.limelightLastRobotCoords = coords;
+    }
+
+    public void setIntakeSlidePosition(double intakeSlidePosition) {
+        this.intakeSlidePosition = intakeSlidePosition;
+    }
+
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
     }
 }

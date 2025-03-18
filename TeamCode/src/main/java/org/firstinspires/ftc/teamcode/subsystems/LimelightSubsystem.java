@@ -21,9 +21,9 @@ import team.techtigers.core.paths.Waypoint;
 public class LimelightSubsystem extends CloseableSubsystem {
     private static final int BLOCK_CACHE_LIMIT = 3;
     private final static double LIMELIGHT_HEIGHT = 10.25;
-    private final static double LIMELIGHT_X_OFFSET = 4;
-    private static final double LIMELIGHT_INTAKE_OFFSET = 8;
-    private static final double LIMELIGHT_DOWNWARD_ANGLE = 25;
+    private static final double SLIDES_OFFSET = 8; // forward distance from center of robot to slides
+    private static final double LIMELIGHT_COARSE_OFFSET = 2.5; // forward distance from end of slides to limelight lens in coarse
+    private static final double LIMELIGHT_FINE_OFFSET = 5.5; // forward distance from end of slides to limelight lens in fine
 
     private static final double WIDTH_RANGE = 6; // TODO: Tune properly
     private static final double HEIGHT_RANGE = 5.6;
@@ -38,7 +38,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     private final RobotState robotState;
     private final Limelight3A limelight;
-    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
 
     // Lateral bounds
     private double lateralLowerBound = -5;
@@ -153,7 +153,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
                     // Saving the block's relative position whenever a block is seen
                     absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralFine());
-                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardFine());
+                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardFine() + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition());
                 } else {
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
                     robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
@@ -164,7 +164,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
                     // Saving the block's relative position whenever a block is seen
                     absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralCoarse());
-                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse());
+                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition());
                 }
             }
 
