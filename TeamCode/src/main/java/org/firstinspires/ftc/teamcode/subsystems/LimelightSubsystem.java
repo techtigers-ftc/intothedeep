@@ -19,11 +19,11 @@ import team.techtigers.core.paths.Waypoint;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
+    public static final double SLIDES_OFFSET = 8; // forward distance from center of robot to slides
+    public static final double LIMELIGHT_COARSE_OFFSET = 2.5; // forward distance from end of slides to limelight lens in coarse
+    public static final double LIMELIGHT_FINE_OFFSET = 5.5; // forward distance from end of slides to limelight lens in fine
     private static final int BLOCK_CACHE_LIMIT = 3;
     private final static double LIMELIGHT_HEIGHT = 10.25;
-    private static final double SLIDES_OFFSET = 8; // forward distance from center of robot to slides
-    private static final double LIMELIGHT_COARSE_OFFSET = 2.5; // forward distance from end of slides to limelight lens in coarse
-    private static final double LIMELIGHT_FINE_OFFSET = 5.5; // forward distance from end of slides to limelight lens in fine
 
     private static final double WIDTH_RANGE = 6; // TODO: Tune properly
     private static final double HEIGHT_RANGE = 5.6;

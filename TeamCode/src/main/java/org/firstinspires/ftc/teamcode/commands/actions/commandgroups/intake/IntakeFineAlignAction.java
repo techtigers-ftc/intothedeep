@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.function.DoubleSupplier;
@@ -44,7 +45,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> targetPositions[3], 0.75, 0.3),
+                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 3, 0.75, 0.3),
                         new IntakeClawRotationAction(intake, clawRotationSupplier, 150),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> targetPositions[0],
@@ -64,8 +65,10 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     private double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {
         Point robotVector = robotPose.getPoint();
         Point blockVector = blockPose.getPoint();
+        Point robotToBlockVector = blockVector.minus(robotVector);
+
         double distance = robotVector.dist(blockVector);
-        double angleBetween = robotVector.angleTo(blockVector);
+        double angleBetween = robotPose.getHeading() - Math.atan2(robotToBlockVector.getY(), robotToBlockVector.getX()) ;
 
         double forwardDistance = distance * Math.cos(angleBetween);
         double lateralDistance = distance * Math.sin(angleBetween);
@@ -76,9 +79,6 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                 robotPose.getY()
                         - Math.cos(robotPose.getHeading()) * lateralDistance,
                 robotPose.getHeading());
-
-        RobotLog.dd("AlignDebug", "Distance between: %f, Angle between: %f, forward dist: %f, lateral dist: %f, target x: %f, target y: %f, Target heading: %f",
-                distance, angleBetween, forwardDistance, lateralDistance, robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading());
 
         return new double[] {robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
     }

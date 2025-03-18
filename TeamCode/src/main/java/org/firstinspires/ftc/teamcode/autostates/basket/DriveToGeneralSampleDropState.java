@@ -85,4 +85,10 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
         }
         return AutoState.RUNNING;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.resetBlockHasBeenDetected();
+    }
 }

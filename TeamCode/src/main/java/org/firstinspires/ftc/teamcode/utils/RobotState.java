@@ -906,19 +906,46 @@ public class RobotState extends GlobalState {
         this.absoluteBlockCoordinates = coordinates;
     }
 
-    public Waypoint getLimelightLastRobotCoords() {
-        return limelightLastRobotCoords;
+    /**
+     * Gets the current intake slide position (inches)
+     *
+     * @return the current intake slide position
+     */
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
     }
 
-    public void setLimelightLastRobotCoords(Waypoint coords) {
-        this.limelightLastRobotCoords = coords;
-    }
-
+    /**
+     * Sets the current intake slide position (inches)
+     *
+     * @param intakeSlidePosition the current intake slide position
+     */
     public void setIntakeSlidePosition(double intakeSlidePosition) {
         this.intakeSlidePosition = intakeSlidePosition;
     }
 
-    public double getIntakeSlidePosition() {
-        return intakeSlidePosition;
+    /**
+     * Resets the boolean of whether a block has recently been detected
+     */
+    public void resetBlockHasBeenDetected() {
+        absoluteBlockCoordinates.resetBlockHasBeenDetected();
+    }
+
+    /**
+     * Returns if a block has recently been detected
+     *
+     * @return Whether a block has recently been detected
+     */
+    public boolean hasBlockBeenDetected() {
+        return absoluteBlockCoordinates.getBlockHasBeenDetected();
+    }
+
+    /**
+     * Gets the last robot position known to the Limelight
+     *
+     * @return The last robot position known to the Limelight
+     */
+    public Waypoint getLimelightLastRobotCoords() {
+        return absoluteBlockCoordinates.getLimelightLastRobotPosition();
     }
 }

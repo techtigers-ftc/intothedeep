@@ -300,12 +300,13 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeThirdSample, driveToThirdDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.SAMPLE_3_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.FAILED_SAMPLE_3_TIMEOUT)
-                .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
 
+                /*
                 // Drives to the third drop, drops it off, and goes to the fourth intake
+                .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
-
+*/
                 // Intakes the fourth sample
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.TIMEOUT)
@@ -386,6 +387,9 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
+        telemetry.addLine();
+        telemetry.addData("Block Has Been Detected", robotState.hasBlockBeenDetected());
+        telemetry.addData("Last Remembered Block", robotState.getAbsoluteBlockCoordinates());
     }
 
     @Override

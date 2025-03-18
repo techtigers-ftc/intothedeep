@@ -40,20 +40,9 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
 
         addCommands(
-                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new WaitUntilCommand(robotState::hasBlockBeenDetected),
                 new IntakeFinePickUpAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
-    }
-
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        RobotLog.dd("VisionDebug", "Robot Position at Drive End: " + robotState.getRobotCurrentPose());
-        RobotLog.dd("VisionDebug", "Limelight's Last Saved Robot Position: " + robotState.getLimelightLastRobotCoords());
-        RobotLog.dd("VisionDebug", "Calculated Absolute Block Position: " + robotState.getAbsoluteBlockCoordinates());
-        RobotLog.dd("VisionDebug", "Robot Current Velocity: %f", robotState.getRobotVelocity().getPoint().magnitude());
     }
 
     /**
