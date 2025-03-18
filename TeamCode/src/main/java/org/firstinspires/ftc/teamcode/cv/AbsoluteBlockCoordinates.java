@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.cv;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import team.techtigers.core.paths.Waypoint;
 
 public class AbsoluteBlockCoordinates {

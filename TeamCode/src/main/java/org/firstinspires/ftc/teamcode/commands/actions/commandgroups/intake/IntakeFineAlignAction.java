@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -51,7 +50,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                 () -> targetPositions[0],
                                 () -> targetPositions[1],
                                 () -> targetPositions[2],
-                                        0.5, Math.toRadians(2))
+                                0.5, Math.toRadians(2))
                 )
         );
     }
@@ -68,7 +67,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
         Point robotToBlockVector = blockVector.minus(robotVector);
 
         double distance = robotVector.dist(blockVector);
-        double angleBetween = robotPose.getHeading() - Math.atan2(robotToBlockVector.getY(), robotToBlockVector.getX()) ;
+        double angleBetween = robotPose.getHeading() - Math.atan2(robotToBlockVector.getY(), robotToBlockVector.getX());
 
         double forwardDistance = distance * Math.cos(angleBetween);
         double lateralDistance = distance * Math.sin(angleBetween);
@@ -80,7 +79,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                         - Math.cos(robotPose.getHeading()) * lateralDistance,
                 robotPose.getHeading());
 
-        return new double[] {robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
+        return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
     }
 
     @Override

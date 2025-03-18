@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -33,11 +32,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     // Limelight fine horizontal linear equation parameters
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
-
-    public Waypoint robotPositionForLastUpdate = new Waypoint(0, 0, 0);
-
     private final RobotState robotState;
     private final Limelight3A limelight;
+    public Waypoint robotPositionForLastUpdate = new Waypoint(0, 0, 0);
     private AbsoluteBlockCoordinates absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
 
     // Lateral bounds
@@ -128,10 +125,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
 
         LLResult result = limelight.getLatestResult();
-
-        // These two lines were for debugging - to delete
-        robotPositionForLastUpdate = robotState.getRobotCurrentPose();
-        robotState.setLimelightLastRobotCoords(robotPositionForLastUpdate);
 
         // Saving the robot's coordinates every update cycle (regardless of whether a block is detected)
         absoluteBlockCoordinates.setRobotPosition(robotState.getRobotCurrentPose());
