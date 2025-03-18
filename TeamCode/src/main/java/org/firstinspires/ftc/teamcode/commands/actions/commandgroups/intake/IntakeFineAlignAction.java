@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -14,12 +15,16 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.function.DoubleSupplier;
 
+import team.techtigers.core.paths.Waypoint;
+import team.techtigers.core.paths.geometry.Point;
+
 /**
  * Command to align to a block using fine camera vision
  */
 public class IntakeFineAlignAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
+    private double[] targetPositions;
 
     /**
      * Creates a new IntakeFineAlignAction
@@ -33,21 +38,49 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                  DoubleSupplier clawRotationSupplier,
                                  RobotState robotState) {
         this.robotState = robotState;
+        targetPositions = new double[4];
         addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> intake.getCurrentSlidePositionInches() + robotState.getBlockForwardFine() + 3, 0.75, 0.3),
+                                () -> targetPositions[3], 0.75, 0.3),
                         new IntakeClawRotationAction(intake, clawRotationSupplier, 150),
                         new TeleHoldPointAction(drive, robotState,
-                                () -> robotState.getRobotCurrentPose().getX() +
-                                        Math.sin(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                                () -> robotState.getRobotCurrentPose().getY()
-                                        - Math.cos(robotState.getRobotCurrentPose().getHeading()) * (robotState.getBlockLateralFine()),
-                                () -> robotState.getRobotCurrentPose().getHeading(), 0.5, Math.toRadians(2))
+                                () -> targetPositions[0],
+                                () -> targetPositions[1],
+                                () -> targetPositions[2],
+                                        0.5, Math.toRadians(2))
                 )
         );
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        targetPositions = getTargetIntakePosition(robotState.getRobotCurrentPose(), robotState.getAbsoluteBlockCoordinates());
+    }
+
+    private double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {
+        Point robotVector = robotPose.getPoint();
+        Point blockVector = blockPose.getPoint();
+        double distance = robotVector.dist(blockVector);
+        double angleBetween = robotVector.angleTo(blockVector);
+
+        double forwardDistance = distance * Math.cos(angleBetween);
+        double lateralDistance = distance * Math.sin(angleBetween);
+
+        Waypoint robotTarget = new Waypoint(
+                robotPose.getX() +
+                        Math.sin(robotPose.getHeading()) * lateralDistance,
+                robotPose.getY()
+                        - Math.cos(robotPose.getHeading()) * lateralDistance,
+                robotPose.getHeading());
+
+        RobotLog.dd("AlignDebug", "Distance between: %f, Angle between: %f, forward dist: %f, lateral dist: %f, target x: %f, target y: %f, Target heading: %f",
+                distance, angleBetween, forwardDistance, lateralDistance, robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading());
+
+        return new double[] {robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
     }
 
     @Override
