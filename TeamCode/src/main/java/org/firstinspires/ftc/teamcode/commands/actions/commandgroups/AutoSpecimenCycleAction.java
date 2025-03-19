@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.opmodes.auto.SpecimenDriveStateConfigurator;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
@@ -34,22 +32,14 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 new CustomFilteredPIDFCoefficients(0.0055, 0, 0.0035, 0.6, 0),
                                 new CustomPIDFCoefficients(0.9, 0, 0.015, 0),
                                 new Pose(68, 41.5, 90),
-                                        robotState,
-                                        SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE,
-                                        SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
+                                robotState,
+                                SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE,
+                                SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 3
                         ),
                         new DropperForwardCarryWallAction(dropper, robotState)
                 ),
-                new RawPowerDriveAction(drive, 0.8, 0.1),
-                new DropperFrontSlapNoReleaseAction(dropper, robotState),
-                // Slide the specimen
-                new TeleDriveCommand(drive,
-                        new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
-                        new CustomFilteredPIDFCoefficients(0.0055, 0, 0.0035, 0.6, 0),
-                        new CustomPIDFCoefficients(0.9, 0, 0.015, 0), new Pose(74, 41.5, 90), robotState, SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE, SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE, 3
-                ),
-                new DropperOpenAction(dropper, 50),
+                new ClipSpecimenState("clipSpecimen", dropper, drive, robotState),
                 // Drive back
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
