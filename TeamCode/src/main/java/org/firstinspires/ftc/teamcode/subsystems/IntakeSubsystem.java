@@ -461,6 +461,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
         rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
 
+        robotState.setIntakeSlidePosition(getCurrentSlidePositionInches());
+
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
         if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {

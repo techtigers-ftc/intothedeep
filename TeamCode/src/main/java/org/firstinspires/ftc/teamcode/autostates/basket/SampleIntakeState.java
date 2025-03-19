@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -33,10 +32,10 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
                              RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
+
         addCommands(
-                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickUpAction(drive, intake, () -> robotState.getRobotCurrentPose().getHeading(), robotState)
+                new WaitUntilCommand(robotState::hasBlockBeenDetected),
+                new IntakeFinePickUpAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
     }
 
