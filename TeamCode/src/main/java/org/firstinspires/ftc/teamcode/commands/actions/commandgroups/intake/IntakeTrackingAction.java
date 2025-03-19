@@ -8,13 +8,19 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 /**
- * Command to move the slides until the small camera sees the block is in the right place
+ * Command to creep the slides forward until the Limelight sees the block. This command makes sure
+ * the Limelight sees the block for a few frames before picking it up to make sure there is no
+ * ghost block detected.
  */
 @Config
 public class IntakeTrackingAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
     private double frameCount;
+    private double detectedSlidePosition;
+
+    private static final double BASE_POWER = 0.275;
+    private static final double INCREMENTAL_POWER = 0.005;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -27,6 +33,7 @@ public class IntakeTrackingAction extends CommandBase {
         this.intake = intake;
         this.robotState = robotState;
         frameCount = 0;
+        detectedSlidePosition = 0;
     }
 
     @Override
@@ -39,12 +46,14 @@ public class IntakeTrackingAction extends CommandBase {
     public void execute() {
         double power;
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+            if (frameCount == 0) {
+                detectedSlidePosition = intake.getCurrentSlidePositionInches();
+            }
             frameCount++;
             power = 0;
-
         } else {
             frameCount = 0;
-            power = 0.3 + 0.003 * intake.getCurrentSlidePositionInches();
+            power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
         }
 //        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
 //        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
@@ -53,14 +62,18 @@ public class IntakeTrackingAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 3;
+        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 2;
     }
 
     @Override
     public void end(boolean interrupted) {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(0);
         robotState.setIntakeTracking(false);
+        if (!interrupted) {
+            intake.moveSlidesAbsolute(detectedSlidePosition - 0.5);
+        } else {
+            intake.moveSlidesRelative(0);
+        }
     }
 }

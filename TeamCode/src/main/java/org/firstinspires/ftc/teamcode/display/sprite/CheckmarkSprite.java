@@ -14,16 +14,20 @@ public class CheckmarkSprite extends Sprite {
      * @param y the y coordinate of the bottom left corner of the sprite within the region
      */
     public CheckmarkSprite(int x, int y) {
-        super(x, y, 5, 4);
+        super(x, y, 9, 6);
     }
 
 
     @Override
     protected void showSprite(Color[][] leds) {
-        leds[getX()][getY() + 1] = getColor();
-        leds[getX() + 1][getY()] = getColor();
-        leds[getX() + 2][getY() + 1] = getColor();
-        leds[getX() + 3][getY() + 2] = getColor();
-        leds[getX() + 4][getY() + 3] = getColor();
+        leds[getX()][getY() + 2] = getColor();
+        leds[getX() + 1][getY() + 1] = getColor();
+        leds[getX() + 2][getY()] = getColor();
+        leds[getX() + 3][getY() + 1] = getColor();
+        leds[getX() + 4][getY() + 2] = getColor();
+        leds[getX() + 5][getY() + 3] = getColor();
+        leds[getX() + 6][getY() + 4] = getColor();
+        leds[getX() + 7][getY() + 5] = getColor();
+        leds[getX() + 4][getY() + 3] = Color.BLACK;
     }
 }

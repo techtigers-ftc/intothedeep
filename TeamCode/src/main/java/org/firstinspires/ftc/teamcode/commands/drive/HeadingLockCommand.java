@@ -48,6 +48,8 @@ public class HeadingLockCommand extends CommandBase {
     public void initialize() {
         rotationalController.reset();
         rotationalController.setTolerance(Math.toRadians(1));
+        targetHeading = robotState.getRobotCurrentPose().getHeading();
+        robotState.setHeadingLock(true);
     }
 
     /*
@@ -79,5 +81,10 @@ public class HeadingLockCommand extends CommandBase {
                 strafePower,
                 headingPower
         );
+    }
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.setHeadingLock(false);
     }
 }

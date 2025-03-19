@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.display.region;
 
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.display.sprite.CheckmarkSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteLeft;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteRight;
 import org.firstinspires.ftc.teamcode.display.sprite.FrameSprite;
@@ -15,13 +16,13 @@ import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
 import team.techtigers.core.display.Sprite;
 
-// TODO: Show something when robot is going for a block
 public class VisionStreamRegion extends DisplayRegion {
     private final FrameSprite frame;
     private final RectangleSprite verticalBlock;
     private final RectangleSprite horizontalBlock;
     private final DiagonalBlockSpriteLeft diagonalBlockLeft;
     private final DiagonalBlockSpriteRight diagonalBlockRight;
+    private final CheckmarkSprite checkmark;
     private final XSprite noBlockDetected;
 
     private final Sprite[] sprites;
@@ -43,6 +44,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft = new DiagonalBlockSpriteLeft(1, 1);
         diagonalBlockRight = new DiagonalBlockSpriteRight(1, 1);
         noBlockDetected = new XSprite(3, 1, 6, 6);
+        checkmark = new CheckmarkSprite(2, 1);
 
         frame.setColor(Color.WHITE);
         verticalBlock.setColor(Color.YELLOW);
@@ -50,9 +52,10 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockRight.setColor(Color.YELLOW);
         diagonalBlockLeft.setColor(Color.YELLOW);
         noBlockDetected.setColor(Color.ORANGE);
+        checkmark.setColor(Color.GREEN);
         frame.enable();
 
-        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected};
+        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected, checkmark};
     }
 
     @Override
@@ -62,8 +65,13 @@ public class VisionStreamRegion extends DisplayRegion {
         blockOrientation = robotState.getBlockOrientation();
 
         if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            disableAllBlocks();
-            noBlockDetected.enable();
+            if (robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED) {
+                disableAllBlocks();
+                checkmark.enable();
+            } else {
+                disableAllBlocks();
+                noBlockDetected.enable();
+            }
         } else if (0 <= blockOrientation && blockOrientation < 22.5) {
             disableAllBlocks();
             horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
@@ -103,6 +111,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft.disable();
         diagonalBlockRight.disable();
         noBlockDetected.disable();
+        checkmark.disable();
     }
 
     // TODO: Make this use color from Govind's pipeline

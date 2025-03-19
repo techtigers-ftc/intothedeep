@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -16,9 +21,10 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
+    private static final double TIME_TO_INTAKE = 2;
+    private static final double TIME_TO_DROP = 2.5;
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
-    private int runCounter;
+    private boolean blockDetected;
 
     /**
      * Creates a new SubmersibleIntakeState
@@ -31,28 +37,37 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
-        this.intake = intake;
-        runCounter = 0;
+        blockDetected = true;
         addCommands(
-                new IntakeTrackingAction(intake, robotState),
-                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
+                new IntakeCoarseAlignAction(drive, intake, robotState),
+                new WaitCommand(100),
+                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new IntakeFinePickUpAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
     @Override
     public void initialize() {
-        runCounter++;
         super.initialize();
+        blockDetected = true;
     }
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
+        if (blockNotDetected || super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
-            if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+            if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
+                return AutoState.PARK;
+            } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
-                    return AutoState.SAMPLE_INTAKE_COMPLETE;
+                    if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
+                        return AutoState.PARK;
+                    } else {
+                        return AutoState.SAMPLE_INTAKE_COMPLETE;
+                    }
                 } else {
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }

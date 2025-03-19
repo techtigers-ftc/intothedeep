@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPark;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
@@ -38,7 +38,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(29.75, 7.25),
-                                        new Point(9, 12)
+                                        new Point(7, 12)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
@@ -65,7 +65,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(9, 12),
+                                        new Point(7, 12),
                                         new Point(14.5, 19)
                                 )
                         )
@@ -146,9 +146,9 @@ public class BasketDriveStateConfigurator {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
         state.setHeadingPIDF(2, 0, 0, 0);
-//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-//        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -203,9 +203,9 @@ public class BasketDriveStateConfigurator {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
         state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
         state.setHeadingPIDF(2, 0, 0, 0);
-//        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-//        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-//        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
+        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
+        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
 
         state.setPathChain(
                 new PathBuilder()
@@ -250,7 +250,7 @@ public class BasketDriveStateConfigurator {
         );
 
         state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
     /**
@@ -260,7 +260,7 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFourthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
+        state.setDrivePIDF(0.008, 0, 0.0055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -308,7 +308,7 @@ public class BasketDriveStateConfigurator {
         );
 
         state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
     /**
@@ -318,7 +318,7 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFifthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
-        state.setDrivePIDF(0.008, 0, 0.0065, 0.6, 0);
+        state.setDrivePIDF(0.008, 0, 0.0055, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -345,7 +345,7 @@ public class BasketDriveStateConfigurator {
      *
      * @param state The DriveToPark to configure
      */
-    public static void configDriveToPark(DriveToPark state) {
+    public static void configDriveToPark(DriveToSamplePark state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setDrivePIDF(0.01, 0, 0.005, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
@@ -368,5 +368,4 @@ public class BasketDriveStateConfigurator {
         state.setTolerance(MEGA_TOLERANCE);
         state.setAngleTolerance(MEGA_ANGLE_TOLERANCE);
     }
-
 }

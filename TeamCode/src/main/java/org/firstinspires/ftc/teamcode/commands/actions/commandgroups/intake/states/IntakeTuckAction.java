@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
- * Command to tuck the intake in.
+ * Command to put the intake into the tuck position
  */
 public class IntakeTuckAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeTuckAction.class.getSimpleName();
@@ -43,8 +43,8 @@ public class IntakeTuckAction extends ParallelCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (interrupted) {
-            intake.setWristAbsolute(IntakeSubsystem.WRIST_PITCH_TUCK_POSITION
-                    , IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
+            intake.setWristAbsolute(IntakeSubsystem.WRIST_PITCH_TUCK_POSITION,
+                    IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
             intake.setClawRotationAbsolute(IntakeSubsystem.CLAW_ROTATION_TUCK_POSITION);
         }
         robotState.setIntakeState(IntakeState.TUCK);

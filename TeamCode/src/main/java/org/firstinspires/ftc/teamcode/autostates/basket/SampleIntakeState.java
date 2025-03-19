@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -28,17 +26,16 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param intake     The intake subsystem
-     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
     public SampleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake,
-                             DropperSubsystem dropper,
                              RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
+
         addCommands(
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakePrepareToTransferAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new WaitUntilCommand(robotState::hasBlockBeenDetected),
+                new IntakeFinePickUpAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
     }
 
@@ -53,7 +50,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-                if(robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
                     return AutoState.SAMPLE_INTAKE_FAILED;

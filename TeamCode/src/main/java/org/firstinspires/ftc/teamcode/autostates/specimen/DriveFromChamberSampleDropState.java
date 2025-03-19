@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.IntakeTuckAfterTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAfterTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SubmersibleIntakeReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -26,11 +26,12 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
             DriveFromChamberSampleDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveFromSubmersibleSampleDropState
+     * Constructor for the DriveFromChamberSampleDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
+     * @param intake     The intake subsystem
      * @param robotState The robot state
      */
     public DriveFromChamberSampleDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
@@ -38,13 +39,16 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new SubmersibleIntakeReadyToTransferAction(intake, dropper, robotState),
+                        new ReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
                                         new DropperOpenAction(dropper, 100)
+                                ),
+                                new SequentialCommandGroup(
+                                        new WaitUntilCommand(() -> robotState.getAutoRemainingTime() < 0.1  && dropper.getPitch() > 180),
+                                        new DropperOpenAction(dropper)
                                 ),
                                 new IntakeTuckAfterTransferAction(dropper, intake, robotState)
                         )

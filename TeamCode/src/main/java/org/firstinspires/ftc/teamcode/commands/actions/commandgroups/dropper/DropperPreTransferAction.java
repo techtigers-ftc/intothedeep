@@ -11,14 +11,15 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that moves the dropper to the transfer position
+ * An action that moves the dropper to the pre-transfer position. The slides stay up to allow the
+ * intake to be tucked inside the robot.
  */
 public class DropperPreTransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = DropperPreTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperToTransferAction
+     * Creates a new DropperPreTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state

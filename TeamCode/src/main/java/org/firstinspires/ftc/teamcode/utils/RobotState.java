@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -42,6 +43,7 @@ public class RobotState extends GlobalState {
     private boolean isAscending;
     private boolean isVerticalExtended;
     private boolean isManualIntakeSelected;
+    private boolean isBreakBeamEnabled;
     private double dropperClawPitch;
     private double dropperClawRotation;
     private double driverCurrent;
@@ -61,9 +63,14 @@ public class RobotState extends GlobalState {
     private String currentAutoState;
     private String previousAutoState;
     private Color debugColor;
+    private double autoRemainingTime;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private Waypoint limelightLastRobotCoords;
+    private double intakeSlidePosition;
 
 
     private boolean runDistanceSensor;
+    private boolean headingLockEnabled;
     private double distanceSensorValue;
 
     /**
@@ -92,6 +99,7 @@ public class RobotState extends GlobalState {
         isAscending = false;
         isVerticalExtended = false;
         isManualIntakeSelected = false;
+        isBreakBeamEnabled = true;
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
@@ -114,6 +122,11 @@ public class RobotState extends GlobalState {
         debugColor = Color.BLACK;
         runDistanceSensor = false;
         distanceSensorValue = -1;
+        autoRemainingTime = -1;
+        headingLockEnabled = false;
+        absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
+        limelightLastRobotCoords = new Waypoint(0, 0, 0);
+        intakeSlidePosition = 0;
     }
 
     /**
@@ -824,5 +837,115 @@ public class RobotState extends GlobalState {
      */
     public void setDistanceSensorValue(double distanceSensorValue) {
         this.distanceSensorValue = distanceSensorValue;
+    }
+
+    /**
+     * @return the amount of time remaining in the autonomous
+     */
+    public double getAutoRemainingTime() {
+        return (double) autoRemainingTime;
+    }
+
+    /**
+     * Sets the amount of time remaining in the autonomous
+     *
+     * @param autoRemainingTime the amount of time remaining in the autonomous
+     */
+    public void setAutoRemainingTime(double autoRemainingTime) {
+        this.autoRemainingTime = autoRemainingTime;
+    }
+
+    /**
+     * @return whether or not the break beam is enabled
+     */
+    public boolean isBreakBeamEnabled() {
+        return isBreakBeamEnabled;
+    }
+
+    /**
+     * Sets whether or not the break beam is enabled
+     *
+     * @param breakBeamEnabled whether or not the break beam is enabled
+     */
+    public void setBreakBeamEnabled(boolean breakBeamEnabled) {
+        isBreakBeamEnabled = breakBeamEnabled;
+    }
+
+
+    /**
+     * @return whether or not the heading lock is enabled
+     */
+    public boolean isHeadingLockEnabled() {
+        return headingLockEnabled;
+    }
+
+    /**
+     * Sets whether or not the heading lock beam is enabled
+     *
+     * @param headingLockEnabled whether or not the break beam is enabled
+     */
+    public void setHeadingLock(boolean headingLockEnabled) {
+        this.headingLockEnabled = headingLockEnabled;
+    }
+
+    /**
+     * Gets the absolute coordinates of a detected block
+     *
+     * @return the detected block's absolute coordinates
+     */
+    public Waypoint getAbsoluteBlockCoordinates() {
+        return absoluteBlockCoordinates.getBlockAbsolutePosition();
+    }
+
+    /**
+     * Sets the absolute coordinates of a detected block
+     *
+     * @param coordinates the detected block's absolute coordinates
+     */
+    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates coordinates) {
+        this.absoluteBlockCoordinates = coordinates;
+    }
+
+    /**
+     * Gets the current intake slide position (inches)
+     *
+     * @return the current intake slide position
+     */
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
+    }
+
+    /**
+     * Sets the current intake slide position (inches)
+     *
+     * @param intakeSlidePosition the current intake slide position
+     */
+    public void setIntakeSlidePosition(double intakeSlidePosition) {
+        this.intakeSlidePosition = intakeSlidePosition;
+    }
+
+    /**
+     * Resets the boolean of whether a block has recently been detected
+     */
+    public void resetBlockHasBeenDetected() {
+        absoluteBlockCoordinates.resetBlockHasBeenDetected();
+    }
+
+    /**
+     * Returns if a block has recently been detected
+     *
+     * @return Whether a block has recently been detected
+     */
+    public boolean hasBlockBeenDetected() {
+        return absoluteBlockCoordinates.getBlockHasBeenDetected();
+    }
+
+    /**
+     * Gets the last robot position known to the Limelight
+     *
+     * @return The last robot position known to the Limelight
+     */
+    public Waypoint getLimelightLastRobotCoords() {
+        return absoluteBlockCoordinates.getLimelightLastRobotPosition();
     }
 }

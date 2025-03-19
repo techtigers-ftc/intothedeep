@@ -49,7 +49,7 @@ public class DropperSlidesTuningOpmode extends BaseOpMode {
         });
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-            dropperSubsystem.moveSlidesAbsolute(DropperSubsystem.SLIDE_MAX);
+            dropperSubsystem.moveSlidesAbsolute(DropperSubsystem.SLIDES_MAX);
         });
 
         // Emergency stop button for the slides

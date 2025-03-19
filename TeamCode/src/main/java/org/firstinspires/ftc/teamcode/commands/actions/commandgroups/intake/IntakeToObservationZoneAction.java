@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * Command to move intake to observation zone, dropping its block in the zone
- * and moving to ready to intake
+ * Command to move intake to observation zone. This command sends the slides out and puts the intake
+ * into the prepare to pickup position.
  */
 public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     private static final String LOG_TAG = IntakeToObservationZoneAction.class.getSimpleName();
@@ -28,14 +28,12 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
      * Creates a new IntakeToPrepareToIntakeCommand
      *
      * @param intake     the intake subsystem
-     * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeToObservationZoneAction(IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public IntakeToObservationZoneAction(IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(intake);
         addCommands(
-                new DropperPreTransferAction(dropper, robotState),
                 new IntakeSlidesAbsoluteAction(intake, () -> 5, 1),
                 new IntakeWristRotationAction(intake,
                         IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION, 300),
@@ -57,8 +55,8 @@ public class IntakeToObservationZoneAction extends ParallelCommandGroup {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
+        robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
         if (!interrupted) {
-            robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
             if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                 robotState.setBlockPosition(RobotBlockPosition.NONE);
             }

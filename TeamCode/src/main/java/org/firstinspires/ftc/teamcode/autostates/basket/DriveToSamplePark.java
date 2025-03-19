@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
@@ -18,12 +18,12 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 /**
  * A State to drive to the submersible position
  */
-public class DriveToPark extends DriveStateBase {
+public class DriveToSamplePark extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveToPark.class.getSimpleName();
+            DriveToSamplePark.class.getSimpleName();
 
     /**
-     * Constructor for the DriveToPark
+     * Constructor for the DriveToSamplePark
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
@@ -31,7 +31,7 @@ public class DriveToPark extends DriveStateBase {
      * @param intake     The intake subsystem
      * @param robotState The robot state
      */
-    public DriveToPark(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DriveToSamplePark(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
