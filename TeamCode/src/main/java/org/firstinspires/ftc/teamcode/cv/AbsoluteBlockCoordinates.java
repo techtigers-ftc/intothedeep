@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.cv;
 
 import team.techtigers.core.paths.Waypoint;
 
+/**
+ * A class that stores the absolute position of a block on the game field using the robot's
+ * orientation and position as well as the block's lateral and forward offset
+ */
 public class AbsoluteBlockCoordinates {
     private double robotXPos;
     private double robotYPos;
