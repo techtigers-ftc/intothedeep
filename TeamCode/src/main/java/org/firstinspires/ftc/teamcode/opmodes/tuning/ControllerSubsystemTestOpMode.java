@@ -19,6 +19,7 @@ import team.techtigers.base.BaseOpMode;
 @SuppressWarnings("unused")
 public class ControllerSubsystemTestOpMode extends BaseOpMode {
     RobotState robotState;
+    private double lateralCourseDistance;
 
     @Override
     public void initialize() {
@@ -27,7 +28,7 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
 
         robotState = new RobotState(false, false);
         robotState.setBlockPosition(RobotBlockPosition.DROPPER);
-        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, manipulatorGamepad, robotState);
+        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, manipulatorGamepad, robotState, lateralCourseDistance);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> robotState.setBlockColorPreference(ALLIANCE));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> robotState.setBlockColorPreference(ANY));
@@ -40,7 +41,6 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-
         telemetry.addData("Runtime Seconds", robotState.getRunTime()/1000f);
         telemetry.addData("Color Preference", robotState.getBlockColorPreference());
         telemetry.addData("Intake State", robotState.getIntakeState());

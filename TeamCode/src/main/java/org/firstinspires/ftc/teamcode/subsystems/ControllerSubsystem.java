@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.controller.ClimbReminderRumble;
 import org.firstinspires.ftc.teamcode.controller.EndgameRumble;
 import org.firstinspires.ftc.teamcode.controller.FailedPickupRumble;
 import org.firstinspires.ftc.teamcode.controller.Rumble;
+import org.firstinspires.ftc.teamcode.controller.VisionAllignmentRumble;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ControllerSubsystem extends CloseableSubsystem {
     private final RobotState robotState;
     private final GamepadEx gamepad1;
     private final GamepadEx gamepad2;
+    private final double lateralCourseDistance;
 
     /**
      * Constructor for the ControllerSubsystem
@@ -29,15 +31,18 @@ public class ControllerSubsystem extends CloseableSubsystem {
      * @param gamepad2   The second gamepad
      * @param robotState The robot state to use
      */
-    public ControllerSubsystem(GamepadEx gamepad1, GamepadEx gamepad2, RobotState robotState) {
+    public ControllerSubsystem(GamepadEx gamepad1, GamepadEx gamepad2, RobotState robotState,
+                               double lateralCourseDistance) {
         this.robotState = robotState;
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
+        this.lateralCourseDistance = robotState.getBlockLateralCoarse();
 
         rumbles = new ArrayList<>();
         rumbles.add(new EndgameRumble(gamepad1, gamepad2, robotState));
         rumbles.add(new ClimbReminderRumble(gamepad1, gamepad2, robotState));
         rumbles.add(new FailedPickupRumble(gamepad2, robotState));
+        rumbles.add(new VisionAllignmentRumble(gamepad2, robotState, lateralCourseDistance));
     }
 
     @Override
