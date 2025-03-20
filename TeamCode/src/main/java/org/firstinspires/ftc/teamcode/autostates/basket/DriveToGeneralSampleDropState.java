@@ -89,6 +89,6 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        robotState.resetBlockHasBeenDetected();
+        robotState.getAbsoluteBlockPosition().resetBlockDetection();
     }
 }

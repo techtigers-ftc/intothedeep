@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import java.util.function.DoubleSupplier;
 
@@ -360,7 +362,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(limelight, auto, drive, odometry, dropper, intake, sensor, visualDisplaySubsystem);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -388,8 +390,14 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.addLine();
-        telemetry.addData("Block Has Been Detected", robotState.hasBlockBeenDetected());
-        telemetry.addData("Last Remembered Block", robotState.getAbsoluteBlockCoordinates());
+
+        if (robotState.getAbsoluteBlockPosition().isBlockDetected()) {
+            telemetry.addLine("Block Detected");
+            telemetry.addData("Last Remembered Block Position", robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition());
+        } else {
+            telemetry.addLine("Block NOT Detected");
+        }
+        RobotLog.dd("Auto Debug", "Current Auto State: %s Block Detected: %b", robotState.getCurrentAutoState(), robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -58,7 +59,25 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-        targetPositions = getTargetIntakePosition(robotState.getRobotCurrentPose(), robotState.getAbsoluteBlockCoordinates());
+        if (!robotState.getAbsoluteBlockPosition().isBlockDetected()) {
+            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+            throw new IllegalStateException("Block not detected");
+            // TODO: Possibly cancel command so robot doesn't crash during a match
+//            this.cancel();
+        }
+
+        Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
+        targetPositions = getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
+
+        double distanceFromTargetPos = Math.hypot(
+                targetPositions[0] - robotState.getRobotCurrentPose().getX(),
+                targetPositions[1] - robotState.getRobotCurrentPose().getY()
+        );
+
+        RobotLog.dd("Auto Debug", "Distance from Target (in): %f", distanceFromTargetPos);
+        RobotLog.dd("Auto Debug", "Robot Current Position X: %f Y: %f", robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY());
+        RobotLog.dd("Auto Debug", "Target Position X: %f Y: %f", targetPositions[0], targetPositions[1]);
+        RobotLog.dd("Auto Debug", "Block Absolute Position X: %f Y: %f", blockPos.getX(), blockPos.getY());
     }
 
     private double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {

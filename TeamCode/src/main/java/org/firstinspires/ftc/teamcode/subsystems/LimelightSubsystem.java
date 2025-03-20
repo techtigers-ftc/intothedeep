@@ -4,8 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -18,7 +18,7 @@ import team.techtigers.core.paths.Waypoint;
  */
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
-    public static final double SLIDES_OFFSET = 8; // forward distance from center of robot to slides
+    public static final double SLIDES_OFFSET = 7; // forward distance from center of robot to slides
     public static final double LIMELIGHT_COARSE_OFFSET = 2.5; // forward distance from end of slides to limelight lens in coarse
     public static final double LIMELIGHT_FINE_OFFSET = 5.5; // forward distance from end of slides to limelight lens in fine
     private static final int BLOCK_CACHE_LIMIT = 3;
@@ -34,8 +34,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
     private final RobotState robotState;
     private final Limelight3A limelight;
-    public Waypoint robotPositionForLastUpdate = new Waypoint(0, 0, 0);
-    private AbsoluteBlockCoordinates absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
 
     // Lateral bounds
     private double lateralLowerBound = -5;
@@ -126,9 +124,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
         LLResult result = limelight.getLatestResult();
 
-        // Saving the robot's coordinates every update cycle (regardless of whether a block is detected)
-        absoluteBlockCoordinates.setRobotPosition(robotState.getRobotCurrentPose());
-
         if (result != null) {
             double[] results = result.getPythonOutput();
             if (results[1] == 0 && results[2] == 0 && results[3] == 0) {
@@ -138,31 +133,48 @@ public class LimelightSubsystem extends CloseableSubsystem {
 //                RobotLog.dd("VisionDebug", "Limelight's Last Robot Position" + robotPositionForLastUpdate.toString());
 //                RobotLog.dd("VisionDebug", "Robot Velocity: " + robotState.getRobotVelocity());
                 if (!robotState.isCoarseCameraMode()) {
+                    double lateralFine = getCorrectedLateralFine(results[1]);
+                    double forwardFine = -(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0);
+                    double orientation = (results[3] + 180) % 180;
+
                     robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-                    robotState.setBlockLateralFine(getCorrectedLateralFine(results[1]));
-                    robotState.setBlockForwardFine(-(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0));
-                    robotState.setBlockOrientation((results[3] + 180) % 180);
+                    robotState.setBlockLateralFine(lateralFine);
+                    robotState.setBlockForwardFine(forwardFine);
+                    robotState.setBlockOrientation(orientation);
 
                     // Saving the block's relative position whenever a block is seen
-                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralFine());
-                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardFine() + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition());
+                    robotState.getAbsoluteBlockPosition().updatePosition(
+                            robotState.getRobotCurrentPose(),
+                            robotState.getBlockLateralFine(),
+                            robotState.getBlockForwardFine() + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition(),
+                            robotState.getBlockOrientation()
+                    );
                 } else {
-                    robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
-                    robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                     double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_OFFSET + result.getTy()));
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
+
+                    robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
+                    robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                     robotState.setBlockForwardCoarse(forwardCoarse);
                     robotState.setBlockLateralCoarse(lateralCoarse);
 
                     // Saving the block's relative position whenever a block is seen
-                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralCoarse());
-                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition());
+//                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralCoarse());
+//                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition());
                 }
             }
 
-            // Saves the absolute block coordinates object into robot state
-            robotState.setAbsoluteBlockCoordinates(absoluteBlockCoordinates);
+            Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
+
+            RobotLog.dd("Auto Debug", "Block Absolute Position X: %f Y: %f Heading: %f",
+                    blockPos.getX(),
+                    blockPos.getY(),
+                    Math.toDegrees(blockPos.getHeading()));
+            RobotLog.dd("Auto Debug", "Robot Current Position X: %f Y: %f Heading: %f",
+                    robotState.getRobotCurrentPose().getX(),
+                    robotState.getRobotCurrentPose().getY(),
+                    Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
         }
     }
 
