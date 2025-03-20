@@ -1,5 +1,5 @@
 ### CONFIG
-# Exposure = 935
+# Exposure = 1300
 # Sensor Gain = 29.8
 # Red Balance = 1200
 # Blue Balance = 1466
@@ -39,29 +39,9 @@ def track_opencv(func_name):
     return decorator
 
 
-# Wrap commonly used OpenCV functions
-cv2.split = track_opencv("split")(cv2.split)
-cv2.cvtColor = track_opencv("cvtColor")(cv2.cvtColor)
-cv2.inRange = track_opencv("inRange")(cv2.inRange)
-cv2.bitwise_and = track_opencv("bitwise_and")(cv2.bitwise_and)
-cv2.bitwise_or = track_opencv("bitwise_or")(cv2.bitwise_or)
-cv2.bitwise_not = track_opencv("bitwise_not")(cv2.bitwise_not)
-cv2.morphologyEx = track_opencv("morphologyEx")(cv2.morphologyEx)
-cv2.GaussianBlur = track_opencv("GaussianBlur")(cv2.GaussianBlur)
-cv2.Sobel = track_opencv("Sobel")(cv2.Sobel)
-cv2.Canny = track_opencv("Canny")(cv2.Canny)
-cv2.findContours = track_opencv("findContours")(cv2.findContours)
-cv2.drawContours = track_opencv("drawContours")(cv2.drawContours)
-cv2.bilateralFilter = track_opencv("bilateralFilter")(cv2.bilateralFilter)
-cv2.normalize = track_opencv("normalize")(cv2.normalize)
-cv2.dilate = track_opencv("dilate")(cv2.dilate)
-cv2.contourArea = track_opencv("contourArea")(cv2.contourArea)
-
-
 # Edge detection parameters - initial values
 BLUR_SIZE = 13
 SOBEL_KERNEL = 7
-
 
 GAUSSIAN_BLUR_KERNEL_SIZE = (5, 5)
 MORPHOLOGY_KERNEL = np.ones((5, 5), np.uint8)
@@ -70,14 +50,14 @@ DILATE_KERNEL = np.ones((3, 3), np.uint8)
 
 # Color detection ranges for different color spaces
 HSV_BLUE_RANGE = ([90, 70, 20], [140, 255, 255])
-HSV_RED_RANGE_1 = ([0, 40, 20], [20, 255, 255])  # Red wraps around in HSV
-HSV_RED_RANGE_2 = ([150, 40, 20], [180, 255, 255])
-HSV_YELLOW_RANGE = ([10, 30, 150], [40, 255, 255])
+HSV_RED_RANGE_1 = ([0, 40, 20], [25, 255, 255])  # Red wraps around in HSV
+HSV_RED_RANGE_2 = ([160, 40, 20], [180, 255, 255])
+HSV_YELLOW_RANGE = ([10, 100, 150], [40, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 30000
-LARGE_CONTOUR_AREA_FINE = 90000
+SMALL_CONTOUR_AREA_FINE = 30000/4
+LARGE_CONTOUR_AREA_FINE = 80000/4
 SMALL_CONTOUR_AREA_COARSE = 200
 
 
@@ -137,7 +117,7 @@ def explore_touching_contours(frame, contour, min_area_ratio=0.15):
     x, y, w, h = cv2.boundingRect(contour)
     mask = np.zeros((h, w), dtype=np.uint8)
     shifted_contour = contour - [x, y]
-    cv2.drawContours(mask, [shifted_contour], -1, 255, -1)
+    # cv2.drawContours(mask, [shifted_contour], -1, 255, -1)
 
     original_area = cv2.contourArea(contour)
     max_contours = []
@@ -154,7 +134,7 @@ def explore_touching_contours(frame, contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
     return frame
 
@@ -180,7 +160,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
         valid_contours = [
             contour
@@ -197,12 +177,20 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
     return [contour]
 
-
 def runPipeline(frame, llrobot):
-    # llrobot[0] = 1
+    global last_time
+    llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
-    # llrobot[3] = 0
+    # llrobot[3] = 1
+    if not last_time:
+        last_time = time.time()
+    else:
+        current_time = time.time()
+        time_delta =  current_time - last_time
+        last_time = current_time
+        print(1/time_delta)
+
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
@@ -287,7 +275,7 @@ def runPipeline(frame, llrobot):
             if cv2.contourArea(contour) < small_contour_area:
                 continue
 
-            frame = explore_touching_contours(frame, contour)
+            # frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
                 if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
                     continue
@@ -322,14 +310,9 @@ def runPipeline(frame, llrobot):
 
                 game_pieces.append(
                     {
-                        "index": len(game_pieces) + 1,
-                        "color": "Blue",
                         "position": center,
                         "angle": angle,
                         "area": area,
-                        "hierarchy_level": "external"
-                        if hierarchy[0][i][3] == -1
-                        else "internal",
                     }
                 )
 
@@ -337,7 +320,7 @@ def runPipeline(frame, llrobot):
             return (width / 2 - center[0]) ** 2 + (3 * height / 2 - center[1]) ** 2
 
         def dist_for_coarse(center):
-            return (height - center[1])**2 + (width - 2 * center[0]) ** 2
+            return (height - center[1])**2 + (width - center[0]) ** 2
 
         if isFine:
             dist_func = dist_for_fine
