@@ -26,7 +26,7 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
-    public static final double SLIDES_MAX = 27;
+    public static final double SLIDES_MAX = 22;
     public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 0;
