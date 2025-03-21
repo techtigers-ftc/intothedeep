@@ -1,6 +1,6 @@
 ### CONFIG
 # Exposure = 1300
-# Sensor Gain = 29.8
+# Sensor Gain = 37.1
 # Red Balance = 1200
 # Blue Balance = 1466
 
@@ -50,14 +50,14 @@ DILATE_KERNEL = np.ones((3, 3), np.uint8)
 
 # Color detection ranges for different color spaces
 HSV_BLUE_RANGE = ([90, 70, 20], [140, 255, 255])
-HSV_RED_RANGE_1 = ([0, 40, 20], [25, 255, 255])  # Red wraps around in HSV
-HSV_RED_RANGE_2 = ([160, 40, 20], [180, 255, 255])
-HSV_YELLOW_RANGE = ([10, 100, 150], [40, 255, 255])
+HSV_RED_RANGE_1 = ([0, 90, 130], [10, 255, 255])  # Red wraps around in HSV
+HSV_RED_RANGE_2 = ([170, 90, 130], [180, 255, 255])
+HSV_YELLOW_RANGE = ([20, 120, 200], [40, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 30000/4
-LARGE_CONTOUR_AREA_FINE = 80000/4
+SMALL_CONTOUR_AREA_FINE = 30000
+LARGE_CONTOUR_AREA_FINE = 80000
 SMALL_CONTOUR_AREA_COARSE = 200
 
 
@@ -179,11 +179,11 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 def runPipeline(frame, llrobot):
     global last_time
-    llrobot[0] = 1
+    # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
     # llrobot[3] = 1
-    if not last_time:
+    if "last_time" not in globals():
         last_time = time.time()
     else:
         current_time = time.time()
@@ -238,6 +238,8 @@ def runPipeline(frame, llrobot):
 
         masked_frame = cv2.bitwise_and(frame, frame, mask=combined_mask)
 
+        # return np.array([[]]), masked_frame, [0 for _ in range(8)]
+
         gray_masked = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2GRAY)
         # Edge detection pipeline
         blurred = cv2.GaussianBlur(gray_masked, (BLUR_SIZE, BLUR_SIZE), 0)
@@ -272,12 +274,12 @@ def runPipeline(frame, llrobot):
                 SMALL_CONTOUR_AREA_FINE if isFine == 1 else SMALL_CONTOUR_AREA_COARSE
             )
 
-            if cv2.contourArea(contour) < small_contour_area:
+            if cv2.contourArea(contour) < small_contour_area and isFine:
                 continue
 
             # frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
-                if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
+                if isFine and cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
                     continue
 
                 mask = np.zeros(gray.shape, dtype=np.uint8)
