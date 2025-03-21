@@ -26,7 +26,7 @@ public class AutoDriveCommand extends CommandBase {
 
     private final DriveSubsystem drive;
     private final RobotState robotState;
-    public final Follower follower;
+    public Follower follower;
     private PathChain pathChain;
     private PathChain previousPathChain;
 
@@ -40,6 +40,8 @@ public class AutoDriveCommand extends CommandBase {
     private PIDFController secondaryHeadingPIDF;
     private FilteredPIDFController secondaryDrivePIDF;
 
+    private final RobotStateLocalizer localizer;
+
     /**
      * Constructs a new AutoDriveCommand.
      *
@@ -50,7 +52,7 @@ public class AutoDriveCommand extends CommandBase {
                             RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
-        RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
+        localizer = new RobotStateLocalizer(robotState);
         follower = new Follower(localizer);
         addRequirements(drive);
     }
@@ -113,6 +115,11 @@ public class AutoDriveCommand extends CommandBase {
     @Override
     public void execute() {
         if (pathChain != previousPathChain) {
+            follower = new Follower(localizer);
+            follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
+            follower.setHeadingPIDF(headingPIDF.getCoefficients());
+            follower.setDrivePIDF(drivePIDF.getCoefficients());
+            follower.disableSecondaryPIDS();
             follower.followPath(pathChain, true);
             previousPathChain = pathChain;
         }
