@@ -1,0 +1,44 @@
+package org.firstinspires.ftc.teamcode.autostates.specimen;
+
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
+import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+
+/**
+ * A state to drive and extend the slides to the park position
+ */
+public class DriveToSpecimenPark extends DriveStateBase {
+    private static final String LOG_TAG =
+            DriveToSpecimenPark.class.getSimpleName();
+
+    /**
+     * Constructor for the DriveToPark
+     *
+     * @param name       The name of the state
+     * @param intake     The intake subsystem
+     * @param drive      The drive subsystem
+     * @param dropper    the dropper subsystem
+     * @param robotState The robot state
+     */
+    public DriveToSpecimenPark(String name, IntakeSubsystem intake, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+        super(name, drive, robotState, 5);
+        addCommands(
+                autoDriveCommand,
+                new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        new DropperOpenAction(dropper, 100),
+                        new WaitCommand(500),
+                        new DropperPreTransferAction(dropper, robotState)
+                ),
+                new IntakeTuckAction(intake, robotState)
+        );
+    }
+}

@@ -1,80 +1,79 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.util.RobotLog;
+import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 /**
- * Command to move the slides until the small camera sees the block is in the right place
+ * Command to creep the slides forward until the Limelight sees the block. This command makes sure
+ * the Limelight sees the block for a few frames before picking it up to make sure there is no
+ * ghost block detected.
  */
 @Config
-public class IntakeTrackingAction extends TimeoutCommand {
-    private static final double TARGET_Y = 0;
-    public static double FORWARD_KP = 0.2;
-    public static double FORWARD_KI = 0;
-    public static double FORWARD_KD = 0.01;
-    public static double FORWARD_KF = 0;
-    public final PIDFController pidfController;
+public class IntakeTrackingAction extends CommandBase {
     private final IntakeSubsystem intake;
     private final RobotState robotState;
-    private double tolerance;
+    private double frameCount;
+    private double detectedSlidePosition;
+
+    private static final double BASE_POWER = 0.275;
+    private static final double INCREMENTAL_POWER = 0.005;
 
     /**
      * Constructs a new IntakeTrackingAction
      *
      * @param intake     the intake subsystem
-     * @param tolerance  the tolerance for the command (in pixels)
      * @param robotState robot state
      */
-    public IntakeTrackingAction(IntakeSubsystem intake, double tolerance, RobotState robotState) {
-        super(0.9);
+    public IntakeTrackingAction(IntakeSubsystem intake, RobotState robotState) {
         addRequirements(intake);
         this.intake = intake;
-        this.tolerance = tolerance;
         this.robotState = robotState;
-        pidfController = new PIDFController(FORWARD_KP,
-                FORWARD_KI,
-                FORWARD_KD,
-                FORWARD_KF);
+        frameCount = 0;
+        detectedSlidePosition = 0;
     }
 
     @Override
     public void initialize() {
-        super.initialize();
         intake.setDirectControl(true);
+        robotState.setIntakeTracking(true);
     }
 
     @Override
     public void execute() {
-        double currentPosition = robotState.getBlockForwardFine();
-        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            currentPosition = -2.5;
+        double power;
+        if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+            if (frameCount == 0) {
+                detectedSlidePosition = intake.getCurrentSlidePositionInches();
+            }
+            frameCount++;
+            power = 0;
+        } else {
+            frameCount = 0;
+            power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
         }
-        double movePower = pidfController.calculate(currentPosition, TARGET_Y);
-        RobotLog.dd("tracking action", "error: %f", currentPosition - TARGET_Y);
-        RobotLog.dd("tracking action", "move power: %f", movePower);
-        intake.setMotorPower(movePower);
+//        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
+//        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        intake.setMotorPower(power);
     }
 
     @Override
     public boolean isFinished() {
-        return ((Math.abs(robotState.getBlockForwardFine() - TARGET_Y) < tolerance)
-                && robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED)
-                || isTimeoutReached();
+        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 2;
     }
 
     @Override
     public void end(boolean interrupted) {
-        RobotLog.dd("tracking action", "ending tracking action");
-        robotState.setDetectedFineBlockOrientation(robotState.getBlockOrientation());
         intake.setMotorPower(0);
         intake.setDirectControl(false);
-        intake.moveSlidesRelative(0);
+        robotState.setIntakeTracking(false);
+        if (!interrupted) {
+            intake.moveSlidesAbsolute(detectedSlidePosition - 0.5);
+        } else {
+            intake.moveSlidesRelative(0);
+        }
     }
 }

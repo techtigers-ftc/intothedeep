@@ -1,32 +1,25 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
+import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 /**
- * Command to move intake to Ready To Transfer.
+ * Command to use vision to align the robot to a block, pick it up, and bring it to the transfer
+ * position. It does a tele hold point when the vision is not aligning
  */
 public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
-    private final RobotState robotState;
-    private final IntakeSubsystem intake;
-    private double lastClawRotation;
 
     /**
      * Creates a new IntakeFullReadyToTransferAction
@@ -36,32 +29,32 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param robotState the robot state
      * @param command    the command to cancel
      */
-    public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
+    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
+                                           IntakeSubsystem intake,
                                            DropperSubsystem dropper,
                                            RobotState robotState, CommandBase command) {
-        this.robotState = robotState;
-        this.intake = intake;
-        lastClawRotation = 90;
         addRequirements(intake, dropper);
+
+        TeleHoldPointAction holdRobotPosition =
+                new TeleHoldPointAction(drive, robotState,
+                        () -> robotState.getRobotCurrentPose().getX(),
+                        () -> robotState.getRobotCurrentPose().getY(),
+                        () -> robotState.getRobotCurrentPose().getHeading(),
+                        0, Math.toRadians(0)
+                );
+
         addCommands(
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 100),
-                new IntakeCloseAction(intake, 150),
+                new InstantCommand(() -> robotState.setVisionAligning(true)),
+                new WaitCommand(100),
+                new IntakeFineAlignAction(drive, intake, robotState::getBlockOrientation, robotState),
                 new ParallelCommandGroup(
-                        new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
-                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300)
-                ),
-                new IntakeCheckSensorAction(robotState, command == null ? this : command),
-                new ParallelCommandGroup(
-                        new DropperPitchAction(dropper,
-                                DropperSubsystem.PITCH_TRANSFER_POSITION, 100),
                         new SequentialCommandGroup(
-                                new IntakeLoosenAction(intake, 350),
-                                new IntakeCloseAction(intake, 50)
+                                holdRobotPosition,
+                                new WaitUntilCommand(robotState::isVisionAligning),
+                                new InstantCommand(holdRobotPosition::stop)
                         ),
-                        new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.7)
+                        new IntakeFullReadyToTransferNoVisionAction(intake,
+                                dropper, robotState, command == null ? this : command)
                 )
         );
     }
@@ -73,25 +66,10 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeFullReadyToTransferAction(IntakeSubsystem intake,
+    public IntakeFullReadyToTransferAction(DriveSubsystem drive,
+                                           IntakeSubsystem intake,
                                            DropperSubsystem dropper,
                                            RobotState robotState) {
-        this(intake, dropper, robotState, null);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
-        if (!interrupted) {
-            robotState.setIntakeState(IntakeState.READY_TO_TRANSFER);
-            robotState.setBlockPosition(RobotBlockPosition.INTAKE);
-            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
-        } else {
-            robotState.setIntakeState(IntakeState.PREPARE_TO_PICKUP);
-            robotState.setCurrentGear(DriveGears.ENGAGED);
-            intake.setWristPitchAbsolute(IntakeSubsystem.WRIST_PITCH_PREPARE_TO_PICKUP_POSITION);
-            intake.setWristRotationAbsolute(IntakeSubsystem.WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION);
-            intake.openClaw();
-        }
+        this(drive, intake, dropper, robotState, null);
     }
 }

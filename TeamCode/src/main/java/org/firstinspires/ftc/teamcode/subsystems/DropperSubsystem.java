@@ -5,19 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlideController;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -30,42 +26,55 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class DropperSubsystem extends CloseableSubsystem {
     // SLIDE POSITIONS
-    public static final double SLIDE_MAX = 25.75;
-    public static final double SLIDES_CHAMBER_POSITION = 5;
+    public static final double SLIDES_MAX = 22;
+    public static final double SLIDES_LOW_BASKET_POSITION = 11;
+    public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
+    public static final double SLIDES_CHAMBER_POSITION = 4.4;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
-    public static final double PITCH_PRE_TRANSFER_POSITION = 60;
+    public static final double PITCH_PRE_TRANSFER_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 41;
-    public static final double PITCH_BASKET_POSITION = 210;
-    public static final double PITCH_CHAMBER_POSITION = 180;
-    public static final double PITCH_FRONT_SLAP_POSITION = 95;
+    public static final double PITCH_BASKET_POSITION = 230;
+    public static final double PITCH_CHAMBER_POSITION = 155; // 180
+    public static final double AUTO_PITCH_CHAMBER_POSITION = 155;
+    public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
-    public static final double PITCH_WALL_INTAKE_POSITION = 305;
+    public static final double PITCH_WALL_INTAKE_POSITION = 310;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 15;
-    public static final double ROTATION_BASKET_POSITION = 215;
-    public static final double ROTATION_FRONT_SLAP_POSITION = 15;
-    public static final double ROTATION_BACK_SLAP_POSITION = 215;
+    public static final double ROTATION_TRANSFER_POSITION = 210;
+    public static final double ROTATION_BASKET_POSITION = 210;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 210;
+    public static final double ROTATION_BACK_SLAP_POSITION = 10;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.27 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double TICKS_PER_ROTATION = 384.5;
-    private static final double ERROR_FACTOR = 1.15;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
+    private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower
+    private static final double TICKS_PER_ROTATION = 145.1;
+    private static final double ERROR_FACTOR = 1;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
     private static final double GEAR_RATIO = 1;
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
-    public static double CLAW_OPENED_POSITION = 0.9;
-    public static double CLAW_CLOSED_POSITION = 0.055;
-    public static double KP = 0.006;
-    public static double KI = 0;
-    public static double KD = 0;
-    public static double KF = 0;
+    // Old values for an axon micro: closed 0.6, open 0.24
+    // New values for an injora: closed 0.6, open 0.26
+    public static double CLAW_OPENED_POSITION = 0.57;
+    public static double CLAW_CLOSED_POSITION = 0.25;
+    public static double PRIMARY_KP = 0.01;
+    public static double PRIMARY_KI = 0;
+    public static double PRIMARY_KD = 0.0001;
+    public static double PRIMARY_KF = 0;
+    public static double SECONDARY_KP = 0.01;
+    public static double SECONDARY_KI = 0;
+    public static double SECONDARY_KD = 0.0001;
+    public static double SECONDARY_KF = 0;
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
     public final DcMotor leftSlideMotor;
+    private final PIDFCoefficients PRIMARY_COEFFICIENTS = new PIDFCoefficients(PRIMARY_KP, PRIMARY_KI, PRIMARY_KD, PRIMARY_KF);
+    private final PIDFCoefficients SECONDARY_COEFFICIENTS = new PIDFCoefficients(SECONDARY_KP, SECONDARY_KI, SECONDARY_KD, SECONDARY_KF);
     private final DcMotor encoderMotor;
     private final DcMotorEx currentMotorRight;
     private final DcMotorEx currentMotorLeft;
@@ -77,8 +86,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private final DifferentialController differentialController;
     private final SlidingAverageCalculator leftSlideCurrentAverage;
     private final SlidingAverageCalculator rightSlideCurrentAverage;
-    private final NormalizedColorSensor colorSensor;
-    private final ElapsedTime colorSensorTimer;
+    private boolean inPrimarySlideMode;
 
     /**
      * Initializes dropper subsystem
@@ -94,10 +102,9 @@ public class DropperSubsystem extends CloseableSubsystem {
         rightWrist = hardwareMap.get(Servo.class, "right_dropper_wrist");
         //Claw zero is open
         grabServo = hardwareMap.get(Servo.class, "dropper_claw");
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "dropper_color_sensor");
 
-        PIDFCoefficients forwardPIDF = new PIDFCoefficients(KP, KI, KD, KF);
-        slideController = new SlideController(TICKS_PER_INCHES, forwardPIDF);
+        slideController = new SlideController(TICKS_PER_INCHES, PRIMARY_COEFFICIENTS);
+        inPrimarySlideMode = true;
         differentialController = new DifferentialController(GEAR_RATIO, 355, SERVO_GEAR_RATIO);
         differentialController.setMaxRange(330, 215);
         rightSlideCurrentAverage = new SlidingAverageCalculator(10);
@@ -106,8 +113,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
         rightWrist.setDirection(Servo.Direction.FORWARD);
 
-        leftSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotorRight = (DcMotorEx) rightSlideMotor;
@@ -119,21 +126,22 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (robotState.isAuto()) {
-            init();
+            closeClaw();
+            resetSlides();
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
         }
-
-        colorSensorTimer = new ElapsedTime();
     }
 
     @Override
     public void init() {
-        setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
-        if (robotState.isAuto()) {
-            closeClaw();
-            resetSlides();
-        } else if (getCurrentSlidePositionInches() > 5) {
-            moveSlidesAbsolute(getCurrentSlidePositionInches());
-            closeClaw();
+        if (!robotState.isAuto()) {
+            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            if (getCurrentSlidePositionInches() > 5) {
+                moveSlidesAbsolute(getCurrentSlidePositionInches());
+                closeClaw();
+            } else {
+                openClaw();
+            }
         }
     }
 
@@ -208,7 +216,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @return the target position of the slides in inches
      */
     public double getTargetPositionInches() {
-        return slideController.targetTicks * INCHES_PER_MOTOR_TICK;
+        return slideController.getTargetTicks() * INCHES_PER_MOTOR_TICK;
     }
 
     /**
@@ -217,7 +225,7 @@ public class DropperSubsystem extends CloseableSubsystem {
      * @param position Position where you want to set the slides to in inches
      */
     public void moveSlidesAbsolute(double position) {
-        slideController.moveToInches(Range.clip(position, 0, SLIDE_MAX));
+        slideController.moveToInches(Range.clip(position, 0, SLIDES_MAX));
     }
 
     /**
@@ -327,68 +335,26 @@ public class DropperSubsystem extends CloseableSubsystem {
         return leftSlideCurrentAverage.getAverage();
     }
 
-    /**
-     * Updates the block color of the color sensor
-     */
-    private void updateBlockColor() {
-        double sensorRed = getSensorRed();
-        double sensorGreen = getSensorGreen();
-        double sensorBlue = getSensorBlue();
-        double colorsSum = sensorRed + sensorGreen + sensorBlue;
-        double normalizedBlue = sensorBlue / colorsSum;
-        double normalizedGreen = sensorGreen / colorsSum;
-        double normalizedRed = sensorRed / colorsSum;
-        int magnitude = (int) Math.sqrt(Math.pow(sensorBlue, 2) + Math.pow(sensorRed, 2) + Math.pow(sensorGreen, 2));
-
-        if (magnitude < 30) {
-            robotState.setIntakeBlockColor(BlockColor.NONE);
-        } else if (normalizedBlue > 0.53) {
-            robotState.setIntakeBlockColor(BlockColor.BLUE);
-        } else if (normalizedRed > 0.43) {
-            robotState.setIntakeBlockColor(BlockColor.RED);
-        } else if (normalizedBlue < 0.165) {
-            robotState.setIntakeBlockColor(BlockColor.YELLOW);
-        }
-    }
-
-    /**
-     * @return the blue value of the color sensor
-     */
-    public double getSensorBlue() {
-        return (colorSensor.getNormalizedColors().toColor() & 0xFF);
-    }
-
-    /**
-     * @return the red value of the color sensor
-     */
-    public double getSensorRed() {
-        return (colorSensor.getNormalizedColors().toColor() >> 16 & 0xFF);
-    }
-
-    /**
-     * @return the green value of the color sensor
-     */
-    public double getSensorGreen() {
-        return (colorSensor.getNormalizedColors().toColor() >> 8 & 0xFF);
-    }
-
     private double getVoltageCompensatedMotorPower(double power) {
-        if(robotState.getVoltage() != 0) {
-            RobotLog.dd(tag, "Voltage: %f", robotState.getVoltage());
-            RobotLog.dd(tag, "Voltage Compensated Power: %f", power);
-            return Range.clip(power * robotState.getVoltage() / 12.0, -1, 1);
+        if (robotState.getVoltage() != 0) {
+            return Range.clip(power / (robotState.getVoltage() / 12.0), -1, 1);
         } else {
-            RobotLog.dd(tag, "Voltage Is Not Set");
             return power;
         }
     }
 
     @Override
     public void periodic() {
-        double power =
-                getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
-
         if (!robotState.getIsAscending()) {
+            if (getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
+                inPrimarySlideMode = false;
+            } else if (getCurrentSlidePositionInches() < 23 && !inPrimarySlideMode) {
+                slideController.setPIDFCoefficients(PRIMARY_COEFFICIENTS);
+                inPrimarySlideMode = true;
+            }
+            double power = getVoltageCompensatedMotorPower(slideController.calculateMotorPowers(getCurrentSlidePositionTicks()));
+//            RobotLog.dd("dropper subsystem", "slides power: %f", power);
             leftSlideMotor.setPower(power);
             rightSlideMotor.setPower(power);
         }
@@ -405,10 +371,5 @@ public class DropperSubsystem extends CloseableSubsystem {
 //        }
 
 
-        RobotLog.dd(tag, "Current: %f Target %f",
-                getCurrentSlidePositionInches(), getTargetPositionInches());
-        RobotLog.dd(tag, "Left Slide Current: %f", leftSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Right Slide Current: %f", rightSlideCurrentAverage.getAverage());
-        RobotLog.dd(tag, "Dropper Block Color: %s", robotState.getDropperBlockColor().toString());
     }
 }

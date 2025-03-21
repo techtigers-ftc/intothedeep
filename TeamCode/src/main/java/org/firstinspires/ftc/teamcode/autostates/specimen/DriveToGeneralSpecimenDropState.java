@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.AutoDropperForwardCarryAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+
+import team.techtigers.core.display.Color;
 
 /**
  * Drives to general specimen drop
@@ -26,27 +24,36 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      * @param drive      The drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
-     * @param intake    The intake subsystem
      */
-    public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState, 5);
+    public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+        super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
-                new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, robotState),
-                        new DropperBackwardCarryAction(dropper, intake, robotState)
-                )
+                new AutoDropperForwardCarryAction(dropper, robotState)
         );
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        robotState.setDebugColor(Color.BLACK);
     }
 
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.BACKWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
+            robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
+            robotState.setDebugColor(Color.GREEN);
             return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
     }
 }

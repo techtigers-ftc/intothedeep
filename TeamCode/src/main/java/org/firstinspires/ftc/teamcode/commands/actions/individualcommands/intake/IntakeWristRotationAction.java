@@ -25,7 +25,7 @@ public class IntakeWristRotationAction extends ServoActionCommand {
 
     @Override
     protected double getPosition() {
-        return intake.getRotation();
+        return intake.getWristRotation();
     }
 
     @Override

@@ -70,7 +70,7 @@ public class AutoDriveTestOpMode extends BaseOpMode {
 //                .addTransition(testAutoDrive, secondTestAutoDrive, AutoState.DRIVE_END)
                 .setCurrentState(testAutoDrive);
 
-        AutoSubsystem auto = new AutoSubsystem(stateMachine);
+        AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(auto, drive, odometry);
 
         update();

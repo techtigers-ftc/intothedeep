@@ -5,6 +5,10 @@ package org.firstinspires.ftc.teamcode.utils.enums;
  */
 public enum DropperState {
     /**
+     * Dropper is ready to transfer a block from the intake
+     */
+    TRANSFER,
+    /**
      * The dropper is in the pre-transfer state
      * This State is slightly higher than the transfer state
      */

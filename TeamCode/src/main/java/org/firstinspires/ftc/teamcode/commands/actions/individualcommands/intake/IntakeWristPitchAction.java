@@ -25,7 +25,7 @@ public class IntakeWristPitchAction extends ServoActionCommand {
 
     @Override
     protected double getPosition() {
-        return intake.getPitch();
+        return intake.getWristPitch();
     }
 
     @Override

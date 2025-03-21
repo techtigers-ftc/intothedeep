@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAfterTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -17,7 +16,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  */
 public class DropperBackwardCarryAction extends SequentialCommandGroup {
     private static final String LOG_TAG = DropperBackwardCarryAction.class.getSimpleName();
-    private final RobotState robotState;
 
     /**
      * Creates a new DropperBackwardCarryAction
@@ -27,16 +25,12 @@ public class DropperBackwardCarryAction extends SequentialCommandGroup {
      * @param robotState the robot state
      */
     public DropperBackwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
                 new TransferAction(dropper, intake, robotState),
                 new ParallelCommandGroup(
-                        new DropperBackwardCarryNoTransferAction(dropper, robotState),
-                        new SequentialCommandGroup(
-                                new WaitCommand(200),
-                                new IntakeTuckAction(intake, robotState)
-                        )
+                        new IntakeTuckAfterTransferAction(dropper, intake, robotState),
+                        new DropperBackwardCarryNoTransferAction(dropper, robotState)
                 )
         );
     }

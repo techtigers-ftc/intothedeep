@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
+import team.techtigers.core.display.Color;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.GlobalState;
 
@@ -17,6 +19,8 @@ import team.techtigers.core.utils.GlobalState;
  * Implementation of a global state for the robot
  */
 public class RobotState extends GlobalState {
+    private final boolean isBlue;
+    private final boolean isAuto;
     private Waypoint robotCurrentPose;
     private Waypoint robotVelocity;
     private Waypoint robotFinalPose;
@@ -39,6 +43,7 @@ public class RobotState extends GlobalState {
     private boolean isAscending;
     private boolean isVerticalExtended;
     private boolean isManualIntakeSelected;
+    private boolean isBreakBeamEnabled;
     private double dropperClawPitch;
     private double dropperClawRotation;
     private double driverCurrent;
@@ -49,11 +54,24 @@ public class RobotState extends GlobalState {
     private DriveGears driveGears;
     private IntakeState intakeState;
     private int robotError;
-    private final boolean isBlue;
-    private final boolean isAuto;
     private double visionIntakeHeading;
     private double voltage;
     private boolean isCameraRunning;
+    private boolean isCoarseCameraMode;
+    private boolean isVisionAligning;
+    private boolean isIntakeTracking;
+    private String currentAutoState;
+    private String previousAutoState;
+    private Color debugColor;
+    private double autoRemainingTime;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private Waypoint limelightLastRobotCoords;
+    private double intakeSlidePosition;
+
+
+    private boolean runDistanceSensor;
+    private boolean headingLockEnabled;
+    private double distanceSensorValue;
 
     /**
      * Initializes a new RobotState
@@ -81,6 +99,7 @@ public class RobotState extends GlobalState {
         isAscending = false;
         isVerticalExtended = false;
         isManualIntakeSelected = false;
+        isBreakBeamEnabled = true;
         dropperClawPitch = 0;
         dropperClawRotation = 0;
         dropperClawState = ClawState.OPEN;
@@ -95,6 +114,19 @@ public class RobotState extends GlobalState {
         visionIntakeHeading = Math.toRadians(0);
         voltage = 0;
         isCameraRunning = false;
+        isCoarseCameraMode = false;
+        isVisionAligning = false;
+        isIntakeTracking = false;
+        currentAutoState = "";
+        previousAutoState = "";
+        debugColor = Color.BLACK;
+        runDistanceSensor = false;
+        distanceSensorValue = -1;
+        autoRemainingTime = -1;
+        headingLockEnabled = false;
+        absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
+        limelightLastRobotCoords = new Waypoint(0, 0, 0);
+        intakeSlidePosition = 0;
     }
 
     /**
@@ -550,6 +582,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current driver current
+     *
      * @param driverCurrent the current driver current
      */
     public void setDriverCurrent(double driverCurrent) {
@@ -565,6 +598,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current intake current
+     *
      * @param intakeCurrent the current intake current
      */
     public void setIntakeCurrent(double intakeCurrent) {
@@ -580,6 +614,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current dropper current
+     *
      * @param dropperCurrent the current dropper current
      */
     public void setDropperCurrent(double dropperCurrent) {
@@ -595,6 +630,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets intake control to be manual or autonomous (with vision)
+     *
      * @param manualIntakeSelected Whether the intake should be manual or not
      */
     public void setManualIntakeSelected(boolean manualIntakeSelected) {
@@ -603,6 +639,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Get the alliance color
+     *
      * @return Is alliance blue?
      */
     public boolean isBlue() {
@@ -611,6 +648,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Get the opmode mode
+     *
      * @return Is mode auto?
      */
     public boolean isAuto() {
@@ -642,6 +680,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the vision intake heading to use
+     *
      * @param visionIntakeHeading the supplier for the vision intake heading to use
      */
     public void setVisionIntakeHeading(double visionIntakeHeading) {
@@ -657,6 +696,7 @@ public class RobotState extends GlobalState {
 
     /**
      * Sets the current voltage of the robot
+     *
      * @param voltage the current voltage of the robot
      */
     public void setVoltage(double voltage) {
@@ -677,5 +717,235 @@ public class RobotState extends GlobalState {
      */
     public void setCameraRunning(boolean cameraRunning) {
         isCameraRunning = cameraRunning;
+    }
+
+    /**
+     * @return true if the small camera is in course camera mode, false if not
+     */
+    public boolean isCoarseCameraMode() {
+        return isCoarseCameraMode;
+    }
+
+    /**
+     * Sets the small camera mode
+     *
+     * @param courseCameraMode whether the small camera is in course or fine camera mode
+     */
+    public void setCoarseCameraMode(boolean courseCameraMode) {
+        isCoarseCameraMode = courseCameraMode;
+    }
+
+    /**
+     * @return whether the robot is aligning with vision
+     */
+    public boolean isVisionAligning() {
+        return isVisionAligning;
+    }
+
+    /**
+     * Sets whether the robot is aligning with vision to intake
+     */
+    public void setVisionAligning(boolean visionAligning) {
+        isVisionAligning = visionAligning;
+    }
+
+    /**
+     * @return the current state of the autonomous command
+     */
+    public String getCurrentAutoState() {
+        return currentAutoState;
+    }
+
+    /**
+     * Sets the current state of the autonomous command
+     */
+    public void setCurrentAutoState(String currentAutoState) {
+        this.currentAutoState = currentAutoState;
+    }
+
+    /**
+     * @return the previous state of the autonomous command
+     */
+    public String getPreviousAutoState() {
+        return previousAutoState;
+    }
+
+    /**
+     * Sets the previous state of the autonomous command
+     */
+    public void setPreviousAutoState(String previousAutoState) {
+        this.previousAutoState = previousAutoState;
+    }
+
+    /**
+     * @return the current debug color
+     */
+    public Color getDebugColor() {
+        return debugColor;
+    }
+
+    /**
+     * Sets the current debug color
+     */
+    public void setDebugColor(Color color) {
+        this.debugColor = color;
+    }
+
+    /**
+     * @return whether or not the intake is tracking
+     */
+    public boolean isIntakeTracking() {
+        return isIntakeTracking;
+    }
+
+    /**
+     * Sets whether or not the intake is tracking
+     *
+     * @param intakeTracking whether or not the intake is tracking
+     */
+    public void setIntakeTracking(boolean intakeTracking) {
+        isIntakeTracking = intakeTracking;
+    }
+
+    /**
+     * @return whether or not the distance sensor is running
+     */
+    public boolean isRunDistanceSensor() {
+        return runDistanceSensor;
+    }
+
+    /**
+     * sets whether or not the distance sensor is running
+     *
+     * @param runDistanceSensor whether or not the distance sensor is running
+     */
+    public void setRunDistanceSensor(boolean runDistanceSensor) {
+        this.runDistanceSensor = runDistanceSensor;
+    }
+
+    /**
+     * @return get the distance sensor value
+     */
+    public double getDistanceSensorValue() {
+        return distanceSensorValue;
+    }
+
+    /**
+     * sets the distance sensor value
+     *
+     * @param distanceSensorValue the distance sensor value
+     */
+    public void setDistanceSensorValue(double distanceSensorValue) {
+        this.distanceSensorValue = distanceSensorValue;
+    }
+
+    /**
+     * @return the amount of time remaining in the autonomous
+     */
+    public double getAutoRemainingTime() {
+        return (double) autoRemainingTime;
+    }
+
+    /**
+     * Sets the amount of time remaining in the autonomous
+     *
+     * @param autoRemainingTime the amount of time remaining in the autonomous
+     */
+    public void setAutoRemainingTime(double autoRemainingTime) {
+        this.autoRemainingTime = autoRemainingTime;
+    }
+
+    /**
+     * @return whether or not the break beam is enabled
+     */
+    public boolean isBreakBeamEnabled() {
+        return isBreakBeamEnabled;
+    }
+
+    /**
+     * Sets whether or not the break beam is enabled
+     *
+     * @param breakBeamEnabled whether or not the break beam is enabled
+     */
+    public void setBreakBeamEnabled(boolean breakBeamEnabled) {
+        isBreakBeamEnabled = breakBeamEnabled;
+    }
+
+
+    /**
+     * @return whether or not the heading lock is enabled
+     */
+    public boolean isHeadingLockEnabled() {
+        return headingLockEnabled;
+    }
+
+    /**
+     * Sets whether or not the heading lock beam is enabled
+     *
+     * @param headingLockEnabled whether or not the break beam is enabled
+     */
+    public void setHeadingLock(boolean headingLockEnabled) {
+        this.headingLockEnabled = headingLockEnabled;
+    }
+
+    /**
+     * Gets the absolute coordinates of a detected block
+     *
+     * @return the detected block's absolute coordinates
+     */
+    public Waypoint getAbsoluteBlockCoordinates() {
+        return absoluteBlockCoordinates.getBlockAbsolutePosition();
+    }
+
+    /**
+     * Sets the absolute coordinates of a detected block
+     *
+     * @param coordinates the detected block's absolute coordinates
+     */
+    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates coordinates) {
+        this.absoluteBlockCoordinates = coordinates;
+    }
+
+    /**
+     * Gets the current intake slide position (inches)
+     *
+     * @return the current intake slide position
+     */
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
+    }
+
+    /**
+     * Sets the current intake slide position (inches)
+     *
+     * @param intakeSlidePosition the current intake slide position
+     */
+    public void setIntakeSlidePosition(double intakeSlidePosition) {
+        this.intakeSlidePosition = intakeSlidePosition;
+    }
+
+    /**
+     * Resets the boolean of whether a block has recently been detected
+     */
+    public void resetBlockHasBeenDetected() {
+        absoluteBlockCoordinates.resetBlockHasBeenDetected();
+    }
+
+    /**
+     * Returns if a block has recently been detected
+     *
+     * @return Whether a block has recently been detected
+     */
+    public boolean hasBlockBeenDetected() {
+        return absoluteBlockCoordinates.getBlockHasBeenDetected();
+    }
+
+    /**
+     * Gets the last robot position known to the Limelight
+     *
+     * @return The last robot position known to the Limelight
+     */
+    public Waypoint getLimelightLastRobotCoords() {
+        return absoluteBlockCoordinates.getLimelightLastRobotPosition();
     }
 }

@@ -28,6 +28,8 @@ public class DropperFrontSlapAction extends SequentialCommandGroup {
         addCommands(
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                 new WaitCommand(300),
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION+20, 0),
                 new DropperOpenAction(dropper, 100)
         );
     }

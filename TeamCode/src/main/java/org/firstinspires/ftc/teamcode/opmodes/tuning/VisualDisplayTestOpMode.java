@@ -1,0 +1,86 @@
+package org.firstinspires.ftc.teamcode.opmodes.tuning;
+
+    import com.acmerobotics.dashboard.FtcDashboard;
+    import com.acmerobotics.dashboard.config.Config;
+    import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+    import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+    import com.qualcomm.robotcore.util.ElapsedTime;
+
+    import org.firstinspires.ftc.teamcode.display.view.TeleView;
+    import org.firstinspires.ftc.teamcode.utils.RobotState;
+    import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+    import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
+    import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
+
+    import team.techtigers.base.BaseOpMode;
+    import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
+    import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
+
+    import java.util.Random;
+
+    @Config
+    @TeleOp(name = "VisualDisplayTestOpMode")
+    public class VisualDisplayTestOpMode extends BaseOpMode {
+
+        public static double voltage = 14;
+        public static double lateralFine = 0;
+        public static double forwardFine = 0;
+        public static double orientation = 0;
+        public static boolean blockInRobot = false;
+        public static boolean blockDetected = true;
+        public static boolean headingLockOn = false;
+        private ElapsedTime timer;
+        private ElapsedTime updateTimer;
+
+        private RobotState robotState;
+        private VisualDisplaySubsystem visualDisplaySubsystem;
+        private Random random;
+
+        @Override
+        public void initialize() {
+            FtcDashboard dashboard = FtcDashboard.getInstance();
+            telemetry = new MultipleTelemetry(dashboard.getTelemetry(), telemetry);
+
+            robotState = new RobotState(false, false);
+            AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
+            displayDriver.initialize(224, 3);
+            VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new TeleView(robotState));
+            registerSubsystems(visualDisplaySubsystem);
+            timer = new ElapsedTime();
+            updateTimer = new ElapsedTime();
+            random = new Random();
+            timer.reset();
+            updateTimer.reset();
+
+            robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+            telemetry.addData("Cycle time", timer.milliseconds());
+        }
+
+        @Override
+        public void update() {
+//            if (updateTimer.milliseconds() >= 250) { // 4 times per second
+//                lateralFine = -3 + (6 * random.nextDouble());
+//                forwardFine = -3 + (6 * random.nextDouble());
+//                orientation = 180 * random.nextDouble();
+//                voltage = random.nextDouble() * 5.5 + 8;
+//                blockInRobot = random.nextBoolean();
+//                updateTimer.reset();
+//            }
+
+            robotState.setVoltage(voltage);
+            robotState.setBlockLateralFine(lateralFine);
+            robotState.setBlockForwardFine(forwardFine);
+            robotState.setBlockOrientation(orientation);
+            robotState.setHeadingLock(headingLockOn);
+            if (blockDetected) robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
+            else robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+            if (blockInRobot) robotState.setBlockPosition(RobotBlockPosition.INTAKE);
+            else robotState.setBlockPosition(RobotBlockPosition.NONE);
+
+            telemetry.addData("Cycle time", timer.milliseconds());
+            telemetry.addData("Lateral Fine", lateralFine);
+            telemetry.addData("Forward Fine", forwardFine);
+            telemetry.addData("Orientation", orientation);
+            timer.reset();
+        }
+    }

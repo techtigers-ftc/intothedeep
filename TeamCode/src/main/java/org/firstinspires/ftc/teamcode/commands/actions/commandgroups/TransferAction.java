@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -16,12 +13,12 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * A command group that transfers a block from the intake to the dropper.
  */
-public class TransferAction extends SequentialCommandGroup {
+public class TransferAction extends ParallelCommandGroup {
     private static final String LOG_TAG = TransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperTransferAction.
+     * Creates a new TransferAction.
      *
      * @param dropper    The dropper subsystem.
      * @param intake     The intake subsystem.
@@ -32,16 +29,12 @@ public class TransferAction extends SequentialCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperCloseAction(dropper, 150),
-                new ParallelCommandGroup(
-                        new IntakeOpenAction(intake, 150),
-                        new IntakeWristPitchAction(intake, 70, 150)
-                )
+                new IntakeOpenAction(intake, 150)
         );
     }
 
     @Override
     public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
         robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
         super.initialize();
     }

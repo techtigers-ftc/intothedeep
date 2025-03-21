@@ -83,6 +83,25 @@ public abstract class DisplayRegion {
         }
     }
 
+    protected void disableAllSprites() {
+        for (Sprite sprite : getSprites()) {
+            sprite.disable();
+        }
+    }
+
+    protected void enableAllSprites() {
+        for (Sprite sprite : getSprites()) {
+            sprite.enable();
+        }
+    }
+
+    protected void disableAllButSelectedSprites(int... spriteIndexes) {
+        disableAllSprites();
+        for(int spriteIndex : spriteIndexes) {
+            getSprites()[spriteIndex].enable();
+        }
+    }
+
     /**
      * an abstract method implemented by child classes which updates the LEDs
      */

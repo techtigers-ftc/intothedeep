@@ -56,15 +56,7 @@ public class VisualDisplaySubsystem extends CloseableSubsystem {
      * @return the index of the LED in the array
      */
     protected int findLedArrayIndex(int ledX, int ledY) {
-        if (ledX < 8) {
-            ledX = 7 - ledX;
-        } else if (ledX > 39) {
-            ledX = ledX - 40;
-            ledX = 7 - ledX;
-            ledX = ledX + 40;
-        } else {
-            ledY = 7 - ledY;
-        }
+        ledY = 7 - ledY;
 
         if (ledX % 2 == 0) {
             return ledX * 8 + ledY;

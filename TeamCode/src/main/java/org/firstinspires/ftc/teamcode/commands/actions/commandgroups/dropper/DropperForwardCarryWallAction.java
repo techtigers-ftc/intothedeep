@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -33,13 +32,6 @@ public class DropperForwardCarryWallAction extends SequentialCommandGroup {
                 new DropperCloseAction(dropper, 200),
                 new DropperForwardCarryNoTransferAction(dropper, robotState)
         );
-    }
-
-    @Override
-    public void initialize() {
-        RobotLog.dd(LOG_TAG, "Executing command from state: %s", robotState.getIntakeState());
-        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
-        super.initialize();
     }
 
     @Override

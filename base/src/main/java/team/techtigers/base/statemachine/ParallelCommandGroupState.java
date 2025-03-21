@@ -51,4 +51,18 @@ public abstract class ParallelCommandGroupState<T> extends ParallelCommandGroup 
     protected final boolean isTimeoutReached(){
         return timeout > 0 && timer.seconds() > timeout;
     }
+
+    /**
+     * @return the amount of time that the command has been running for
+     */
+    protected final double getRunningTime() {
+        return timer.seconds();
+    }
+
+    /**
+     * @return the amount of time that the command has remaining until the timeout is reached
+     */
+    protected final double getRemainingTime() {
+        return timeout - timer.seconds();
+    }
 }

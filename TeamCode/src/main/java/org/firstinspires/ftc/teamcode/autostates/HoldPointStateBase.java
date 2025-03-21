@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoHoldPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -229,9 +227,6 @@ public abstract class HoldPointStateBase extends ParallelCommandGroupState<AutoS
             return AutoState.TIMEOUT;
         }
 
-        RobotLog.dd(LOG_TAG, "Dist to target: %f Angle diff: %f",
-                distToTarget(current, target),
-                angleDistance(current.getHeading(), target.getHeading()));
         if (distToTarget(current, target) < tolerance
                 && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
             return AutoState.DRIVE_END;

@@ -14,7 +14,8 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.base.BaseOpMode;
 
-@TeleOp(name = "Dropper Slides Tuning OpMode", group = "Tuning")
+@TeleOp(name = "Dropper Slides Tuning", group = "Dropper Tuning")
+//@Disabled
 public class DropperSlidesTuningOpmode extends BaseOpMode {
     private DropperSubsystem dropperSubsystem;
     private RobotState robotState;
@@ -48,7 +49,7 @@ public class DropperSlidesTuningOpmode extends BaseOpMode {
         });
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-            dropperSubsystem.moveSlidesAbsolute(DropperSubsystem.SLIDE_MAX);
+            dropperSubsystem.moveSlidesAbsolute(DropperSubsystem.SLIDES_MAX);
         });
 
         // Emergency stop button for the slides

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing.pathgen;
 
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
+
 import java.util.ArrayList;
 
 /**
@@ -31,6 +33,19 @@ public class BezierPoint extends BezierCurve {
     public BezierPoint(Point point) {
         super();
         this.point = point;
+        length = approximateLength();
+        super.initializeDashboardDrawingPoints();
+    }
+
+    /**
+     * This creates a new BezierPoint with a specified Point.
+     * This is just a point but it extends the BezierCurve class so things work.
+     *
+     * @param pose the specified point.
+     */
+    public BezierPoint(Pose pose) {
+        super();
+        this.point = new Point(pose);
         length = approximateLength();
         super.initializeDashboardDrawingPoints();
     }

@@ -1,21 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.SmallCameraVisionPickup;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
-import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 
 import team.techtigers.base.BaseOpMode;
 
@@ -23,41 +14,39 @@ import team.techtigers.base.BaseOpMode;
  * Test opmode for running just the VisionSubsystem
  */
 @TeleOp
-@Disabled
 @SuppressWarnings("unused")
 public class VisionTestOpmode extends BaseOpMode {
-    RobotState robotState;
-    IntakeSubsystem intake;
+    private RobotState robotState;
 
     @Override
     public void initialize() {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        robotState = new RobotState(true, false);
-        robotState.setBlockColorPreference(BlockColorPreference.ANY);
-        intake = new IntakeSubsystem(hardwareMap, robotState);
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        VisionSubsystem vision = new VisionSubsystem(hardwareMap, robotState);
-        SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
+        robotState = new RobotState(false, false);
+        LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap,
+                robotState);
 
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new IntakeTrackingAction(intakeSubsystem, 0.4, robotState));
+        driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
+            robotState.setCoarseCameraMode(!robotState.isCoarseCameraMode());
+            gamepad1.rumbleBlips(1);
+        });
 
-        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new SequentialCommandGroup(
-                new IntakePrepareToPickupAction(intake, dropper, intake::getCurrentSlidePositionInches, robotState),
-                new IntakeTrackingAction(intake, 0.5, robotState),
-                new WaitCommand(150),
-                new SmallCameraVisionPickup(intake, dropper, robotState, null)
-        ));
+        ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
+                new ChangeBlockColorPreferenceCommand(robotState, driverGamepad);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                changeBlockColorPreferenceCommand);
 
-
-        registerSubsystems(vision, intake, sensor, dropper);
+        registerSubsystems(limelight);
     }
 
     @Override
     public void update() {
-        telemetry.addData("Forward fine", robotState.getBlockForwardFine());
-        telemetry.addData("Lateral fine", robotState.getBlockLateralFine());
-        telemetry.addData("Orientation", robotState.getBlockOrientation());
-        telemetry.addData("Detected Fine Block Orientation", robotState.getDetectedFineBlockOrientation());
-        telemetry.addData("Fine block detections state", robotState.getFineBlockDetectionState());
+        if (robotState.isCoarseCameraMode()) {
+            telemetry.addData("Forward Coarse", robotState.getBlockForwardCoarse());
+            telemetry.addData("Lateral Coarse", robotState.getBlockLateralCoarse());
+        } else {
+            telemetry.addData("Forward Fine", robotState.getBlockForwardFine());
+            telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
+            telemetry.addData("Orientation", robotState.getBlockOrientation());
+        }
     }
 }

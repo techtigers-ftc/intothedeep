@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -14,8 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 import team.techtigers.base.BaseOpMode;
 
-@TeleOp(name = "Intake Tuning OpMode", group = "Tuning")
-@Disabled
+@TeleOp(name = "Intake General Tuning", group = "Intake Tuning")
 public class IntakeTuningOpmode extends BaseOpMode {
     private IntakeSubsystem intakeSubsystem;
     private RobotState robotState;
@@ -39,10 +37,10 @@ public class IntakeTuningOpmode extends BaseOpMode {
 
         // Wrist Pitch
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> {
-            intakeSubsystem.setWristRelative(-5, 0);
+            intakeSubsystem.setWristRelative(-1, 0);
         });
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> {
-            intakeSubsystem.setWristRelative(5, 0);
+            intakeSubsystem.setWristRelative(1, 0);
         });
 
         // Wrist Rotation
@@ -108,8 +106,8 @@ public class IntakeTuningOpmode extends BaseOpMode {
         telemetry.addData("Slide position error (inches)", error);
         telemetry.addLine();
         telemetry.addData("Claw rotation angle", intakeSubsystem.getClawRotation());
-        telemetry.addData("Claw diff pitch", intakeSubsystem.getPitch());
-        telemetry.addData("Claw diff rotation", intakeSubsystem.getRotation());
+        telemetry.addData("Claw diff pitch", intakeSubsystem.getWristPitch());
+        telemetry.addData("Claw diff rotation", intakeSubsystem.getWristRotation());
         telemetry.addData("Slides position", intakeSubsystem.getCurrentSlidePositionInches());
         telemetry.addLine();
         telemetry.addData("Left slide motor current", intakeSubsystem.getSlideCurrentLeft());
