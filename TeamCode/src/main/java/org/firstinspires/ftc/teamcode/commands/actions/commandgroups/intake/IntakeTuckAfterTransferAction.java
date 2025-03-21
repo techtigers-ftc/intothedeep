@@ -1,15 +1,13 @@
-package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that tucks the intake after doing a transfer

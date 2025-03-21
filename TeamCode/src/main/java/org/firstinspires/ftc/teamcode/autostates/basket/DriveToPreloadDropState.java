@@ -7,7 +7,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -46,9 +46,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 25),
-                                new IntakeReadyToPickupAction(intake,
-                                        robotState, () -> targetSlidePos,
-                                        () -> 90)
+                                new IntakeReadyToPickupAction(intake, robotState, () -> targetSlidePos)
                         ),
                         new SequentialCommandGroup(
                                 new DropperHighBasketNoTransferAction(dropper, robotState),
@@ -77,5 +75,11 @@ public class DriveToPreloadDropState extends DriveStateBase {
         }
 
         return AutoState.RUNNING;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.resetBlockHasBeenDetected();
     }
 }

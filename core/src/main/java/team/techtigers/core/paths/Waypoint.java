@@ -75,7 +75,7 @@ public class Waypoint {
     }
 
     /**
-     * @return the heading of the waypoint
+     * @return the heading of the waypoint (radians)
      */
     public double getHeading() {
         return this.heading;
