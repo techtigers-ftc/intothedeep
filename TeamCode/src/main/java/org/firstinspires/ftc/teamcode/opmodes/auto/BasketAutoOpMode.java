@@ -303,12 +303,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.SAMPLE_3_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.FAILED_SAMPLE_3_TIMEOUT)
 
-                /*
                 // Drives to the third drop, drops it off, and goes to the fourth intake
                 .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
-*/
+
                 // Intakes the fourth sample
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.TIMEOUT)
@@ -362,7 +361,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
         registerSubsystems(limelight, auto, drive, odometry, dropper, intake, sensor, visualDisplaySubsystem);
 
-//        disableUpdate();
+        disableUpdate();
     }
 
     @Override
@@ -397,7 +396,6 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         } else {
             telemetry.addLine("Block NOT Detected");
         }
-        RobotLog.dd("Auto Debug", "Current Auto State: %s Block Detected: %b", robotState.getCurrentAutoState(), robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
     }
 
     @Override

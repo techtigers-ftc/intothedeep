@@ -19,15 +19,16 @@ import team.techtigers.core.paths.Waypoint;
 @Config
 public class LimelightSubsystem extends CloseableSubsystem {
     public static final double SLIDES_OFFSET = 7; // forward distance from center of robot to slides
-    public static final double LIMELIGHT_COARSE_OFFSET = 2.5; // forward distance from end of slides to limelight lens in coarse
+    public static final double LIMELIGHT_COARSE_OFFSET = 2; // forward distance from end of slides to limelight lens in coarse
     public static final double LIMELIGHT_FINE_OFFSET = 5.5; // forward distance from end of slides to limelight lens in fine
     private static final int BLOCK_CACHE_LIMIT = 3;
-    private final static double LIMELIGHT_HEIGHT = 10.25;
 
     private static final double WIDTH_RANGE = 6; // TODO: Tune properly
     private static final double HEIGHT_RANGE = 5.6;
     private static final double PIXELS_PER_INCH = 94.5;
-    private static final double CAMERA_COARSE_OFFSET = 41;
+
+    public static double LIMELIGHT_HEIGHT = 10.25;
+    public static double CAMERA_COARSE_ANGLE = 49;
 
     // Limelight fine horizontal linear equation parameters
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
@@ -151,7 +152,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                             robotState.getBlockOrientation()
                     );
                 } else {
-                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_OFFSET + result.getTy()));
+                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_ANGLE + result.getTy()));
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
 
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
@@ -160,21 +161,14 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     robotState.setBlockLateralCoarse(lateralCoarse);
 
                     // Saving the block's relative position whenever a block is seen
-//                    absoluteBlockCoordinates.setBlockLateralInches(robotState.getBlockLateralCoarse());
-//                    absoluteBlockCoordinates.setBlockForwardInches(robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition());
+                    robotState.getAbsoluteBlockPosition().updatePosition(
+                            robotState.getRobotCurrentPose(),
+                            robotState.getBlockLateralCoarse(),
+                            robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition(),
+                            robotState.getBlockOrientation()
+                    );
                 }
             }
-
-            Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
-
-            RobotLog.dd("Auto Debug", "Block Absolute Position X: %f Y: %f Heading: %f",
-                    blockPos.getX(),
-                    blockPos.getY(),
-                    Math.toDegrees(blockPos.getHeading()));
-            RobotLog.dd("Auto Debug", "Robot Current Position X: %f Y: %f Heading: %f",
-                    robotState.getRobotCurrentPose().getX(),
-                    robotState.getRobotCurrentPose().getY(),
-                    Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
         }
     }
 
