@@ -221,7 +221,9 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     @Override
     public void execute() {
         super.execute();
-        if (autoDriveCommand.isRobotStuck() || isTimeoutReached()) {
+        // If the robot is stuck or the timeout is reached for the first time, we need to recover
+        if (autoDriveCommand.isRobotStuck() || (isTimeoutReached() && recoveryCounter == 0)) {
+            // Generate a new path chain using the robot's current and final poses
             PathChain pathChain = new PathBuilder().addBezierLine(
                     new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
                     new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
