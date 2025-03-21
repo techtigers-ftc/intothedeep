@@ -27,7 +27,6 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param intake     The intake subsystem
-     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
     public DriveToGeneralSubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {

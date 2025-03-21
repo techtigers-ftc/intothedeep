@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.cv;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import team.techtigers.core.paths.Waypoint;
 
 /**
@@ -7,7 +9,9 @@ import team.techtigers.core.paths.Waypoint;
  * orientation and position as well as the block's lateral and forward offset
  */
 public class AbsoluteBlockPosition {
+    private double CACHE_TIMEOUT = 2000;
     private Waypoint robotPos;
+    private ElapsedTime timer;
 
     private double blockLateralInches;
     private double blockForwardInches;
@@ -23,6 +27,7 @@ public class AbsoluteBlockPosition {
         blockOrientation = 0;
         cachedAbsoluteBlockPosition = null;
         blockDetected = false;
+        timer = new ElapsedTime();
     }
 
    /**
@@ -39,6 +44,7 @@ public class AbsoluteBlockPosition {
         blockLateralInches = blockLateralOffset;
         blockForwardInches = blockForwardOffset;
         this.blockOrientation = blockOrientation;
+        timer.reset();
     }
 
     /**
@@ -55,6 +61,9 @@ public class AbsoluteBlockPosition {
      * @return whether the block has been recently detected
      */
     public boolean isBlockDetected() {
+        if (timer.milliseconds() > CACHE_TIMEOUT) {
+            blockDetected = false;
+        }
         return blockDetected;
     }
 
