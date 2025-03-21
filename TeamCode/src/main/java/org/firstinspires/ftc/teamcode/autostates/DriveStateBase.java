@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
@@ -19,6 +23,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     protected final RobotState robotState;
     private double tolerance;
     private double angleTolerance;
+    private double recoveryCounter;
 
     /**
      * Constructor for the SequentialCommandGroupState
@@ -34,6 +39,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
         autoDriveCommand = new AutoDriveCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
+        recoveryCounter = 0;
     }
 
     /**
@@ -213,13 +219,30 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     @Override
+    public void execute() {
+        super.execute();
+        if (autoDriveCommand.isRobotStuck() || isTimeoutReached()) {
+            PathChain pathChain = new PathBuilder().addBezierLine(
+                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
+                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
+            ).setLinearHeadingInterpolation(
+                    robotState.getRobotCurrentPose().getHeading(),
+                    robotState.getRobotFinalPose().getHeading()
+            ).build();
+            autoDriveCommand.setPathChain(pathChain);
+            recoveryCounter ++;
+            RobotLog.dd(LOG_TAG, "Recovery attempt: %d", recoveryCounter);
+        }
+    }
+
+    @Override
     public AutoState getCurrentCondition() {
         if (tolerance < 0 || angleTolerance < 0) {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
         }
 
-        if (super.isTimeoutReached()) {
-            return AutoState.TIMEOUT;
+        if (recoveryCounter > 2) {
+            return AutoState.DRIVE_RECOVERY_FAILED;
         }
 
         Waypoint current = robotState.getRobotCurrentPose();
@@ -231,10 +254,6 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
 
         if (distToTarget(current, target) < tolerance
                 && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
-            return AutoState.DRIVE_END;
-        }
-
-        if (autoDriveCommand.isRobotStuck()) {
             return AutoState.DRIVE_END;
         }
 
