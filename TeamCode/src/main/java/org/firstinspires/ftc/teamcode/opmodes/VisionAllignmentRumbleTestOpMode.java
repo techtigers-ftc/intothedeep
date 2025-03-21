@@ -22,7 +22,8 @@ public class VisionAllignmentRumbleTestOpMode extends BaseOpMode {
     public void initialize() {
         visionAllignmentRumble = new VisionAllignmentRumble(manipulatorGamepad, robotState,
                 lateralCourseDistance);
-        blockDetectionState = robotState.getCoarseBlockDetectionState();
+        blockDetectionState = BlockDetectionState.DETECTED;
+
         if (blockDetectionState == BlockDetectionState.DETECTED) {
             isBlockDetected = true;
         } else {

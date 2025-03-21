@@ -5,9 +5,17 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ Class for a rumble that only rumbles on the right side of the controller
+ **/
 public class RightSideRumble extends Rumble{
     private GamepadEx manipulatorGamepad;
 
+    /**
+     Constructor for a rumble that only rumbles on the right side of the controller
+     @param manipulatorGamepad: Manipulator gamepad
+     @param robotState: State of the robot
+     **/
     public RightSideRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
         super(manipulatorGamepad, robotState);
     }

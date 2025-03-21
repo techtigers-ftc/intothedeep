@@ -20,29 +20,29 @@ import team.techtigers.base.CloseableSubsystem;
 public class ControllerSubsystem extends CloseableSubsystem {
     private final ArrayList<Rumble> rumbles;
     private final RobotState robotState;
-    private final GamepadEx gamepad1;
-    private final GamepadEx gamepad2;
+    private final GamepadEx driverGamepad;
+    private final GamepadEx manipulatorGamepad;
     private final double lateralCourseDistance;
 
     /**
      * Constructor for the ControllerSubsystem
      *
-     * @param gamepad1   The first gamepad
-     * @param gamepad2   The second gamepad
+     * @param driverGamepad   The first gamepad
+     * @param manipulatorGamepad   The second gamepad
      * @param robotState The robot state to use
      */
-    public ControllerSubsystem(GamepadEx gamepad1, GamepadEx gamepad2, RobotState robotState,
+    public ControllerSubsystem(GamepadEx driverGamepad, GamepadEx manipulatorGamepad, RobotState robotState,
                                double lateralCourseDistance) {
         this.robotState = robotState;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+        this.driverGamepad = driverGamepad;
+        this.manipulatorGamepad = manipulatorGamepad;
         this.lateralCourseDistance = robotState.getBlockLateralCoarse();
 
         rumbles = new ArrayList<>();
-        rumbles.add(new EndgameRumble(gamepad1, gamepad2, robotState));
-        rumbles.add(new ClimbReminderRumble(gamepad1, gamepad2, robotState));
-        rumbles.add(new FailedPickupRumble(gamepad2, robotState));
-        rumbles.add(new VisionAllignmentRumble(gamepad2, robotState, lateralCourseDistance));
+        rumbles.add(new EndgameRumble(driverGamepad, manipulatorGamepad, robotState));
+        rumbles.add(new ClimbReminderRumble(driverGamepad, manipulatorGamepad, robotState));
+        rumbles.add(new FailedPickupRumble(manipulatorGamepad, robotState));
+        rumbles.add(new VisionAllignmentRumble(manipulatorGamepad, robotState, lateralCourseDistance));
     }
 
     @Override
@@ -67,20 +67,20 @@ public class ControllerSubsystem extends CloseableSubsystem {
         switch (robotState.getBlockColorPreference()) {
             case ALLIANCE:
                 if(robotState.isBlue()){
-                    gamepad1.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                    gamepad2.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
+                    driverGamepad.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
+                    manipulatorGamepad.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
                 } else {
-                    gamepad1.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                    gamepad2.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
+                    driverGamepad.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
+                    manipulatorGamepad.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
                 }
                 break;
             case YELLOW:
-                gamepad1.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                gamepad2.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
+                driverGamepad.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
+                manipulatorGamepad.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
                 break;
             case ANY:
-                gamepad1.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                gamepad2.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
+                driverGamepad.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
+                manipulatorGamepad.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
                 break;
         }
     }

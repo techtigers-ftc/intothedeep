@@ -32,7 +32,7 @@ public class VisionAllignmentRumble extends Rumble {
     }
 
 
-    // Check if the block is detected by the robot for vision allignment
+    // Check if the block is detected by the robot for vision alignment
     @Override
     public void updateRumble() {
         if (blockDetectionState == BlockDetectionState.DETECTED) {
