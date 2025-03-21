@@ -2,18 +2,12 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCloseAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeLoosenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeWristRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -30,7 +24,6 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
-    private double lastClawRotation;
 
     /**
      * Creates a new IntakeFullReadyToTransferNoVisionAction
@@ -45,32 +38,12 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
                                                    RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.intake = intake;
-        lastClawRotation = 90;
         addRequirements(intake, dropper);
         addCommands(
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 200),
-                new IntakeCloseAction(intake, 100),
-                new IntakeWristPitchAction(intake,
-                        IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 40, 300),
+                new IntakePrepareToTransferAction(intake, robotState),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new IntakeClawRotationAction(intake, () -> 30, 0),
-                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
-                        ),
-                        new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 300),
-                        new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 200),
-                        new DropperTransferAction(dropper, robotState)
-                ),
-                new ParallelCommandGroup(
-                        new IntakeLoosenAction(intake, 350),
-                        new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
-                )
+                new ReadyToTransferAction(intake, dropper, robotState)
         );
     }
 

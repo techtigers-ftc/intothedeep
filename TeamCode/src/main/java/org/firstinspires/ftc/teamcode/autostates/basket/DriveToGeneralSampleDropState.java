@@ -8,8 +8,8 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -45,15 +45,13 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
         super(name, drive, robotState, 8);
         addCommands(
                 new SequentialCommandGroup(
-                        new IntakeReadyToTransferAction(intake, dropper, robotState),
+                        new ReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 autoDriveCommand,
                                 new SequentialCommandGroup(
                                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 16),
-                                        new IntakeReadyToPickupAction(intake,
-                                                robotState, () -> targetSlidePos,
-                                                () -> 90)
+                                        new IntakeReadyToPickupAction(intake, robotState, () -> targetSlidePos)
                                 ),
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
@@ -86,5 +84,11 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
             return AutoState.TIMEOUT;
         }
         return AutoState.RUNNING;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.resetBlockHasBeenDetected();
     }
 }

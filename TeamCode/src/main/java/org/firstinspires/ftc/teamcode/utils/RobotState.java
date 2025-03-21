@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -63,6 +64,9 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
     private double autoRemainingTime;
+    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private Waypoint limelightLastRobotCoords;
+    private double intakeSlidePosition;
 
 
     private boolean runDistanceSensor;
@@ -120,6 +124,9 @@ public class RobotState extends GlobalState {
         distanceSensorValue = -1;
         autoRemainingTime = -1;
         headingLockEnabled = false;
+        absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
+        limelightLastRobotCoords = new Waypoint(0, 0, 0);
+        intakeSlidePosition = 0;
     }
 
     /**
@@ -879,5 +886,66 @@ public class RobotState extends GlobalState {
      */
     public void setHeadingLock(boolean headingLockEnabled) {
         this.headingLockEnabled = headingLockEnabled;
+    }
+
+    /**
+     * Gets the absolute coordinates of a detected block
+     *
+     * @return the detected block's absolute coordinates
+     */
+    public Waypoint getAbsoluteBlockCoordinates() {
+        return absoluteBlockCoordinates.getBlockAbsolutePosition();
+    }
+
+    /**
+     * Sets the absolute coordinates of a detected block
+     *
+     * @param coordinates the detected block's absolute coordinates
+     */
+    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates coordinates) {
+        this.absoluteBlockCoordinates = coordinates;
+    }
+
+    /**
+     * Gets the current intake slide position (inches)
+     *
+     * @return the current intake slide position
+     */
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
+    }
+
+    /**
+     * Sets the current intake slide position (inches)
+     *
+     * @param intakeSlidePosition the current intake slide position
+     */
+    public void setIntakeSlidePosition(double intakeSlidePosition) {
+        this.intakeSlidePosition = intakeSlidePosition;
+    }
+
+    /**
+     * Resets the boolean of whether a block has recently been detected
+     */
+    public void resetBlockHasBeenDetected() {
+        absoluteBlockCoordinates.resetBlockHasBeenDetected();
+    }
+
+    /**
+     * Returns if a block has recently been detected
+     *
+     * @return Whether a block has recently been detected
+     */
+    public boolean hasBlockBeenDetected() {
+        return absoluteBlockCoordinates.getBlockHasBeenDetected();
+    }
+
+    /**
+     * Gets the last robot position known to the Limelight
+     *
+     * @return The last robot position known to the Limelight
+     */
+    public Waypoint getLimelightLastRobotCoords() {
+        return absoluteBlockCoordinates.getLimelightLastRobotPosition();
     }
 }
