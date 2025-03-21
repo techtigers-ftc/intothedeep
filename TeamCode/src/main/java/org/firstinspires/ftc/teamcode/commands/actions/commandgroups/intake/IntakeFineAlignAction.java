@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.utils.TargetIntakeRobotPositionCalculator;
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.core.paths.Waypoint;
-import team.techtigers.core.paths.geometry.Point;
 
 /**
  * Command to align to a block using fine camera vision
@@ -67,11 +66,6 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
 
         Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
         targetPositions = TargetIntakeRobotPositionCalculator.getTargetIntakePositionFine(robotState.getRobotCurrentPose(), blockPos);
-
-        double distanceFromTargetPos = Math.hypot(
-                targetPositions[0] - robotState.getRobotCurrentPose().getX(),
-                targetPositions[1] - robotState.getRobotCurrentPose().getY()
-        );
     }
 
     @Override

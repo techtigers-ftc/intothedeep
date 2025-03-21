@@ -9,9 +9,9 @@ import team.techtigers.core.paths.Waypoint;
  * orientation and position as well as the block's lateral and forward offset
  */
 public class AbsoluteBlockPosition {
-    private double CACHE_TIMEOUT = 2000;
+    private final double CACHE_TIMEOUT = 2000;
     private Waypoint robotPos;
-    private ElapsedTime timer;
+    private final ElapsedTime timer;
 
     private double blockLateralInches;
     private double blockForwardInches;

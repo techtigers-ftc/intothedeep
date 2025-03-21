@@ -4,14 +4,12 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.CloseableSubsystem;
-import team.techtigers.core.paths.Waypoint;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
@@ -27,12 +25,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double HEIGHT_RANGE = 5.6;
     private static final double PIXELS_PER_INCH = 94.5;
 
-    public static double LIMELIGHT_HEIGHT = 10.25;
-    public static double CAMERA_COARSE_ANGLE = 49;
-
     // Limelight fine horizontal linear equation parameters
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
+    public static double LIMELIGHT_HEIGHT = 10.25;
+    public static double CAMERA_COARSE_ANGLE = 49;
     private final RobotState robotState;
     private final Limelight3A limelight;
 
