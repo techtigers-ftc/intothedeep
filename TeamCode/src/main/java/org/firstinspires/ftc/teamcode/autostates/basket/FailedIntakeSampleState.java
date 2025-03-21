@@ -41,7 +41,7 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         addCommands(
                 new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5),
                 new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickUpAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new IntakeFinePickUpAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
