@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.ControllerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -19,7 +20,6 @@ import team.techtigers.base.BaseOpMode;
 @SuppressWarnings("unused")
 public class ControllerSubsystemTestOpMode extends BaseOpMode {
     RobotState robotState;
-    private double lateralCourseDistance;
 
     @Override
     public void initialize() {
@@ -28,7 +28,9 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
 
         robotState = new RobotState(false, false);
         robotState.setBlockPosition(RobotBlockPosition.DROPPER);
-        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, manipulatorGamepad, robotState, lateralCourseDistance);
+        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, manipulatorGamepad, robotState);
+        LimelightSubsystem visionSubsystem = new LimelightSubsystem(hardwareMap, robotState);
+        robotState.setCoarseCameraMode(true);
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> robotState.setBlockColorPreference(ALLIANCE));
         driverGamepad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> robotState.setBlockColorPreference(ANY));
@@ -36,13 +38,16 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() -> robotState.setIntakeState(IntakeState.PREPARE_TO_TRANSFER));
         manipulatorGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> robotState.setIntakeState(IntakeState.READY_TO_PICKUP));
 
-        registerSubsystems(controllerSubsystem);
+        registerSubsystems(controllerSubsystem, visionSubsystem);
     }
 
     @Override
     public void update() {
+
         telemetry.addData("Runtime Seconds", robotState.getRunTime()/1000f);
         telemetry.addData("Color Preference", robotState.getBlockColorPreference());
         telemetry.addData("Intake State", robotState.getIntakeState());
+        telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Block Position", robotState.getAbsoluteBlockCoordinates());
     }
 }

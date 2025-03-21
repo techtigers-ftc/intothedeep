@@ -22,8 +22,6 @@ public class ControllerSubsystem extends CloseableSubsystem {
     private final RobotState robotState;
     private final GamepadEx driverGamepad;
     private final GamepadEx manipulatorGamepad;
-    private final double lateralCourseDistance;
-
     /**
      * Constructor for the ControllerSubsystem
      *
@@ -31,18 +29,16 @@ public class ControllerSubsystem extends CloseableSubsystem {
      * @param manipulatorGamepad   The second gamepad
      * @param robotState The robot state to use
      */
-    public ControllerSubsystem(GamepadEx driverGamepad, GamepadEx manipulatorGamepad, RobotState robotState,
-                               double lateralCourseDistance) {
+    public ControllerSubsystem(GamepadEx driverGamepad, GamepadEx manipulatorGamepad, RobotState robotState) {
         this.robotState = robotState;
         this.driverGamepad = driverGamepad;
         this.manipulatorGamepad = manipulatorGamepad;
-        this.lateralCourseDistance = robotState.getBlockLateralCoarse();
 
         rumbles = new ArrayList<>();
         rumbles.add(new EndgameRumble(driverGamepad, manipulatorGamepad, robotState));
         rumbles.add(new ClimbReminderRumble(driverGamepad, manipulatorGamepad, robotState));
         rumbles.add(new FailedPickupRumble(manipulatorGamepad, robotState));
-        rumbles.add(new VisionAllignmentRumble(manipulatorGamepad, robotState, lateralCourseDistance));
+        rumbles.add(new VisionAllignmentRumble(manipulatorGamepad, robotState));
     }
 
     @Override
