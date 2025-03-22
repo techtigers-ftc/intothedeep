@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.controller.FailedPickupRumble;
 import org.firstinspires.ftc.teamcode.controller.Rumble;
 import org.firstinspires.ftc.teamcode.controller.SwitchIntakeModeRumble;
 import org.firstinspires.ftc.teamcode.controller.ToggleBreakBeamRumble;
-import org.firstinspires.ftc.teamcode.controller.VisionAllignmentRumble;
+import org.firstinspires.ftc.teamcode.controller.VisionAlignmentRumble;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class ControllerSubsystem extends CloseableSubsystem {
         rumbles.add(new EndgameRumble(driverGamepad, manipulatorGamepad, robotState));
         rumbles.add(new ClimbReminderRumble(driverGamepad, manipulatorGamepad, robotState));
         rumbles.add(new FailedPickupRumble(manipulatorGamepad, robotState));
-        rumbles.add(new VisionAllignmentRumble(driverGamepad, robotState));
+        rumbles.add(new VisionAlignmentRumble(driverGamepad, robotState));
         rumbles.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));
         rumbles.add(new SwitchIntakeModeRumble(manipulatorGamepad, robotState));
     }

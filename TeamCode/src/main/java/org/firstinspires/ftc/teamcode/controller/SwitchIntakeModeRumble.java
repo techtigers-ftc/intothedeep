@@ -5,12 +5,23 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ * Rumbles if the driver changes the intake mode (manual or automatic)
+ */
 public class SwitchIntakeModeRumble extends Rumble {
 
+    /**
+     * Constructor for the SwitchIntakeModeRumble class
+     * @param manipulatorGamepad the manipulators gamepad
+     * @param robotState the state of the robot
+     */
     public SwitchIntakeModeRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
         super(manipulatorGamepad, robotState);
     }
 
+    /**
+     * Rumbles if the driver changes the intake mode
+     */
     @Override
     public void updateRumble() {
         if(gamepad1.wasJustPressed(GamepadKeys.Button.START)){
@@ -18,6 +29,9 @@ public class SwitchIntakeModeRumble extends Rumble {
         }
     }
 
+    /**
+     * Runs a short blip of rumble
+     */
     @Override
     protected void runRumble() {
         if(robotState.isManualIntakeSelected()){

@@ -11,21 +11,23 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 /**
  * A rumble that tells the manipulator which side of the block is relative to the robot
  **/
-public class VisionAllignmentRumble extends Rumble {
+public class VisionAlignmentRumble extends Rumble {
     private IntakeState currentIntakeState;
 
     /**
-     * Constructor for VisionAllignmentRumble class
+     * Constructor for VisionAlignmentRumble class
      *
      * @param manipulatorGamepad Gamepad for manipulator
      * @param robotState         The robot state to use
      **/
-    public VisionAllignmentRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
+    public VisionAlignmentRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
         super(manipulatorGamepad, robotState);
     }
 
 
-    // Check if the block is detected by the robot for vision alignment
+    /**
+     * Rumbles if the robot is intaking and a block is detected in the direction of the block
+     */
     @Override
     public void updateRumble() {
         boolean intaking = robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP
@@ -35,6 +37,9 @@ public class VisionAllignmentRumble extends Rumble {
         }
     }
 
+    /**
+     * Runs the rumble effect in the direction of the block
+     */
     @Override
     public void runRumble() {
         Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());

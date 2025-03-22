@@ -4,6 +4,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
+/**
+ * A rumble that reminds the drivers to climb
+ */
 public class ClimbReminderRumble extends Rumble {
     private boolean hasRumbled = false;
 
@@ -30,6 +33,9 @@ public class ClimbReminderRumble extends Rumble {
         }
     }
 
+    /**
+     * Runs two long blips
+     */
     @Override
     protected void runRumble() {
         gamepad1.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
