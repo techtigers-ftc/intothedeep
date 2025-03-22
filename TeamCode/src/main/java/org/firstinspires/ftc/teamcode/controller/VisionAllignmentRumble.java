@@ -43,7 +43,7 @@ public class VisionAllignmentRumble extends Rumble {
         Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
         Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
         double lateral = robotState.getAbsoluteBlockCoordinates().getX() * robotI.getXComponent()
-                + robotState.getAbsoluteBlockCoordinates().getY() * robotI.getYComponent();
+                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
         if(lateral < 0) {
             manipulatorGamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                     .addStep(0, calculateRumbleIntensity(lateral), Gamepad.RUMBLE_DURATION_CONTINUOUS)
