@@ -25,7 +25,7 @@ public class DriveSubsystem extends CloseableSubsystem {
     private static final double GEAR_MULTIPLIER = 0.5;
     private static final double TURN_MULTIPLIER = 0.45;
     private static final double TURN_GEAR_MULTIPLIER = 0.5;
-    private final DcMotor frontLeft, frontRight;
+    public final DcMotor frontLeft, frontRight;
     public final DcMotor backLeft, backRight;
     private final DriveVectorScaler driveVectorScaler;
     private final RobotState robotstate;

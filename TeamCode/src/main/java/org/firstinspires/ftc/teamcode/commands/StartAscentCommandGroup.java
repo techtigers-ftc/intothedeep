@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.ascent.AscentEngageAction;
@@ -25,6 +26,7 @@ public class StartAscentCommandGroup extends SequentialCommandGroup {
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper,
                         AscentSubsystem.ASCENT_SLIDES_INITIAL_HEIGHT + 1, 0.5),
+                new InstantCommand(dropper::stopSlides),
                 new AscentEngageAction(ascent, robotState, 1000)
         );
     }
