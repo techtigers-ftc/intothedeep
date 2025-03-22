@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * Rumbles the controllers when the driver toggles the break beam
  */
 public class ToggleBreakBeamRumble extends Rumble{
+    private boolean breakBeamWasEnabled;
 
     /**
      * Constructs a ToggleBreakBeamRumble
@@ -17,6 +18,7 @@ public class ToggleBreakBeamRumble extends Rumble{
      */
     public ToggleBreakBeamRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
         super(manipulatorGamepad, robotState);
+        breakBeamWasEnabled = robotState.isBreakBeamEnabled();
     }
 
     /**
@@ -24,10 +26,11 @@ public class ToggleBreakBeamRumble extends Rumble{
      */
     @Override
     public void updateRumble() {
-        if(gamepad1.wasJustPressed(GamepadKeys.Button.Y)){
+        if(robotState.isBreakBeamEnabled() != breakBeamWasEnabled){
             runRumble();
         }
 
+        breakBeamWasEnabled = robotState.isBreakBeamEnabled();
     }
 
     /**
