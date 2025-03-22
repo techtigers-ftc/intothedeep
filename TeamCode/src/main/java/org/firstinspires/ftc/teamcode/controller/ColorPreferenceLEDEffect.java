@@ -30,7 +30,7 @@ public class ColorPreferenceLEDEffect implements ControllerEffect {
     public void updateEffect() {
         switch (robotState.getBlockColorPreference()) {
             case ALLIANCE:
-                if(robotState.isBlue()){
+                if (robotState.isBlue()) {
                     gamepad.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
                 } else {
                     gamepad.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);

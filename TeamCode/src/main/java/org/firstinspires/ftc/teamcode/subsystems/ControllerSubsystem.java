@@ -4,9 +4,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.controller.ClimbReminderRumble;
 import org.firstinspires.ftc.teamcode.controller.ColorPreferenceLEDEffect;
+import org.firstinspires.ftc.teamcode.controller.ControllerEffect;
 import org.firstinspires.ftc.teamcode.controller.EndgameRumble;
 import org.firstinspires.ftc.teamcode.controller.FailedPickupRumble;
-import org.firstinspires.ftc.teamcode.controller.ControllerEffect;
 import org.firstinspires.ftc.teamcode.controller.SwitchIntakeModeRumble;
 import org.firstinspires.ftc.teamcode.controller.ToggleBreakBeamRumble;
 import org.firstinspires.ftc.teamcode.controller.VisionAlignmentRumble;
@@ -21,12 +21,13 @@ import team.techtigers.base.CloseableSubsystem;
  */
 public class ControllerSubsystem extends CloseableSubsystem {
     private final ArrayList<ControllerEffect> controllerEffects;
+
     /**
      * Constructor for the ControllerSubsystem
      *
-     * @param driverGamepad   The first gamepad
-     * @param manipulatorGamepad   The second gamepad
-     * @param robotState The robot state to use
+     * @param driverGamepad      The first gamepad
+     * @param manipulatorGamepad The second gamepad
+     * @param robotState         The robot state to use
      */
     public ControllerSubsystem(GamepadEx driverGamepad, GamepadEx manipulatorGamepad, RobotState robotState) {
 

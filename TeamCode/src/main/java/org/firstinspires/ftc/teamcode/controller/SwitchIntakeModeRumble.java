@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
  * Rumbles if the driver changes the intake mode (manual or automatic)
  */
 public class SwitchIntakeModeRumble implements ControllerEffect {
-    private boolean manualIntakeSelected;
     private final GamepadEx gamepad;
     private final RobotState robotState;
     private final Gamepad.RumbleEffect enableEffect = new Gamepad.RumbleEffect.Builder()
@@ -20,6 +19,7 @@ public class SwitchIntakeModeRumble implements ControllerEffect {
     private final Gamepad.RumbleEffect disableEffect = new Gamepad.RumbleEffect.Builder()
             .addStep(1, 1, 100)
             .build();
+    private boolean manualIntakeSelected;
 
     /**
      * Constructor for the SwitchIntakeModeRumble class

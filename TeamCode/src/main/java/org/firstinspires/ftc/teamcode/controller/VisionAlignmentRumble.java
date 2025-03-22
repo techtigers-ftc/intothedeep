@@ -58,9 +58,10 @@ public class VisionAlignmentRumble implements ControllerEffect {
 
     /**
      * Finds the lateral distance between the robot and the block based on its heading
+     *
      * @return the lateral distance between the robot and the block
      */
-    private double findBlockLateral(){
+    private double findBlockLateral() {
         Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
         Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
         RobotLog.dd("Vision Rumble", "i hat: " + robotI + " j hat: " + robotJ);
