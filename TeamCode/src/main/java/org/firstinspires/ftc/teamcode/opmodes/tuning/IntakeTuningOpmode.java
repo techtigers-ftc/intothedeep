@@ -56,9 +56,6 @@ public class IntakeTuningOpmode extends BaseOpMode {
             intakeSubsystem.setWristAbsolute(165,
                     IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
         });
-//        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-//            intakeSubsystem.setWristAbsolute(180, 90);
-//        });
 
         // Claw Rotation
         driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> {
