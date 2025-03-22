@@ -38,8 +38,7 @@ public class ToggleBreakBeamRumble implements ControllerEffect {
     /**
      * Runs a short blip of rumble
      */
-    @Override
-    public void runEffect() {
+    private void runEffect() {
         if(robotState.isBreakBeamEnabled()){
             gamepad.gamepad.rumbleBlips(1);
         } else {

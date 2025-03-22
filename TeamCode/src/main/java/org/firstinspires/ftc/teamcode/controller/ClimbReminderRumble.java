@@ -30,27 +30,13 @@ public class ClimbReminderRumble implements ControllerEffect {
     public void updateEffect() {
         boolean needToClimb = robotState.getRunTime() / 1000 >= 105;
         if (needToClimb && !robotState.getIsAscending() && !hasRumbled) {
-            runEffect();
+            gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
+                    .addStep(1, 1, 500)
+                    .addStep(0, 0, 500)
+                    .addStep(1, 1, 500)
+                    .build()
+            );
             hasRumbled = true;
         }
-    }
-
-    /**
-     * Runs two long blips
-     */
-    @Override
-    public void runEffect() {
-        gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
-                .addStep(1, 1, 500)
-                .addStep(0, 0, 500)
-                .addStep(1, 1, 500)
-                .build()
-        );
-        gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
-                .addStep(1, 1, 500)
-                .addStep(0, 0, 500)
-                .addStep(1, 1, 500)
-                .build()
-        );
     }
 }

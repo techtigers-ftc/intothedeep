@@ -30,18 +30,10 @@ public class EndgameRumble implements ControllerEffect {
         boolean endgameStarted = robotState.getRunTime() / 1000 >= 90;
         if(endgameStarted && !hasRumbled) {
             hasRumbled = true;
-            runEffect();
+            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
+                    .addStep(1, 1, 2000)
+                    .build()
+            );
         }
-    }
-
-    /**
-     * Runs the rumble effect on both controllers for 2 seconds
-     */
-    @Override
-    public void runEffect() {
-        gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
-                .addStep(1, 1, 2000)
-                .build()
-        );
     }
 }

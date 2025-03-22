@@ -43,17 +43,8 @@ public class VisionAlignmentRumble implements ControllerEffect {
     /**
      * Runs the rumble effect in the direction of the block
      */
-    @Override
-    public void runEffect() {
-        Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
-        Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
-        RobotLog.dd("Vision Rumble", "i hat: " + robotI + " j hat: " + robotJ);
-        double blockAdjustedX = robotState.getAbsoluteBlockCoordinates().getX() * robotI.getXComponent()
-                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
-        double robotAdjustedX = robotState.getRobotCurrentPose().getX() * robotI.getXComponent()
-                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
-        double lateral = robotAdjustedX - blockAdjustedX;
-        RobotLog.dd("Vision Rumble", "lateral: " + lateral);
+    private void runEffect() {
+        double lateral = findBlockLateral();
         if (lateral > 0) {
             gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                     .addStep(0, lateral > 0.75 ? 1 : 0, 50)
@@ -63,6 +54,23 @@ public class VisionAlignmentRumble implements ControllerEffect {
                     .addStep(lateral < -0.75 ? 0.5 : 0, 0, 50)
                     .build());
         }
+    }
+
+    /**
+     * Finds the lateral distance between the robot and the block based on its heading
+     * @return the lateral distance between the robot and the block
+     */
+    private double findBlockLateral(){
+        Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
+        Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
+        RobotLog.dd("Vision Rumble", "i hat: " + robotI + " j hat: " + robotJ);
+        double blockAdjustedX = robotState.getAbsoluteBlockCoordinates().getX() * robotI.getXComponent()
+                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
+        double robotAdjustedX = robotState.getRobotCurrentPose().getX() * robotI.getXComponent()
+                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
+        double lateral = robotAdjustedX - blockAdjustedX;
+        RobotLog.dd("Vision Rumble", "lateral: " + lateral);
+        return lateral;
     }
 }
 

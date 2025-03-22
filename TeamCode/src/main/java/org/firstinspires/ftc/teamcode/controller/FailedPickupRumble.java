@@ -34,17 +34,9 @@ public class FailedPickupRumble implements ControllerEffect {
                 robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER;
         boolean noBlockInIntake = robotState.getBlockPosition() != RobotBlockPosition.INTAKE;
         if(pickedUpBlock && noBlockInIntake) {
-            runEffect();
+            gamepad.gamepad.rumbleBlips(2);
         }
 
         previousIntakeState = robotState.getIntakeState();
-    }
-
-    /**
-     * Runs two short blips of rumble
-     */
-    @Override
-    public void runEffect() {
-        gamepad.gamepad.rumbleBlips(2);
     }
 }

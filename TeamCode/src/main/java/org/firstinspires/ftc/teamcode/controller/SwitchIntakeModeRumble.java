@@ -38,8 +38,7 @@ public class SwitchIntakeModeRumble implements ControllerEffect {
     /**
      * Runs a short blip of rumble
      */
-    @Override
-    public void runEffect() {
+    private void runEffect() {
         if(robotState.isManualIntakeSelected()){
             gamepad.gamepad.rumbleBlips(2);
         } else {
