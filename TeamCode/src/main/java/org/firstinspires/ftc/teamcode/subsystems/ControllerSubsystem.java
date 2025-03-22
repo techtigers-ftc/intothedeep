@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.controller.ClimbReminderRumble;
+import org.firstinspires.ftc.teamcode.controller.ColorPreferenceLEDEffect;
 import org.firstinspires.ftc.teamcode.controller.EndgameRumble;
 import org.firstinspires.ftc.teamcode.controller.FailedPickupRumble;
 import org.firstinspires.ftc.teamcode.controller.ControllerEffect;
@@ -47,12 +47,13 @@ public class ControllerSubsystem extends CloseableSubsystem {
         controllerEffects.add(new VisionAlignmentRumble(driverGamepad, robotState));
         controllerEffects.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));
         controllerEffects.add(new SwitchIntakeModeRumble(manipulatorGamepad, robotState));
+
+        controllerEffects.add(new ColorPreferenceLEDEffect(driverGamepad, robotState));
     }
 
     @Override
     public void periodic() {
         handleRumbleEffects();
-        handleLEDs();
     }
 
     /**
@@ -61,31 +62,6 @@ public class ControllerSubsystem extends CloseableSubsystem {
     private void handleRumbleEffects() {
         for (ControllerEffect controllerEffect : controllerEffects) {
             controllerEffect.updateEffect();
-        }
-    }
-
-    /**
-     * Sets the led colors based on the vision color preference
-     */
-    private void handleLEDs() {
-        switch (robotState.getBlockColorPreference()) {
-            case ALLIANCE:
-                if(robotState.isBlue()){
-                    driverGamepad.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                    manipulatorGamepad.gamepad.setLedColor(0, 0, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                } else {
-                    driverGamepad.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                    manipulatorGamepad.gamepad.setLedColor(1, 0, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                }
-                break;
-            case YELLOW:
-                driverGamepad.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                manipulatorGamepad.gamepad.setLedColor(1, 0.8, 0, Gamepad.LED_DURATION_CONTINUOUS);
-                break;
-            case ANY:
-                driverGamepad.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                manipulatorGamepad.gamepad.setLedColor(1, 1, 1, Gamepad.LED_DURATION_CONTINUOUS);
-                break;
         }
     }
 }
