@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.core.paths.Waypoint;
 
-@TeleOp
+@TeleOp(name = "Controller Subsystem Testing", group = "Tuning")
 @SuppressWarnings("unused")
 public class ControllerSubsystemTestOpMode extends BaseOpMode {
     RobotState robotState;
