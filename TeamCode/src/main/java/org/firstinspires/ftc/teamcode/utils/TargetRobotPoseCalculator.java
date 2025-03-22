@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.paths.geometry.Point;
 
@@ -27,7 +29,9 @@ public class TargetRobotPoseCalculator {
                 robotPose.getHeading()
         );
 
-        double clawOrientation = (blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 360) % 180;
+//        double clawOrientation = (blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 360) % 180;
+        double clawOrientation = (-blockPose.getHeading() + Math.toDegrees(robotPose.getHeading()) + 360) % 180;
+        RobotLog.dd("Claw Debug", "Block Heading: %f Robot Heading: %f Expected Claw Orientation: %f", blockPose.getHeading(), Math.toDegrees(robotPose.getHeading()), clawOrientation);
 
         return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance, clawOrientation};
     }
