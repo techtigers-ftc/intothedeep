@@ -23,17 +23,17 @@ import team.techtigers.core.paths.Waypoint;
 @SuppressWarnings("unused")
 public class ControllerSubsystemTestOpMode extends BaseOpMode {
     RobotState robotState;
-    GamepadEx manipulatorGamepad;
+    GamepadEx driverGamepad;
     AbsoluteBlockCoordinates blockCoordinates;
 
     @Override
     public void initialize() {
-        GamepadEx driverGamepad = new GamepadEx(gamepad1);
-        manipulatorGamepad = new GamepadEx(gamepad2);
+        driverGamepad = new GamepadEx(gamepad1);
+        GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
 
         robotState = new RobotState(false, false);
         robotState.setBlockPosition(RobotBlockPosition.DROPPER);
-        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, manipulatorGamepad, robotState);
+        ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverGamepad, driverGamepad, robotState);
 //        LimelightSubsystem visionSubsystem = new LimelightSubsystem(hardwareMap, robotState);
         robotState.setCoarseCameraMode(true);
         blockCoordinates = new AbsoluteBlockCoordinates();
@@ -54,15 +54,17 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        robotState.setRobotPose(new Waypoint(robotState.getRobotCurrentPose().getX(),
+        robotState.setRobotPose(new Waypoint(robotState.getRobotCurrentPose().getX()-driverGamepad.getLeftX()/100,
                 robotState.getRobotCurrentPose().getY(),
-                robotState.getRobotCurrentPose().getHeading()+manipulatorGamepad.getLeftX()));
+                robotState.getRobotCurrentPose().getHeading()));
 
         telemetry.addData("Runtime Seconds", robotState.getRunTime()/1000f);
         telemetry.addData("Color Preference", robotState.getBlockColorPreference());
         telemetry.addData("Intake State", robotState.getIntakeState());
         telemetry.addData("Block Detection State", robotState.hasBlockBeenDetected());
         telemetry.addData("Block Position", robotState.getAbsoluteBlockCoordinates().toString());
-        telemetry.addData("Robot Position", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) % 360);
+        telemetry.addData("Robot X", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Robot Y", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Robot Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) % 360);
     }
 }
