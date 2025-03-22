@@ -390,9 +390,9 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.addLine();
 
-        if (robotState.getAbsoluteBlockPosition().isBlockDetected()) {
+        if (robotState.isBlockDetected()) {
             telemetry.addLine("Block Detected");
-            telemetry.addData("Last Remembered Block Position", robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition());
+            telemetry.addData("Last Remembered Block Position", robotState.getAbsoluteBlockPosition());
         } else {
             telemetry.addLine("Block NOT Detected");
         }

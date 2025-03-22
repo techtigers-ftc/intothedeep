@@ -73,12 +73,12 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-        if (!robotState.getAbsoluteBlockPosition().isBlockDetected()) {
+        if (!robotState.isBlockDetected()) {
             RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
             throw new IllegalStateException("Block not detected");
         }
 
-        Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
+        Waypoint blockPos = robotState.getAbsoluteBlockPosition();
         targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
     }
 

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -64,9 +63,10 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
     private double autoRemainingTime;
-    private AbsoluteBlockPosition absoluteBlockPosition;
+    private Waypoint absoluteBlockPosition;
     private Waypoint limelightLastRobotCoords;
     private double intakeSlidePosition;
+    private boolean hasBlockBeenRecentlyDetected;
 
 
     private boolean runDistanceSensor;
@@ -126,7 +126,8 @@ public class RobotState extends GlobalState {
         headingLockEnabled = false;
         limelightLastRobotCoords = new Waypoint(0, 0, 0);
         intakeSlidePosition = 0;
-        absoluteBlockPosition = new AbsoluteBlockPosition();
+        absoluteBlockPosition = new Waypoint(0, 0, 0);
+        hasBlockBeenRecentlyDetected = false;
     }
 
     /**
@@ -893,8 +894,20 @@ public class RobotState extends GlobalState {
      *
      * @return the object which contains the detected block's attributes
      */
-    public AbsoluteBlockPosition getAbsoluteBlockPosition() {
+    public Waypoint getAbsoluteBlockPosition() {
         return absoluteBlockPosition;
+    }
+
+    public void setAbsoluteBlockPosition(Waypoint pos) {
+        this.absoluteBlockPosition = pos;
+    }
+
+    public boolean isBlockDetected() {
+        return hasBlockBeenRecentlyDetected;
+    }
+
+    public void setBlockDetected(boolean detected) {
+        this.hasBlockBeenRecentlyDetected = detected;
     }
 
     /**

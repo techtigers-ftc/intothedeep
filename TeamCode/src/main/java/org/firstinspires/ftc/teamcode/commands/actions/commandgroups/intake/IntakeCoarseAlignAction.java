@@ -54,12 +54,12 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
     public void initialize() {
         super.initialize();
         robotState.setCoarseCameraMode(true);
-        if (!robotState.getAbsoluteBlockPosition().isBlockDetected()) {
+        if (!robotState.isBlockDetected()) {
             RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
             throw new IllegalStateException("Block not detected");
         }
 
-        Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
+        Waypoint blockPos = robotState.getAbsoluteBlockPosition();
         targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(
                 robotState.getRobotCurrentPose(),
                 blockPos

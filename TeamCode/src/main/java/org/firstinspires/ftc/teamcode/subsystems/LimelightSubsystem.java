@@ -4,12 +4,14 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.CloseableSubsystem;
+import team.techtigers.core.paths.Waypoint;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
@@ -32,6 +34,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public static double CAMERA_COARSE_ANGLE = 49;
     private final RobotState robotState;
     private final Limelight3A limelight;
+    private final AbsoluteBlockPosition absoluteBlockPosition = new AbsoluteBlockPosition();
 
     // Lateral bounds
     private double lateralLowerBound = -5;
@@ -142,12 +145,13 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     robotState.setBlockOrientation(orientation);
 
                     // Saving the block's relative position whenever a block is seen
-                    robotState.getAbsoluteBlockPosition().updatePosition(
+                    absoluteBlockPosition.updatePosition(
                             robotState.getRobotCurrentPose(),
-                            robotState.getBlockLateralFine(),
-                            robotState.getBlockForwardFine() + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition(),
+                            lateralFine,
+                            forwardFine + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition(),
                             robotState.getBlockOrientation()
                     );
+                    robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
                 } else {
                     double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_ANGLE + result.getTy()));
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
@@ -158,19 +162,113 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     robotState.setBlockLateralCoarse(lateralCoarse);
 
                     // Saving the block's relative position whenever a block is seen
-                    robotState.getAbsoluteBlockPosition().updatePosition(
+                    absoluteBlockPosition.updatePosition(
                             robotState.getRobotCurrentPose(),
-                            robotState.getBlockLateralCoarse(),
-                            robotState.getBlockForwardCoarse() + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition(),
+                            lateralCoarse,
+                            forwardCoarse + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition(),
                             robotState.getBlockOrientation()
                     );
+
+                    robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
                 }
             }
         }
+        robotState.setBlockDetected(absoluteBlockPosition.isBlockDetected());
     }
 
     @Override
     public void close() {
         limelight.close();
+    }
+}
+
+class AbsoluteBlockPosition {
+    private final double CACHE_TIMEOUT = 2000;
+    private Waypoint robotPos;
+    private final ElapsedTime timer;
+
+    private double blockLateralInches;
+    private double blockForwardInches;
+    private double blockOrientation;
+
+    private Waypoint cachedAbsoluteBlockPosition;
+    private boolean blockDetected;
+
+    /**
+     * Constructor for the AbsoluteBlockPosition class
+     * Initializes variables and the timer
+     */
+    public AbsoluteBlockPosition() {
+        robotPos = new Waypoint(0, 0, 0);
+        blockLateralInches = 0;
+        blockForwardInches = 0;
+        blockOrientation = 0;
+        cachedAbsoluteBlockPosition = null;
+        blockDetected = false;
+        timer = new ElapsedTime();
+    }
+
+    /**
+     * Updates the robot's position and the block offsets from the robot
+     *
+     * @param robotPos the robot position
+     * @param blockLateralOffset the block's lateral offset
+     * @param blockForwardOffset the block's forward offset
+     */
+    public void updatePosition(Waypoint robotPos, double blockLateralOffset, double blockForwardOffset, double blockOrientation) {
+        this.cachedAbsoluteBlockPosition = null;
+        blockDetected = true;
+        this.robotPos = robotPos;
+        blockLateralInches = blockLateralOffset;
+        blockForwardInches = blockForwardOffset;
+        this.blockOrientation = blockOrientation;
+        timer.reset();
+    }
+
+    /**
+     * Tells the robot that no block has been recently detected
+     */
+    public void resetBlockDetection() {
+        this.cachedAbsoluteBlockPosition = null;
+        blockDetected = false;
+    }
+
+    /**
+     * Gets the value for if a block has been recently detected
+     *
+     * @return whether the block has been recently detected
+     */
+    public boolean isBlockDetected() {
+        if (timer.milliseconds() > CACHE_TIMEOUT) {
+            blockDetected = false;
+        }
+        return blockDetected;
+    }
+
+    /**
+     * Gets the absolute position of the block on the game field using the robot's orientation and
+     * position as well as the block's lateral and forward offset
+     *
+     * @return The absolute position of the block on the game field
+     */
+    public Waypoint getAbsoluteBlockPosition() {
+        if (cachedAbsoluteBlockPosition == null) {
+            // Applying a rotational matrix to the block's position
+            double blockX = blockForwardInches * Math.cos(robotPos.getHeading()) + blockLateralInches * Math.sin(robotPos.getHeading());
+            double blockY = blockForwardInches * Math.sin(robotPos.getHeading()) - blockLateralInches * Math.cos(robotPos.getHeading());
+            double blockOrientation = (Math.toDegrees(robotPos.getHeading()) + this.blockOrientation) % 180;
+            cachedAbsoluteBlockPosition = robotPos.add(blockX, blockY, blockOrientation);
+        }
+
+        return cachedAbsoluteBlockPosition;
+    }
+
+    /**
+     * Gets the limelight's last known robot position
+     *
+     * @return the limelight's last known robot position
+     */
+    public Waypoint getLimelightLastRobotPosition() {
+        return this.robotPos;
     }
 }
