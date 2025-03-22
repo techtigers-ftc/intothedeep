@@ -33,6 +33,8 @@ public class AscentEngageAction extends CommandBase {
     @Override
     public void initialize() {
         ascent.engageJacks();
+        ascent.engageAscent();
+        robotState.setIsAscending(true);
         timer.reset();
     }
 
@@ -40,10 +42,8 @@ public class AscentEngageAction extends CommandBase {
     public boolean isFinished() {
         return timer.milliseconds() > waitTime;
     }
-
-    @Override
-    public void end(boolean interrupted) {
-        robotState.setIsAscending(true);
-        ascent.engageAscent();
-    }
+//
+//    @Override
+//    public void end(boolean interrupted) {
+//    }
 }
