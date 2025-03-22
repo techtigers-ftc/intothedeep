@@ -35,11 +35,6 @@ public class FailedPickupRumble extends Rumble{
 
     @Override
     protected void runRumble() {
-        gamepad1.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
-                .addStep(0.7, 1, 75)
-                .addStep(0, 0, 150)
-                .addStep(0.7, 1, 75)
-                .build()
-        );
+        gamepad1.gamepad.rumbleBlips(2);
     }
 }

@@ -27,7 +27,6 @@ public class VisionTestOpmode extends BaseOpMode {
 
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
             robotState.setCoarseCameraMode(!robotState.isCoarseCameraMode());
-            gamepad1.rumbleBlips(1);
         });
 
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =
