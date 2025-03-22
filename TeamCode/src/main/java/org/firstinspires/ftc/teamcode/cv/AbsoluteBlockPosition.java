@@ -20,6 +20,10 @@ public class AbsoluteBlockPosition {
     private Waypoint cachedAbsoluteBlockPosition;
     private boolean blockDetected;
 
+    /**
+     * Constructor for the AbsoluteBlockPosition class
+     * Initializes variables and the timer
+     */
     public AbsoluteBlockPosition() {
         robotPos = new Waypoint(0, 0, 0);
         blockLateralInches = 0;
@@ -78,6 +82,7 @@ public class AbsoluteBlockPosition {
             // Applying a rotational matrix to the block's position
             double blockX = blockForwardInches * Math.cos(robotPos.getHeading()) + blockLateralInches * Math.sin(robotPos.getHeading());
             double blockY = blockForwardInches * Math.sin(robotPos.getHeading()) - blockLateralInches * Math.cos(robotPos.getHeading());
+            double blockOrientation = (Math.toDegrees(robotPos.getHeading()) + this.blockOrientation) % 180;
             cachedAbsoluteBlockPosition = robotPos.add(blockX, blockY, blockOrientation);
         }
 

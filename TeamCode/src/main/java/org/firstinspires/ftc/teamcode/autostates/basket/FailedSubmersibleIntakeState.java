@@ -61,7 +61,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 new IntakeCoarseAlignAction(drive, intake, robotState),
                 new WaitCommand(100),
                 new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickUpAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickUpAction(drive, intake, robotState)
         );
     }
 

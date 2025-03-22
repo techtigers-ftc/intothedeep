@@ -889,9 +889,9 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * Gets the absolute coordinates of a detected block
+     * Gets the object which contains the detected block's attributes
      *
-     * @return the detected block's absolute coordinates
+     * @return the object which contains the detected block's attributes
      */
     public AbsoluteBlockPosition getAbsoluteBlockPosition() {
         return absoluteBlockPosition;

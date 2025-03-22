@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.TargetIntakeRobotPositionCalculator;
+import org.firstinspires.ftc.teamcode.utils.TargetRobotPoseCalculator;
 
 import team.techtigers.core.paths.Waypoint;
 
@@ -32,7 +32,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
      */
     public IntakeCoarseAlignAction(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         this.robotState = robotState;
-        targetPositions = new double[4];
+        targetPositions = new double[5];
         addRequirements(intake);
 
         addCommands(
@@ -60,7 +60,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
         }
 
         Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
-        targetPositions = TargetIntakeRobotPositionCalculator.getTargetIntakePositionFine(
+        targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(
                 robotState.getRobotCurrentPose(),
                 blockPos
         );

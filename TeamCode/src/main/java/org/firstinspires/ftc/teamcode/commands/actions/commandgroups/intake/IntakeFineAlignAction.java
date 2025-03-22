@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.TargetIntakeRobotPositionCalculator;
+import org.firstinspires.ftc.teamcode.utils.TargetRobotPoseCalculator;
 
 import java.util.function.DoubleSupplier;
 
@@ -28,7 +28,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     private double[] targetPositions;
 
     /**
-     * Creates a new IntakeFineAlignAction
+     * Creates a new IntakeFineAlignAction and allows you to specify the claw rotation
      *
      * @param drive                the drive subsystem
      * @param intake               the intake subsystem
@@ -39,7 +39,10 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                  DoubleSupplier clawRotationSupplier,
                                  RobotState robotState) {
         this.robotState = robotState;
-        targetPositions = new double[4];
+        targetPositions = new double[5];
+        if (clawRotationSupplier == null) {
+            clawRotationSupplier = () -> targetPositions[4];
+        }
         addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
@@ -56,6 +59,17 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
         );
     }
 
+    /**
+     * Creates a new IntakeFineAlignAction and calculates claw rotation based on block orientation
+     *
+     * @param drive                the drive subsystem
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     */
+    public IntakeFineAlignAction(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
+        this(drive, intake, null, robotState);
+    }
+
     @Override
     public void initialize() {
         super.initialize();
@@ -65,7 +79,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
         }
 
         Waypoint blockPos = robotState.getAbsoluteBlockPosition().getAbsoluteBlockPosition();
-        targetPositions = TargetIntakeRobotPositionCalculator.getTargetIntakePositionFine(robotState.getRobotCurrentPose(), blockPos);
+        targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
     }
 
     @Override

@@ -408,6 +408,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
         telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
+        telemetry.addData("Claw Orientation", robotState.getIntakeClawRotation());
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
 //        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());

@@ -8,8 +8,9 @@ import team.techtigers.core.paths.geometry.Point;
  * robot position and slide distance that the robot and slides should go to in order to pick up
  * the block.
  */
-public class TargetIntakeRobotPositionCalculator {
-    public static double[] getTargetIntakePositionFine(Waypoint robotPose, Waypoint blockPose) {
+public class TargetRobotPoseCalculator {
+    // TODO: add comment
+    public static double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {
         Point robotVector = robotPose.getPoint();
         Point blockVector = blockPose.getPoint();
         Point robotToBlockVector = blockVector.minus(robotVector);
@@ -26,6 +27,8 @@ public class TargetIntakeRobotPositionCalculator {
                 robotPose.getHeading()
         );
 
-        return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
+        double clawOrientation = (blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 360) % 180;
+
+        return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance, clawOrientation};
     }
 }
