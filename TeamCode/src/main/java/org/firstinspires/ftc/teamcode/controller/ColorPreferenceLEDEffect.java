@@ -23,6 +23,9 @@ public class ColorPreferenceLEDEffect implements ControllerEffect {
         this.robotState = robotState;
     }
 
+    /**
+     * Updates the effect on the gamepad LEDs based on the color preference
+     */
     @Override
     public void updateEffect() {
         switch (robotState.getBlockColorPreference()) {
