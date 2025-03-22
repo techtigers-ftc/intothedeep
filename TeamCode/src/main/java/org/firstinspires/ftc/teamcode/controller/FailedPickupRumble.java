@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 /**
  * Informs the manipulator if the robot failed to pick up a block
  */
-public class FailedPickupRumble implements Rumble{
+public class FailedPickupRumble implements ControllerEffect {
     private IntakeState previousIntakeState;
     private final RobotState robotState;
     private final GamepadEx gamepad;
@@ -29,12 +29,12 @@ public class FailedPickupRumble implements Rumble{
      * Rumbles in two short blips if the robot failed an intake
      */
     @Override
-    public void updateRumble() {
+    public void updateEffect() {
         boolean pickedUpBlock = previousIntakeState == IntakeState.READY_TO_PICKUP &&
                 robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER;
         boolean noBlockInIntake = robotState.getBlockPosition() != RobotBlockPosition.INTAKE;
         if(pickedUpBlock && noBlockInIntake) {
-            runRumble();
+            runEffect();
         }
 
         previousIntakeState = robotState.getIntakeState();
@@ -44,7 +44,7 @@ public class FailedPickupRumble implements Rumble{
      * Runs two short blips of rumble
      */
     @Override
-    public void runRumble() {
+    public void runEffect() {
         gamepad.gamepad.rumbleBlips(2);
     }
 }

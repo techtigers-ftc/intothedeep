@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.controller;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * Rumbles the controllers when the driver toggles the break beam
  */
-public class ToggleBreakBeamRumble implements Rumble{
+public class ToggleBreakBeamRumble implements ControllerEffect {
     private boolean breakBeamWasEnabled;
     private final GamepadEx gamepad;
     private final RobotState robotState;
@@ -28,9 +27,9 @@ public class ToggleBreakBeamRumble implements Rumble{
      * Rumbles if the driver toggles the break beam
      */
     @Override
-    public void updateRumble() {
+    public void updateEffect() {
         if(robotState.isBreakBeamEnabled() != breakBeamWasEnabled){
-            runRumble();
+            runEffect();
         }
 
         breakBeamWasEnabled = robotState.isBreakBeamEnabled();
@@ -40,7 +39,7 @@ public class ToggleBreakBeamRumble implements Rumble{
      * Runs a short blip of rumble
      */
     @Override
-    public void runRumble() {
+    public void runEffect() {
         if(robotState.isBreakBeamEnabled()){
             gamepad.gamepad.rumbleBlips(1);
         } else {

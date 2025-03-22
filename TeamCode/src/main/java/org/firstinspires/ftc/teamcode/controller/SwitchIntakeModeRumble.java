@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.controller;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * Rumbles if the driver changes the intake mode (manual or automatic)
  */
-public class SwitchIntakeModeRumble implements Rumble {
+public class SwitchIntakeModeRumble implements ControllerEffect {
     private boolean manualIntakeSelected;
     private final GamepadEx gamepad;
     private final RobotState robotState;
@@ -28,9 +27,9 @@ public class SwitchIntakeModeRumble implements Rumble {
      * Rumbles if the driver changes the intake mode
      */
     @Override
-    public void updateRumble() {
+    public void updateEffect() {
         if(robotState.isManualIntakeSelected() != manualIntakeSelected){
-            runRumble();
+            runEffect();
         }
 
         manualIntakeSelected = robotState.isManualIntakeSelected();
@@ -40,7 +39,7 @@ public class SwitchIntakeModeRumble implements Rumble {
      * Runs a short blip of rumble
      */
     @Override
-    public void runRumble() {
+    public void runEffect() {
         if(robotState.isManualIntakeSelected()){
             gamepad.gamepad.rumbleBlips(2);
         } else {

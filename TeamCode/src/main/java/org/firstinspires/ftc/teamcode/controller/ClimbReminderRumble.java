@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A rumble that reminds the drivers to climb
  */
-public class ClimbReminderRumble implements Rumble {
+public class ClimbReminderRumble implements ControllerEffect {
     private boolean hasRumbled = false;
     private final RobotState robotState;
     private final GamepadEx gamepad;
@@ -27,10 +27,10 @@ public class ClimbReminderRumble implements Rumble {
      * Runs two short blips of rumble if the drivers are running out of time to climb
      */
     @Override
-    public void updateRumble() {
+    public void updateEffect() {
         boolean needToClimb = robotState.getRunTime() / 1000 >= 105;
         if (needToClimb && !robotState.getIsAscending() && !hasRumbled) {
-            runRumble();
+            runEffect();
             hasRumbled = true;
         }
     }
@@ -39,7 +39,7 @@ public class ClimbReminderRumble implements Rumble {
      * Runs two long blips
      */
     @Override
-    public void runRumble() {
+    public void runEffect() {
         gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
                 .addStep(1, 1, 500)
                 .addStep(0, 0, 500)

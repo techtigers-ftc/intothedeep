@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.controller.ClimbReminderRumble;
 import org.firstinspires.ftc.teamcode.controller.EndgameRumble;
 import org.firstinspires.ftc.teamcode.controller.FailedPickupRumble;
-import org.firstinspires.ftc.teamcode.controller.Rumble;
+import org.firstinspires.ftc.teamcode.controller.ControllerEffect;
 import org.firstinspires.ftc.teamcode.controller.SwitchIntakeModeRumble;
 import org.firstinspires.ftc.teamcode.controller.ToggleBreakBeamRumble;
 import org.firstinspires.ftc.teamcode.controller.VisionAlignmentRumble;
@@ -20,7 +20,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem to control the rumbles and LEDs of the controllers
  */
 public class ControllerSubsystem extends CloseableSubsystem {
-    private final ArrayList<Rumble> rumbles;
+    private final ArrayList<ControllerEffect> controllerEffects;
     private final RobotState robotState;
     private final GamepadEx driverGamepad;
     private final GamepadEx manipulatorGamepad;
@@ -36,17 +36,17 @@ public class ControllerSubsystem extends CloseableSubsystem {
         this.driverGamepad = driverGamepad;
         this.manipulatorGamepad = manipulatorGamepad;
 
-        rumbles = new ArrayList<>();
-        rumbles.add(new EndgameRumble(driverGamepad, robotState));
-        rumbles.add(new EndgameRumble(manipulatorGamepad, robotState));
+        controllerEffects = new ArrayList<>();
+        controllerEffects.add(new EndgameRumble(driverGamepad, robotState));
+        controllerEffects.add(new EndgameRumble(manipulatorGamepad, robotState));
 
-        rumbles.add(new ClimbReminderRumble(driverGamepad, robotState));
-        rumbles.add(new ClimbReminderRumble(manipulatorGamepad, robotState));
+        controllerEffects.add(new ClimbReminderRumble(driverGamepad, robotState));
+        controllerEffects.add(new ClimbReminderRumble(manipulatorGamepad, robotState));
 
-        rumbles.add(new FailedPickupRumble(manipulatorGamepad, robotState));
-        rumbles.add(new VisionAlignmentRumble(driverGamepad, robotState));
-        rumbles.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));
-        rumbles.add(new SwitchIntakeModeRumble(manipulatorGamepad, robotState));
+        controllerEffects.add(new FailedPickupRumble(manipulatorGamepad, robotState));
+        controllerEffects.add(new VisionAlignmentRumble(driverGamepad, robotState));
+        controllerEffects.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));
+        controllerEffects.add(new SwitchIntakeModeRumble(manipulatorGamepad, robotState));
     }
 
     @Override
@@ -59,8 +59,8 @@ public class ControllerSubsystem extends CloseableSubsystem {
      * Handles the rumble effects for the controllers
      */
     private void handleRumbleEffects() {
-        for (Rumble rumble : rumbles) {
-            rumble.updateRumble();
+        for (ControllerEffect controllerEffect : controllerEffects) {
+            controllerEffect.updateEffect();
         }
     }
 
