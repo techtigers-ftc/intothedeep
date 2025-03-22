@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -24,7 +25,6 @@ public class VisionAllignmentRumble extends Rumble {
      **/
     public VisionAllignmentRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
         super(manipulatorGamepad, robotState);
-
     }
 
 
@@ -40,7 +40,10 @@ public class VisionAllignmentRumble extends Rumble {
 
     @Override
     public void runRumble() {
-        double lateral = robotState.getBlockLateralCoarse();
+        Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
+        Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
+        double lateral = robotState.getAbsoluteBlockCoordinates().getX() * robotI.getXComponent()
+                + robotState.getAbsoluteBlockCoordinates().getY() * robotI.getYComponent();
         if(lateral < 0) {
             manipulatorGamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                     .addStep(0, calculateRumbleIntensity(lateral), Gamepad.RUMBLE_DURATION_CONTINUOUS)
