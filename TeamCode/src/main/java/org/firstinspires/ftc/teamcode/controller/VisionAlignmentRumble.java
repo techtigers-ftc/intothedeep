@@ -11,17 +11,20 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 /**
  * A rumble that tells the manipulator which side of the block is relative to the robot
  **/
-public class VisionAlignmentRumble extends Rumble {
+public class VisionAlignmentRumble implements Rumble {
+    private final RobotState robotState;
+    private final GamepadEx gamepad;
     private IntakeState currentIntakeState;
 
     /**
      * Constructor for VisionAlignmentRumble class
      *
-     * @param manipulatorGamepad Gamepad for manipulator
-     * @param robotState         The robot state to use
+     * @param gamepad    Gamepad to rumble
+     * @param robotState The robot state to use
      **/
-    public VisionAlignmentRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
-        super(manipulatorGamepad, robotState);
+    public VisionAlignmentRumble(GamepadEx gamepad, RobotState robotState) {
+        this.robotState = robotState;
+        this.gamepad = gamepad;
     }
 
 
@@ -52,11 +55,11 @@ public class VisionAlignmentRumble extends Rumble {
         double lateral = robotAdjustedX - blockAdjustedX;
         RobotLog.dd("Vision Rumble", "lateral: " + lateral);
         if (lateral > 0) {
-            gamepad1.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
+            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                     .addStep(0, lateral > 0.75 ? 1 : 0, 50)
                     .build());
         } else {
-            gamepad1.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
+            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                     .addStep(lateral < -0.75 ? 0.5 : 0, 0, 50)
                     .build());
         }

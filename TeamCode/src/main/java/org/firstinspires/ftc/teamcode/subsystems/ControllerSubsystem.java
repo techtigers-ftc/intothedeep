@@ -37,8 +37,12 @@ public class ControllerSubsystem extends CloseableSubsystem {
         this.manipulatorGamepad = manipulatorGamepad;
 
         rumbles = new ArrayList<>();
-        rumbles.add(new EndgameRumble(driverGamepad, manipulatorGamepad, robotState));
-        rumbles.add(new ClimbReminderRumble(driverGamepad, manipulatorGamepad, robotState));
+        rumbles.add(new EndgameRumble(driverGamepad, robotState));
+        rumbles.add(new EndgameRumble(manipulatorGamepad, robotState));
+
+        rumbles.add(new ClimbReminderRumble(driverGamepad, robotState));
+        rumbles.add(new ClimbReminderRumble(manipulatorGamepad, robotState));
+
         rumbles.add(new FailedPickupRumble(manipulatorGamepad, robotState));
         rumbles.add(new VisionAlignmentRumble(driverGamepad, robotState));
         rumbles.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));

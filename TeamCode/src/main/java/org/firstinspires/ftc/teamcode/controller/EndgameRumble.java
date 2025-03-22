@@ -8,16 +8,18 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * Rumbles the controllers for 2 seconds when the endgame starts
  */
-public class EndgameRumble extends Rumble {
+public class EndgameRumble implements Rumble {
     private boolean hasRumbled = false;
+    private final RobotState robotState;
+    private final GamepadEx gamepad;
     /**
      * Constructor for the EndgameRumble class
-     * @param gamepad1 The first gamepad to use
-     * @param gamepad2 The second gamepad to use
+     * @param gamepad the gamepad to rumble
      * @param robotState The state of the robot
      */
-    public EndgameRumble(GamepadEx gamepad1, GamepadEx gamepad2, RobotState robotState) {
-        super(gamepad1, gamepad2, robotState);
+    public EndgameRumble(GamepadEx gamepad, RobotState robotState) {
+        this.gamepad = gamepad;
+        this.robotState = robotState;
     }
 
     /**
@@ -36,12 +38,8 @@ public class EndgameRumble extends Rumble {
      * Runs the rumble effect on both controllers for 2 seconds
      */
     @Override
-    protected void runRumble() {
-        gamepad1.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
-                .addStep(1, 1, 2000)
-                .build()
-        );
-        gamepad2.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
+    public void runRumble() {
+        gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
                 .addStep(1, 1, 2000)
                 .build()
         );

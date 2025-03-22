@@ -7,18 +7,20 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * A rumble that reminds the drivers to climb
  */
-public class ClimbReminderRumble extends Rumble {
+public class ClimbReminderRumble implements Rumble {
     private boolean hasRumbled = false;
+    private final RobotState robotState;
+    private final GamepadEx gamepad;
 
     /**
      * Constructor for the ClimbReminderRumble class
      *
-     * @param gamepad1   The first gamepad to use
-     * @param gamepad2   The second gamepad to use
+     * @param gamepad   The gamepad to rumble
      * @param robotState The state of the robot
      */
-    public ClimbReminderRumble(GamepadEx gamepad1, GamepadEx gamepad2, RobotState robotState) {
-        super(gamepad1, gamepad2, robotState);
+    public ClimbReminderRumble(GamepadEx gamepad, RobotState robotState) {
+        this.gamepad = gamepad;
+        this.robotState = robotState;
     }
 
     /**
@@ -37,14 +39,14 @@ public class ClimbReminderRumble extends Rumble {
      * Runs two long blips
      */
     @Override
-    protected void runRumble() {
-        gamepad1.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
+    public void runRumble() {
+        gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
                 .addStep(1, 1, 500)
                 .addStep(0, 0, 500)
                 .addStep(1, 1, 500)
                 .build()
         );
-        gamepad2.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
+        gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
                 .addStep(1, 1, 500)
                 .addStep(0, 0, 500)
                 .addStep(1, 1, 500)

@@ -8,16 +8,19 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * Rumbles if the driver changes the intake mode (manual or automatic)
  */
-public class SwitchIntakeModeRumble extends Rumble {
+public class SwitchIntakeModeRumble implements Rumble {
     private boolean manualIntakeSelected;
+    private final GamepadEx gamepad;
+    private final RobotState robotState;
 
     /**
      * Constructor for the SwitchIntakeModeRumble class
-     * @param manipulatorGamepad the manipulators gamepad
+     * @param gamepad the gamepad to rumble
      * @param robotState the state of the robot
      */
-    public SwitchIntakeModeRumble(GamepadEx manipulatorGamepad, RobotState robotState) {
-        super(manipulatorGamepad, robotState);
+    public SwitchIntakeModeRumble(GamepadEx gamepad, RobotState robotState) {
+        this.gamepad = gamepad;
+        this.robotState = robotState;
         manualIntakeSelected = robotState.isManualIntakeSelected();
     }
 
@@ -37,11 +40,11 @@ public class SwitchIntakeModeRumble extends Rumble {
      * Runs a short blip of rumble
      */
     @Override
-    protected void runRumble() {
+    public void runRumble() {
         if(robotState.isManualIntakeSelected()){
-            gamepad1.gamepad.rumbleBlips(2);
+            gamepad.gamepad.rumbleBlips(2);
         } else {
-            gamepad1.gamepad.rumbleBlips(1);
+            gamepad.gamepad.rumbleBlips(1);
         }
     }
 }
