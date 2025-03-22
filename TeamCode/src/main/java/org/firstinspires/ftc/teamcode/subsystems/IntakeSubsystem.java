@@ -29,7 +29,8 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 40;
-    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
+    // Zero position: Wrist Pitch: 165, Wrist Rotation: 172, Claw Rotation: 90,
+    // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
 
     public static final double SLIDES_MAX = 18.75;
@@ -61,8 +62,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     public static double CLAW_OPEN_POSITION = 0.68;
-    public static double CLAW_LOOSE_POSITION = 0.89;
-    public static double CLAW_CLOSED_POSITION = 0.92;
+    public static double CLAW_LOOSE_POSITION = 0.97;
+    public static double CLAW_CLOSED_POSITION = 1;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
@@ -131,8 +132,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         leftSlideMotor.setDirection(DcMotor.Direction.FORWARD);
         rightSlideMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        rightWrist.setDirection(Servo.Direction.FORWARD);
-        leftWrist.setDirection(Servo.Direction.REVERSE);
+        rightWrist.setDirection(Servo.Direction.REVERSE);
+        leftWrist.setDirection(Servo.Direction.FORWARD);
 
         claw.setDirection(Servo.Direction.REVERSE);
         clawRotation.setDirection(Servo.Direction.REVERSE);
