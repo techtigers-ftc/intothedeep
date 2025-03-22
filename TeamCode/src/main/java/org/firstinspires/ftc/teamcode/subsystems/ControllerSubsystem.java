@@ -53,13 +53,6 @@ public class ControllerSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-        handleRumbleEffects();
-    }
-
-    /**
-     * Handles the rumble effects for the controllers
-     */
-    private void handleRumbleEffects() {
         for (ControllerEffect controllerEffect : controllerEffects) {
             controllerEffect.updateEffect();
         }
