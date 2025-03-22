@@ -40,8 +40,11 @@ public class AscendOneLevelCommand extends CommandBase {
     public void execute() {
         dropper.leftSlideMotor.setPower(-1);
         dropper.rightSlideMotor.setPower(-1);
-        drive.backLeft.setPower(-1);
-        drive.backRight.setPower(-1);
+        drive.backLeft.setPower(1);
+        drive.backRight.setPower(1);
+        drive.frontLeft.setPower(1);
+        drive.frontRight.setPower(1);
+
 
         if (robotState.getIsAscending()
                 && dropper.getCurrentSlidePositionInches() < AscentSubsystem.JACKS_SLIDES_DISENGAGE_HEIGHT
@@ -61,5 +64,7 @@ public class AscendOneLevelCommand extends CommandBase {
         dropper.rightSlideMotor.setPower(0);
         drive.backLeft.setPower(0);
         drive.backRight.setPower(0);
+        drive.frontLeft.setPower(0);
+        drive.frontRight.setPower(0);
     }
 }
