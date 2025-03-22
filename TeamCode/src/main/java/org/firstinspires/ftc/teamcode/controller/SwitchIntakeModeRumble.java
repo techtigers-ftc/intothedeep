@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.controller;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -11,10 +12,19 @@ public class SwitchIntakeModeRumble implements ControllerEffect {
     private boolean manualIntakeSelected;
     private final GamepadEx gamepad;
     private final RobotState robotState;
+    private final Gamepad.RumbleEffect enableEffect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 100)
+            .addStep(0, 0, 100)
+            .addStep(1, 1, 100)
+            .build();
+    private final Gamepad.RumbleEffect disableEffect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 100)
+            .build();
 
     /**
      * Constructor for the SwitchIntakeModeRumble class
-     * @param gamepad the gamepad to rumble
+     *
+     * @param gamepad    the gamepad to rumble
      * @param robotState the state of the robot
      */
     public SwitchIntakeModeRumble(GamepadEx gamepad, RobotState robotState) {
@@ -28,7 +38,7 @@ public class SwitchIntakeModeRumble implements ControllerEffect {
      */
     @Override
     public void updateEffect() {
-        if(robotState.isManualIntakeSelected() != manualIntakeSelected){
+        if (robotState.isManualIntakeSelected() != manualIntakeSelected) {
             runEffect();
         }
 
@@ -39,10 +49,11 @@ public class SwitchIntakeModeRumble implements ControllerEffect {
      * Runs a short blip of rumble
      */
     private void runEffect() {
-        if(robotState.isManualIntakeSelected()){
-            gamepad.gamepad.rumbleBlips(2);
+        if (robotState.isManualIntakeSelected()) {
+            gamepad.gamepad.runRumbleEffect(enableEffect);
         } else {
-            gamepad.gamepad.rumbleBlips(1);
+            gamepad.gamepad.runRumbleEffect(disableEffect);
+
         }
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.controller;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -11,6 +12,11 @@ public class ClimbReminderRumble implements ControllerEffect {
     private boolean hasRumbled = false;
     private final RobotState robotState;
     private final GamepadEx gamepad;
+    private final Gamepad.RumbleEffect climbRumble = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 500)
+            .addStep(0, 0, 500)
+            .addStep(1, 1, 500)
+            .build();
 
     /**
      * Constructor for the ClimbReminderRumble class
@@ -30,12 +36,7 @@ public class ClimbReminderRumble implements ControllerEffect {
     public void updateEffect() {
         boolean needToClimb = robotState.getRunTime() / 1000 >= 105;
         if (needToClimb && !robotState.getIsAscending() && !hasRumbled) {
-            gamepad.gamepad.runRumbleEffect(new com.qualcomm.robotcore.hardware.Gamepad.RumbleEffect.Builder()
-                    .addStep(1, 1, 500)
-                    .addStep(0, 0, 500)
-                    .addStep(1, 1, 500)
-                    .build()
-            );
+            gamepad.gamepad.runRumbleEffect(climbRumble);
             hasRumbled = true;
         }
     }

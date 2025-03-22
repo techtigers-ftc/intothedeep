@@ -12,6 +12,9 @@ public class EndgameRumble implements ControllerEffect {
     private boolean hasRumbled = false;
     private final RobotState robotState;
     private final GamepadEx gamepad;
+    private final Gamepad.RumbleEffect rumbleEffect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 2000)
+            .build();
     /**
      * Constructor for the EndgameRumble class
      * @param gamepad the gamepad to rumble
@@ -30,10 +33,7 @@ public class EndgameRumble implements ControllerEffect {
         boolean endgameStarted = robotState.getRunTime() / 1000 >= 90;
         if(endgameStarted && !hasRumbled) {
             hasRumbled = true;
-            gamepad.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
-                    .addStep(1, 1, 2000)
-                    .build()
-            );
+            gamepad.gamepad.runRumbleEffect(rumbleEffect);
         }
     }
 }

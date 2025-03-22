@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.controller;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
@@ -11,6 +12,14 @@ public class ToggleBreakBeamRumble implements ControllerEffect {
     private boolean breakBeamWasEnabled;
     private final GamepadEx gamepad;
     private final RobotState robotState;
+    private final Gamepad.RumbleEffect enableEffect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 100)
+            .addStep(0, 0, 100)
+            .addStep(1, 1, 100)
+            .build();
+    private final Gamepad.RumbleEffect disableEffect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1, 1, 100)
+            .build();
 
     /**
      * Constructs a ToggleBreakBeamRumble
@@ -40,9 +49,9 @@ public class ToggleBreakBeamRumble implements ControllerEffect {
      */
     private void runEffect() {
         if(robotState.isBreakBeamEnabled()){
-            gamepad.gamepad.rumbleBlips(1);
+            gamepad.gamepad.runRumbleEffect(enableEffect);
         } else {
-            gamepad.gamepad.rumbleBlips(2);
+            gamepad.gamepad.runRumbleEffect(disableEffect);
         }
     }
 }
