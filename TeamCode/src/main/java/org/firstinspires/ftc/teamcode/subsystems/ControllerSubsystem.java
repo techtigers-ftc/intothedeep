@@ -21,9 +21,6 @@ import team.techtigers.base.CloseableSubsystem;
  */
 public class ControllerSubsystem extends CloseableSubsystem {
     private final ArrayList<ControllerEffect> controllerEffects;
-    private final RobotState robotState;
-    private final GamepadEx driverGamepad;
-    private final GamepadEx manipulatorGamepad;
     /**
      * Constructor for the ControllerSubsystem
      *
@@ -32,9 +29,6 @@ public class ControllerSubsystem extends CloseableSubsystem {
      * @param robotState The robot state to use
      */
     public ControllerSubsystem(GamepadEx driverGamepad, GamepadEx manipulatorGamepad, RobotState robotState) {
-        this.robotState = robotState;
-        this.driverGamepad = driverGamepad;
-        this.manipulatorGamepad = manipulatorGamepad;
 
         controllerEffects = new ArrayList<>();
         controllerEffects.add(new EndgameRumble(driverGamepad, robotState));
