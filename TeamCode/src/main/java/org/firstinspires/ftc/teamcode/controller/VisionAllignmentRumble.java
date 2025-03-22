@@ -48,18 +48,20 @@ public class VisionAllignmentRumble extends Rumble {
         RobotLog.dd("Vision Rumble", "lateral: " + lateral);
         if (lateral > 0) {
             gamepad1.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
-                    .addStep(0, calculateRumbleIntensity(lateral), 50)
+//                    .addStep(0, calculateRumbleIntensity(lateral), 50)
+                    .addStep(0, lateral > 0.75 ? 1 : 0, 50)
                     .build());
         } else {
             gamepad1.gamepad.runRumbleEffect(new Gamepad.RumbleEffect.Builder()
-                    .addStep(calculateRumbleIntensity(lateral), 0, 50)
+//                    .addStep(calculateRumbleIntensity(lateral), 0, 50)
+                    .addStep(lateral < -0.75 ? 0.5 : 0, 0, 50)
                     .build());
         }
     }
 
-    private double calculateRumbleIntensity(double lateral) {
-        return 0.5 / (1 + Math.exp(-1.5 * Math.abs(lateral)));
-    }
+//    private double calculateRumbleIntensity(double lateral) {
+//        return 0.5 / (1 + Math.exp(-1.5 * Math.abs(lateral)));
+//    }
 }
 
 
