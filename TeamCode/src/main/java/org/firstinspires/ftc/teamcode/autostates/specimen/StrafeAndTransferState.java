@@ -18,6 +18,15 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
  * A state that strafes to the second colored sample while transferring a colored sample to the dropper
  */
 public class StrafeAndTransferState extends DriveStateBase {
+    /**
+     * Constructor for StrafeAndTransferState
+     * @param name name of the state
+     * @param drive drive subsystem
+     * @param intake intake subsystem
+     * @param dropper dropper subsystem
+     * @param robotState robot state
+     * @param timeout timeout for the state
+     */
     public StrafeAndTransferState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, double timeout) {
         super(name, drive, robotState, timeout);
         addCommands(

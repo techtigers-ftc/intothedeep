@@ -15,8 +15,20 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
+/**
+ * A state that aligns over the first colored sample while dropping a colored sample into the observation zone
+ */
 public class IntakeAndDropFirstColoredSampleState extends ParallelCommandGroupState<AutoState> {
     RobotState robotState;
+
+    /**
+     * Constructs a new IntakeAndDropFirstColoredSampleState
+     * @param name the name of the state
+     * @param drive the drive subsystem
+     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param robotState the robot state
+     */
     public IntakeAndDropFirstColoredSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         addCommands(

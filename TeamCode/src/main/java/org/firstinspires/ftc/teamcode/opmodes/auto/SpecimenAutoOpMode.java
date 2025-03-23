@@ -97,7 +97,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 drive,
                 intake,
                 dropper,
-                robotState
+                robotState,
+                3
         );
         SpecimenDriveStateConfigurator.configFirstSampleIntake(driveToFirstSampleIntake);
 
