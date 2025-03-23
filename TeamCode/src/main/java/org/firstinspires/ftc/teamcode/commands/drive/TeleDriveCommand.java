@@ -46,6 +46,7 @@ public class TeleDriveCommand extends TimeoutCommand {
     /**
      * Constructs a new TeleDriveCommand, I apologize for the number of constructor parameters,
      * I'm too lazy to fix this
+     * Its not too many deal with it
      *
      * @param drive             The drive subsystem
      * @param translationalPIDF The translational PIDF coefficients
@@ -86,34 +87,6 @@ public class TeleDriveCommand extends TimeoutCommand {
         recoveryCounter = 0;
         addRequirements(drive);
     }
-
-    /**
-     * Overload constructor, given a point instead of suppliers for x, heading, and y
-     *
-     * @param drive             The drive subsystem
-     * @param translationalPIDF The translational PIDF coefficients
-     * @param drivePIDF         The drive PIDF coefficients
-     * @param headingPIDF       The heading PIDF coefficients
-     * @param targetPosition    The target position
-     * @param robotState        The robot state
-     * @param tolerance         The tolerance for the distance to the target
-     * @param angleTolerance    The tolerance for the angle to the target
-     * @param timeout           The timeout for the command
-     */
-    public TeleDriveCommand(DriveSubsystem drive,
-                            CustomPIDFCoefficients translationalPIDF,
-                            CustomFilteredPIDFCoefficients drivePIDF,
-                            CustomPIDFCoefficients headingPIDF,
-                            Waypoint targetPosition,
-                            RobotState robotState,
-                            double tolerance,
-                            double angleTolerance,
-                            double timeout) {
-        this(drive, translationalPIDF, drivePIDF, headingPIDF,
-                targetPosition::getX, targetPosition::getY, targetPosition::getHeading,
-                robotState, tolerance, angleTolerance, timeout);
-    }
-
 
     @Override
     public void initialize() {
