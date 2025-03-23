@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -43,7 +43,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                 new IntakeCoarseAlignAction(drive, intake, robotState),
                 new WaitCommand(100),
                 new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickUpAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
