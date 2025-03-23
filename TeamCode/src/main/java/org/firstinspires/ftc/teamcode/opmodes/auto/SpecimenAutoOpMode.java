@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstColoredSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
@@ -19,7 +18,6 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropFirstColoredSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropSecondColoredSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
@@ -329,10 +327,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(endState)
 
                 // Drives to the preload and clips it
-                .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
-                .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
+                .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
+                .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
+                // Drives to the first intake if a sample is intaken, goes to the first push if not
+                .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SAMPLE_INTAKE_FAILED)
                 // Drives to the first intake once the preload is clipped
-                .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
                 .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.TIMEOUT)
 
@@ -345,12 +345,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
 
 
-                .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
-                .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
-                // Drives to the first intake if a sample is intaken, goes to the first push if not
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.TIMEOUT)
                 // Intakes the first specimen
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.TIMEOUT)
