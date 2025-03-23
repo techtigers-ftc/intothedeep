@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstColoredSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
