@@ -28,19 +28,19 @@ public class TeleDriveCommand extends TimeoutCommand {
     private final DriveSubsystem drive;
     private final RobotState robotState;
     public Follower follower;
-    private RobotStateLocalizer localizer;
-    private DoubleSupplier xSupplier;
-    private DoubleSupplier ySupplier;
-    private DoubleSupplier headingSupplier;
+    private final RobotStateLocalizer localizer;
+    private final DoubleSupplier xSupplier;
+    private final DoubleSupplier ySupplier;
+    private final DoubleSupplier headingSupplier;
     private PathChain pathChain;
 
     // Primary PIDF Controllers
-    private PIDFController translationalPIDF;
-    private PIDFController headingPIDF;
-    private FilteredPIDFController drivePIDF;
+    private final PIDFController translationalPIDF;
+    private final PIDFController headingPIDF;
+    private final FilteredPIDFController drivePIDF;
 
-    private double tolerance;
-    private double angleTolerance;
+    private final double tolerance;
+    private final double angleTolerance;
     private double recoveryCounter;
 
     /**
