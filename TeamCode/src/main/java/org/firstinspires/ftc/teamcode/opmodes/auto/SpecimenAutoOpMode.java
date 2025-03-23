@@ -226,14 +226,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configSampleDrop(driveToSampleDrop);
 
-        ClipAndTrackState intakeSample = new ClipAndTrackState(
-                "intakeSample",
-                drive,
-                intake,
-                dropper,
-                robotState
-        );
-
         EndState endState = new EndState("end");
 
         // Create the state machine
@@ -258,7 +250,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToFourthSpecimenDrop)
                 .addState(driveToSpecimenPark)
                 .addState(driveToSampleDrop)
-                .addState(intakeSample)
                 .addState(endState)
 
                 // Drives to the preload and clips it
@@ -331,13 +322,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveChamberPreload);
-
-        if (doSample()) {
-             stateMachine.addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE);
-        } else {
-             stateMachine.addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_COMPLETE);
-        }
-
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
