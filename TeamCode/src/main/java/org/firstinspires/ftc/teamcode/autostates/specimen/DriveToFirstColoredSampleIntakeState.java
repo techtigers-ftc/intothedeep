@@ -32,8 +32,8 @@ public class DriveToFirstColoredSampleIntakeState extends DriveStateBase {
             autoDriveCommand,
             new DropperWallIntakeNoTransferAction(dropper, robotState),
             new SequentialCommandGroup(
-                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 0), //TODO: Find the right X
-                new IntakeReadyToPickupAction(intake, robotState, () -> 10) //TODO: Find the right slide position
+                new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 95),
+                new IntakeReadyToPickupAction(intake, robotState, () -> 16)
             )
         );
     }

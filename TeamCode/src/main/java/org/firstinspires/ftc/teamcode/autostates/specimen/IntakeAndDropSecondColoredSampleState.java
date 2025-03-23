@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFineAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -34,6 +35,7 @@ public class IntakeAndDropSecondColoredSampleState extends ParallelCommandGroupS
         super(name);
         addCommands(
             new SequentialCommandGroup(
+                    new IntakeReadyToPickupAction(intake, robotState, () -> 16),
                     new WaitUntilCommand(robotState::hasBlockBeenDetected),
                     new IntakeFineAlignAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
             ),
