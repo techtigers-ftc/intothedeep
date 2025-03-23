@@ -383,33 +383,33 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Intake State", robotState.getIntakeState());
-        telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Intake Slide POS",
-                intake.getCurrentSlidePositionInches());
-        telemetry.addData("Dropper Slide POS",
-                dropper.getCurrentSlidePositionInches());
-        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
-        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
-        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
-//        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
-//        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
+//        telemetry.addData("Intake State", robotState.getIntakeState());
+//        telemetry.addData("Dropper State", robotState.getDropperState());
+//        telemetry.addData("Intake Slide POS",
+//                intake.getCurrentSlidePositionInches());
+//        telemetry.addData("Dropper Slide POS",
+//                dropper.getCurrentSlidePositionInches());
+//        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
+//        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
+//        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
+//        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
+////        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
+////        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
+////        telemetry.addLine();
+//        telemetry.addData("Velocity: ", robotState.getRobotVelocity().getPoint().magnitude());
+//        telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
 //        telemetry.addLine();
-        telemetry.addData("Velocity: ", robotState.getRobotVelocity().getPoint().magnitude());
-        telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
-        telemetry.addLine();
-//        telemetry.addData("Runtime: ", robotState.getRunTime());
-//        telemetry.addData("Voltage: ", robotState.getVoltage());
-//        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
+////        telemetry.addData("Runtime: ", robotState.getRunTime());
+////        telemetry.addData("Voltage: ", robotState.getVoltage());
+////        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
+////        telemetry.addLine();
+//        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
+//        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
+//        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
+//        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
 //        telemetry.addLine();
-        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
-        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
-        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
-        telemetry.addLine();
+        telemetry.addData("Absolute Block Orientation", robotState.getAbsoluteBlockPosition().getHeading());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
-        telemetry.addData("Claw Orientation", robotState.getIntakeClawRotation());
         telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
