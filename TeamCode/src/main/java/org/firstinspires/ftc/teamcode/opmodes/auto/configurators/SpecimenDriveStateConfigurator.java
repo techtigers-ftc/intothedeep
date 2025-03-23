@@ -18,15 +18,15 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
  * A class used to configure Specimen Drive States.
  */
 public class SpecimenDriveStateConfigurator {
-    private static final double HUMUNGOUS_TOLERANCE = 8;
-    private static final double LARGE_TOLERANCE = 5;
-    private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
-    private static final double MEDIUM_TOLERANCE = 4;
-    private static final double SMALL_TOLERANCE = 3;
-    private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
-    private static final double MINISCULE_TOLERANCE = 1.25;
-    private static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
-    private static final double MICROSCOPIC_TOLERANCE = 1;
+    public static final double HUMUNGOUS_TOLERANCE = 8;
+    public static final double LARGE_TOLERANCE = 5;
+    public static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
+    public static final double MEDIUM_TOLERANCE = 4;
+    public static final double SMALL_TOLERANCE = 3;
+    public static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
+    public static final double MINISCULE_TOLERANCE = 1.25;
+    public static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
+    public static final double MICROSCOPIC_TOLERANCE = 1;
 
     /**
      * Configures the DriveToPreloadDropState.
