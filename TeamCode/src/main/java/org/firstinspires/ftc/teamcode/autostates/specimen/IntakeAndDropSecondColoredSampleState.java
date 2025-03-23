@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFineAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -15,16 +16,31 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
-public class IntakeAndDropFirstSampleState extends ParallelCommandGroupState<AutoState> {
+/**
+ * A state that aligns over the second colored sample while dropping a colored sample into the observation zone
+ */
+public class IntakeAndDropSecondColoredSampleState extends ParallelCommandGroupState<AutoState> {
     RobotState robotState;
-    public IntakeAndDropFirstSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+
+    /**
+     * Constructs a new IntakeAndDropSecondColoredSampleState
+     * @param name the name of the state
+     * @param drive the drive subsystem
+     * @param intake the intake subsystem
+     * @param dropper the dropper subsystem
+     * @param robotState the robot state
+     */
+    public IntakeAndDropSecondColoredSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         addCommands(
             new SequentialCommandGroup(
                     new WaitUntilCommand(robotState::hasBlockBeenDetected),
                     new IntakeFineAlignAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
             ),
-            new DropperOpenAction(dropper, 100)
+            new SequentialCommandGroup(
+                new DropperWallIntakeNoTransferAction(dropper, robotState),
+                new DropperOpenAction(dropper, 100)
+            )
         );
     }
 
