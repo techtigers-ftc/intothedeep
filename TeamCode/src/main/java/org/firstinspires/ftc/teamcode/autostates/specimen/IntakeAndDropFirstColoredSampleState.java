@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
-public class IntakeAndDropFirstSampleState extends ParallelCommandGroupState<AutoState> {
+public class IntakeAndDropFirstColoredSampleState extends ParallelCommandGroupState<AutoState> {
     RobotState robotState;
-    public IntakeAndDropFirstSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public IntakeAndDropFirstColoredSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         addCommands(
             new SequentialCommandGroup(

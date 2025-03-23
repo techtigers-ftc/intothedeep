@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
-public class DriveToFirstSampleIntakeState extends DriveStateBase {
-    public DriveToFirstSampleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+public class DriveToFirstColoredSampleIntakeState extends DriveStateBase {
+    public DriveToFirstColoredSampleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState, double timeout) {
         super(name, drive, robotState, timeout);
         addCommands(
             autoDriveCommand,

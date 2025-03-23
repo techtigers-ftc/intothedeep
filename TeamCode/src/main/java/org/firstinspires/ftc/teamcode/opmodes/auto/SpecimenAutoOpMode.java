@@ -10,15 +10,15 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSampleIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstColoredSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropFirstSampleState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropSecondSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropFirstColoredSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropSecondColoredSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
@@ -92,7 +92,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
-        DriveToFirstSampleIntakeState driveToFirstSampleIntake = new DriveToFirstSampleIntakeState(
+        DriveToFirstColoredSampleIntakeState driveToFirstSampleIntake = new DriveToFirstColoredSampleIntakeState(
                 "driveToFirstSampleIntake",
                 drive,
                 intake,
@@ -101,7 +101,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configFirstSampleIntake(driveToFirstSampleIntake);
 
-        IntakeAndDropFirstSampleState intakeAndDropFirstSample = new IntakeAndDropFirstSampleState(
+        IntakeAndDropFirstColoredSampleState intakeAndDropFirstSample = new IntakeAndDropFirstColoredSampleState(
                 "intakeAndDropFirstSample",
                 drive,
                 intake,
@@ -118,7 +118,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configSecondSampleIntake(strafeAndTransfer);
 
-        IntakeAndDropSecondSampleState intakeAndDropSecondSample = new IntakeAndDropSecondSampleState(
+        IntakeAndDropSecondColoredSampleState intakeAndDropSecondSample = new IntakeAndDropSecondColoredSampleState(
                 "intakeAndDropSecondSample",
                 drive,
                 intake,
