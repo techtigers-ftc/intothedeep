@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.TurnAndTransferState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -458,5 +459,12 @@ public class SpecimenDriveStateConfigurator {
                                 .build()
 
         );
+    }
+    public static void configThirdSampleIntake(TurnAndTransferState state) {
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+
+        state.setTargetPosition(128.17, 31.52, Math.toRadians(61));
     }
 }

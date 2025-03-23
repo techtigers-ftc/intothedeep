@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropFirstColo
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropSecondColoredSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.TurnAndTransferState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
@@ -111,6 +112,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
+
         DriveToFirstColoredSampleIntakeState driveToFirstSampleIntake = new DriveToFirstColoredSampleIntakeState(
                 "driveToFirstSampleIntake",
                 drive,
@@ -140,6 +142,24 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
         IntakeAndDropSecondColoredSampleState intakeAndDropSecondSample = new IntakeAndDropSecondColoredSampleState(
                 "intakeAndDropSecondSample",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
+
+        TurnAndTransferState turnAndTransfer = new TurnAndTransferState(
+                "turnAndTransfer",
+                drive,
+                intake,
+                dropper,
+                robotState,
+                3
+        );
+        SpecimenDriveStateConfigurator.configThirdSampleIntake(turnAndTransfer);
+
+        IntakeAndDropSecondColoredSampleState intakeAndDropThirdSample = new IntakeAndDropSecondColoredSampleState(
+                "intakeAndDropThirdSample",
                 drive,
                 intake,
                 dropper,
@@ -308,6 +328,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(intakeAndDropFirstSample)
                 .addState(strafeAndTransfer)
                 .addState(intakeAndDropSecondSample)
+                .addState(turnAndTransfer)
+                .addState(intakeAndDropThirdSample)
                 .addState(firstPush)
                 .addState(driveToSecondPush)
                 .addState(secondPush)
@@ -340,7 +362,11 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(strafeAndTransfer, intakeAndDropSecondSample, AutoState.DRIVE_END)
                 .addTransition(strafeAndTransfer, intakeAndDropSecondSample, AutoState.TIMEOUT)
 
-                .addTransition(intakeAndDropSecondSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(intakeAndDropSecondSample, turnAndTransfer, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(turnAndTransfer, intakeAndDropThirdSample, AutoState.DRIVE_END)
+                .addTransition(turnAndTransfer, intakeAndDropThirdSample, AutoState.TIMEOUT)
+
+                .addTransition(intakeAndDropThirdSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
 
 
 
