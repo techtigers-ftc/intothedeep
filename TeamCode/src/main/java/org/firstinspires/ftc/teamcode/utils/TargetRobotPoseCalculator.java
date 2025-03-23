@@ -31,7 +31,9 @@ public class TargetRobotPoseCalculator {
 
 //        double clawOrientation = (blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 360) % 180;
         double clawOrientation =
-                ((-blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 1170) % 180);
+                (-blockPose.getHeading() + Math.toDegrees(robotPose.getHeading()) + 90);
+        clawOrientation = ((clawOrientation % 180) + 180) % 180;
+//        clawOrientation = Math.floorMod(clawOrientation, 180);
         RobotLog.dd("Claw Debug", "Block Heading: %f Robot Heading: %f Expected Claw Orientation: %f", blockPose.getHeading(), Math.toDegrees(robotPose.getHeading()), clawOrientation);
 
         return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance, clawOrientation};

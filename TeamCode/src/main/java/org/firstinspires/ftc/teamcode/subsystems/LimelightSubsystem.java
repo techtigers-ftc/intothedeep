@@ -257,7 +257,7 @@ class AbsoluteBlockPosition {
             double blockX = blockForwardInches * Math.cos(robotPos.getHeading()) + blockLateralInches * Math.sin(robotPos.getHeading());
             double blockY = blockForwardInches * Math.sin(robotPos.getHeading()) - blockLateralInches * Math.cos(robotPos.getHeading());
             double blockOrientation =
-                    (Math.toDegrees(robotPos.getHeading()) + this.blockOrientation + 450) % 180;
+                    (Math.toDegrees(robotPos.getHeading()) - this.blockOrientation + 450) % 180;
             cachedAbsoluteBlockPosition = robotPos.add(blockX, blockY, blockOrientation);
         }
 
