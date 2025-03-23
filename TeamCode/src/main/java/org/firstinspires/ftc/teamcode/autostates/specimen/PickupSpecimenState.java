@@ -36,7 +36,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         runCounter = 0;
         addCommands(
                 new RawPowerToDistanceDriveAction(drive, robotState, -0.25, 1.5),
-                new DropperCloseAction(dropper, 200),
+                new DropperCloseAction(dropper, 150),
                 new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
         );
     }
