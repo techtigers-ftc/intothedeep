@@ -55,7 +55,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 robotState,
                                 SpecimenDriveStateConfigurator.MEDIUM_TOLERANCE,
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
-                                3
+                                2
                         ),
                         new DropperForwardCarryNoTransferAction(dropper, robotState)
                 ),
@@ -72,7 +72,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 robotState,
                                 SpecimenDriveStateConfigurator.LARGE_TOLERANCE,
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
-                                3
+                                2
                         ),
                         new DropperWallIntakeNoTransferAction(dropper, robotState)
                 )

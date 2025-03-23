@@ -44,7 +44,8 @@ public class TeleDriveCommand extends TimeoutCommand {
     private double recoveryCounter;
 
     /**
-     * Constructs a new TeleDriveCommand
+     * Constructs a new TeleDriveCommand, I apologize for the number of constructor parameters,
+     * I'm too lazy to fix this
      *
      * @param drive             The drive subsystem
      * @param translationalPIDF The translational PIDF coefficients
