@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -28,10 +25,10 @@ import team.techtigers.core.paths.Waypoint;
 public class TeleDriveCommand extends TimeoutCommand {
     private static final String LOG_TAG =
             TeleDriveCommand.class.getSimpleName();
-    public Follower follower;
-    private RobotStateLocalizer localizer;
     private final DriveSubsystem drive;
     private final RobotState robotState;
+    public Follower follower;
+    private RobotStateLocalizer localizer;
     private DoubleSupplier xSupplier;
     private DoubleSupplier ySupplier;
     private DoubleSupplier headingSupplier;
@@ -120,6 +117,7 @@ public class TeleDriveCommand extends TimeoutCommand {
     @Override
     public void initialize() {
         super.initialize();
+        recoveryCounter = 0;
         // Makes sure that all primary PIDF coefficients are set
         if (translationalPIDF == null) {
             throw new IllegalArgumentException("Translational PIDF coefficients not set");
