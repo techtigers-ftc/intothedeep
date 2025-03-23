@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFineAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -13,30 +15,41 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
+import java.util.function.DoubleSupplier;
+
 import team.techtigers.base.statemachine.ParallelCommandGroupState;
 
 /**
- * A state that aligns over the first colored sample while dropping a colored sample into the observation zone
+ * A state that aligns over the second colored sample while dropping a colored sample into the observation zone
  */
-public class IntakeAndDropFirstColoredSampleState extends ParallelCommandGroupState<AutoState> {
+public class IntakeAndDropColoredSampleState extends ParallelCommandGroupState<AutoState> {
     RobotState robotState;
 
     /**
-     * Constructs a new IntakeAndDropFirstColoredSampleState
+     * Constructs a new IntakeAndDropSecondColoredSampleState
      * @param name the name of the state
      * @param drive the drive subsystem
      * @param intake the intake subsystem
      * @param dropper the dropper subsystem
      * @param robotState the robot state
      */
-    public IntakeAndDropFirstColoredSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public IntakeAndDropColoredSampleState(String name,
+                                           DriveSubsystem drive,
+                                           IntakeSubsystem intake,
+                                           DropperSubsystem dropper,
+                                           DoubleSupplier slidePosition,
+                                           RobotState robotState) {
         super(name);
         addCommands(
             new SequentialCommandGroup(
+                    new IntakeReadyToPickupAction(intake, robotState, slidePosition),
                     new WaitUntilCommand(robotState::hasBlockBeenDetected),
                     new IntakeFineAlignAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
             ),
-            new DropperOpenAction(dropper, 100)
+            new SequentialCommandGroup(
+                new DropperWallIntakeNoTransferAction(dropper, robotState),
+                new DropperOpenAction(dropper, 100)
+            )
         );
     }
 
