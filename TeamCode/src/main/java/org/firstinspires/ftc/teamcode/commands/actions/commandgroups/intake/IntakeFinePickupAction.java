@@ -13,7 +13,7 @@ import java.util.function.DoubleSupplier;
 /**
  * Command to align to a block using fine camera vision
  */
-public class IntakeFinePickUpAction extends SequentialCommandGroup {
+public class IntakeFinePickupAction extends SequentialCommandGroup {
     private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
@@ -26,7 +26,7 @@ public class IntakeFinePickUpAction extends SequentialCommandGroup {
      * @param clawRotationSupplier the supplier for the claw rotation
      * @param robotState           the robot state
      */
-    public IntakeFinePickUpAction(DriveSubsystem drive, IntakeSubsystem intake,
+    public IntakeFinePickupAction(DriveSubsystem drive, IntakeSubsystem intake,
                                   DoubleSupplier clawRotationSupplier,
                                   RobotState robotState) {
         this.robotState = robotState;

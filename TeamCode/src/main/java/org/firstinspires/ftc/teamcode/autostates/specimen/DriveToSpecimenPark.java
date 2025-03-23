@@ -23,12 +23,12 @@ public class DriveToSpecimenPark extends DriveStateBase {
      * Constructor for the DriveToPark
      *
      * @param name       The name of the state
-     * @param intake     The intake subsystem
      * @param drive      The drive subsystem
+     * @param intake     The intake subsystem
      * @param dropper    the dropper subsystem
      * @param robotState The robot state
      */
-    public DriveToSpecimenPark(String name, IntakeSubsystem intake, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public DriveToSpecimenPark(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,

@@ -14,22 +14,22 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
 /**
  * A state to pickup a specimen from the wall
  */
-public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> {
+public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            PickupSpecimenState.class.getSimpleName();
+            IntakeSpecimenState.class.getSimpleName();
     private int runCounter;
     private RobotState robotState;
     private DropperSubsystem dropper;
 
     /**
-     * Constructor for the PickupSpecimenState
+     * Constructor for the IntakeSpecimenState
      *
      * @param name       The name of the state
      * @param drive      the drive subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public PickupSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public IntakeSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         this.robotState = robotState;
         this.dropper = dropper;
@@ -64,8 +64,11 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
                 return AutoState.SPECIMEN_2_INTAKE_COMPLETE;
             } else if (runCounter == 3) {
                 return AutoState.SPECIMEN_3_INTAKE_COMPLETE;
+            } else if (runCounter == 4) {
+                return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
+            } else {
+                return AutoState.SPECIMEN_5_INTAKE_COMPLETE;
             }
-            return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
     }
