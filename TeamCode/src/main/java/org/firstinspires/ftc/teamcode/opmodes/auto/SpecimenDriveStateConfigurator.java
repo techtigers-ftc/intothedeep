@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 
 /**
@@ -496,8 +497,8 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(71.85, 37.89),
-                                        new Point(7.71, 40.40),
-                                        new Point(31.85, 24.14)
+                                        new Point(100.85, 7.71),
+                                        new Point(117.11, 31.85)
                                 )
                         )
                         .setConstantHeadingInterpolation(0)
@@ -506,6 +507,19 @@ public class SpecimenDriveStateConfigurator {
     }
 
     public static void configSecondSampleIntake(StrafeAndTransferState state) {
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
 
+        state.setPathChain(
+                        new PathBuilder()
+                                .addBezierLine(
+                                        new Point(117.78, 31.85),
+                                        new Point(128.17, 31.52)
+                                )
+                                .setConstantHeadingInterpolation(0)
+                                .build()
+
+        );
     }
 }
