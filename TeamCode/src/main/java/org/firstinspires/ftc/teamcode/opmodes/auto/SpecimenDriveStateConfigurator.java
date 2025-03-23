@@ -487,6 +487,12 @@ public class SpecimenDriveStateConfigurator {
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
+
+    /**
+     * Configures First Sample Intake Of New Path (Option 3) With PIDs
+     *
+     * @param state: The state DriveToFirstSampleIntakeState to configure
+     */
     public static void configFirstSampleIntake(DriveToFirstSampleIntakeState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
@@ -506,6 +512,12 @@ public class SpecimenDriveStateConfigurator {
         );
     }
 
+
+    /**
+     * Configures The Strafe To The Second Sample Intake Of New Path (Option 3) With PIDs
+     *
+     * @param state: The state StrafeAndTransfer to configure
+     */
     public static void configSecondSampleIntake(StrafeAndTransferState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
