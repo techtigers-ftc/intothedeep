@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstObservationSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
@@ -85,6 +86,23 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 intake,
                 dropper,
                 robotState);
+
+        DriveToFirstObservationSampleDropState driveToObservationDropState = new DriveToFirstObservationSampleDropState(
+                "driveToObservationDropState",
+                drive,
+                dropper,
+                intake,
+                robotState
+        );
+        SpecimenDriveStateConfigurator.configDriveToSampleDrop(driveToObservationDropState);
+
+        DriveToPoseState driveToWallIntakeAlign = new DriveToPoseState(
+                "driveToWallIntakeAlign",
+                drive,
+                robotState,
+                3.5
+        );
+        SpecimenDriveStateConfigurator.configDriveToFirstWallIntake(driveToWallIntakeAlign);
 
         ClipSpecimenState clipSpecimen = new ClipSpecimenState(
                 "clipSpecimen",
@@ -262,6 +280,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(clipPreload)
                 .addState(clipSpecimen)
                 .addState(intakeSpecimen)
+                .addState(driveToObservationDropState)
+                .addState(driveToWallIntakeAlign)
                 .addState(driveToFirstDrop)
                 .addState(driveToSecondDrop)
                 .addState(driveToFirstPush)
@@ -287,12 +307,15 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(clipPreload, driveToObservationDropState, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(clipPreload, driveToFirstPush, AutoState.TIMEOUT)
+
+                .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.DRIVE_END)
+                .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.TIMEOUT)
                 // Intakes the first specimen
-                .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.TIMEOUT)
+                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.DRIVE_END)
+                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the first specimen and clips it
                 .addTransition(intakeSpecimen, driveToFirstDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
                 .addTransition(driveToFirstDrop, clipSpecimen, AutoState.DRIVE_END)

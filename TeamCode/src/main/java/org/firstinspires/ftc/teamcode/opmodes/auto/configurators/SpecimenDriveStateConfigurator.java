@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstObservationSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
@@ -44,6 +45,60 @@ public class SpecimenDriveStateConfigurator {
                                 new BezierLine(
                                         new Point(79.25, 7.25),
                                         new Point(76, 40)
+                                )
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .build()
+        );
+
+        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the DriveToPreloadDropState.
+     *
+     * @param state The DriveToPreloadDropState to configure
+     */
+    public static void configDriveToSampleDrop(DriveToFirstObservationSampleDropState state) {
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(76, 40),
+                                        new Point(115, 15)
+                                )
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(45))
+                        .build()
+        );
+
+        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the DriveToPreloadDropState.
+     *
+     * @param state The DriveToPreloadDropState to configure
+     */
+    public static void configDriveToFirstWallIntake(DriveToPoseState state) {
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierLine(
+                                        new Point(115, 15),
+                                        new Point(113, 13)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
