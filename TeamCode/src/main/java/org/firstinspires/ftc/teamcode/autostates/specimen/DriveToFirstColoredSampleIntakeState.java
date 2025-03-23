@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -33,7 +34,7 @@ public class DriveToFirstColoredSampleIntakeState extends DriveStateBase {
             autoDriveCommand,
             new DropperWallIntakeNoTransferAction(dropper, robotState),
             new SequentialCommandGroup(
-                new IntakeTuckAction(intake, robotState),
+                new IntakeSlidesAbsoluteAction(intake, () -> 5, 0.5),
                 new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 95),
                 new IntakeReadyToPickupAction(intake, robotState, () -> 16)
             )
