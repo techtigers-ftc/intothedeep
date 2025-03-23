@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
@@ -26,7 +28,8 @@ import team.techtigers.core.paths.Waypoint;
 public class TeleDriveCommand extends TimeoutCommand {
     private static final String LOG_TAG =
             TeleDriveCommand.class.getSimpleName();
-    public final Follower follower;
+    public Follower follower;
+    private RobotStateLocalizer localizer;
     private final DriveSubsystem drive;
     private final RobotState robotState;
     private DoubleSupplier xSupplier;
@@ -41,6 +44,7 @@ public class TeleDriveCommand extends TimeoutCommand {
 
     private double tolerance;
     private double angleTolerance;
+    private double recoveryCounter;
 
     /**
      * Constructs a new TeleDriveCommand
@@ -71,7 +75,7 @@ public class TeleDriveCommand extends TimeoutCommand {
         super(timeout);
         this.drive = drive;
         this.robotState = robotState;
-        RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
+        localizer = new RobotStateLocalizer(robotState);
         follower = new Follower(localizer);
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
@@ -81,6 +85,7 @@ public class TeleDriveCommand extends TimeoutCommand {
         this.translationalPIDF = new PIDFController(translationalPIDF);
         this.headingPIDF = new PIDFController(headingPIDF);
         this.drivePIDF = new FilteredPIDFController(drivePIDF);
+        recoveryCounter = 0;
         addRequirements(drive);
     }
 
@@ -186,6 +191,27 @@ public class TeleDriveCommand extends TimeoutCommand {
 
     @Override
     public void execute() {
+        super.execute();
+        // If the robot is stuck or the timeout is reached for the first time, we need to recover
+        if (isRobotStuck() || (isTimeoutReached() && recoveryCounter == 0)) {
+            // Generate a new path chain using the robot's current and final poses
+            pathChain = new PathBuilder().addBezierLine(
+                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
+                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
+            ).setLinearHeadingInterpolation(
+                    robotState.getRobotCurrentPose().getHeading(),
+                    robotState.getRobotFinalPose().getHeading()
+            ).build();
+            follower = new Follower(localizer);
+            follower.setTranslationalPIDF(translationalPIDF.getCoefficients());
+            follower.setHeadingPIDF(headingPIDF.getCoefficients());
+            follower.setDrivePIDF(drivePIDF.getCoefficients());
+            follower.disableSecondaryPIDS();
+            follower.followPath(pathChain, true);
+            recoveryCounter++;
+//            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
+        }
+
         drive.drivePedroPath(follower.getCurrentDriveVectors());
     }
 
@@ -200,10 +226,6 @@ public class TeleDriveCommand extends TimeoutCommand {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
         }
 
-        if (isTimeoutReached()) {
-            return true;
-        }
-
         Waypoint current = robotState.getRobotCurrentPose();
         Waypoint target = robotState.getRobotFinalPose();
 
@@ -213,10 +235,6 @@ public class TeleDriveCommand extends TimeoutCommand {
 
         if (distToTarget(current, target) < tolerance
                 && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
-            return true;
-        }
-
-        if (isRobotStuck()) {
             return true;
         }
 
