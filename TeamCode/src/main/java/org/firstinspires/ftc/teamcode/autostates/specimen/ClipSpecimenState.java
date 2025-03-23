@@ -27,16 +27,16 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
      * Constructor for the ClipSpecimenState
      *
      * @param name       The name of the state
-     * @param dropper    The dropper subsystem
      * @param drive      The drive subsystem
+     * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public ClipSpecimenState(String name, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
+    public ClipSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, 0.4);
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new RawPowerDriveAction(drive, 0.8, 0.15),
+                new RawPowerDriveAction(drive, 0.8, 0.2),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
                         new DropperPitchAction(dropper,
@@ -70,8 +70,11 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
                 return AutoState.SPECIMEN_2_DROP_COMPLETE;
             } else if (runCounter == 3) {
                 return AutoState.SPECIMEN_3_DROP_COMPLETE;
+            } else if (runCounter == 4) {
+                return AutoState.SPECIMEN_4_DROP_COMPLETE;
+            } else {
+                return AutoState.SPECIMEN_5_DROP_COMPLETE;
             }
-            return AutoState.SPECIMEN_4_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
     }
