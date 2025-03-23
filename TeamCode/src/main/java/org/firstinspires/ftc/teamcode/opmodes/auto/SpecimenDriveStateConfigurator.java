@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
@@ -482,5 +484,28 @@ public class SpecimenDriveStateConfigurator {
 
         state.setTolerance(LARGE_TOLERANCE);
         state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    public static void configFirstSampleIntake(DriveToFirstSampleIntakeState state) {
+        state.setTranslationalPIDF(0.06, 0, 0.001, 0);
+        state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addPath(
+                                new BezierCurve(
+                                        new Point(71.85, 37.89),
+                                        new Point(7.71, 40.40),
+                                        new Point(31.85, 24.14)
+                                )
+                        )
+                        .setConstantHeadingInterpolation(0)
+                        .build()
+        );
+    }
+
+    public static void configSecondSampleIntake(StrafeAndTransferState state) {
+
     }
 }
