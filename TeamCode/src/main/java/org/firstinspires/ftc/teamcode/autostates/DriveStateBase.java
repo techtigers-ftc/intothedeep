@@ -217,6 +217,12 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        recoveryCounter = 0; // Reset the recovery counter on initialization
+    }
+
+    @Override
     public void execute() {
         super.execute();
         // If the robot is stuck or the timeout is reached for the first time, we need to recover
@@ -239,10 +245,6 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     public AutoState getCurrentCondition() {
         if (tolerance < 0 || angleTolerance < 0) {
             throw new IllegalStateException("Tolerance and angle tolerance must be set");
-        }
-
-        if (recoveryCounter > 2) {
-            return AutoState.DRIVE_RECOVERY_FAILED;
         }
 
         Waypoint current = robotState.getRobotCurrentPose();
