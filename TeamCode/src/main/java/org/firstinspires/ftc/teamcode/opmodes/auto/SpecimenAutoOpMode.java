@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.autostates.EndState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndTrackState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
@@ -307,13 +306,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFourthSpecimenIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fourth specimen and clips it
                 .addTransition(intakeSpecimen, driveToFourthSpecimenDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
-                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.DRIVE_END)
-                .addTransition(driveToFourthSpecimenDrop, intakeSample, AutoState.TIMEOUT)
-
-                // Goes to park if the sample intake times out or fails
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.TIMEOUT)
-                .addTransition(intakeSample, driveToSpecimenPark, AutoState.NO_TIME)
 
                 //Transitions to end state when done with either park or sample drop drive
                 .addTransition(driveToSpecimenPark, endState, AutoState.DRIVE_END)
