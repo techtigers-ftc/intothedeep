@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
-import com.arcrobotics.ftclib.command.CommandBase;
-
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Path;
@@ -18,7 +15,8 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
-import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+
+import java.util.function.DoubleSupplier;
 
 import team.techtigers.core.paths.Waypoint;
 
@@ -31,7 +29,9 @@ public class TeleDriveCommand extends TimeoutCommand {
     public final Follower follower;
     private final DriveSubsystem drive;
     private final RobotState robotState;
-    private final Pose targetPosition;
+    private DoubleSupplier xSupplier;
+    private DoubleSupplier ySupplier;
+    private DoubleSupplier headingSupplier;
     private PathChain pathChain;
 
     // Primary PIDF Controllers
@@ -43,16 +43,27 @@ public class TeleDriveCommand extends TimeoutCommand {
     private double angleTolerance;
 
     /**
-     * Constructs a new AutoDriveCommand.
+     * Constructs a new TeleDriveCommand
      *
-     * @param drive      The drive subsystem
-     * @param robotState The robot state
+     * @param drive             The drive subsystem
+     * @param translationalPIDF The translational PIDF coefficients
+     * @param drivePIDF         The drive PIDF coefficients
+     * @param headingPIDF       The heading PIDF coefficients
+     * @param xSupplier         The supplier for x
+     * @param ySupplier         The supplier for y
+     * @param headingSupplier   The supplier for heading
+     * @param robotState        The robot state
+     * @param tolerance         The tolerance for the distance to the target
+     * @param angleTolerance    The tolerance for the angle to the target
+     * @param timeout           The timeout for the command
      */
     public TeleDriveCommand(DriveSubsystem drive,
                             CustomPIDFCoefficients translationalPIDF,
                             CustomFilteredPIDFCoefficients drivePIDF,
                             CustomPIDFCoefficients headingPIDF,
-                            Pose targetPosition,
+                            DoubleSupplier xSupplier,
+                            DoubleSupplier ySupplier,
+                            DoubleSupplier headingSupplier,
                             RobotState robotState,
                             double tolerance,
                             double angleTolerance,
@@ -62,7 +73,9 @@ public class TeleDriveCommand extends TimeoutCommand {
         this.robotState = robotState;
         RobotStateLocalizer localizer = new RobotStateLocalizer(robotState);
         follower = new Follower(localizer);
-        this.targetPosition = targetPosition;
+        this.xSupplier = xSupplier;
+        this.ySupplier = ySupplier;
+        this.headingSupplier = headingSupplier;
         this.tolerance = tolerance;
         this.angleTolerance = angleTolerance;
         this.translationalPIDF = new PIDFController(translationalPIDF);
@@ -70,6 +83,34 @@ public class TeleDriveCommand extends TimeoutCommand {
         this.drivePIDF = new FilteredPIDFController(drivePIDF);
         addRequirements(drive);
     }
+
+    /**
+     * Overload constructor, given a point instead of suppliers for x, heading, and y
+     *
+     * @param drive             The drive subsystem
+     * @param translationalPIDF The translational PIDF coefficients
+     * @param drivePIDF         The drive PIDF coefficients
+     * @param headingPIDF       The heading PIDF coefficients
+     * @param targetPosition    The target position
+     * @param robotState        The robot state
+     * @param tolerance         The tolerance for the distance to the target
+     * @param angleTolerance    The tolerance for the angle to the target
+     * @param timeout           The timeout for the command
+     */
+    public TeleDriveCommand(DriveSubsystem drive,
+                            CustomPIDFCoefficients translationalPIDF,
+                            CustomFilteredPIDFCoefficients drivePIDF,
+                            CustomPIDFCoefficients headingPIDF,
+                            Waypoint targetPosition,
+                            RobotState robotState,
+                            double tolerance,
+                            double angleTolerance,
+                            double timeout) {
+        this(drive, translationalPIDF, drivePIDF, headingPIDF,
+                targetPosition::getX, targetPosition::getY, targetPosition::getHeading,
+                robotState, tolerance, angleTolerance, timeout);
+    }
+
 
     @Override
     public void initialize() {
@@ -94,9 +135,9 @@ public class TeleDriveCommand extends TimeoutCommand {
         pathChain = new PathBuilder()
                 .addBezierLine(
                         new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
-                        new Point(targetPosition.getX(), targetPosition.getY())
+                        new Point(xSupplier.getAsDouble(), ySupplier.getAsDouble())
                 )
-                .setLinearHeadingInterpolation(robotState.getRobotCurrentPose().getHeading(), targetPosition.getHeading())
+                .setLinearHeadingInterpolation(robotState.getRobotCurrentPose().getHeading(), headingSupplier.getAsDouble())
                 .build();
 
         // Finds the final waypoint in the path chain

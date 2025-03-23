@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.AutoSpecimenCycleAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -30,16 +32,21 @@ public class AutoSpecimenCycleTestOpMode extends BaseOpMode {
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(113,13, Math.toRadians(90)));
-        registerSubsystems(drive, dropper, sensor, odometry);
+        registerSubsystems(drive, dropper, intake, sensor, odometry);
 
         AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(autoSpecimenCycle);
 
-        DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
+        DropperWallIntakeNoTransferAction dropperWallIntakeAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(dropperWallIntakeAction);
 
         DropperOpenAction openAction = new DropperOpenAction(dropper, 100);
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(openAction);
+
+        CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(
+                drive
+        );
+        driverGamepad.getGamepadButton(GamepadKeys.Button.Y).whenPressed(cancelDriveCommand);
     }
 
     @Override
