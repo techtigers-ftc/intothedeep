@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
@@ -232,7 +230,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
                     robotState.getRobotFinalPose().getHeading()
             ).build();
             autoDriveCommand.setPathChain(pathChain);
-            recoveryCounter ++;
+            recoveryCounter++;
 //            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
         }
     }

@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSamp
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSubmersibleIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToPreloadDropState;
+import org.firstinspires.ftc.teamcode.autostates.basket.DriveToSamplePark;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedIntakeSampleState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FailedSubmersibleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.basket.FirstLevelAscentState;
@@ -25,8 +25,6 @@ import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-
-import java.util.function.DoubleSupplier;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
@@ -316,7 +314,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 // Intakes the fifth sample
                 .addTransition(driveToFifthIntake, intakeFifthSample, AutoState.DRIVE_END)
 
-                 // Transitions from the fifth sample intake to the drop, including transitions if the intake fails
+                // Transitions from the fifth sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeFifthSample, driveToFifthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
