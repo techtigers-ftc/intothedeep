@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.opmodes.auto.SpecimenDriveStateConfigurator;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -24,8 +23,9 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     private static final String LOG_TAG = AutoSpecimenCycleAction.class.getSimpleName();
-    private static final double X_TO_SLAP = 40;
+    private static final double X_TO_SLAP = 42;
     private static final double Y_TO_SLAP = 36;
+    private static final double Y_TO_INTAKE = 2;
     private final RobotState robotState;
     private boolean needsReset;
     private Waypoint startPosition;
@@ -66,7 +66,9 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 new CustomPIDFCoefficients(0.03, 0, 0.001, 0),
                                 new CustomFilteredPIDFCoefficients(0.008, 0, 0.0045, 0.6, 0),
                                 new CustomPIDFCoefficients(0.5, 0, 0.03, 0),
-                                startPosition,
+                                () -> startPosition.getX(),
+                                () -> startPosition.getY() + Y_TO_INTAKE,
+                                () -> startPosition.getHeading(),
                                 robotState,
                                 SpecimenDriveStateConfigurator.LARGE_TOLERANCE,
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
