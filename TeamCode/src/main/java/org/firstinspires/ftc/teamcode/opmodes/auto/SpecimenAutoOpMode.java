@@ -10,13 +10,17 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSampleIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropFirstSampleState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeAndDropSecondSampleState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -88,6 +92,39 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
         SpecimenDriveStateConfigurator.configFirstIntake(driveToFirstIntake);
+        DriveToFirstSampleIntakeState driveToFirstSampleIntake = new DriveToFirstSampleIntakeState(
+                "driveToFirstSampleIntake",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
+        SpecimenDriveStateConfigurator.configFirstSampleIntake(driveToFirstSampleIntake);
+
+        IntakeAndDropFirstSampleState intakeAndDropFirstSample = new IntakeAndDropFirstSampleState(
+                "intakeAndDropFirstSample",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
+        StrafeAndTransferState strafeAndTransfer = new StrafeAndTransferState(
+                "intakeAndTransfer",
+                drive,
+                intake,
+                dropper,
+                robotState,
+                3
+        );
+        SpecimenDriveStateConfigurator.configSecondSampleIntake(strafeAndTransfer);
+
+        IntakeAndDropSecondSampleState intakeAndDropSecondSample = new IntakeAndDropSecondSampleState(
+                "intakeAndDropSecondSample",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
 
         DriveToPoseState firstPush = new DriveToPoseState(
                 "firstPush",
@@ -265,7 +302,19 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveChamberPreload, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveChamberPreload, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake once the preload is clipped
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.DRIVE_END)
+                .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.TIMEOUT)
+
+                .addTransition(intakeAndDropFirstSample, strafeAndTransfer, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(strafeAndTransfer, intakeAndDropSecondSample, AutoState.DRIVE_END)
+                .addTransition(strafeAndTransfer, intakeAndDropSecondSample, AutoState.TIMEOUT)
+
+                .addTransition(intakeAndDropSecondSample, endState, AutoState.SAMPLE_INTAKE_COMPLETE)
+
+
+
+
                 // Pushes the first sample
                 .addTransition(driveToFirstIntake, firstPush, AutoState.DRIVE_END)
                 .addTransition(driveToFirstIntake, firstPush, AutoState.TIMEOUT)
