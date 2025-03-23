@@ -58,13 +58,25 @@ public class ManualAscentCommand extends CommandBase {
 
         dropper.leftSlideMotor.setPower(power);
         dropper.rightSlideMotor.setPower(power);
-        drive.backLeft.setPower(power);
-        drive.backRight.setPower(power);
+        drive.backLeft.setPower(-power);
+        drive.backRight.setPower(-power);
+        drive.frontLeft.setPower(-power);
+        drive.frontRight.setPower(-power);
 
         if (robotState.getIsAscending()
                 && dropper.getCurrentSlidePositionInches() < AscentSubsystem.JACKS_SLIDES_DISENGAGE_HEIGHT
                 && ascent.areJacksEngaged()) {
             ascent.disengageJacks();
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        dropper.leftSlideMotor.setPower(0);
+        dropper.rightSlideMotor.setPower(0);
+        drive.backLeft.setPower(0);
+        drive.backRight.setPower(0);
+        drive.frontLeft.setPower(0);
+        drive.frontRight.setPower(0);
     }
 }
