@@ -283,7 +283,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToObservationDropState)
                 .addState(driveToWallIntakeAlign)
                 .addState(driveToFirstDrop)
-                .addState(driveToSecondDrop)
                 .addState(driveToFirstPush)
                 .addState(firstPush)
                 .addState(driveToSecondPush)
