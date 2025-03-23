@@ -233,7 +233,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
             ).build();
             autoDriveCommand.setPathChain(pathChain);
             recoveryCounter ++;
-            RobotLog.dd(LOG_TAG, "Recovery attempt: %d", recoveryCounter);
+            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
         }
     }
 
