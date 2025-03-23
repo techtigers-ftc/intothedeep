@@ -48,6 +48,7 @@ public class TeleDriveCommand extends TimeoutCommand {
      * I'm too lazy to fix this
      * Its not too many deal with it
      *
+     * @author Josh Raikman
      * @param drive             The drive subsystem
      * @param translationalPIDF The translational PIDF coefficients
      * @param drivePIDF         The drive PIDF coefficients
@@ -205,11 +206,7 @@ public class TeleDriveCommand extends TimeoutCommand {
 //        RobotLog.dd(LOG_TAG, "Distance: %f", distToTarget(current, target));
 //        RobotLog.dd(LOG_TAG, "Angular Distance: %f", Math.toDegrees(angleDistance(current.getHeading(), target.getHeading())));
 
-        if (distToTarget(current, target) < tolerance
-                && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
-            return true;
-        }
-
-        return false;
+        return distToTarget(current, target) < tolerance
+                && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance;
     }
 }
