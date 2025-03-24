@@ -68,5 +68,6 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
         telemetry.addLine();
         telemetry.addData("Orientation", robotState.getBlockOrientation());
+        telemetry.addData("Camera Mode", robotState.isCoarseCameraMode());
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
@@ -288,12 +290,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.SAMPLE_3_INTAKE_RECOVERED)
                 .addTransition(failedIntakeSample, driveToThirdDrop, AutoState.FAILED_SAMPLE_3_TIMEOUT)
 
-                /*
                 // Drives to the third drop, drops it off, and goes to the fourth intake
                 .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
                 .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
-*/
+
                 // Intakes the fourth sample
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
 
@@ -372,8 +373,13 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Dropper Slide Position", dropper.getTargetPositionInches());
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.addLine();
-        telemetry.addData("Block Has Been Detected", robotState.hasBlockBeenDetected());
-        telemetry.addData("Last Remembered Block", robotState.getAbsoluteBlockCoordinates());
+
+        if (robotState.isBlockDetected()) {
+            telemetry.addLine("Block Detected");
+            telemetry.addData("Last Remembered Block Position", robotState.getAbsoluteBlockPosition());
+        } else {
+            telemetry.addLine("Block NOT Detected");
+        }
     }
 
     @Override
