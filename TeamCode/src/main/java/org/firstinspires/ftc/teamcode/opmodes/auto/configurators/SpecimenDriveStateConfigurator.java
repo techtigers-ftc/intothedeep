@@ -427,16 +427,16 @@ public class SpecimenDriveStateConfigurator {
 
     public static void configFirstSampleIntake(DriveToFirstColoredSampleIntakeState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-        state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierCurve(
-                                        new Point(71.85, 37.89),
-                                        new Point(100.85, 7.71),
-                                        new Point(117.11, 31.85)
+                                        new Point(76, 40),
+                                        new Point(117.9357143, 22.13877551),
+                                        new Point(71.50306122, 24.29387755)
                                 )
                         )
                         .setConstantHeadingInterpolation(90)
@@ -454,8 +454,8 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                         new PathBuilder()
                                 .addBezierLine(
-                                        new Point(117.78, 31.85),
-                                        new Point(128.17, 31.52)
+                                        new Point(71.50306122, 24.29387755),
+                                        new Point(128.3846939, 22.13877551)
                                 )
                                 .setConstantHeadingInterpolation(90)
                                 .build()
@@ -469,8 +469,8 @@ public class SpecimenDriveStateConfigurator {
         state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 
-        state.setTargetPosition(128.17, 31.52, Math.toRadians(61));
+        state.setTargetPosition(128.3846939, 22.13877551, Math.toRadians(61));
         state.setTolerance(MEDIUM_TOLERANCE);
-        state.setAngleTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
     }
 }
