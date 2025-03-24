@@ -338,7 +338,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToThirdPush)
                 .addState(thirdPush)
                 .addState(driveToSecondIntake)
-                .addState(driveToSecondDrop)
                 .addState(driveToThirdIntake)
                 .addState(driveToThirdDrop)
                 .addState(driveToFourthIntake)

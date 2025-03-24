@@ -439,9 +439,11 @@ public class SpecimenDriveStateConfigurator {
                                         new Point(117.11, 31.85)
                                 )
                         )
-                        .setConstantHeadingInterpolation(0)
+                        .setConstantHeadingInterpolation(90)
                         .build()
         );
+        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(MEDIUM_TOLERANCE);
     }
 
     public static void configSecondSampleIntake(StrafeAndTransferState state) {
@@ -455,10 +457,12 @@ public class SpecimenDriveStateConfigurator {
                                         new Point(117.78, 31.85),
                                         new Point(128.17, 31.52)
                                 )
-                                .setConstantHeadingInterpolation(0)
+                                .setConstantHeadingInterpolation(90)
                                 .build()
 
         );
+        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(MEDIUM_TOLERANCE);
     }
     public static void configThirdSampleIntake(TurnAndTransferState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
@@ -466,5 +470,7 @@ public class SpecimenDriveStateConfigurator {
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 
         state.setTargetPosition(128.17, 31.52, Math.toRadians(61));
+        state.setTolerance(MEDIUM_TOLERANCE);
+        state.setAngleTolerance(MEDIUM_TOLERANCE);
     }
 }
