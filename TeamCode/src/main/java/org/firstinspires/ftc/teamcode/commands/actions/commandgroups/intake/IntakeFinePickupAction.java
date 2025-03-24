@@ -45,7 +45,7 @@ public class IntakeFinePickupAction extends SequentialCommandGroup {
      * @param intake               the intake subsystem
      * @param robotState           the robot state
      */
-    public IntakeFinePickUpAction(DriveSubsystem drive, IntakeSubsystem intake,
+    public IntakeFinePickupAction(DriveSubsystem drive, IntakeSubsystem intake,
                                   RobotState robotState) {
         this(drive, intake, null, robotState);
     }
