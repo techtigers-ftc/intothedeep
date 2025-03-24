@@ -55,6 +55,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
         super.initialize();
         robotState.setCoarseCameraMode(true);
         if (!robotState.isBlockDetected()) {
+            // TODO: Replace with something that won't crash the robot
             RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
             throw new IllegalStateException("Block not detected");
         }

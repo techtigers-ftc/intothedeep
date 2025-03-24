@@ -898,14 +898,27 @@ public class RobotState extends GlobalState {
         return absoluteBlockPosition;
     }
 
+    /**
+     * Sets the absolute position of a detected block
+     *
+     * @param pos the absolute position of a detected block
+     */
     public void setAbsoluteBlockPosition(Waypoint pos) {
         this.absoluteBlockPosition = pos;
     }
 
+    /**
+     * @return whether or not a block has been recently detected
+     */
     public boolean isBlockDetected() {
         return hasBlockBeenRecentlyDetected;
     }
 
+    /**
+     * Sets whether or not a block has been recently detected
+     *
+     * @param detected whether or not a block has been recently detected
+     */
     public void setBlockDetected(boolean detected) {
         this.hasBlockBeenRecentlyDetected = detected;
     }

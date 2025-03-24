@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.qualcomm.robotcore.util.RobotLog;
-
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.paths.geometry.Point;
 
@@ -11,7 +9,14 @@ import team.techtigers.core.paths.geometry.Point;
  * the block.
  */
 public class TargetRobotPoseCalculator {
-    // TODO: add comment
+    /**
+     * Using the absolute positions of a block and the robot, calculates the target position the
+     * robot needs to go to in order to pick up the block.
+     *
+     * @param robotPose the robot's absolute position
+     * @param blockPose the block's absolute position
+     * @return the target positions and distances the robot should go to in order to pick up the block
+     */
     public static double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {
         Point robotVector = robotPose.getPoint();
         Point blockVector = blockPose.getPoint();
@@ -29,12 +34,8 @@ public class TargetRobotPoseCalculator {
                 robotPose.getHeading()
         );
 
-//        double clawOrientation = (blockPose.getHeading() - Math.toDegrees(robotPose.getHeading()) + 360) % 180;
-        double clawOrientation =
-                (-blockPose.getHeading() + Math.toDegrees(robotPose.getHeading()) + 90);
+        double clawOrientation = (-blockPose.getHeading() + Math.toDegrees(robotPose.getHeading()) + 90);
         clawOrientation = ((clawOrientation % 180) + 180) % 180;
-//        clawOrientation = Math.floorMod(clawOrientation, 180);
-        RobotLog.dd("Claw Debug", "Block Heading: %f Robot Heading: %f Expected Claw Orientation: %f", blockPose.getHeading(), Math.toDegrees(robotPose.getHeading()), clawOrientation);
 
         return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance, clawOrientation};
     }

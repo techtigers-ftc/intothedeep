@@ -131,8 +131,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                 robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else {
-//                RobotLog.dd("VisionDebug", "Limelight's Last Robot Position" + robotPositionForLastUpdate.toString());
-//                RobotLog.dd("VisionDebug", "Robot Velocity: " + robotState.getRobotVelocity());
                 if (!robotState.isCoarseCameraMode()) {
                     double lateralFine = getCorrectedLateralFine(results[1]);
                     double forwardFine = -(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0);
@@ -182,6 +180,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     }
 }
 
+/**
+ * Class to calculate the absolute position of a block based on the robot's position and the block's offsets
+ */
 class AbsoluteBlockPosition {
     private final double CACHE_TIMEOUT = 2000;
     private Waypoint robotPos;
