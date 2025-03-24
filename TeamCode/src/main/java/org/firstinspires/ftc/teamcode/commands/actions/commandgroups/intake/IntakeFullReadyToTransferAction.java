@@ -46,7 +46,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new WaitCommand(100),
-                new IntakeFineAlignAction(drive, intake, robotState::getBlockOrientation, robotState),
+                new IntakeFineAlignAction(drive, intake, robotState),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 holdRobotPosition,

@@ -41,16 +41,16 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new IntakeClawRotationAction(intake, () -> 60, 0),
                                 new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100)
+                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0)
                         ),
                         new IntakeWristRotationAction(intake,
-                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 200),
+                                IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,
                                 IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION, 100),
                         new DropperTransferAction(dropper, robotState)
                 ),
                 new ParallelCommandGroup(
-                        new IntakeLoosenAction(intake, 200),
+                        new IntakeLoosenAction(intake, 100),
                         new IntakeSlidesAbsoluteAction(intake,
                                 () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
                 ),

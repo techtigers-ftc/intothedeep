@@ -85,4 +85,26 @@ public class Waypoint {
     public String toString() {
         return "x: " + getX() + " y: " + getY() + " h: " + Math.toDegrees(getHeading());
     }
+
+    /**
+     * Adds two waypoints together
+     *
+     * @param other the other waypoint
+     * @return the sum of the two waypoints
+     */
+    public Waypoint add(Waypoint other) {
+        return new Waypoint(point.add(other.getPoint()), heading + other.getHeading());
+    }
+
+    /**
+     * Returns a new Waypoint that is the sum of the current Waypoint and the given x and y values
+     *
+     * @param x the x value to add
+     * @param y the y value to add
+     * @param heading the heading to add
+     * @return the sum of the current Waypoint and the given x and y values
+     */
+    public Waypoint add(double x, double y, double heading) {
+        return new Waypoint(point.add(new Point(x, y)), this.heading + heading);
+    }
 }

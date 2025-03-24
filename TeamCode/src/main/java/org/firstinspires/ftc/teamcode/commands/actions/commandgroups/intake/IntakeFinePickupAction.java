@@ -19,7 +19,7 @@ public class IntakeFinePickupAction extends SequentialCommandGroup {
     private final IntakeSubsystem intake;
 
     /**
-     * Creates a new IntakeFineAlignAction
+     * Creates a new IntakeFineAlignAction and allows you to specify the claw rotation
      *
      * @param drive                the drive subsystem
      * @param intake               the intake subsystem
@@ -36,6 +36,18 @@ public class IntakeFinePickupAction extends SequentialCommandGroup {
                 new IntakeFineAlignAction(drive, intake, clawRotationSupplier, robotState),
                 new IntakePrepareToTransferAction(intake, robotState)
         );
+    }
+
+    /**
+     * Creates a new IntakeFineAlignAction and has the robot calculate block orientation
+     *
+     * @param drive                the drive subsystem
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     */
+    public IntakeFinePickUpAction(DriveSubsystem drive, IntakeSubsystem intake,
+                                  RobotState robotState) {
+        this(drive, intake, null, robotState);
     }
 
     @Override
