@@ -82,10 +82,9 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
-        ClipAndIntakeState clipPreload = new ClipAndIntakeState(
+        ClipSpecimenState clipPreload = new ClipSpecimenState(
                 "clipPreload",
                 drive,
-                intake,
                 dropper,
                 robotState);
 
@@ -310,21 +309,21 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
-                .addTransition(clipPreload, driveToObservationDropState, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(clipPreload, driveToObservationDropState, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(clipPreload, driveToObservationDropState, AutoState.SPECIMEN_1_DROP_COMPLETE)
+//                .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(clipPreload, driveToObservationDropState, AutoState.TIMEOUT)
 
-                .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.DRIVE_END)
-                .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.TIMEOUT)
-                // Intakes the first specimen
-                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.TIMEOUT)
+//                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.DRIVE_END)
+//                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.TIMEOUT)
+//                // Intakes the first specimen
+//                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.DRIVE_END)
+//                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the first specimen and clips it
-                .addTransition(intakeSpecimen, driveToFirstDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
-                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.TIMEOUT)
+//                .addTransition(intakeSpecimen, driveToFirstDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
+//                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.DRIVE_END)
+//                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.TIMEOUT)
                 // Goes to the first push once the first specimen has been clipped
-                .addTransition(clipSpecimen, driveToFirstPush, AutoState.SPECIMEN_1_DROP_COMPLETE)
+//                .addTransition(clipSpecimen, driveToFirstPush, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 // Pushes the first sample
                 .addTransition(driveToFirstPush, firstPush, AutoState.DRIVE_END)
                 .addTransition(driveToFirstPush, firstPush, AutoState.TIMEOUT)

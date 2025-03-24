@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstObservationSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
@@ -14,10 +16,12 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.opencv.core.Mat;
 
 /**
  * A class used to configure Specimen Drive States.
  */
+@Config
 public class SpecimenDriveStateConfigurator {
     public static final double HUMUNGOUS_TOLERANCE = 8;
     public static final double LARGE_TOLERANCE = 5;
@@ -28,6 +32,17 @@ public class SpecimenDriveStateConfigurator {
     public static final double MINISCULE_TOLERANCE = 1.25;
     public static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
     public static final double MICROSCOPIC_TOLERANCE = 1;
+    public static double controlX = 87.25;
+    public static double controlY = 22;
+    public static double finalX = 105;
+    public static double finalY = 24;
+
+    public static double controlX2 = 102.25;
+    public static double controlY2 = 72;
+    public static double finalX2 = 117.25;
+    public static double finalY2 = 52;
+
+
 
     /**
      * Configures the DriveToPreloadDropState.
@@ -70,9 +85,10 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
-                                new BezierLine(
+                                new BezierCurve(
                                         new Point(70, 40),
-                                        new Point(90, 30)
+                                        new Point(controlX, controlY),
+                                        new Point(finalX, finalY)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(335))
@@ -174,13 +190,13 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(76, 40),
-                                new Point(77.25, 32),
-                                new Point(123, 28),
-                                new Point(100, 55),
-                                new Point(117.25, 52)
+                                new Point(finalX, finalY),
+                                new Point(controlX2, controlY2),
+//                                new Point(123, 28),
+//                                new Point(100, 55),
+                                new Point(finalX2, finalY2)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .setLinearHeadingInterpolation(Math.toRadians(335), Math.toRadians(90))
 
                         .build()
         );
