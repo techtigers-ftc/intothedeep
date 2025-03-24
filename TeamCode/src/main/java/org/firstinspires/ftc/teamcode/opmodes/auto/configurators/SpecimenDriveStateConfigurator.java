@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSample
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstObservationSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstWallIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
@@ -71,7 +72,7 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(70, 40),
-                                        new Point(110, 20)
+                                        new Point(98, 25)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(315))
@@ -87,7 +88,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state The DriveToPreloadDropState to configure
      */
-    public static void configDriveToFirstWallIntake(DriveToPoseState state) {
+    public static void configDriveToFirstWallIntake(DriveToFirstWallIntakeState state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
         state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
@@ -97,7 +98,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(110, 20),
+                                        new Point(98, 25),
                                         new Point(113, 13)
                                 )
                         )

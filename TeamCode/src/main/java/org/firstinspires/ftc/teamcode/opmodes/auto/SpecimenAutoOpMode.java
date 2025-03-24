@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSample
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstObservationSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstWallIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
@@ -96,11 +97,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         );
         SpecimenDriveStateConfigurator.configDriveToSampleDrop(driveToObservationDropState);
 
-        DriveToPoseState driveToWallIntakeAlign = new DriveToPoseState(
+        DriveToFirstWallIntakeState driveToWallIntakeAlign = new DriveToFirstWallIntakeState(
                 "driveToWallIntakeAlign",
                 drive,
-                robotState,
-                3.5
+                dropper,
+                intake,
+                robotState
         );
         SpecimenDriveStateConfigurator.configDriveToFirstWallIntake(driveToWallIntakeAlign);
 
