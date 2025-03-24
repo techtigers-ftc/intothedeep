@@ -355,6 +355,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
                 .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
                 .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(clipPreload, driveToFirstSampleIntake, AutoState.TIMEOUT)
                 // Drives to the first intake once the preload is clipped
                 .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.DRIVE_END)
                 .addTransition(driveToFirstSampleIntake, intakeAndDropFirstSample, AutoState.TIMEOUT)
