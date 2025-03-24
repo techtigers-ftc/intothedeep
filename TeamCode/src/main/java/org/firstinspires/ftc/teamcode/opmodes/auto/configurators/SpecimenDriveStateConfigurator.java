@@ -44,7 +44,7 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(79.25, 7.25),
-                                        new Point(76, 40)
+                                        new Point(70, 40)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -70,16 +70,16 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(76, 40),
-                                        new Point(115, 15)
+                                        new Point(70, 40),
+                                        new Point(110, 20)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(45))
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(315))
                         .build()
         );
 
         state.setTolerance(MEDIUM_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
     /**
@@ -97,11 +97,11 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(115, 15),
+                                        new Point(110, 20),
                                         new Point(113, 13)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .setLinearHeadingInterpolation(Math.toRadians(315), Math.toRadians(90))
                         .build()
         );
 
@@ -173,7 +173,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(74.75, 42),
+                                new Point(76, 40),
                                 new Point(77.25, 32),
                                 new Point(123, 28),
                                 new Point(100, 55),

@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.PickupSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
-import org.firstinspires.ftc.teamcode.opmodes.auto.SpecimenDriveStateConfigurator;
+import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -43,7 +43,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         startPosition = new Waypoint(113, 13, Math.toRadians(90));
         needsReset = true;
         addCommands(
-                new PickupSpecimenState("pickupSpecimen", drive, dropper, robotState),
+                new IntakeSpecimenState("intakeSpecimen", drive, dropper, robotState),
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
                                 new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
@@ -59,7 +59,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                         ),
                         new DropperForwardCarryNoTransferAction(dropper, robotState)
                 ),
-                new ClipSpecimenState("clipSpecimen", dropper, drive, robotState),
+                new ClipSpecimenState("clipSpecimen", drive, dropper, robotState),
                 // Drive back
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,

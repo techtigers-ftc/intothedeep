@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -18,7 +21,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 public class DriveToFirstObservationSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToFirstObservationSampleDropState.class.getSimpleName();
-
     /**
      * Constructor for the DriveToLastSpecimenDropState
      *
@@ -31,18 +33,19 @@ public class DriveToFirstObservationSampleDropState extends DriveStateBase {
     public DriveToFirstObservationSampleDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         super(name, drive, robotState, 3.5);
         addCommands(
+                autoDriveCommand,
                 new SequentialCommandGroup(
-                        autoDriveCommand,
-                        new IntakeOpenAction(intake)
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 110),
+                        new IntakeOpenAction(intake, 50)
                 ),
-                new DropperWallIntakeAction(dropper, intake, robotState)
+                new DropperWallIntakeNoTransferAction(dropper, robotState),
+                new IntakeTuckAction(intake, robotState)
         );
     }
 
     @Override
     public AutoState getCurrentCondition() {
-        if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getIntakeClawState() == ClawState.OPEN) {
+        if (robotState.getIntakeClawState() == ClawState.OPEN) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

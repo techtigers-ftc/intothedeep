@@ -137,6 +137,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         DriveToFirstPushState driveToFirstPush = new DriveToFirstPushState(
                 "driveToFirstPush",
                 drive,
+                intake,
                 dropper,
                 robotState
         );
@@ -307,8 +308,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
                 .addTransition(clipPreload, driveToObservationDropState, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.TIMEOUT)
+                .addTransition(clipPreload, driveToObservationDropState, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(clipPreload, driveToObservationDropState, AutoState.TIMEOUT)
 
                 .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.DRIVE_END)
                 .addTransition(driveToObservationDropState, driveToWallIntakeAlign, AutoState.TIMEOUT)
@@ -411,7 +412,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
