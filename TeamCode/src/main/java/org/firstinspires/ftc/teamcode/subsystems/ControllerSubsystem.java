@@ -39,7 +39,7 @@ public class ControllerSubsystem extends CloseableSubsystem {
         controllerEffects.add(new ClimbReminderRumble(manipulatorGamepad, robotState));
 
         controllerEffects.add(new FailedPickupRumble(manipulatorGamepad, robotState));
-        controllerEffects.add(new VisionAlignmentRumble(driverGamepad, robotState));
+//        controllerEffects.add(new VisionAlignmentRumble(driverGamepad, robotState));
         controllerEffects.add(new ToggleBreakBeamRumble(manipulatorGamepad, robotState));
         controllerEffects.add(new SwitchIntakeModeRumble(manipulatorGamepad, robotState));
 
