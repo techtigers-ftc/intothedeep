@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
@@ -37,9 +38,11 @@ public class DriveToFirstObservationSampleDropState extends DriveStateBase {
                 autoDriveCommand,
                 new SequentialCommandGroup(
                         new IntakeTuckAction(intake, robotState),
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getHeading() < 10),
-                        new IntakeSlidesAbsoluteAction(intake, () -> 15, 1),
-                        new IntakeOpenAction(intake, 50)
+                        new WaitUntilCommand(() -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) < 55),
+                        new IntakeSlidesAbsoluteAction(intake, () -> 16.5, 1),
+                        new WaitUntilCommand(() -> intake.getCurrentSlidePositionInches() > 11),
+                        new IntakeOpenAction(intake, 0),
+                        new WaitCommand(150)
                 ),
                 new DropperWallIntakeNoTransferAction(dropper, robotState)
         );
