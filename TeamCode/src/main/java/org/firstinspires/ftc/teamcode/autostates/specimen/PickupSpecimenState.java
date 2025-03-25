@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerToDistanceDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -24,6 +26,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
     private RobotState robotState;
     private DropperSubsystem dropper;
     private final ElapsedTime timer;
+    private boolean dropperPitchUp;
 
     /**
      * Constructor for the PickupSpecimenState
@@ -40,9 +43,11 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         runCounter = 0;
         timer = new ElapsedTime();
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 1.5),
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.8, 2.25),
                 new DropperCloseAction(dropper, 150),
-                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
+//                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
+                new DropperPitchAction(dropper, 295, 20),
+                new InstantCommand(() -> dropperPitchUp = true)
         );
     }
 
@@ -54,6 +59,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         runCounter++;
         super.initialize();
         timer.reset();
+        dropperPitchUp = false;
     }
 
     /**
@@ -63,15 +69,17 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED && dropper.getCurrentSlidePositionInches() > 1.5) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED && dropperPitchUp) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {
                 return AutoState.SPECIMEN_2_INTAKE_COMPLETE;
             } else if (runCounter == 3) {
                 return AutoState.SPECIMEN_3_INTAKE_COMPLETE;
+            } else if (runCounter == 4) {
+                return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
             }
-            return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
+            return AutoState.SPECIMEN_5_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
     }

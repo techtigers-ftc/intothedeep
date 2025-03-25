@@ -233,7 +233,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierLine(
                                 // 100 is correct for the y, don't change it
                                 new Point(135, 100),
-                                new Point(129, 13)
+                                new Point(129, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -249,16 +249,16 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configFirstSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.08, 0, 0.004, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(0.9, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(129, 13),
-                                new Point(66, 41.5)
+                                new Point(71, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -282,10 +282,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(66, 41.5),
-//                                new Point(82, 43.5),
-//                                new Point(73.25, 16),
-//                                new Point(116.25, 40),
+                                new Point(71, 42),
                                 new Point(113, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -302,17 +299,16 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configSecondSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.08, 0, 0.004, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(0.9, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(113, 12),
-//                                new Point(80, 16),
-                                new Point(69, 41.5)
+                                new Point(71, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -336,10 +332,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(69, 41.5),
-//                                new Point(82, 43.5),
-//                                new Point(73.25, 16),
-//                                new Point(116.25, 40),
+                                new Point(71, 42),
                                 new Point(113, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -356,17 +349,16 @@ public class SpecimenDriveStateConfigurator {
      * @param state the state to configure
      */
     public static void configThirdSpecimenDrop(DriveToGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.08, 0, 0.004, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(0.9, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(113, 12),
-//                                new Point(80, 16),
-                                new Point(72, 41.5)
+                                new Point(71, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -390,11 +382,8 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(72, 41.5),
-//                                new Point(82, 43.5),
-//                                new Point(73.25, 16),
-//                                new Point(116.25, 40),
-                                new Point(113, 13)
+                                new Point(71, 42),
+                                new Point(113, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -409,18 +398,67 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configFourthSpecimenDrop(DriveToLastGeneralSpecimenDropState state) {
-        state.setTranslationalPIDF(0.08, 0, 0.004, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+    public static void configFourthSpecimenDrop(DriveToGeneralSpecimenDropState state) {
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addBezierCurve(
+                                new Point(113, 13),
+                                new Point(71, 42)
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .build()
+        );
+
+        state.setTolerance(SMALL_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the fifth specimen intake state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
+    public static void configFifthSpecimenIntake(DriveToGeneralSpecimenIntakeState state) {
+        state.setTranslationalPIDF(0.03, 0, 0.001, 0);
+        state.setDrivePIDF(0.008, 0, 0.0045, 0.6, 0);
+        state.setHeadingPIDF(0.5, 0, 0.03, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(113, 12),
-//                                new Point(80, 16),
-                                new Point(74, 41.5)
+                                new Point(71, 42),
+                                new Point(113, 12)
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+    }
+
+    /**
+     * Configures the fifth specimen drop state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
+    public static void configFifthSpecimenDrop(DriveToGeneralSpecimenDropState state) {
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addBezierCurve(
+                                new Point(113, 13),
+                                new Point(71, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -444,7 +482,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(74, 41.5),
+                                new Point(71, 42),
                                 new Point(120, 15)
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
