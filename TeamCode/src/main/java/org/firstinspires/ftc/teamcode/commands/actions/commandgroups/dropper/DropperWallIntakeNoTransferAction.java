@@ -28,7 +28,7 @@ public class DropperWallIntakeNoTransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.5),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.25),
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 200),
                 new DropperRotationAction(dropper,
                         DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 200),
