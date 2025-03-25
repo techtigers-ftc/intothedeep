@@ -41,7 +41,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double AUTO_PITCH_CHAMBER_POSITION = 145;
     public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
-    public static final double PITCH_WALL_INTAKE_POSITION = 310;
+    public static final double PITCH_WALL_INTAKE_POSITION = 325;
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 210;

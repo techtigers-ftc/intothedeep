@@ -34,7 +34,6 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
         addCommands(
                 new RawPowerDriveAction(drive, 0.6, 0.1),
                 new SequentialCommandGroup(
-//                        new WaitCommand(50),
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
                         new WaitCommand(50),
