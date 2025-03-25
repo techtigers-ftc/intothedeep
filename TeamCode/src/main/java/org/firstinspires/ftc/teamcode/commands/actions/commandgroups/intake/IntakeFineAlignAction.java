@@ -3,20 +3,21 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TargetRobotPoseCalculator;
 
 import java.util.function.DoubleSupplier;
 
 import team.techtigers.core.paths.Waypoint;
-import team.techtigers.core.paths.geometry.Point;
 
 /**
  * Command to align to a block using fine camera vision
@@ -27,7 +28,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     private double[] targetPositions;
 
     /**
-     * Creates a new IntakeFineAlignAction
+     * Creates a new IntakeFineAlignAction and allows you to specify the claw rotation
      *
      * @param drive                the drive subsystem
      * @param intake               the intake subsystem
@@ -38,7 +39,10 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                  DoubleSupplier clawRotationSupplier,
                                  RobotState robotState) {
         this.robotState = robotState;
-        targetPositions = new double[4];
+        targetPositions = new double[5];
+        if (clawRotationSupplier == null) {
+            clawRotationSupplier = () -> targetPositions[4];
+        }
         addRequirements(intake);
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
@@ -55,31 +59,28 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
         );
     }
 
+    /**
+     * Creates a new IntakeFineAlignAction and calculates claw rotation based on block orientation
+     *
+     * @param drive                the drive subsystem
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     */
+    public IntakeFineAlignAction(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
+        this(drive, intake, null, robotState);
+    }
+
     @Override
     public void initialize() {
         super.initialize();
-        targetPositions = getTargetIntakePosition(robotState.getRobotCurrentPose(), robotState.getAbsoluteBlockCoordinates());
-    }
+        if (!robotState.isBlockDetected()) {
+            // TODO: Replace with something that won't crash the robot
+            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+            throw new IllegalStateException("Block not detected");
+        }
 
-    private double[] getTargetIntakePosition(Waypoint robotPose, Waypoint blockPose) {
-        Point robotVector = robotPose.getPoint();
-        Point blockVector = blockPose.getPoint();
-        Point robotToBlockVector = blockVector.minus(robotVector);
-
-        double distance = robotVector.dist(blockVector);
-        double angleBetween = robotPose.getHeading() - Math.atan2(robotToBlockVector.getY(), robotToBlockVector.getX());
-
-        double forwardDistance = distance * Math.cos(angleBetween);
-        double lateralDistance = distance * Math.sin(angleBetween);
-
-        Waypoint robotTarget = new Waypoint(
-                robotPose.getX() +
-                        Math.sin(robotPose.getHeading()) * lateralDistance,
-                robotPose.getY()
-                        - Math.cos(robotPose.getHeading()) * lateralDistance,
-                robotPose.getHeading());
-
-        return new double[]{robotTarget.getX(), robotTarget.getY(), robotTarget.getHeading(), forwardDistance};
+        Waypoint blockPos = robotState.getAbsoluteBlockPosition();
+        targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
     }
 
     @Override

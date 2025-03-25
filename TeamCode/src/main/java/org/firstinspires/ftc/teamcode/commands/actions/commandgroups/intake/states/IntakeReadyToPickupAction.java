@@ -32,8 +32,8 @@ public class IntakeReadyToPickupAction extends ParallelCommandGroup {
         addRequirements(intake);
         addCommands(
                 new IntakeSlidesAbsoluteAction(intake, slidePositionSupplier, 0.5),
-                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 300),
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 300),
+                new IntakeWristRotationAction(intake, IntakeSubsystem.WRIST_ROTATION_READY_TO_PICKUP_POSITION, 100),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_READY_TO_PICKUP_POSITION, 100),
                 new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_PICKUP_POSITION, 100),
                 new IntakeOpenAction(intake, 0)
         );

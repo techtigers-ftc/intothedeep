@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerToDistanceDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -20,6 +25,8 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
     private int runCounter;
     private RobotState robotState;
     private DropperSubsystem dropper;
+    private final ElapsedTime timer;
+    private boolean dropperPitchUp;
 
     /**
      * Constructor for the IntakeSpecimenState
@@ -35,9 +42,11 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.25, 2.5),
-                new DropperCloseAction(dropper, 50),
-                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 2.25),
+                new DropperCloseAction(dropper, 150),
+//                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
+                new DropperPitchAction(dropper, 295, 20),
+                new InstantCommand(() -> dropperPitchUp = true)
         );
     }
 
@@ -48,6 +57,8 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
     public void initialize() {
         runCounter++;
         super.initialize();
+        timer.reset();
+        dropperPitchUp = false;
     }
 
     /**
@@ -57,7 +68,7 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED && dropper.getCurrentSlidePositionInches() > 1.5) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED && dropperPitchUp) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {

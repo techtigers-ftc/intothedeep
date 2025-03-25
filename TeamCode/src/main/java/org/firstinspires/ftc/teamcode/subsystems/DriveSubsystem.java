@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
@@ -189,13 +189,19 @@ public class DriveSubsystem extends CloseableSubsystem {
 
         if (robotstate.getVoltage() != 0) {
             for (int i = 0; i < drivePowers.length; i++) {
-                drivePowers[i] /= (robotstate.getVoltage()/12.0);
+                drivePowers[i] /= (robotstate.getVoltage() / 12.0);
             }
         } else {
             throw new ArithmeticException("Voltage is 0, initialize sensor subsystem");
         }
 
+
         normalize(drivePowers);
+
+//        RobotLog.dd("drive subsystem", "Front Left Power: %f ", drivePowers[0]);
+//        RobotLog.dd("drive subsystem", "Front Right Power: %f ", drivePowers[2]);
+//        RobotLog.dd("drive subsystem", "Rear Left Power: %f ", drivePowers[1]);
+//        RobotLog.dd("drive subsystem", "Rear Right Power: %f ", drivePowers[3]);
         setMotorPowers(drivePowers[0], drivePowers[1], drivePowers[2], drivePowers[3]);
     }
 
