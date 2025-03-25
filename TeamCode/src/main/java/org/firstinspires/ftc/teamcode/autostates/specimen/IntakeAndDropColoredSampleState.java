@@ -40,6 +40,7 @@ public class IntakeAndDropColoredSampleState extends ParallelCommandGroupState<A
                                            DoubleSupplier slidePosition,
                                            RobotState robotState) {
         super(name);
+        this.robotState = robotState;
         addCommands(
             new SequentialCommandGroup(
                     new IntakeReadyToPickupAction(intake, robotState, slidePosition),

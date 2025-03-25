@@ -6,9 +6,9 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.StrafeAndTransferState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.TurnAndTransferState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -435,11 +435,11 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierCurve(
                                         new Point(76, 40),
-                                        new Point(117.9357143, 22.13877551),
+                                        new Point(118.9153061, 22.13877551),
                                         new Point(71.50306122, 24.29387755)
-                                )
+                                        )
                         )
-                        .setConstantHeadingInterpolation(90)
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
         state.setTolerance(MEDIUM_TOLERANCE);
@@ -452,18 +452,19 @@ public class SpecimenDriveStateConfigurator {
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 
         state.setPathChain(
-                        new PathBuilder()
-                                .addBezierLine(
-                                        new Point(71.50306122, 24.29387755),
-                                        new Point(128.3846939, 22.13877551)
-                                )
-                                .setConstantHeadingInterpolation(90)
-                                .build()
+                new PathBuilder()
+                        .addBezierLine(
+                                new Point(118.9153061, 22.13877551),
+                                new Point(128.3846939, 22.13877551)
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
+                        .build()
 
         );
         state.setTolerance(MEDIUM_TOLERANCE);
         state.setAngleTolerance(MEDIUM_TOLERANCE);
     }
+
     public static void configThirdSampleIntake(TurnAndTransferState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.01, 0, 0.0019, 0.6, 0);
