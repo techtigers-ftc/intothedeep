@@ -25,7 +25,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
     private int runCounter;
     private RobotState robotState;
     private DropperSubsystem dropper;
-    private final ElapsedTime timer;
+//    private final ElapsedTime timer;
     private boolean dropperPitchUp;
 
     /**
@@ -41,7 +41,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
         this.robotState = robotState;
         this.dropper = dropper;
         runCounter = 0;
-        timer = new ElapsedTime();
+//        timer = new ElapsedTime();
         addCommands(
                 new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 2.25),
                 new DropperCloseAction(dropper, 150),
@@ -58,7 +58,7 @@ public class PickupSpecimenState extends SequentialCommandGroupState<AutoState> 
     public void initialize() {
         runCounter++;
         super.initialize();
-        timer.reset();
+//        timer.reset();
         dropperPitchUp = false;
     }
 

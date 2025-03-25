@@ -24,7 +24,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
             ClipSpecimenState.class.getSimpleName();
     private int runCounter;
     private RobotState robotState;
-    private final ElapsedTime timer;
+//    private final ElapsedTime timer;
 
     /**
      * Constructor for the ClipSpecimenState
@@ -37,7 +37,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     public ClipSpecimenState(String name, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
         super(name, 0.4);
         this.robotState = robotState;
-        timer = new ElapsedTime();
+//        timer = new ElapsedTime();
         runCounter = 0;
         addCommands(
                 new RawPowerDriveAction(drive, 0.8, 0.1),
@@ -57,7 +57,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     public void initialize() {
         runCounter++;
         super.initialize();
-        timer.reset();
+//        timer.reset();
     }
 
     /**
