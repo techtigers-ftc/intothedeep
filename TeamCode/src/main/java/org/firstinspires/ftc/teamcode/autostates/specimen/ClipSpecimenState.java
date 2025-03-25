@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -22,6 +24,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
             ClipSpecimenState.class.getSimpleName();
     private int runCounter;
     private RobotState robotState;
+//    private final ElapsedTime timer;
 
     /**
      * Constructor for the ClipSpecimenState
@@ -34,14 +37,14 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     public ClipSpecimenState(String name, DropperSubsystem dropper, DriveSubsystem drive, RobotState robotState) {
         super(name, 0.4);
         this.robotState = robotState;
+//        timer = new ElapsedTime();
         runCounter = 0;
         addCommands(
-                new RawPowerDriveAction(drive, 0.8, 0.15),
+                new RawPowerDriveAction(drive, 0.8, 0.1),
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
-                        new WaitCommand(100),
+                        new WaitCommand(50),
                         new DropperOpenAction(dropper)
                 )
         );
@@ -54,6 +57,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     public void initialize() {
         runCounter++;
         super.initialize();
+//        timer.reset();
     }
 
     /**
@@ -70,9 +74,17 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
                 return AutoState.SPECIMEN_2_DROP_COMPLETE;
             } else if (runCounter == 3) {
                 return AutoState.SPECIMEN_3_DROP_COMPLETE;
+            } else if (runCounter == 4) {
+                return AutoState.SPECIMEN_4_DROP_COMPLETE;
             }
-            return AutoState.SPECIMEN_4_DROP_COMPLETE;
+            return AutoState.SPECIMEN_5_DROP_COMPLETE;
         }
         return AutoState.RUNNING;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+//        RobotLog.dd("Specimen Auto Debug", "Clip State Time to End: %f", timer.seconds());
     }
 }
