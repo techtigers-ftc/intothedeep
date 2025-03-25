@@ -65,6 +65,6 @@ public class DriveToGeneralSpecimenIntakeState extends DriveStateBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        RobotLog.dd("Specimen Auto Debug", "General Intake State Time to End: %f", timer.seconds());
+//        RobotLog.dd("Specimen Auto Debug", "General Intake State Time to End: %f", timer.seconds());
     }
 }

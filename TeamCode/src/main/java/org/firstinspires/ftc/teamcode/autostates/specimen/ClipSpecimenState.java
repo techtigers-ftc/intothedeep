@@ -85,6 +85,6 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        RobotLog.dd("Specimen Auto Debug", "Clip State Time to End: %f", timer.seconds());
+//        RobotLog.dd("Specimen Auto Debug", "Clip State Time to End: %f", timer.seconds());
     }
 }
