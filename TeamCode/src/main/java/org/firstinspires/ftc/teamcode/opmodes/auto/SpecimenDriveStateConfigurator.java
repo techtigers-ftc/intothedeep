@@ -34,7 +34,7 @@ public class SpecimenDriveStateConfigurator {
      */
     public static void configPreloadDrop(DriveToPreloadDropSpecimenState state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+        state.setDrivePIDF(0.006, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
 //        state.setPrimaryPIDSToTuning();
 
