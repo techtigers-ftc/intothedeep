@@ -19,7 +19,7 @@ import team.techtigers.core.display.Color;
 public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToGeneralSpecimenDropState.class.getSimpleName();
-    private final ElapsedTime timer;
+//    private final ElapsedTime timer;
 
     /**
      * Constructor for the DriveToGeneralSpecimenDropState
@@ -31,7 +31,7 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
      */
     public DriveToGeneralSpecimenDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState, 3.5);
-        timer = new ElapsedTime();
+//        timer = new ElapsedTime();
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryNoTransferAction(dropper, robotState)
@@ -42,7 +42,7 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     public void initialize() {
         super.initialize();
         robotState.setDebugColor(Color.BLACK);
-        timer.reset();
+//        timer.reset();
     }
 
     @Override
@@ -61,6 +61,6 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        RobotLog.dd("Specimen Auto Debug", "General Drop State Time to End: %f", timer.seconds());
+//        RobotLog.dd("Specimen Auto Debug", "General Drop State Time to End: %f", timer.seconds());
     }
 }
