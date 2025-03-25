@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -24,7 +21,6 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     private static final double TIME_TO_INTAKE = 2;
     private static final double TIME_TO_DROP = 2.5;
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
     private boolean blockDetected;
 
     /**
@@ -38,14 +34,12 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
-        this.intake = intake;
         blockDetected = true;
         addCommands(
-                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10),
-                new IntakeTrackingAction(intake, robotState),
-                new WaitCommand(100),
-                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakePrepareToTransferAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new WaitUntilCommand(robotState::isBlockDetected),
+                new IntakeCoarseAlignAction(drive, intake, robotState),
+                new WaitUntilCommand(robotState::isBlockDetected),
+                new IntakeFinePickUpAction(drive, intake, robotState)
         );
     }
 
@@ -57,10 +51,8 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5)
-                && !robotState.isVisionAligning();
         boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
-        if (trackingTimeout || blockNotDetected) {
+        if (blockNotDetected || super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {

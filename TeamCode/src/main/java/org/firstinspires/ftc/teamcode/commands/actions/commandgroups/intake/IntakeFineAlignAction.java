@@ -1,0 +1,91 @@
+package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
+
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeClawRotationAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.drive.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
+import org.firstinspires.ftc.teamcode.utils.RobotState;
+import org.firstinspires.ftc.teamcode.utils.TargetRobotPoseCalculator;
+
+import java.util.function.DoubleSupplier;
+
+import team.techtigers.core.paths.Waypoint;
+
+/**
+ * Command to align to a block using fine camera vision
+ */
+public class IntakeFineAlignAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
+    private final RobotState robotState;
+    private double[] targetPositions;
+
+    /**
+     * Creates a new IntakeFineAlignAction and allows you to specify the claw rotation
+     *
+     * @param drive                the drive subsystem
+     * @param intake               the intake subsystem
+     * @param clawRotationSupplier the supplier for the claw rotation
+     * @param robotState           the robot state
+     */
+    public IntakeFineAlignAction(DriveSubsystem drive, IntakeSubsystem intake,
+                                 DoubleSupplier clawRotationSupplier,
+                                 RobotState robotState) {
+        this.robotState = robotState;
+        targetPositions = new double[5];
+        if (clawRotationSupplier == null) {
+            clawRotationSupplier = () -> targetPositions[4];
+        }
+        addRequirements(intake);
+        addCommands(
+                new InstantCommand(() -> robotState.setVisionAligning(true)),
+                new ParallelCommandGroup(
+                        new IntakeSlidesAbsoluteAction(intake,
+                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 3, 0.75, 0.3),
+                        new IntakeClawRotationAction(intake, clawRotationSupplier, 150),
+                        new TeleHoldPointAction(drive, robotState,
+                                () -> targetPositions[0],
+                                () -> targetPositions[1],
+                                () -> targetPositions[2],
+                                0.5, Math.toRadians(2))
+                )
+        );
+    }
+
+    /**
+     * Creates a new IntakeFineAlignAction and calculates claw rotation based on block orientation
+     *
+     * @param drive                the drive subsystem
+     * @param intake               the intake subsystem
+     * @param robotState           the robot state
+     */
+    public IntakeFineAlignAction(DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
+        this(drive, intake, null, robotState);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        if (!robotState.isBlockDetected()) {
+            // TODO: Replace with something that won't crash the robot
+            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+            throw new IllegalStateException("Block not detected");
+        }
+
+        Waypoint blockPos = robotState.getAbsoluteBlockPosition();
+        targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        robotState.setVisionAligning(false);
+    }
+}

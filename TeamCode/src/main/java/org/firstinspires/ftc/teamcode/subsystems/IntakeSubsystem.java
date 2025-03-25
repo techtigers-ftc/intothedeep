@@ -24,12 +24,13 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls all the motors for the intake subsystem.
  * Gives methods to control all of the aspects of the subsystem.
  * Controls both differential servos for the wrist, the two servos that control the claw, and the
- * two motors that control the horizontal slides.
+ * two motors that control the horizontal slides.]
  */
 @Config
 public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 40;
-    // Zero position: Wrist Pitch: 170, Wrist Rotation: 172, Claw Rotation: 90, Claw closed
+    // Zero position: Wrist Pitch: 165, Wrist Rotation: 172, Claw Rotation: 90,
+    // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
 
     public static final double SLIDES_MAX = 18.75;
@@ -44,13 +45,13 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 129;
     public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 173;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 160;
+    public static final double WRIST_PITCH_PECK_POSITION = 150;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 100;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 3;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 93;
+    public static final double WRIST_ROTATION_TRANSFER_POSITION = 9.5;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 88;
 
-    public static final double SLIDES_TRANSFER_POSITION = 1.25;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.26 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
@@ -61,8 +62,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
     public static double CLAW_OPEN_POSITION = 0.68;
-    public static double CLAW_LOOSE_POSITION = 0.91;
-    public static double CLAW_CLOSED_POSITION = 0.92;
+    public static double CLAW_LOOSE_POSITION = 0.97;
+    public static double CLAW_CLOSED_POSITION = 1;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.007;
     public static double PRIMARY_KI = 0;
@@ -131,8 +132,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         leftSlideMotor.setDirection(DcMotor.Direction.FORWARD);
         rightSlideMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        rightWrist.setDirection(Servo.Direction.FORWARD);
-        leftWrist.setDirection(Servo.Direction.REVERSE);
+        rightWrist.setDirection(Servo.Direction.REVERSE);
+        leftWrist.setDirection(Servo.Direction.FORWARD);
 
         claw.setDirection(Servo.Direction.REVERSE);
         clawRotation.setDirection(Servo.Direction.REVERSE);
@@ -460,6 +461,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         leftSlideCurrentAverage.add(currentMotorLeft.getCurrent(CurrentUnit.AMPS));
         rightSlideCurrentAverage.add(currentMotorRight.getCurrent(CurrentUnit.AMPS));
+
+        robotState.setIntakeSlidePosition(getCurrentSlidePositionInches());
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 

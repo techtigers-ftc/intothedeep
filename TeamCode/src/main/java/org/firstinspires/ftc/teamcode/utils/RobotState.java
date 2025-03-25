@@ -63,6 +63,10 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
     private double autoRemainingTime;
+    private Waypoint absoluteBlockPosition;
+    private Waypoint limelightLastRobotCoords;
+    private double intakeSlidePosition;
+    private boolean hasBlockBeenRecentlyDetected;
 
 
     private boolean runDistanceSensor;
@@ -120,6 +124,10 @@ public class RobotState extends GlobalState {
         distanceSensorValue = -1;
         autoRemainingTime = -1;
         headingLockEnabled = false;
+        limelightLastRobotCoords = new Waypoint(0, 0, 0);
+        intakeSlidePosition = 0;
+        absoluteBlockPosition = new Waypoint(0, 0, 0);
+        hasBlockBeenRecentlyDetected = false;
     }
 
     /**
@@ -879,5 +887,57 @@ public class RobotState extends GlobalState {
      */
     public void setHeadingLock(boolean headingLockEnabled) {
         this.headingLockEnabled = headingLockEnabled;
+    }
+
+    /**
+     * Gets the object which contains the detected block's attributes
+     *
+     * @return the object which contains the detected block's attributes
+     */
+    public Waypoint getAbsoluteBlockPosition() {
+        return absoluteBlockPosition;
+    }
+
+    /**
+     * Sets the absolute position of a detected block
+     *
+     * @param pos the absolute position of a detected block
+     */
+    public void setAbsoluteBlockPosition(Waypoint pos) {
+        this.absoluteBlockPosition = pos;
+    }
+
+    /**
+     * @return whether or not a block has been recently detected
+     */
+    public boolean isBlockDetected() {
+        return hasBlockBeenRecentlyDetected;
+    }
+
+    /**
+     * Sets whether or not a block has been recently detected
+     *
+     * @param detected whether or not a block has been recently detected
+     */
+    public void setBlockDetected(boolean detected) {
+        this.hasBlockBeenRecentlyDetected = detected;
+    }
+
+    /**
+     * Gets the current intake slide position (inches)
+     *
+     * @return the current intake slide position
+     */
+    public double getIntakeSlidePosition() {
+        return intakeSlidePosition;
+    }
+
+    /**
+     * Sets the current intake slide position (inches)
+     *
+     * @param intakeSlidePosition the current intake slide position
+     */
+    public void setIntakeSlidePosition(double intakeSlidePosition) {
+        this.intakeSlidePosition = intakeSlidePosition;
     }
 }

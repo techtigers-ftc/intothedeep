@@ -29,16 +29,16 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_MAX = 27;
     public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
-    public static final double SLIDES_TRANSFER_POSITION = 0.75;
-    public static final double SLIDES_CHAMBER_POSITION = 4.4;
+    public static final double SLIDES_TRANSFER_POSITION = 0;
+    public static final double SLIDES_CHAMBER_POSITION = 5.25;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_PRE_TRANSFER_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 41;
     public static final double PITCH_BASKET_POSITION = 230;
-    public static final double PITCH_CHAMBER_POSITION = 155; // 180
-    public static final double AUTO_PITCH_CHAMBER_POSITION = 155;
+    public static final double PITCH_CHAMBER_POSITION = 145; // 180
+    public static final double AUTO_PITCH_CHAMBER_POSITION = 145;
     public static final double PITCH_FRONT_SLAP_POSITION = 90;
     public static final double PITCH_BACK_SLAP_POSITION = 265;
     public static final double PITCH_WALL_INTAKE_POSITION = 310;
@@ -50,9 +50,9 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double ROTATION_BACK_SLAP_POSITION = 10;
     public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
-    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.758 * Math.PI;
-    private static final double SPOOL_GEAR_RATIO = 1.0; // Driver / Follower
-    private static final double TICKS_PER_ROTATION = 384.5;
+    private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
+    private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower
+    private static final double TICKS_PER_ROTATION = 145.1;
     private static final double ERROR_FACTOR = 1;
     private static final double INCHES_PER_MOTOR_TICK = ERROR_FACTOR * (SPOOL_GEAR_RATIO * SPOOL_CIRCUMFERENCE_INCHES) / TICKS_PER_ROTATION;
     private static final double TICKS_PER_INCHES = 1 / INCHES_PER_MOTOR_TICK;
@@ -60,15 +60,15 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     // Old values for an axon micro: closed 0.6, open 0.24
     // New values for an injora: closed 0.6, open 0.26
-    public static double CLAW_OPENED_POSITION = 0.57;
-    public static double CLAW_CLOSED_POSITION = 0.25;
-    public static double PRIMARY_KP = 0.006;
+    public static double CLAW_OPENED_POSITION = 0.58;
+    public static double CLAW_CLOSED_POSITION = 0.32;
+    public static double PRIMARY_KP = 0.01;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0;
+    public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0;
-    public static double SECONDARY_KP = 0.006;
+    public static double SECONDARY_KP = 0.01;
     public static double SECONDARY_KI = 0;
-    public static double SECONDARY_KD = 0;
+    public static double SECONDARY_KD = 0.0001;
     public static double SECONDARY_KF = 0;
     public static double SLIDES_TOLERANCE = 1;
     public final DcMotor rightSlideMotor;
@@ -113,8 +113,8 @@ public class DropperSubsystem extends CloseableSubsystem {
         leftWrist.setDirection(Servo.Direction.REVERSE);
         rightWrist.setDirection(Servo.Direction.FORWARD);
 
-        leftSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         encoderMotor = rightSlideMotor; // Assuming rightSlideMotor is the encoder motor
         currentMotorRight = (DcMotorEx) rightSlideMotor;

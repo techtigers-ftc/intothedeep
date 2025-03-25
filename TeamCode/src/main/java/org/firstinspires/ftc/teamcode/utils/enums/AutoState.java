@@ -31,5 +31,4 @@ public enum AutoState {
     FAILED_SAMPLE_3_TIMEOUT,
     FAILED_SAMPLE_4_TIMEOUT,
     FAILED_SAMPLE_5_TIMEOUT,
-
 }
