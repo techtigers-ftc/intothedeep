@@ -33,14 +33,14 @@ public class DriveToGeneralSpecimenDropState extends DriveStateBase {
         super(name, drive, robotState, 3.5);
         addCommands(
                 autoDriveCommand,
-                new DropperBackwardCarryNoTransferAction(dropper, robotState)
+                new DropperForwardCarryNoTransferAction(dropper, robotState)
         );
     }
 
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.BACKWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {

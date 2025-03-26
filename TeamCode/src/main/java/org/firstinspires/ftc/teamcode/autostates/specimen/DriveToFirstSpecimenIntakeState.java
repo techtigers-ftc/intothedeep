@@ -1,11 +1,17 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import androidx.annotation.RequiresPermission;
+
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardWallIntakeNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -35,11 +41,11 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new IntakeTuckAction(intake, robotState),
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 30 && robotState.getRobotCurrentPose().getHeading() > Math.toRadians(230)),
-                        new IntakeOpenAction(intake)
-                ),
-                new DropperForwardWallIntakeNoTransferAction(dropper, robotState)
+                        new ReadyToTransferAction(intake, dropper, robotState),
+                        new DropperWallIntakeAction(dropper, intake, robotState),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 25),
+                        new DropperOpenAction(dropper)
+                )
         );
     }
 

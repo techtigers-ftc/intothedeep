@@ -26,7 +26,7 @@ public class DriveToFirstPushState extends DriveStateBase {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-                new DropperForwardWallIntakeNoTransferAction(dropper, robotState)
+                new DropperWallIntakeNoTransferAction(dropper, robotState)
         );
     }
 }

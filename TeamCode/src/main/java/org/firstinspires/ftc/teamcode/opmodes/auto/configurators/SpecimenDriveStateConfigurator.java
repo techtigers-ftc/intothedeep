@@ -63,15 +63,15 @@ public class SpecimenDriveStateConfigurator {
         state.setTranslationalPIDF(0.03, 0, 0.001, 0);
         state.setDrivePIDF(0.008, 0, 0.0045, 0.6, 0);
         state.setHeadingPIDF(0.5, 0, 0.03, 0);
-        state.setPrimaryPIDSToTuning();
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierLine(
+                        .addBezierCurve(
                                 new Point(72, 42),
                                 new Point(113, 12)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -96,7 +96,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(113, 12),
                                 new Point(71, 42)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -124,8 +124,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(100, 55),
                                 new Point(117.25, 52)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
-
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -151,7 +150,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(117.25, 52),
                                 new Point(117.25, 22)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -178,7 +177,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(110, 52),
                                 new Point(126, 48)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
 
                         .build()
         );
@@ -205,7 +204,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(126, 48),
                                 new Point(126, 22)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
 
                         .build()
         );
@@ -233,7 +232,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(116, 52),
                                 new Point(136, 50)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -259,7 +258,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(136, 48),
                                 new Point(136, 25)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -285,7 +284,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(135, 100),
                                 new Point(129, 12)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -310,7 +309,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(129, 9),
                                 new Point(71, 42)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -335,7 +334,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(71, 42),
                                 new Point(113, 12)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -360,7 +359,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(113, 12),
                                 new Point(71, 42)
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(270))
+                        .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
         );
 
@@ -385,7 +384,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(71, 42),
                                 new Point(120, 15)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(135))
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                         .build()
         );
 
