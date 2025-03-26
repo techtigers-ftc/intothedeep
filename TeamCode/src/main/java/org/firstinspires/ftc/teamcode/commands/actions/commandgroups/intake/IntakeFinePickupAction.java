@@ -38,18 +38,6 @@ public class IntakeFinePickupAction extends SequentialCommandGroup {
         );
     }
 
-    /**
-     * Creates a new IntakeFineAlignAction and has the robot calculate block orientation
-     *
-     * @param drive                the drive subsystem
-     * @param intake               the intake subsystem
-     * @param robotState           the robot state
-     */
-    public IntakeFinePickUpAction(DriveSubsystem drive, IntakeSubsystem intake,
-                                  RobotState robotState) {
-        this(drive, intake, null, robotState);
-    }
-
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);

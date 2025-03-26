@@ -35,7 +35,7 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryNoTransferAction(dropper, robotState),
-                new IntakePrepareToPickupAction(intake, robotState),
+//                new IntakePrepareToPickupAction(intake, robotState),
                 new InstantCommand(() -> robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE))
         );
     }
@@ -43,8 +43,9 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
-                robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY //&&
+//                robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP
+        ) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

@@ -50,12 +50,6 @@ public class DropperWallIntakeAction extends SequentialCommandGroup {
     }
 
     @Override
-    public void initialize() {
-        robotState.clearError(RobotError.INVALID_DROPPER_POSITION);
-        super.initialize();
-    }
-
-    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {

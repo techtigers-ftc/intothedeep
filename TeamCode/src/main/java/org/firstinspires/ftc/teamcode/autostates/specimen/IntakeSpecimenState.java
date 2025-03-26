@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
+import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerToDistanceDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -25,7 +26,6 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
     private int runCounter;
     private RobotState robotState;
     private DropperSubsystem dropper;
-    private final ElapsedTime timer;
     private boolean dropperPitchUp;
 
     /**
@@ -42,10 +42,10 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 2.25),
+//                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 2.25),
+                new RawPowerDriveAction(drive, 0.4, 0.2),
                 new DropperCloseAction(dropper, 150),
-//                new DropperSlidesAbsoluteAction(dropper, 2.5, 1)
-                new DropperPitchAction(dropper, 295, 20),
+                new DropperPitchAction(dropper, 95, 20),
                 new InstantCommand(() -> dropperPitchUp = true)
         );
     }
@@ -57,7 +57,6 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
     public void initialize() {
         runCounter++;
         super.initialize();
-        timer.reset();
         dropperPitchUp = false;
     }
 

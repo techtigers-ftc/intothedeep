@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.teamcode.autostates.EndState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipAndIntakeState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.ClipPreloadState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
@@ -79,11 +80,10 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
-        ClipAndIntakeState clipPreload = new ClipAndIntakeState(
+        ClipPreloadState clipPreload = new ClipPreloadState(
                 "clipPreload",
-                drive,
-                intake,
                 dropper,
+                drive,
                 robotState);
 
         ClipSpecimenState clipSpecimen = new ClipSpecimenState(
@@ -103,6 +103,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         DriveToFirstSpecimenIntakeState driveToFirstIntake = new DriveToFirstSpecimenIntakeState(
                 "driveToFirstIntake",
                 drive,
+                intake,
                 dropper,
                 robotState
         );
@@ -262,16 +263,16 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(clipPreload)
                 .addState(clipSpecimen)
                 .addState(intakeSpecimen)
+                .addState(driveToFirstIntake)
                 .addState(driveToFirstDrop)
-                .addState(driveToSecondDrop)
                 .addState(driveToFirstPush)
                 .addState(firstPush)
                 .addState(driveToSecondPush)
                 .addState(secondPush)
                 .addState(driveToThirdPush)
                 .addState(thirdPush)
-                .addState(driveToSecondIntake)
                 .addState(driveToSecondDrop)
+                .addState(driveToSecondIntake)
                 .addState(driveToThirdIntake)
                 .addState(driveToThirdDrop)
                 .addState(driveToFourthIntake)
@@ -287,9 +288,9 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(clipPreload, driveToFirstPush, AutoState.TIMEOUT)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
                 // Intakes the first specimen
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.TIMEOUT)
@@ -389,7 +390,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         telemetry.addData("Dropper Slide Position", dropper.getCurrentSlidePositionInches());
         telemetry.update();
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
