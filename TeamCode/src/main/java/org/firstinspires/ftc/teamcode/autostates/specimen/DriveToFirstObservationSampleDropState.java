@@ -37,14 +37,14 @@ public class DriveToFirstObservationSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new IntakeTuckAction(intake, robotState)
-//                        new WaitUntilCommand(() -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) < 55),
-//                        new IntakeSlidesAbsoluteAction(intake, () -> 16.5, 1),
-//                        new WaitUntilCommand(() -> intake.getCurrentSlidePositionInches() > 11),
-//                        new IntakeOpenAction(intake, 0),
+                        new IntakeTuckAction(intake, robotState),
+                        new WaitUntilCommand(() -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) < 55),
+                        new IntakeSlidesAbsoluteAction(intake, () -> 16.5, 1),
+                        new WaitUntilCommand(() -> intake.getCurrentSlidePositionInches() > 11),
+                        new IntakeOpenAction(intake, 0)
 //                        new WaitCommand(150)
-                ),
-                new DropperWallIntakeNoTransferAction(dropper, robotState)
+                )
+//                new DropperWallIntakeNoTransferAction(dropper, robotState)
         );
     }
 

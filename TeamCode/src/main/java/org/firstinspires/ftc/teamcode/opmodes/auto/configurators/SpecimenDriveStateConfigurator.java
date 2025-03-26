@@ -42,6 +42,8 @@ public class SpecimenDriveStateConfigurator {
     public static double finalX2 = 117.25;
     public static double finalY2 = 52;
 
+    public static double finalHeading = 300;
+
 
 
     /**
@@ -77,10 +79,10 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configDriveToSampleDrop(DriveToFirstObservationSampleDropState state) {
-        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
-        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
-        state.setHeadingPIDF(1.8, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+//        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+//        state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
+//        state.setHeadingPIDF(1.8, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -91,7 +93,8 @@ public class SpecimenDriveStateConfigurator {
                                         new Point(finalX, finalY)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(335))
+                        .setLinearHeadingInterpolation(Math.toRadians(90),
+                                Math.toRadians(finalHeading))
                         .build()
         );
 
@@ -191,12 +194,13 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(finalX, finalY),
-                                new Point(controlX2, controlY2),
+//                                new Point(controlX2, controlY2),
 //                                new Point(123, 28),
 //                                new Point(100, 55),
                                 new Point(finalX2, finalY2)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(335), Math.toRadians(90))
+                        .setLinearHeadingInterpolation(Math.toRadians(finalHeading),
+                                Math.toRadians(90))
 
                         .build()
         );

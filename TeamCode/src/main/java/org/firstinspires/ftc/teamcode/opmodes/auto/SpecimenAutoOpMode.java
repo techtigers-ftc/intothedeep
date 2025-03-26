@@ -313,8 +313,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 //                .addTransition(clipPreload, driveToFirstPush, AutoState.SAMPLE_INTAKE_FAILED)
                 .addTransition(clipPreload, driveToObservationDropState, AutoState.TIMEOUT)
 
-//                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.DRIVE_END)
-//                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.TIMEOUT)
+                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.DRIVE_END)
+                .addTransition(driveToObservationDropState, driveToFirstPush, AutoState.TIMEOUT)
 //                // Intakes the first specimen
 //                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.DRIVE_END)
 //                .addTransition(driveToWallIntakeAlign, intakeSpecimen, AutoState.TIMEOUT)
