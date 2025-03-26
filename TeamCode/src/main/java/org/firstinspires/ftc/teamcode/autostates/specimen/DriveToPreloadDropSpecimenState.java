@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -35,7 +38,10 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new DropperForwardCarryNoTransferAction(dropper, robotState),
-//                new IntakePrepareToPickupAction(intake, robotState),
+                new SequentialCommandGroup(
+                        new WaitCommand(750),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 7)
+                ),
                 new InstantCommand(() -> robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE))
         );
     }

@@ -44,7 +44,7 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
         addCommands(
                 new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 2.25),
                 new DropperCloseAction(dropper, 150),
-                new DropperPitchAction(dropper, 95, 20),
+                new DropperPitchAction(dropper, 295, 20),
                 new InstantCommand(() -> dropperPitchUp = true)
         );
     }

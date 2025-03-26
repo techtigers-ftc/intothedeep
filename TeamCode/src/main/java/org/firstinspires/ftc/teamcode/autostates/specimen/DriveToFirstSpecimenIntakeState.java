@@ -40,6 +40,7 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
+//                new IntakeTuckAction(intake, robotState),
                 new SequentialCommandGroup(
                         new ReadyToTransferAction(intake, dropper, robotState),
                         new DropperWallIntakeAction(dropper, intake, robotState),
@@ -52,7 +53,7 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.WALL_INTAKE &&
+//                robotState.getDropperState() == DropperState.WALL_INTAKE &&
                 robotState.getDropperClawState() == ClawState.OPEN) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {

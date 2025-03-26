@@ -83,6 +83,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         ClipPreloadState clipPreload = new ClipPreloadState(
                 "clipPreload",
                 dropper,
+                intake,
                 drive,
                 robotState);
 
