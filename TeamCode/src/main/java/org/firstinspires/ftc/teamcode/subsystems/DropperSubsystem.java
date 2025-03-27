@@ -34,22 +34,20 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
-    public static final double PITCH_PRE_TRANSFER_POSITION = 90;
-    public static final double PITCH_TRANSFER_POSITION = 41;
-    public static final double PITCH_BASKET_POSITION = 230;
+    public static final double PITCH_INIT_POSITION = 95;
+    public static final double PITCH_TRANSFER_POSITION = 30;
+    public static final double PITCH_BASKET_POSITION = 225;
     public static final double PITCH_CHAMBER_POSITION = 145; // 180
-    public static final double PITCH_BACK_CHAMBER_POSITION = 220; // 180
-    public static final double PITCH_FRONT_SLAP_POSITION = 90;
-    public static final double PITCH_BACK_SLAP_POSITION = 275;
-    public static final double PITCH_WALL_INTAKE_POSITION = 325;
-    public static final double PITCH_FRONT_WALL_INTAKE_POSITION = 55;
+    public static final double PITCH_FRONT_SLAP_POSITION = 80;
+    public static final double PITCH_BACK_SLAP_POSITION = 265;
+    public static final double PITCH_WALL_INTAKE_POSITION = 305;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 210;
-    public static final double ROTATION_BASKET_POSITION = 210;
-    public static final double ROTATION_FRONT_SLAP_POSITION = 210;
-    public static final double ROTATION_BACK_SLAP_POSITION = 10;
-    public static final double ROTATION_WALL_INTAKE_POSITION = 10;
+    public static final double ROTATION_TRANSFER_POSITION = 205;
+    public static final double ROTATION_BASKET_POSITION = 205;
+    public static final double ROTATION_FRONT_SLAP_POSITION = 205;
+    public static final double ROTATION_BACK_SLAP_POSITION = 5;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 5;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower
@@ -63,7 +61,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     // New values for an injora: closed 0.6, open 0.26
     public static double CLAW_OPENED_POSITION = 0.58;
     public static double CLAW_CLOSED_POSITION = 0.32;
-    public static double PRIMARY_KP = 0.01;
+    public static double PRIMARY_KP = 0.011;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0;
@@ -129,14 +127,14 @@ public class DropperSubsystem extends CloseableSubsystem {
         if (robotState.isAuto()) {
             closeClaw();
             resetSlides();
-            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            setWristAbsolute(PITCH_INIT_POSITION, ROTATION_TRANSFER_POSITION);
         }
     }
 
     @Override
     public void init() {
         if (!robotState.isAuto()) {
-            setWristAbsolute(PITCH_PRE_TRANSFER_POSITION, ROTATION_TRANSFER_POSITION);
+            setWristAbsolute(PITCH_INIT_POSITION, ROTATION_TRANSFER_POSITION);
             if (getCurrentSlidePositionInches() > 5) {
                 moveSlidesAbsolute(getCurrentSlidePositionInches());
                 closeClaw();
