@@ -369,7 +369,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -386,8 +386,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 //        telemetry.addData("Dropper Slide POS",
 //                dropper.getCurrentSlidePositionInches());
 //        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-//        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
-//        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
+        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Coarse Camera Mode: ", robotState.isCoarseCameraMode());
 //        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 ////        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
 ////        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));

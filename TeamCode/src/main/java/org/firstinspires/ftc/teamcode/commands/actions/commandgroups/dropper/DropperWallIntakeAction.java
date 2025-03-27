@@ -4,9 +4,9 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTuckAfterTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 
 /**
  * A command group that transfers a sample and gets the robot ready to do a wall intake
@@ -57,7 +56,9 @@ public class DropperWallIntakeAction extends SequentialCommandGroup {
                                 new WaitCommand(100),
                                 new IntakeTuckAction(intake, robotState)
                         ),
-                        new DropperWallIntakeNoTransferAction(dropper, robotState)
+                        new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.25),
+                        new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 100),
+                        new DropperRotationAction(dropper, DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 100)
                 )
         );
     }

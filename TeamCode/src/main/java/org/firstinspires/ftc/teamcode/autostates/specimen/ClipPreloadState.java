@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -43,6 +44,7 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
                         new RawPowerDriveAction(drive, 0.6, 0.1),
                         new WaitUntilCommand(robotState::isBlockDetected),
                         new IntakeCoarseAlignAction(drive, intake, robotState),
+                        new InstantCommand(() -> robotState.setBlockDetected(false)),
                         new WaitUntilCommand(robotState::isBlockDetected),
                         new IntakeFinePickupAction(drive, intake,
                                 robotState::getBlockOrientation,

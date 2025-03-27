@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ParallelReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -35,7 +38,8 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
                 autoDriveCommand,
 //                new IntakeTuckAction(intake, robotState),
                 new SequentialCommandGroup(
-                        new ReadyToTransferAction(intake, dropper, robotState),
+//                        new ReadyToTransferAction(intake, dropper, robotState),
+                        new ParallelReadyToTransferAction(intake, dropper, robotState),
                         new DropperWallIntakeAction(dropper, intake, robotState),
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 25),
                         new DropperOpenAction(dropper)

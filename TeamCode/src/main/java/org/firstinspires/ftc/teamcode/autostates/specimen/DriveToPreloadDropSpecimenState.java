@@ -37,7 +37,10 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new DropperCarryNoTransferAction(dropper, robotState),
-                new IntakePrepareToPickupAction(intake, robotState),
+                new SequentialCommandGroup(
+                        new WaitCommand(300),
+                        new IntakePrepareToPickupAction(intake, robotState)
+                ),
                 new InstantCommand(() -> robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE))
         );
     }
