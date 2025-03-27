@@ -32,7 +32,7 @@ public class FirstLevelAscentState extends ParallelCommandGroupState<AutoState> 
     public FirstLevelAscentState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION,
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_INIT_POSITION,
                         300),
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                 new IntakeTuckAction(intake, robotState),

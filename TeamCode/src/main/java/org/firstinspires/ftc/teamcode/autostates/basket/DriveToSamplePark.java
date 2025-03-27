@@ -38,7 +38,7 @@ public class DriveToSamplePark extends DriveStateBase {
                 new SequentialCommandGroup(
                         new WaitCommand(500),
                         new ParallelCommandGroup(
-                                new DropperPitchAction(dropper, DropperSubsystem.PITCH_PRE_TRANSFER_POSITION,
+                                new DropperPitchAction(dropper, DropperSubsystem.PITCH_INIT_POSITION,
                                         300),
                                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                                 new IntakeTuckAction(intake, robotState),
