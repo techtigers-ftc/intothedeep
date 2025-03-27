@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;

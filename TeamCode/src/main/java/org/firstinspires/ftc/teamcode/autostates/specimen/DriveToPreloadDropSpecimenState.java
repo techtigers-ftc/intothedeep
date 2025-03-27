@@ -5,8 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
-import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 /**
  * Drives to the chamber and clips the preload specimen for the beginning of the specimen auto
@@ -37,7 +35,7 @@ public class DriveToPreloadDropSpecimenState extends DriveStateBase {
         super(name, drive, robotState, 5);
         addCommands(
                 autoDriveCommand,
-                new DropperForwardCarryNoTransferAction(dropper, robotState),
+                new DropperCarryNoTransferAction(dropper, robotState),
                 new SequentialCommandGroup(
                         new WaitCommand(750),
                         new IntakeReadyToPickupAction(intake, robotState, () -> 7)

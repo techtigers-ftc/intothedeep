@@ -3,33 +3,34 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that moves the dropper slides in order to hang the specimen on the chamber backwards
+ * A command group that moves the dropper slides in order to hang the
+ * specimen on the chamber forwards, without releasing the specimen
  */
-public class DropperBackSlapAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = DropperBackSlapAction.class.getSimpleName();
+public class DropperSlapNoReleaseAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = DropperSlapNoReleaseAction.class.getSimpleName();
     private final RobotState robotState;
 
-
     /**
-     * Creates a new DropperBackSlapAction
+     * Creates a new DropperSlapNoReleaseAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperBackSlapAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperSlapNoReleaseAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACK_SLAP_POSITION, 0),
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
                 new WaitCommand(300),
-                new DropperOpenAction(dropper, 100)
+                new DropperPitchAction(dropper,
+                        DropperSubsystem.PITCH_SLAP_POSITION +20, 0)
         );
     }
 
@@ -37,7 +38,7 @@ public class DropperBackSlapAction extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {
-            robotState.setDropperState(DropperState.BACK_SLAP);
+            robotState.setDropperState(DropperState.FRONT_SLAP);
         }
     }
 }

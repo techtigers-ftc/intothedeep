@@ -46,7 +46,7 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new DropperPitchAction(dropper,
-                                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
                                 new WaitCommand(100),
                                 new DropperOpenAction(dropper)
                         ),

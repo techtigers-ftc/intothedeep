@@ -1,25 +1,18 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import androidx.annotation.RequiresPermission;
-
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * Drive state that drives the robot from the chamber to a sample drop

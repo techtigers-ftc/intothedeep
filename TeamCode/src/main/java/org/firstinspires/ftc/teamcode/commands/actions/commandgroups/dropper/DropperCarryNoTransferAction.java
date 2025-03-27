@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
@@ -11,35 +10,34 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that gets the robot ready to do a wall intake without transferring a sample
+ * A command group that moves the dropper to the forward high chamber drop position, with the
+ * specimen upside down, ready to be clipped downwards onto the high chamber.
  */
-public class DropperForwardWallIntakeNoTransferAction extends ParallelCommandGroup {
-    private static final String LOG_TAG = DropperForwardWallIntakeNoTransferAction.class.getSimpleName();
+public class DropperCarryNoTransferAction extends ParallelCommandGroup {
+    private static final String LOG_TAG = DropperCarryNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperForwardWallIntakeNoTransferAction
+     * Creates a new DropperCarryNoTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperForwardWallIntakeNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperCarryNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.25),
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_FRONT_WALL_INTAKE_POSITION, 200),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_CHAMBER_POSITION, 0.5),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_TRANSFER_POSITION, 200),
-                new DropperOpenAction(dropper, 100)
+                        DropperSubsystem.ROTATION_SLAP_POSITION, 300)
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        super.end(interrupted);
         if (!interrupted) {
-            robotState.setDropperState(DropperState.WALL_INTAKE);
+            robotState.setDropperState(DropperState.FORWARD_CARRY);
         }
     }
 }

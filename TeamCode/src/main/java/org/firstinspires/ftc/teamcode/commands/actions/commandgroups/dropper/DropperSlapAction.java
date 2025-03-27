@@ -10,28 +10,27 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
- * A command group that moves the dropper slides in order to hang the
- * specimen on the chamber forwards, without releasing the specimen
+ * A command group that moves the dropper slides in order to hang the specimen on the chamber forwards
  */
-public class DropperFrontSlapNoReleaseAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = DropperFrontSlapNoReleaseAction.class.getSimpleName();
+public class DropperSlapAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = DropperSlapAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperFrontSlapNoReleaseAction
+     * Creates a new DropperSlapAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperFrontSlapNoReleaseAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperSlapAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperPitchAction(dropper,
-                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_SLAP_POSITION, 0),
                 new WaitCommand(300),
                 new DropperPitchAction(dropper,
-                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION+20, 0)
+                        DropperSubsystem.PITCH_SLAP_POSITION +20, 0),
+                new DropperOpenAction(dropper, 100)
         );
     }
 

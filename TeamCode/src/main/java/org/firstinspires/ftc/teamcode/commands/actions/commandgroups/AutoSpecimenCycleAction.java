@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
@@ -57,7 +57,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 2
                         ),
-                        new DropperForwardCarryNoTransferAction(dropper, robotState)
+                        new DropperCarryNoTransferAction(dropper, robotState)
                 ),
                 new ClipSpecimenState("clipSpecimen", drive, dropper, robotState),
                 // Drive back

@@ -11,15 +11,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
-import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackSlapAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
+import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
@@ -28,9 +25,9 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferNoVisionAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
@@ -215,16 +212,13 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         // Dropper TODO: Split into a different method
 
         // Dropper State Transitions
-        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
+        DropperCarryWallAction dropperCarryWallAction = new DropperCarryWallAction(dropper, robotState);
         DropperWallIntakeAction dropperWallIntakeAction =
                 new DropperWallIntakeAction(dropper, intake, robotState);
         DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
-        DropperBackSlapAction dropperBackSlapAction = new DropperBackSlapAction(dropper, robotState);
-        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
-        DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
-        DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
-        DropperForwardCarryNoTransferAction dropperForwardCarryNoTransferAction = new DropperForwardCarryNoTransferAction(dropper, robotState);
-        DropperForwardCarryAction dropperForwardCarryAction = new DropperForwardCarryAction(dropper, intake, robotState);
+        DropperSlapAction dropperSlapAction = new DropperSlapAction(dropper, robotState);
+        DropperCarryNoTransferAction dropperCarryNoTransferAction = new DropperCarryNoTransferAction(dropper, robotState);
+        DropperCarryAction dropperCarryAction = new DropperCarryAction(dropper, intake, robotState);
         DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
@@ -260,16 +254,11 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         // Wall Intake
         dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
         dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeNoTransferAction);
-        dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
+        dpadRight.and(wallIntake).whenActive(dropperCarryWallAction);
 
-        // Dropper specimen movements
-        back.and(backwardCarry).whenActive(dropperBackSlapAction);
-        back.and(blockInIntake).and(transfer).whenActive(dropperBackwardCarryAction);
-        back.and(backwardCarry.negate()).and(blockInDropper).whenActive(dropperBackwardCarryNoTransferAction);
-
-        dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
-        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
+        dpadRight.and(forwardCarry).whenActive(dropperSlapAction);
+        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperCarryAction);
+        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperCarryNoTransferAction);
 
         //Manual Dropper Stuff
 
