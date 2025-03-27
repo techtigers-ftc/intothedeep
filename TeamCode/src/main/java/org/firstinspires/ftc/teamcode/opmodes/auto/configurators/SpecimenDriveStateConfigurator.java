@@ -29,10 +29,6 @@ public class SpecimenDriveStateConfigurator {
     public static final double MINISCULE_TOLERANCE = 1.25;
     public static final double MINISCULE_ANGLE_TOLERANCE = Math.toRadians(1.5);
     public static final double MICROSCOPIC_TOLERANCE = 1;
-    public static double DRIVE_P = 0.006;
-    public static double DRIVE_D = 0.0035;
-    public static double TRANS_P = 0.08;
-    public static double TRANS_D = 0.001;
 
     /**
      * Configures the DriveToPreloadDropState.
@@ -40,8 +36,8 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToPreloadDropState to configure
      */
     public static void configPreloadDrop(DriveToPreloadDropSpecimenState state) {
-        state.setTranslationalPIDF(TRANS_P, 0, TRANS_D, 0);
-        state.setDrivePIDF(DRIVE_P, 0, DRIVE_D, 0.6, 0);
+        state.setTranslationalPIDF(0.08, 0, 0.001, 0);
+        state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
 //        state.setPrimaryPIDSToTuning();
 
