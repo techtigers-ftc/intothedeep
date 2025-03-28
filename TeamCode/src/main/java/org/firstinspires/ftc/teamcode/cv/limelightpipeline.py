@@ -2,7 +2,7 @@
 # Exposure = 1822
 # Sensor Gain = 32.2
 # Red Balance = 1175
-# Blue Balance = 1868
+# Blue Balance = 1594
 import cv2
 import numpy as np
 import math
@@ -70,7 +70,7 @@ DILATE_KERNEL = np.ones((3, 3), np.uint8)
 HSV_BLUE_RANGE = ([90, 70, 20], [140, 255, 255])
 HSV_RED_RANGE_1 = ([0, 70, 20], [5, 255, 255])  # Red wraps around in HSV
 HSV_RED_RANGE_2 = ([150, 70, 20], [180, 255, 255])
-HSV_YELLOW_RANGE = ([20, 70, 150], [100, 255, 255])
+HSV_YELLOW_RANGE = ([20, 150, 150], [100, 255, 255])
 
 
 # Constants for filtering contours
@@ -196,9 +196,9 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    # llrobot[0] = 1
+    llrobot[0] = 1
     llrobot[1] = 1
-    # llrobot[2] = 1
+    llrobot[2] = 1
     llrobot[3] = 0
     try:
         usingYellow = llrobot[0] == 1
@@ -329,7 +329,7 @@ def runPipeline(frame, llrobot):
             return (width / 2 - center[0]) ** 2 + (height / 2 - center[1]) ** 2
 
         def dist_for_coarse(center):
-            return height - center[1]
+            return (width / 2 - center[0]) ** 2 * 4 + (height / 2 - center[1]) ** 2
 
         if isFine:
             dist_func = dist_for_fine

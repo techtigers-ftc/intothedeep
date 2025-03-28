@@ -377,7 +377,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -409,9 +409,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 ////        telemetry.addLine();
 //        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
 //        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
-//        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
-//        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
-//        telemetry.addLine();
+        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
+        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
+        telemetry.addLine();
         telemetry.addData("Absolute Block Orientation", robotState.getAbsoluteBlockPosition().getHeading());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
         telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
