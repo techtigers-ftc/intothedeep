@@ -80,11 +80,11 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState);
         SpecimenDriveStateConfigurator.configPreloadDrop(driveToPreloadDrop);
 
-        ClipPreloadState clipPreload = new ClipPreloadState(
+        ClipAndIntakeState clipPreload = new ClipAndIntakeState(
                 "clipPreload",
-                dropper,
-                intake,
                 drive,
+                intake,
+                dropper,
                 robotState);
 
         ClipSpecimenState clipSpecimen = new ClipSpecimenState(
@@ -289,9 +289,9 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.DRIVE_END)
                 .addTransition(driveToPreloadDrop, clipPreload, AutoState.TIMEOUT)
                 // Drives to the first intake if a sample is intaken, goes to the first push if not
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
-                .addTransition(clipPreload, driveToFirstIntake, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SAMPLE_INTAKE_COMPLETE)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(clipPreload, driveToFirstIntake, AutoState.TIMEOUT)
                 // Intakes the first specimen
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.TIMEOUT)
