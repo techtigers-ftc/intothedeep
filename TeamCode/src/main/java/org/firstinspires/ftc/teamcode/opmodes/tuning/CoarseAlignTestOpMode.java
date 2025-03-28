@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -52,6 +53,8 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
 
         IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(coarseAlignAction);
+
+        driverGamepad.getGamepadButton(GamepadKeys.Button.START).whenPressed(new InstantCommand(() -> intake.moveSlidesAbsolute(0)));
 
         registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem, odometry);
     }

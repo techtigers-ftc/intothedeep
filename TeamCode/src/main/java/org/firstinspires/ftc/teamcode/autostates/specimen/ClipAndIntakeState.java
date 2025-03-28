@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
@@ -50,8 +51,12 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                 new WaitCommand(100),
                                 new DropperOpenAction(dropper)
                         ),
-                        new IntakeCoarseAlignAction(drive, intake, robotState)
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(robotState::isBlockDetected),
+                                new IntakeCoarseAlignAction(drive, intake, robotState)
+                        )
                 ),
+                new WaitUntilCommand(robotState::isBlockDetected),
                 new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }

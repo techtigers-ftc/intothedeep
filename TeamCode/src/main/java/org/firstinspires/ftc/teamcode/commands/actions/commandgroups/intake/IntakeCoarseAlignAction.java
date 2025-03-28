@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -45,7 +46,7 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
                                 0.5, Math.toRadians(2)
                         ),
                         new IntakeReadyToPickupAction(intake, robotState,
-                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - LimelightSubsystem.LIMELIGHT_FINE_OFFSET)
+                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - LimelightSubsystem.LIMELIGHT_FINE_OFFSET - 1)
                 )
         );
     }

@@ -54,7 +54,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                 () -> targetPositions[0],
                                 () -> targetPositions[1],
                                 () -> targetPositions[2],
-                                0.5, Math.toRadians(2))
+                                0.6, Math.toRadians(2))
                 )
         );
     }
@@ -87,5 +87,6 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         robotState.setVisionAligning(false);
+        RobotLog.dd("Fine Align Debug", "Error X: %f Y: %f", targetPositions[0] - robotState.getRobotCurrentPose().getX(), targetPositions[1] - robotState.getRobotCurrentPose().getY());
     }
 }
