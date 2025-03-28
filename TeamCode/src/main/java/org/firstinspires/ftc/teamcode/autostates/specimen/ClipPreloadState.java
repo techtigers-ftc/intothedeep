@@ -7,6 +7,8 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
@@ -42,9 +44,14 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
         addCommands(
                 new SequentialCommandGroup(
                         new RawPowerDriveAction(drive, 0.6, 0.1),
-                        new WaitUntilCommand(robotState::isBlockDetected),
-                        new IntakeCoarseAlignAction(drive, intake, robotState),
-                        new InstantCommand(() -> robotState.setBlockDetected(false)),
+//                        new WaitUntilCommand(robotState::isBlockDetected),
+//                        new IntakeCoarseAlignAction(drive, intake, robotState),
+//                        new InstantCommand(() -> robotState.setBlockDetected(false)),
+//                        new WaitUntilCommand(robotState::isBlockDetected),
+//                        new IntakeFinePickupAction(drive, intake,
+//                                robotState::getBlockOrientation,
+//                                robotState)
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 5),
                         new WaitUntilCommand(robotState::isBlockDetected),
                         new IntakeFinePickupAction(drive, intake,
                                 robotState::getBlockOrientation,
@@ -53,7 +60,7 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
                 new SequentialCommandGroup(
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_SLAP_POSITION, 0),
-                        new WaitCommand(50),
+                        new WaitCommand(45),
                         new DropperOpenAction(dropper)
                 )
         );

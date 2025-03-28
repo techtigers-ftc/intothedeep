@@ -64,7 +64,7 @@ public class SpecimenDriveStateConfigurator {
      */
     public static void configFirstIntake(DriveToFirstSpecimenIntakeState state) {
         state.setTranslationalPIDF(0.03, 0, 0.001, 0);
-        state.setDrivePIDF(0.008, 0, 0.0045, 0.6, 0);
+        state.setDrivePIDF(0.008, 0, 0.005, 0.6, 0);
         state.setHeadingPIDF(0.5, 0, 0.03, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -97,7 +97,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(113, 12),
-                                new Point(71, 42)
+                                new Point(74, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -310,7 +310,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(129, 9),
-                                new Point(71, 42)
+                                new Point(71.5, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -335,7 +335,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(71, 42),
-                                new Point(113, 12)
+                                new Point(111, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -360,7 +360,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(113, 12),
-                                new Point(71, 42)
+                                new Point(73, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()

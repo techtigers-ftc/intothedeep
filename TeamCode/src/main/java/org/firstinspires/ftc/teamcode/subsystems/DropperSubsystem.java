@@ -58,7 +58,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     // Old values for an axon micro: closed 0.6, open 0.24
     // New values for an injora: closed 0.6, open 0.26
     public static double CLAW_OPENED_POSITION = 0.58;
-    public static double CLAW_CLOSED_POSITION = 0.32;
+    public static double CLAW_CLOSED_POSITION = 0.31;
     public static double PRIMARY_KP = 0.011;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;

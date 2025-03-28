@@ -36,7 +36,7 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
         this.robotState = robotState;
         runCounter = 0;
         addCommands(
-                new RawPowerDriveAction(drive, 0.8, 0.1),
+                new RawPowerDriveAction(drive, 0.8, 0.08),
                 new SequentialCommandGroup(
                         new DropperPitchAction(dropper,
                                 DropperSubsystem.PITCH_SLAP_POSITION, 0),
