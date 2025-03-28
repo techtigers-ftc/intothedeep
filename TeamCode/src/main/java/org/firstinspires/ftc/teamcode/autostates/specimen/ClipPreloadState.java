@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -43,7 +41,8 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 new SequentialCommandGroup(
-                        new RawPowerDriveAction(drive, 0.6, 0.1),
+                        new ParallelCommandGroup(
+                                new RawPowerDriveAction(drive, 0.8, 0.2),
 //                        new WaitUntilCommand(robotState::isBlockDetected),
 //                        new IntakeCoarseAlignAction(drive, intake, robotState),
 //                        new InstantCommand(() -> robotState.setBlockDetected(false)),
@@ -51,7 +50,10 @@ public class ClipPreloadState extends ParallelCommandGroupState<AutoState> {
 //                        new IntakeFinePickupAction(drive, intake,
 //                                robotState::getBlockOrientation,
 //                                robotState)
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 5),
+                                new SequentialCommandGroup(
+                                        new WaitCommand(25),
+                                        new IntakeReadyToPickupAction(intake, robotState, () -> 5)
+                                )),
                         new WaitUntilCommand(robotState::isBlockDetected),
                         new IntakeFinePickupAction(drive, intake,
                                 robotState::getBlockOrientation,
