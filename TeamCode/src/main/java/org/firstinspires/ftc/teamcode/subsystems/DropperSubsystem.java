@@ -34,18 +34,18 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
-    public static final double PITCH_INIT_POSITION = 95;
+    public static final double PITCH_INIT_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 30;
     public static final double PITCH_BASKET_POSITION = 225;
     public static final double PITCH_CHAMBER_POSITION = 145; // 180
     public static final double PITCH_SLAP_POSITION = 80;
-    public static final double PITCH_WALL_INTAKE_POSITION = 305;
+    public static final double PITCH_WALL_INTAKE_POSITION = 310;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 205;
-    public static final double ROTATION_BASKET_POSITION = 205;
-    public static final double ROTATION_SLAP_POSITION = 205;
-    public static final double ROTATION_WALL_INTAKE_POSITION = 5;
+    public static final double ROTATION_TRANSFER_POSITION = 210;
+    public static final double ROTATION_BASKET_POSITION = 210;
+    public static final double ROTATION_SLAP_POSITION = 210;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 10;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower
