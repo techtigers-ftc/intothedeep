@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
@@ -225,20 +223,20 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     @Override
     public void execute() {
         super.execute();
-        // If the robot is stuck or the timeout is reached for the first time, we need to recover
-        if (autoDriveCommand.isRobotStuck() || (isTimeoutReached() && recoveryCounter == 0)) {
-            // Generate a new path chain using the robot's current and final poses
-            PathChain pathChain = new PathBuilder().addBezierLine(
-                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
-                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
-            ).setLinearHeadingInterpolation(
-                    robotState.getRobotCurrentPose().getHeading(),
-                    robotState.getRobotFinalPose().getHeading()
-            ).build();
-            autoDriveCommand.setPathChain(pathChain);
-            recoveryCounter++;
-//            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
-        }
+//        // If the robot is stuck or the timeout is reached for the first time, we need to recover
+//        if (autoDriveCommand.isRobotStuck() || (isTimeoutReached() && recoveryCounter == 0)) {
+//            // Generate a new path chain using the robot's current and final poses
+//            PathChain pathChain = new PathBuilder().addBezierLine(
+//                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
+//                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
+//            ).setLinearHeadingInterpolation(
+//                    robotState.getRobotCurrentPose().getHeading(),
+//                    robotState.getRobotFinalPose().getHeading()
+//            ).build();
+//            autoDriveCommand.setPathChain(pathChain);
+//            recoveryCounter++;
+////            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
+//        }
     }
 
     @Override

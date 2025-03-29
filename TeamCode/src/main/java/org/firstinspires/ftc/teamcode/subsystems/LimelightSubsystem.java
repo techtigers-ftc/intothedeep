@@ -30,7 +30,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
     public static double LIMELIGHT_HEIGHT = 10.25;
-    public static double CAMERA_COARSE_ANGLE = 45;
+    public static double CAMERA_COARSE_ANGLE = 40;
     private final RobotState robotState;
     private final Limelight3A limelight;
     private final AbsoluteBlockPosition absoluteBlockPosition;
@@ -39,6 +39,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private double lateralLowerBound = -5;
     private double lateralUpperBound = 1;
     private double framesCached;
+
+    private boolean isLastModeCourse;
 
 
     /**
@@ -52,6 +54,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         absoluteBlockPosition = new AbsoluteBlockPosition(robotState);
         framesCached = 1;
+        isLastModeCourse = robotState.isCoarseCameraMode();
     }
 
     @Override
@@ -151,7 +154,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     );
                     robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
                 } else {
-                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(90 - CAMERA_COARSE_ANGLE + result.getTy()));
+                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(CAMERA_COARSE_ANGLE + result.getTy()));
                     double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
 
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
@@ -170,6 +173,11 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
                 }
             }
+        }
+
+        if (isLastModeCourse != robotState.isCoarseCameraMode()) {
+            isLastModeCourse = robotState.isCoarseCameraMode();
+            absoluteBlockPosition.resetBlockDetection();
         }
         robotState.setBlockDetected(absoluteBlockPosition.isBlockDetected());
     }

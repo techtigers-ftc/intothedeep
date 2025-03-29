@@ -56,6 +56,7 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                 new IntakeCoarseAlignAction(drive, intake, robotState)
                         )
                 ),
+                new WaitCommand(100),
                 new WaitUntilCommand(robotState::isBlockDetected),
                 new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );

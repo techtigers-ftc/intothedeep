@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarsePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -54,6 +55,9 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         IntakeCoarseAlignAction coarseAlignAction = new IntakeCoarseAlignAction(drive, intake, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(coarseAlignAction);
 
+        IntakeCoarsePickupAction coarsePickupAction = new IntakeCoarsePickupAction(drive, intake, dropper, robotState);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.B).whenPressed(coarsePickupAction);
+
         driverGamepad.getGamepadButton(GamepadKeys.Button.START).whenPressed(new InstantCommand(() -> intake.moveSlidesAbsolute(0)));
 
         registerSubsystems(limelight, dropper, intake, drive, sensorSubsystem, odometry);
@@ -69,6 +73,8 @@ public class CoarseAlignTestOpMode extends BaseOpMode {
         telemetry.addLine();
         telemetry.addData("Forward Fine", robotState.getBlockForwardFine());
         telemetry.addData("Lateral Fine", robotState.getBlockLateralFine());
+        telemetry.addLine();
+        telemetry.addData("Block Color Selection", robotState.getBlockColorPreference());
         telemetry.addLine();
         telemetry.addData("Orientation", robotState.getBlockOrientation());
         telemetry.addData("Camera Mode", robotState.isCoarseCameraMode());

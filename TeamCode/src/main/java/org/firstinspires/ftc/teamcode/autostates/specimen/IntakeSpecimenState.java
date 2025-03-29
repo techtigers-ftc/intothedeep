@@ -1,19 +1,14 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
-import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerToDistanceDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
 
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
@@ -42,9 +37,10 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.5, 1.5),
-                new DropperCloseAction(dropper, 150),
-                new DropperPitchAction(dropper, 295, 10),
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 1.5),
+                new DropperCloseAction(dropper, 0),
+                new DropperPitchAction(dropper, 275, 0),
+//                new WaitCommand(10),
                 new InstantCommand(() -> dropperPitchUp = true)
         );
     }
@@ -66,7 +62,7 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED && dropperPitchUp) {
+        if (dropperPitchUp) {
             if (runCounter == 1) {
                 return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
             } else if (runCounter == 2) {
