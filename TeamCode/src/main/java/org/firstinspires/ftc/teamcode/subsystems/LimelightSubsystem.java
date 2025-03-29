@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.utils.AbsoluteBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 
 import team.techtigers.base.CloseableSubsystem;
-import team.techtigers.core.paths.Waypoint;
 
 /**
  * A subsystem which saves a detected sample's attributes into RobotState
@@ -33,7 +32,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
     public static double LIMELIGHT_HEIGHT_COARSE = 10.25;
     public static double LIMELIGHT_HEIGHT_FINE = 8.5;
-    public static double CAMERA_FINE_ANGLE = 15;
+    public static double CAMERA_FINE_ANGLE = 22;
     public static double CAMERA_COARSE_ANGLE = 49;
     private final RobotState robotState;
     private final Limelight3A limelight;
@@ -115,7 +114,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double blue = robotState.isBlue() ? 1 : 0;
         double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;
-        double coarseCamera = robotState.isCoarseCameraMode() ? 1 : 0;
+        double coarseCamera = robotState.isCoarseCameraMode() ? 0 : 1;
 
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
             yellow = 1;
@@ -125,7 +124,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             yellow = 1;
         }
 
-        limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
+        limelight.updatePythonInputs(yellow, red, blue, 1, 0, 0, 0, 0);
 
         LLResult result = limelight.getLatestResult();
 
@@ -142,6 +141,8 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
                     double forwardFine = LIMELIGHT_HEIGHT_FINE * Math.tan(Math.toRadians(CAMERA_FINE_ANGLE + result.getTy()));
                     double lateralFine = forwardFine * Math.tan(Math.toRadians(result.getTx()));
+                    RobotLog.dd("limelight", "tx: %f", result.getTx());
+                    RobotLog.dd("limelight", "ty: %f", result.getTy());
 
                     robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
