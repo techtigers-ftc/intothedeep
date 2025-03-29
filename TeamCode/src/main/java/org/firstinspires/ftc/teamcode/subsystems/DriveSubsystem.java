@@ -23,7 +23,7 @@ import team.techtigers.base.CloseableSubsystem;
  */
 public class DriveSubsystem extends CloseableSubsystem {
     private static final double GEAR_MULTIPLIER = 0.5;
-    private static final double TURN_MULTIPLIER = 0.45;
+    private static final double TURN_MULTIPLIER = 0.6;
     private static final double TURN_GEAR_MULTIPLIER = 0.5;
     public final DcMotor frontLeft, frontRight;
     public final DcMotor backLeft, backRight;
@@ -128,7 +128,7 @@ public class DriveSubsystem extends CloseableSubsystem {
     public void driveFieldCentric(double forward, double strafe, double rotation, double heading) {
         double strafeSpeed = Range.clip(strafe, -1, 1);
         double forwardSpeed = Range.clip(forward, -1, 1);
-        double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER * 0.9;
+        double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER;
 
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
 //            strafeSpeed *= GEAR_MULTIPLIER;
