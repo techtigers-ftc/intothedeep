@@ -21,12 +21,12 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 /**
  * Drive state that drives the robot from the chamber to a sample drop
  */
-public class DriveFromChamberSampleDropState extends DriveStateBase {
+public class DriveFromWallSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
-            DriveFromChamberSampleDropState.class.getSimpleName();
+            DriveFromWallSampleDropState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveFromChamberSampleDropState
+     * Constructor for the DriveFromWallSampleDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
@@ -34,25 +34,32 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public DriveFromChamberSampleDropState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public DriveFromWallSampleDropState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new ReadyToTransferAction(intake, dropper, robotState),
-                        new TransferAction(dropper, intake, robotState),
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new DropperOpenAction(dropper, 100)
-                                ),
-                                new SequentialCommandGroup(
-                                        new WaitUntilCommand(() -> robotState.getAutoRemainingTime() < 0.1 && dropper.getPitch() > 180),
-                                        new DropperOpenAction(dropper)
-                                ),
-                                new IntakeTuckAfterTransferAction(dropper, intake, robotState)
-                        )
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 80),
+                        new DropperHighBasketNoTransferAction(dropper, robotState),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
+                        new DropperOpenAction(dropper, 50)
                 )
+//
+//                new SequentialCommandGroup(
+//                        new ReadyToTransferAction(intake, dropper, robotState),
+//                        new TransferAction(dropper, intake, robotState),
+//                        new ParallelCommandGroup(
+//                                new SequentialCommandGroup(
+//                                        new DropperHighBasketNoTransferAction(dropper, robotState),
+//                                        new DropperOpenAction(dropper, 100)
+//                                ),
+//                                new SequentialCommandGroup(
+//                                        new WaitUntilCommand(() -> robotState.getAutoRemainingTime() < 0.1 && dropper.getPitch() > 180),
+//                                        new DropperOpenAction(dropper)
+//                                ),
+//                                new IntakeTuckAfterTransferAction(dropper, intake, robotState)
+//                        )
+//                )
         );
     }
 
@@ -65,7 +72,6 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;
         }
-
         return AutoState.RUNNING;
     }
 }

@@ -26,7 +26,7 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
             DriveToFirstSpecimenIntakeState.class.getSimpleName();
 
     /**
-     * Constructor for the DriveFromChamberSampleDropState
+     * Constructor for the DriveFromWallSampleDropState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem

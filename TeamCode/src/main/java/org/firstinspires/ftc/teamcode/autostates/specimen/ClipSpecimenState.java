@@ -64,15 +64,15 @@ public class ClipSpecimenState extends ParallelCommandGroupState<AutoState> {
     public AutoState getCurrentCondition() {
         if (robotState.getDropperClawState() == ClawState.OPEN || isTimeoutReached()) {
             if (runCounter == 1) {
-                return AutoState.SPECIMEN_1_DROP_COMPLETE;
+                return AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE;
             } else if (runCounter == 2) {
-                return AutoState.SPECIMEN_2_DROP_COMPLETE;
+                return AutoState.SPECIMEN_1_DROP_COMPLETE;
             } else if (runCounter == 3) {
-                return AutoState.SPECIMEN_3_DROP_COMPLETE;
+                return AutoState.SPECIMEN_2_DROP_COMPLETE;
             } else if (runCounter == 4) {
-                return AutoState.SPECIMEN_4_DROP_COMPLETE;
+                return AutoState.SPECIMEN_3_DROP_COMPLETE;
             } else {
-                return AutoState.SPECIMEN_5_DROP_COMPLETE;
+                return AutoState.SPECIMEN_4_DROP_COMPLETE;
             }
         }
         return AutoState.RUNNING;

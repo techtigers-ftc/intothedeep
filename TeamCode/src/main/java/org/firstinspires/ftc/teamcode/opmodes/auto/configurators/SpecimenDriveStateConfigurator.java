@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromWallSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
@@ -384,10 +384,10 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(71, 42),
+                                new Point(13, 10),
                                 new Point(120, 15)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
+                        .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                         .build()
         );
 
@@ -400,23 +400,21 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state The DriveToGeneralSampleDropState to configure
      */
-    public static void configSampleDrop(DriveFromChamberSampleDropState state) {
-        state.setTranslationalPIDF(0.06, 0, 0, 0);
-        state.setDrivePIDF(0.007, 0, 0.0065, 0.6, 0);
-        state.setHeadingPIDF(0.7, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+    public static void configSampleDrop(DriveFromWallSampleDropState state) {
+//       state.setTranslationalPIDF(0.08, 0, 0.004, 0);
+//        state.setDrivePIDF(0.007, 0, 0.004, 0.6, 0);
+//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
-                                new BezierCurve(
-                                        new Point(76, 41.5),
-                                        new Point(60, 35),
-                                        new Point(11, 11)
+                                new BezierLine(
+                                        new Point(111, 12),
+                                        new Point(13, 12)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(45))
+                        .setConstantHeadingInterpolation(Math.toRadians(0))
                         .build()
         );
 
