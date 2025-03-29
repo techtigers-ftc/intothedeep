@@ -30,7 +30,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
     public static double LIMELIGHT_HEIGHT = 10.25;
-    public static double CAMERA_COARSE_ANGLE = 49;
+    public static double CAMERA_COARSE_ANGLE = 45;
     private final RobotState robotState;
     private final Limelight3A limelight;
     private final AbsoluteBlockPosition absoluteBlockPosition;
@@ -111,7 +111,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
         double blue = robotState.isBlue() ? 1 : 0;
         double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;
-        double coarseCamera = robotState.isCoarseCameraMode() ? 1 : 0;
+        double coarseCamera = robotState.isCoarseCameraMode() ? 0 : 1;
 
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
             yellow = 1;

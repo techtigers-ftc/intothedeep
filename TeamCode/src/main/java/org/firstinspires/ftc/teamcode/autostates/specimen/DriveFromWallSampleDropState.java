@@ -39,7 +39,7 @@ public class DriveFromWallSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 80),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 100),
                         new DropperHighBasketNoTransferAction(dropper, robotState),
                         new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 14),
                         new DropperOpenAction(dropper, 50)

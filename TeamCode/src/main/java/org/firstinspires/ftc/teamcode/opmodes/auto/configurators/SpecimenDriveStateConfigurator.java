@@ -335,7 +335,7 @@ public class SpecimenDriveStateConfigurator {
                 new PathBuilder()
                         .addBezierCurve(
                                 new Point(71, 42),
-                                new Point(111, 12)
+                                new Point(113, 13.5)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -359,7 +359,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierCurve(
-                                new Point(113, 12),
+                                new Point(113, 13.5),
                                 new Point(72, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -411,10 +411,10 @@ public class SpecimenDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(111, 12),
-                                        new Point(13, 12)
+                                        new Point(15, 10)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(0))
+                        .setConstantHeadingInterpolation(0)
                         .build()
         );
 

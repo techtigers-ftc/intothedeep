@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -34,10 +35,10 @@ public class WallIntakeSampleState extends SequentialCommandGroupState<AutoState
         super(name);
         this.robotState = robotState;
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.5, 1.5),
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 1.5),
                 new DropperCloseAction(dropper, 150),
-                new DropperPitchAction(dropper, 295, 10),
-                new InstantCommand(() -> dropperPitchUp = true)
+                new DropperPitchAction(dropper, 275, 0),
+                new WaitCommand(20)
         );
     }
 
@@ -57,7 +58,7 @@ public class WallIntakeSampleState extends SequentialCommandGroupState<AutoState
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (robotState.getDropperClawState() == ClawState.CLOSED && dropperPitchUp) {
+        if (robotState.getDropperClawState() == ClawState.CLOSED) {
             return AutoState.SAMPLE_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
