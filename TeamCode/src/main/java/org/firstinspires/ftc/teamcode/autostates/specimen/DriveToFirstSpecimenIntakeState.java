@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
@@ -52,12 +51,16 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
                                         new WaitCommand(100),
                                         new IntakeTuckAction(intake, robotState)
                                 ),
-                                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.25),
-                                new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 0),
-                                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 0)
-                        ),
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 25),
-                        new DropperOpenAction(dropper)
+                                new SequentialCommandGroup(
+                                        new ParallelCommandGroup(
+                                                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.75),
+                                                new DropperPitchAction(dropper, DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 300),
+                                                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 0)
+                                        ),
+                                        new DropperOpenAction(dropper)
+                                )
+                        )
+//                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 30),
                 )
         );
     }
@@ -65,7 +68,6 @@ public class DriveToFirstSpecimenIntakeState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-//                robotState.getDropperState() == DropperState.WALL_INTAKE &&
                 robotState.getDropperClawState() == ClawState.OPEN) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
