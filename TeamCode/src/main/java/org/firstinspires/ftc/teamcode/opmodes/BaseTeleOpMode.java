@@ -314,7 +314,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Wall Intake
         dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
-        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeNoTransferAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).and(blockInDropper.negate()).whenActive(dropperWallIntakeNoTransferAction);
         dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
 
         // Dropper specimen movements
