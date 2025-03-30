@@ -310,7 +310,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Wall Intake
         dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
-        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).whenActive(dropperWallIntakeNoTransferAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).and(blockInDropper.negate()).whenActive(
+                dropperWallIntakeNoTransferAction);
         dpadRight.and(wallIntake).whenActive(dropperCarryWallAction);
 
         // Dropper specimen movements
@@ -373,7 +374,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -383,8 +384,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-//        telemetry.addData("Intake State", robotState.getIntakeState());
-//        telemetry.addData("Dropper State", robotState.getDropperState());
+        telemetry.addData("Intake State", robotState.getIntakeState());
+        telemetry.addData("Dropper State", robotState.getDropperState());
+        telemetry.addData("Robot Block Position", robotState.getBlockPosition());
 //        telemetry.addData("Intake Slide POS",
 //                intake.getCurrentSlidePositionInches());
 //        telemetry.addData("Dropper Slide POS",

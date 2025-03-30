@@ -387,7 +387,7 @@ public class SpecimenDriveStateConfigurator {
                                 new Point(13, 10),
                                 new Point(120, 15)
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                         .build()
         );
 
