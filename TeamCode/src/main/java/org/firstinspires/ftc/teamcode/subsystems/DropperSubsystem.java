@@ -42,10 +42,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_WALL_INTAKE_POSITION = 315;
 
     // ROTATION POSITIONS
-    public static final double ROTATION_TRANSFER_POSITION = 210;
-    public static final double ROTATION_BASKET_POSITION = 210;
-    public static final double ROTATION_SLAP_POSITION = 210;
-    public static final double ROTATION_WALL_INTAKE_POSITION = 10;
+    public static final double ROTATION_TRANSFER_POSITION = 205;
+    public static final double ROTATION_BASKET_POSITION = 205;
+    public static final double ROTATION_SLAP_POSITION = 205;
+    public static final double ROTATION_WALL_INTAKE_POSITION = 5;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;
     private static final double SPOOL_GEAR_RATIO = 10.0 / 14.0; // Driver / Follower

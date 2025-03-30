@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
@@ -40,7 +41,9 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     public AutoSpecimenCycleAction(DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
         addRequirements(drive, dropper);
         this.robotState = robotState;
-        startPosition = new Waypoint(113, 13, Math.toRadians(90));
+        startPosition = new Waypoint(robotState.getRobotCurrentPose().getX(),
+                robotState.getRobotCurrentPose().getY(),
+                robotState.getRobotCurrentPose().getHeading());
         needsReset = true;
         addCommands(
                 new IntakeSpecimenState("intakeSpecimen", drive, dropper, robotState),
@@ -82,10 +85,12 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
+//        RobotLog.dd(LOG_TAG,"Auto Specimen Cycle initialized, needs reset: %s", String.valueOf(needsReset));
         if (needsReset) {
             startPosition = new Waypoint(robotState.getRobotCurrentPose().getX(),
                     robotState.getRobotCurrentPose().getY(),
                     robotState.getRobotCurrentPose().getHeading());
+//            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
             needsReset = false;
         }
     }
@@ -96,9 +101,11 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         if (!interrupted) {
             // If the command is not interrupted, recursively schedule it to run again
             this.schedule();
+//            RobotLog.dd(LOG_TAG, "command scheduled again");
         } else {
             // If the command is interrupted, tell the command it needs to reset the next time you run it
             needsReset = true;
+//            RobotLog.dd(LOG_TAG, "Auto Specimen Cycle interrupted");
         }
     }
 }
