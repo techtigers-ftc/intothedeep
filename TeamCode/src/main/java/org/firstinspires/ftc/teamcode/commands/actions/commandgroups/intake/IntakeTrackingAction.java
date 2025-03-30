@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -40,12 +41,13 @@ public class IntakeTrackingAction extends CommandBase {
     public void initialize() {
         intake.setDirectControl(true);
         robotState.setIntakeTracking(true);
+        robotState.setCoarseCameraMode(false);
     }
 
     @Override
     public void execute() {
         double power;
-        if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+        if (robotState.isBlockDetected()) {
             if (frameCount == 0) {
                 detectedSlidePosition = intake.getCurrentSlidePositionInches();
             }
@@ -55,14 +57,15 @@ public class IntakeTrackingAction extends CommandBase {
             frameCount = 0;
             power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
         }
-//        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
-//        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
+        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        RobotLog.dd("IntakeTrackingAction", "Frame Count: %f", frameCount);
         intake.setMotorPower(power);
     }
 
     @Override
     public boolean isFinished() {
-        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 2;
+        return robotState.isBlockDetected() && frameCount > 2;
     }
 
     @Override

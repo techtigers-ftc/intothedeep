@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFineAlignAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
@@ -20,17 +22,16 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * A state to clip a specimen onto the chamber, track a sample, and pick it up
+ * A state to clip a specimen onto the chamber, align to a sample, and pick it up
  */
-public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
+public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
-            ClipAndTrackState.class.getSimpleName();
-    private static final double TIME_TO_DROP = 2.4;
+            ClipAndIntakeState.class.getSimpleName();
     private final RobotState robotState;
     private final IntakeSubsystem intake;
 
     /**
-     * Constructor for the ClipAndTrackState
+     * Constructor for the ClipAndIntakeState
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
@@ -38,26 +39,29 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public ClipAndTrackState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
         this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
-                        new RawPowerDriveAction(drive, 0.8, 0.25),
+                        new RawPowerDriveAction(drive, 0.8, 0.1),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 0)
+                ),
+                new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(100),
                                 new DropperPitchAction(dropper,
                                         DropperSubsystem.PITCH_SLAP_POSITION, 0),
-                                new WaitCommand(150),
+                                new WaitCommand(100),
                                 new DropperOpenAction(dropper)
                         ),
                         new SequentialCommandGroup(
-                                new IntakeTrackingAction(intake, robotState),
-                                new WaitCommand(100)
+                                new IntakeTrackingAction(intake, robotState)
                         )
                 ),
-                new IntakeFineAlignAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new WaitCommand(100),
+                new WaitUntilCommand(robotState::isBlockDetected),
+                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 
@@ -68,10 +72,8 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2.5 && robotState.isIntakeTracking())) {
+        if (super.isTimeoutReached()) {
             return AutoState.TIMEOUT;
-        } else if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
-            return AutoState.NO_TIME;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {

@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
+import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -36,10 +39,11 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
         this.robotState = robotState;
         blockDetected = true;
         addCommands(
-                new WaitUntilCommand(robotState::isBlockDetected),
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
                 new IntakeCoarseAlignAction(drive, intake, robotState),
-                new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeFinePickUpAction(drive, intake, robotState)
+                new WaitCommand(100),
+                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
 

@@ -48,9 +48,8 @@ public class ParallelReadyToTransferAction extends SequentialCommandGroup {
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 0),
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
-                ),
-                new WaitCommand(100)
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.75)
+                )
         );
     }
 

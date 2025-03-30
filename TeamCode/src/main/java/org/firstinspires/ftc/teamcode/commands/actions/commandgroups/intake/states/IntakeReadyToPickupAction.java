@@ -40,6 +40,12 @@ public class IntakeReadyToPickupAction extends ParallelCommandGroup {
     }
 
     @Override
+    public void initialize() {
+        super.initialize();
+        robotState.setCoarseCameraMode(false);
+    }
+
+    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         if (!interrupted) {

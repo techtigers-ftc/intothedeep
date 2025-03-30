@@ -52,9 +52,8 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeLoosenAction(intake, 100),
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
-                ),
-                new WaitCommand(100)
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.75)
+                )
         );
     }
 
