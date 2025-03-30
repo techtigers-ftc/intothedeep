@@ -42,7 +42,7 @@ public class DropperTuningOpMode extends BaseOpMode {
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
-//        // Claw
+        // Claw
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
             dropperSubsystem.closeClaw();
         }));
@@ -74,7 +74,7 @@ public class DropperTuningOpMode extends BaseOpMode {
             dropperSubsystem.setPitchAbsolute(PITCH_POS_2);
         }));
 
-        // Presets for the differential
+//        // Presets for the differential
 //        driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(() -> {
 //            dropperSubsystem.setRotationAbsolute(ROTATION_POS_1);
 //        }));
