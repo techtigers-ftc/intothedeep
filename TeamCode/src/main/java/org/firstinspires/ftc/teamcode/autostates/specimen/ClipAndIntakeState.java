@@ -5,8 +5,9 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
@@ -43,7 +44,10 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         this.intake = intake;
         addCommands(
-                new RawPowerDriveAction(drive, 0.8, 0.1),
+                new ParallelCommandGroup(
+                        new RawPowerDriveAction(drive, 0.8, 0.1),
+                        new IntakeReadyToPickupAction(intake, robotState, () -> 0)
+                ),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new DropperPitchAction(dropper,
@@ -52,8 +56,7 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                 new DropperOpenAction(dropper)
                         ),
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(robotState::isBlockDetected),
-                                new IntakeCoarseAlignAction(drive, intake, robotState)
+                                new IntakeTrackingAction(intake, robotState)
                         )
                 ),
                 new WaitCommand(100),

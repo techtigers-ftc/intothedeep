@@ -29,7 +29,7 @@ public class TransferAction extends ParallelCommandGroup {
         addRequirements(dropper, intake);
         addCommands(
                 new DropperCloseAction(dropper, 50),
-                new IntakeOpenAction(intake, 50)
+                new IntakeOpenAction(intake, 100)
         );
     }
 

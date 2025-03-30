@@ -401,20 +401,22 @@ public class SpecimenDriveStateConfigurator {
      * @param state The DriveToGeneralSampleDropState to configure
      */
     public static void configSampleDrop(DriveFromWallSampleDropState state) {
-//       state.setTranslationalPIDF(0.08, 0, 0.004, 0);
-//        state.setDrivePIDF(0.007, 0, 0.004, 0.6, 0);
-//        state.setHeadingPIDF(0.9, 0, 0.015, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.06, 0, 0, 0);
+        state.setDrivePIDF(0.007, 0, 0.0065, 0.6, 0);
+        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
-                                new BezierLine(
-                                        new Point(111, 12),
-                                        new Point(15, 10)
+                                new BezierCurve(
+                                        new Point(75, 41.5),
+                                        new Point(60, 35),
+                                        new Point(11, 11)
                                 )
                         )
-                        .setConstantHeadingInterpolation(0)
+                        .setLinearHeadingInterpolation(Math.toRadians(45),
+                                Math.toRadians(45))
                         .build()
         );
 
