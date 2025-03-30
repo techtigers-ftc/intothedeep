@@ -28,10 +28,10 @@ public class DropperFrontSlapNoReleaseAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new DropperPitchAction(dropper,
-                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
                 new WaitCommand(300),
                 new DropperPitchAction(dropper,
-                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION+20, 0)
+                        DropperSubsystem.PITCH_SLAP_POSITION+20, 0)
         );
     }
 
