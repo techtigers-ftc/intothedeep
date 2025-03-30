@@ -57,7 +57,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     // Old values for an axon micro: closed 0.6, open 0.24
     // New values for an injora: closed 0.6, open 0.26
-    // claw open/close positions are swapped for the gobilda servo
+    // New claw positions for gobilda claw servo: closed 0.39, open 0.23
     public static double CLAW_OPENED_POSITION = 0.23;
     public static double CLAW_CLOSED_POSITION = 0.39;
     public static double PRIMARY_KP = 0.011;

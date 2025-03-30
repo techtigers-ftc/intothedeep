@@ -18,16 +18,18 @@ import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.AutoSpecimenCycleAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperBackwardCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperForwardCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperFrontSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperLowBasketAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperLowBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSlapAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
@@ -136,7 +138,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
 
 //        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
-        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
+        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(autoSpecimenCycle);
 
 
@@ -181,14 +183,16 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger inDropperReadyToTransfer = new Trigger(() -> robotState.getDropperState() == DropperState.TRANSFER);
 
         // Dropper States
-        DropperCarryWallAction dropperCarryWallAction = new DropperCarryWallAction(dropper, robotState);
+        DropperForwardCarryWallAction dropperForwardCarryWallAction = new DropperForwardCarryWallAction(dropper, robotState);
         DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
         DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
-        DropperSlapAction dropperSlapAction = new DropperSlapAction(dropper, robotState);
-        DropperSlapNoReleaseAction dropperSlapNoReleaseAction =
-                new DropperSlapNoReleaseAction(dropper, robotState);
-        DropperCarryNoTransferAction dropperCarryNoTransferAction = new DropperCarryNoTransferAction(dropper, robotState);
-        DropperCarryAction dropperCarryAction = new DropperCarryAction(dropper, intake, robotState);
+        DropperFrontSlapAction dropperFrontSlapAction = new DropperFrontSlapAction(dropper, robotState);
+        DropperFrontSlapNoReleaseAction dropperFrontSlapNoReleaseAction =
+                new DropperFrontSlapNoReleaseAction(dropper, robotState);
+        DropperBackwardCarryNoTransferAction dropperBackwardCarryNoTransferAction = new DropperBackwardCarryNoTransferAction(dropper, robotState);
+        DropperBackwardCarryAction dropperBackwardCarryAction = new DropperBackwardCarryAction(dropper, intake, robotState);
+        DropperForwardCarryNoTransferAction dropperForwardCarryNoTransferAction = new DropperForwardCarryNoTransferAction(dropper, robotState);
+        DropperForwardCarryAction dropperForwardCarryAction = new DropperForwardCarryAction(dropper, intake, robotState);
         DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
@@ -223,7 +227,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry).whenActive(() -> {
             readyToPickupManual.schedule();
-            dropperSlapAction.schedule();
+            dropperFrontSlapAction.schedule();
         });
         (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry.negate()).whenActive(readyToPickupManual);
         (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
@@ -310,16 +314,15 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         // Wall Intake
         dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
-        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).and(blockInDropper.negate()).whenActive(
-                dropperWallIntakeNoTransferAction);
-        dpadRight.and(wallIntake).whenActive(dropperCarryWallAction);
+        dpadLeft.and(wallIntake.negate()).and(blockInIntake.negate()).and(blockInDropper.negate()).whenActive(dropperWallIntakeNoTransferAction);
+        dpadRight.and(wallIntake).whenActive(dropperForwardCarryWallAction);
 
         // Dropper specimen movements
-        back.and(forwardCarry).whenActive(dropperSlapNoReleaseAction);
+        back.and(forwardCarry).whenActive(dropperFrontSlapNoReleaseAction);
 
-        dpadRight.and(forwardCarry).whenActive(dropperSlapAction);
-        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperCarryAction);
-        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperCarryNoTransferAction);
+        dpadRight.and(forwardCarry).whenActive(dropperFrontSlapAction);
+        dpadRight.and(blockInIntake).and(transfer).whenActive(dropperForwardCarryAction);
+        dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperForwardCarryNoTransferAction);
 
         // Low Basket drop
         driverB.and(blockInIntake).whenActive(dropperLowBasketAction);
@@ -374,7 +377,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();
-//        disableUpdate();
+        disableUpdate();
     }
 
     @Override
@@ -384,17 +387,15 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Intake State", robotState.getIntakeState());
-        telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Robot Block Position", robotState.getBlockPosition());
+//        telemetry.addData("Intake State", robotState.getIntakeState());
+//        telemetry.addData("Dropper State", robotState.getDropperState());
 //        telemetry.addData("Intake Slide POS",
 //                intake.getCurrentSlidePositionInches());
 //        telemetry.addData("Dropper Slide POS",
 //                dropper.getCurrentSlidePositionInches());
 //        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
-        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
-        telemetry.addData("Coarse Camera Mode: ", robotState.isCoarseCameraMode());
+//        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
+//        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
 //        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
 ////        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
 ////        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
@@ -406,14 +407,14 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 ////        telemetry.addData("Voltage: ", robotState.getVoltage());
 ////        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
 ////        telemetry.addLine();
-        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
-        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+//        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
+//        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
 //        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
 //        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
 //        telemetry.addLine();
         telemetry.addData("Absolute Block Orientation", robotState.getAbsoluteBlockPosition().getHeading());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
+        telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
 //        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
