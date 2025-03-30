@@ -196,10 +196,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[0] = 1
-    llrobot[1] = 1
-    llrobot[2] = 1
-    llrobot[3] = 0
+#     llrobot[0] = 1
+#     llrobot[1] = 1
+#     llrobot[2] = 1
+#     llrobot[3] = 0
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
