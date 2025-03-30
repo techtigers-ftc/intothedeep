@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
@@ -29,9 +28,9 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     private static final double Y_TO_SLAP = 37;
     private static final double Y_TO_INTAKE = 2;
     private final RobotState robotState;
+    private final GoBodometrySubsystem odometry;
     private boolean needsReset;
     private Waypoint startPosition;
-    private final GoBodometrySubsystem odometry;
 
     /**
      * Creates a new AutoSpecimenCycleAction
@@ -90,8 +89,8 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         super.initialize();
 //        RobotLog.dd(LOG_TAG,"Auto Specimen Cycle initialized, needs reset: %s", String.valueOf(needsReset));
         if (needsReset) {
-            odometry.setPose(new Waypoint(13, 13, Math.toRadians(90)));
-            startPosition = new Waypoint(13,
+            odometry.setPose(new Waypoint(113, 13, Math.toRadians(90)));
+            startPosition = new Waypoint(113,
                     13,
                     Math.toRadians(90));
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);

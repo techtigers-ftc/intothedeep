@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
-import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -55,11 +53,11 @@ public class IntakeCoarseAlignAction extends SequentialCommandGroup {
     public void initialize() {
         super.initialize();
         robotState.setCoarseCameraMode(true);
-        if (!robotState.isBlockDetected()) {
-            // TODO: Replace with something that won't crash the robot
-            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
-            throw new IllegalStateException("Block not detected");
-        }
+//        if (!robotState.isBlockDetected()) {
+//            // TODO: Replace with something that won't crash the robot
+//            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+//            throw new IllegalStateException("Block not detected");
+//        }
 
         Waypoint blockPos = robotState.getAbsoluteBlockPosition();
         targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(
