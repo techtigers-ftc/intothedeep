@@ -54,7 +54,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                                 () -> targetPositions[0],
                                 () -> targetPositions[1],
                                 () -> targetPositions[2],
-                                0.5, Math.toRadians(2))
+                                0.6, Math.toRadians(2))
                 )
         );
     }
