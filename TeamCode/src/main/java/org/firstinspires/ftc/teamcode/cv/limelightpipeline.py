@@ -67,14 +67,14 @@ DILATE_KERNEL = np.ones((3, 3), np.uint8)
 
 
 # Color detection ranges for different color spaces
-HSV_BLUE_RANGE = ([90, 70, 20], [140, 255, 255])
-HSV_RED_RANGE_1 = ([0, 70, 20], [5, 255, 255])  # Red wraps around in HSV
+HSV_BLUE_RANGE = ([90, 150, 20], [140, 255, 255])
+HSV_RED_RANGE_1 = ([0, 70, 20], [9, 255, 255])  # Red wraps around in HSV
 HSV_RED_RANGE_2 = ([150, 70, 20], [180, 255, 255])
-HSV_YELLOW_RANGE = ([20, 150, 150], [100, 255, 255])
+HSV_YELLOW_RANGE = ([20, 90, 150], [80, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 7000
+SMALL_CONTOUR_AREA_FINE = 25000
 SMALL_CONTOUR_AREA_COARSE = 1500
 
 
@@ -84,7 +84,7 @@ MIN_BRIGHTNESS_THRESHOLD = 20
 
 # Drawing color
 FONT_NAME = cv2.FONT_HERSHEY_SIMPLEX
-FONT_SIZE = 0.25
+FONT_SIZE = 0.5
 FONT_THICKNESS = 1
 
 
@@ -196,10 +196,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[0] = 1
-    llrobot[1] = 1
-    llrobot[2] = 1
-    llrobot[3] = 0
+    # llrobot[0] = 1
+    # llrobot[1] = 1
+    # llrobot[2] = 1
+    # llrobot[3] = 0
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
@@ -326,7 +326,7 @@ def runPipeline(frame, llrobot):
                 )
 
         def dist_for_fine(center):
-            return (width / 2 - center[0]) ** 2 + (height / 2 - center[1]) ** 2
+            return (width / 2 - center[0]) ** 2 * 2 + (height / 2 - center[1]) ** 2
 
         def dist_for_coarse(center):
             return (width / 2 - center[0]) ** 2 * 4 + (height / 2 - center[1]) ** 2
