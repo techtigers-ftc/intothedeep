@@ -170,4 +170,9 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         robotState.setRobotPose(robotPose);
         robotState.setRobotVelocity(robotVelocity);
     }
+
+    public void setPose(Waypoint waypoint) {
+        startPose = startPose.add(waypoint);
+        startPose = new Waypoint(startPose.getX(), startPose.getY(), waypoint.getHeading());
+    }
 }

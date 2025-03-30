@@ -136,7 +136,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
 
 //        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
-        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, robotState);
+        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(autoSpecimenCycle);
 
 
@@ -406,14 +406,14 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 ////        telemetry.addData("Voltage: ", robotState.getVoltage());
 ////        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
 ////        telemetry.addLine();
-//        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
-//        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
+        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
+        telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 //        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
 //        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
 //        telemetry.addLine();
         telemetry.addData("Absolute Block Orientation", robotState.getAbsoluteBlockPosition().getHeading());
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
-        telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
 //        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());

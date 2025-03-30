@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoeffi
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.core.paths.Waypoint;
@@ -24,12 +25,13 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     private static final String LOG_TAG = AutoSpecimenCycleAction.class.getSimpleName();
-    private static final double X_TO_SLAP = 42;
-    private static final double Y_TO_SLAP = 36;
+    private static final double X_TO_SLAP = 43;
+    private static final double Y_TO_SLAP = 37;
     private static final double Y_TO_INTAKE = 2;
     private final RobotState robotState;
     private boolean needsReset;
     private Waypoint startPosition;
+    private final GoBodometrySubsystem odometry;
 
     /**
      * Creates a new AutoSpecimenCycleAction
@@ -38,9 +40,10 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public AutoSpecimenCycleAction(DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
+    public AutoSpecimenCycleAction(DriveSubsystem drive, DropperSubsystem dropper, GoBodometrySubsystem odometry, RobotState robotState) {
         addRequirements(drive, dropper);
         this.robotState = robotState;
+        this.odometry = odometry;
         startPosition = new Waypoint(robotState.getRobotCurrentPose().getX(),
                 robotState.getRobotCurrentPose().getY(),
                 robotState.getRobotCurrentPose().getHeading());
@@ -87,9 +90,10 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         super.initialize();
 //        RobotLog.dd(LOG_TAG,"Auto Specimen Cycle initialized, needs reset: %s", String.valueOf(needsReset));
         if (needsReset) {
-            startPosition = new Waypoint(robotState.getRobotCurrentPose().getX(),
-                    robotState.getRobotCurrentPose().getY(),
-                    robotState.getRobotCurrentPose().getHeading());
+            odometry.setPose(new Waypoint(13, 13, Math.toRadians(90)));
+            startPosition = new Waypoint(13,
+                    13,
+                    Math.toRadians(90));
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
             needsReset = false;
         }
