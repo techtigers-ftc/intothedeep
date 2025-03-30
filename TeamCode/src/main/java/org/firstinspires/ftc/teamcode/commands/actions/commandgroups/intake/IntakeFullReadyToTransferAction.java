@@ -7,7 +7,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.TeleHoldPointAction;
+import org.firstinspires.ftc.teamcode.commands.drive.TeleHoldPointAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -46,7 +46,7 @@ public class IntakeFullReadyToTransferAction extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new WaitCommand(100),
-                new IntakeFineAlignAction(drive, intake, robotState::getBlockOrientation, robotState),
+                new IntakeFineAlignAction(drive, intake, robotState),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 holdRobotPosition,

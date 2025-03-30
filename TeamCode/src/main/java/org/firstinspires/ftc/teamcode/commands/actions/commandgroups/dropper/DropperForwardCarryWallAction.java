@@ -29,7 +29,7 @@ public class DropperForwardCarryWallAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperCloseAction(dropper, 200),
+                new DropperCloseAction(dropper, 150),
                 new DropperForwardCarryNoTransferAction(dropper, robotState)
         );
     }

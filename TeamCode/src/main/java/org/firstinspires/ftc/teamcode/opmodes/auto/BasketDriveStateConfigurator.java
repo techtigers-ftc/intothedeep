@@ -15,12 +15,12 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
  * A class used to configure BasketDriveStates.
  */
 public class BasketDriveStateConfigurator {
-    private static final double MEGA_TOLERANCE = 7;
-    private static final double MEGA_ANGLE_TOLERANCE = Math.toRadians(10);
-    private static final double LARGE_TOLERANCE = 3;
-    private static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
-    private static final double SMALL_TOLERANCE = 2;
-    private static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
+    public static final double MEGA_TOLERANCE = 7;
+    public static final double MEGA_ANGLE_TOLERANCE = Math.toRadians(10);
+    public static final double LARGE_TOLERANCE = 3;
+    public static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
+    public static final double SMALL_TOLERANCE = 2;
+    public static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
 
     /**
      * Configures the DriveToPreloadDropState

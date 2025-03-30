@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
@@ -104,13 +106,8 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void initialize() {
         super.initialize();
         // Set the PIDF coefficients
-        if (!robotState.isAuto()) {
-            follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.7, 0, 0.035, 0));
-            follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
-        } else {
-            follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.4, 0, 0.055, 0));
-            follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
-        }
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.35, 0, 0.01, 0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
         follower.disableSecondaryPIDS();
 
 //        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));

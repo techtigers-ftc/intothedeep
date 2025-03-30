@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColor;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
@@ -64,9 +63,10 @@ public class RobotState extends GlobalState {
     private String previousAutoState;
     private Color debugColor;
     private double autoRemainingTime;
-    private AbsoluteBlockCoordinates absoluteBlockCoordinates;
+    private Waypoint absoluteBlockPosition;
     private Waypoint limelightLastRobotCoords;
     private double intakeSlidePosition;
+    private boolean hasBlockBeenRecentlyDetected;
 
 
     private boolean runDistanceSensor;
@@ -124,9 +124,10 @@ public class RobotState extends GlobalState {
         distanceSensorValue = -1;
         autoRemainingTime = -1;
         headingLockEnabled = false;
-        absoluteBlockCoordinates = new AbsoluteBlockCoordinates();
         limelightLastRobotCoords = new Waypoint(0, 0, 0);
         intakeSlidePosition = 0;
+        absoluteBlockPosition = new Waypoint(0, 0, 0);
+        hasBlockBeenRecentlyDetected = false;
     }
 
     /**
@@ -889,21 +890,37 @@ public class RobotState extends GlobalState {
     }
 
     /**
-     * Gets the absolute coordinates of a detected block
+     * Gets the object which contains the detected block's attributes
      *
-     * @return the detected block's absolute coordinates
+     * @return the object which contains the detected block's attributes
      */
-    public Waypoint getAbsoluteBlockCoordinates() {
-        return absoluteBlockCoordinates.getBlockAbsolutePosition();
+    public Waypoint getAbsoluteBlockPosition() {
+        return absoluteBlockPosition;
     }
 
     /**
-     * Sets the absolute coordinates of a detected block
+     * Sets the absolute position of a detected block
      *
-     * @param coordinates the detected block's absolute coordinates
+     * @param pos the absolute position of a detected block
      */
-    public void setAbsoluteBlockCoordinates(AbsoluteBlockCoordinates coordinates) {
-        this.absoluteBlockCoordinates = coordinates;
+    public void setAbsoluteBlockPosition(Waypoint pos) {
+        this.absoluteBlockPosition = pos;
+    }
+
+    /**
+     * @return whether or not a block has been recently detected
+     */
+    public boolean isBlockDetected() {
+        return hasBlockBeenRecentlyDetected;
+    }
+
+    /**
+     * Sets whether or not a block has been recently detected
+     *
+     * @param detected whether or not a block has been recently detected
+     */
+    public void setBlockDetected(boolean detected) {
+        this.hasBlockBeenRecentlyDetected = detected;
     }
 
     /**
@@ -922,30 +939,5 @@ public class RobotState extends GlobalState {
      */
     public void setIntakeSlidePosition(double intakeSlidePosition) {
         this.intakeSlidePosition = intakeSlidePosition;
-    }
-
-    /**
-     * Resets the boolean of whether a block has recently been detected
-     */
-    public void resetBlockHasBeenDetected() {
-        absoluteBlockCoordinates.resetBlockHasBeenDetected();
-    }
-
-    /**
-     * Returns if a block has recently been detected
-     *
-     * @return Whether a block has recently been detected
-     */
-    public boolean hasBlockBeenDetected() {
-        return absoluteBlockCoordinates.getBlockHasBeenDetected();
-    }
-
-    /**
-     * Gets the last robot position known to the Limelight
-     *
-     * @return The last robot position known to the Limelight
-     */
-    public Waypoint getLimelightLastRobotCoords() {
-        return absoluteBlockCoordinates.getLimelightLastRobotPosition();
     }
 }

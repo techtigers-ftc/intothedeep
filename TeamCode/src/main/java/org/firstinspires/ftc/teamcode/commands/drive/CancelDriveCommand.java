@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 /**
  * Command for canceling all drive movements
  */
-public class CancelDriveCommand extends CommandBase {
+public class CancelDriveCommand extends InstantCommand {
     private final DriveSubsystem drive;
 
     /**
@@ -22,10 +23,5 @@ public class CancelDriveCommand extends CommandBase {
     @Override
     public void end(boolean interruptible) {
         drive.driveRobotCentric(0, 0, 0);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
     }
 }

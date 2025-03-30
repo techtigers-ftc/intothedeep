@@ -48,7 +48,7 @@ public class ClipAndTrackState extends SequentialCommandGroupState<AutoState> {
                         new SequentialCommandGroup(
                                 new WaitCommand(100),
                                 new DropperPitchAction(dropper,
-                                        DropperSubsystem.PITCH_FRONT_SLAP_POSITION, 0),
+                                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
                                 new WaitCommand(150),
                                 new DropperOpenAction(dropper)
                         ),

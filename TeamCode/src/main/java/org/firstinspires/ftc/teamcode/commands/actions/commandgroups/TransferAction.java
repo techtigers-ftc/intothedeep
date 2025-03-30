@@ -28,8 +28,8 @@ public class TransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperCloseAction(dropper, 150),
-                new IntakeOpenAction(intake, 150)
+                new DropperCloseAction(dropper, 100),
+                new IntakeOpenAction(intake, 100)
         );
     }
 

@@ -30,9 +30,9 @@ public class AutoDropperForwardCarryAction extends ParallelCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_CHAMBER_POSITION, 0.5),
-                new DropperPitchAction(dropper, DropperSubsystem.AUTO_PITCH_CHAMBER_POSITION, 300),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_FRONT_SLAP_POSITION, 300)
+                        DropperSubsystem.ROTATION_SLAP_POSITION, 300)
         );
     }
 
