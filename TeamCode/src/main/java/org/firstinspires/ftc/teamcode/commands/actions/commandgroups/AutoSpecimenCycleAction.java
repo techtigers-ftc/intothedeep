@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
@@ -62,9 +65,9 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 2
                         ),
-                        new DropperCarryNoTransferAction(dropper, robotState)
+                        new DropperPitchAction(dropper, 80, 250)
                 ),
-                new ClipSpecimenState("clipSpecimen", drive, dropper, robotState),
+//                new ClipSpecimenState("clipSpecimen", drive, dropper, robotState),
                 // Drive back
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
@@ -79,7 +82,11 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 2
                         ),
-                        new DropperWallIntakeNoTransferAction(dropper, robotState)
+                        new DropperPitchAction(dropper, 120, 75),
+                        new SequentialCommandGroup(
+                                new WaitCommand(100),
+                                new DropperOpenAction(dropper)
+                        )
                 )
         );
     }
@@ -89,10 +96,13 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         super.initialize();
 //        RobotLog.dd(LOG_TAG,"Auto Specimen Cycle initialized, needs reset: %s", String.valueOf(needsReset));
         if (needsReset) {
-            odometry.setPose(new Waypoint(113, 13, Math.toRadians(90)));
-            startPosition = new Waypoint(113,
-                    13,
-                    Math.toRadians(90));
+//            odometry.setPose(new Waypoint(113, 13, Math.toRadians(90)));
+//            startPosition = new Waypoint(113,
+//                    13,
+//                    Math.toRadians(90));
+            startPosition = new Waypoint(robotState.getRobotCurrentPose().getX(),
+                robotState.getRobotCurrentPose().getY(),
+                robotState.getRobotCurrentPose().getHeading());
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
             needsReset = false;
         }

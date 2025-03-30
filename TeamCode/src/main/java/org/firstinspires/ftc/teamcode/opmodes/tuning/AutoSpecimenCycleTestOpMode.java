@@ -28,11 +28,12 @@ public class AutoSpecimenCycleTestOpMode extends BaseOpMode {
         robotState = new RobotState(false, false);
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
+//        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(113,13, Math.toRadians(90)));
-        registerSubsystems(drive, dropper, intake, sensor, odometry);
+//        registerSubsystems(drive, dropper, intake, sensor, odometry);
+        registerSubsystems(drive, dropper, sensor, odometry);
 
         AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(autoSpecimenCycle);

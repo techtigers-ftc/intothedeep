@@ -24,7 +24,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls all the motors for the intake subsystem.
  * Gives methods to control all of the aspects of the subsystem.
  * Controls both differential servos for the wrist, the two servos that control the claw, and the
- * two motors that control the horizontal slides.]
+ * two motors that control the horizontal slides.
  */
 @Config
 public class  IntakeSubsystem extends CloseableSubsystem {
