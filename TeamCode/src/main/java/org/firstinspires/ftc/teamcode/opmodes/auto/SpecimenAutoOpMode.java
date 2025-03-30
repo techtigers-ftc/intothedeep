@@ -401,6 +401,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
     @Override
     public void update() {
+        telemetry.addData("Current Auto State: ", robotState.getCurrentAutoState());
         telemetry.addData("Distance Sensor Value", robotState.getDistanceSensorValue());
         telemetry.addLine();
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());

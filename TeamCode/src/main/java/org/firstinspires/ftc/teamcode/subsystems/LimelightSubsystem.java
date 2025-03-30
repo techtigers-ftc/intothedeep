@@ -179,7 +179,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             isLastModeCourse = robotState.isCoarseCameraMode();
             absoluteBlockPosition.resetBlockDetection();
         }
-        robotState.setBlockDetected(absoluteBlockPosition.isBlockDetected());
+        robotState.setBlockDetected(robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED || robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED);
     }
 
     @Override
