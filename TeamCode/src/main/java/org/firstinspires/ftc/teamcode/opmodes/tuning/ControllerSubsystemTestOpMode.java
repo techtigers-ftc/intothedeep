@@ -8,7 +8,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.cv.AbsoluteBlockCoordinates;
 import org.firstinspires.ftc.teamcode.subsystems.ControllerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
@@ -23,7 +22,6 @@ import team.techtigers.base.BaseOpMode;
 public class ControllerSubsystemTestOpMode extends BaseOpMode {
     RobotState robotState;
     GamepadEx driverGamepad;
-    AbsoluteBlockCoordinates blockCoordinates;
 
     @Override
     public void initialize() {
@@ -52,8 +50,6 @@ public class ControllerSubsystemTestOpMode extends BaseOpMode {
         telemetry.addData("Runtime Seconds", robotState.getRunTime()/1000f);
         telemetry.addData("Color Preference", robotState.getBlockColorPreference());
         telemetry.addData("Intake State", robotState.getIntakeState());
-        telemetry.addData("Block Detection State", robotState.hasBlockBeenDetected());
-        telemetry.addData("Block Position", robotState.getAbsoluteBlockCoordinates().toString());
         telemetry.addData("Robot X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Robot Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()) % 360);

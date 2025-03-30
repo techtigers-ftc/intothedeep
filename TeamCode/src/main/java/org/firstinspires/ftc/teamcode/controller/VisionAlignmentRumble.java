@@ -35,7 +35,7 @@ public class VisionAlignmentRumble implements ControllerEffect {
     public void updateEffect() {
         boolean intaking = robotState.getIntakeState() == IntakeState.PREPARE_TO_PICKUP
                 || robotState.getIntakeState() == IntakeState.READY_TO_PICKUP;
-        if (robotState.hasBlockBeenDetected() && intaking) {
+        if (robotState.isBlockDetected() && intaking) {
             runEffect();
         }
     }
@@ -65,10 +65,10 @@ public class VisionAlignmentRumble implements ControllerEffect {
         Vector robotI = new Vector(1, robotState.getRobotCurrentPose().getHeading());
         Vector robotJ = new Vector(1, robotState.getRobotCurrentPose().getHeading() + Math.PI / 2);
         RobotLog.dd("Vision Rumble", "i hat: " + robotI + " j hat: " + robotJ);
-        double blockAdjustedX = robotState.getAbsoluteBlockCoordinates().getX() * robotI.getXComponent()
-                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
+        double blockAdjustedX = robotState.getAbsoluteBlockPosition().getX() * robotI.getXComponent()
+                + robotState.getAbsoluteBlockPosition().getY() * robotJ.getXComponent();
         double robotAdjustedX = robotState.getRobotCurrentPose().getX() * robotI.getXComponent()
-                + robotState.getAbsoluteBlockCoordinates().getY() * robotJ.getXComponent();
+                + robotState.getAbsoluteBlockPosition().getY() * robotJ.getXComponent();
         double lateral = robotAdjustedX - blockAdjustedX;
         RobotLog.dd("Vision Rumble", "lateral: " + lateral);
         return lateral;
