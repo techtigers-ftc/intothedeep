@@ -111,6 +111,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return lateralFine * LATERAL_FINE_VERTICAL_COMPRESSION + LATERAL_FINE_VERTICAL_SHIFT;
     }
 
+    public void resetAbsoluteBlockDetection() {
+        absoluteBlockPosition.resetBlockDetection();
+    }
+
     @Override
     public void periodic() {
         double blue = robotState.isBlue() ? 1 : 0;
