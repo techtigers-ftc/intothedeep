@@ -137,24 +137,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else {
                 if (!robotState.isCoarseCameraMode()) {
-//                    double lateralFine = getCorrectedLateralFine(results[1]);
-//                    double forwardFine = -(results[2] / PIXELS_PER_INCH - HEIGHT_RANGE / 2.0);
-//                    double orientation = (results[3] + 180) % 180;
-//
-//                    robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
-//                    robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-//                    robotState.setBlockLateralFine(lateralFine);
-//                    robotState.setBlockForwardFine(forwardFine);
-//                    robotState.setBlockOrientation(orientation);
-//
-//                    // Saving the block's relative position whenever a block is seen
-//                    absoluteBlockPosition.updatePosition(
-//                            robotState.getRobotCurrentPose(),
-//                            lateralFine,
-//                            forwardFine + SLIDES_OFFSET + LIMELIGHT_FINE_OFFSET + robotState.getIntakeSlidePosition(),
-//                            robotState.getBlockOrientation()
-//                    );
-//                    robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
                     double forwardFine =
                             LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(CAMERA_FINE_ANGLE + result.getTy()));
                     double lateralFine =

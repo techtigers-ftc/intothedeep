@@ -73,10 +73,6 @@ public class IntakeTrackingAction extends CommandBase {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         robotState.setIntakeTracking(false);
-//        if (!interrupted) {
-//            intake.moveSlidesAbsolute(detectedSlidePosition);
-//        } else {
-            intake.moveSlidesRelative(0);
-//        }
+        intake.moveSlidesRelative(0);
     }
 }

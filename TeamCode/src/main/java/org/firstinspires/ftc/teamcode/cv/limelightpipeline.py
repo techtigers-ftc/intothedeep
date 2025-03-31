@@ -1,10 +1,4 @@
 ### CONFIG
-# For red
-# Exposure = 1834
-# Black Level Offset = 4
-# Sensor Gain = 32.2
-# Red Balance = 1184
-# Blue Balance = 1515
 
 # For blue
 # Exposure = 3300
@@ -209,10 +203,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[0] = 1
-    llrobot[1] = 1
-    llrobot[2] = 1
-    llrobot[3] = 1
+    # llrobot[0] = 1
+    # llrobot[1] = 1
+    # llrobot[2] = 1
+    # llrobot[3] = 1
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
