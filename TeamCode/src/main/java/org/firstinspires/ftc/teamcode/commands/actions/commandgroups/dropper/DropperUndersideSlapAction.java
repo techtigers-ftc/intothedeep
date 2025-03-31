@@ -35,7 +35,6 @@ public class DropperUndersideSlapAction extends SequentialCommandGroup {
                         new DropperSlidesAbsoluteAction(dropper, 8, 1),
                         new DropperPitchAction(dropper, 155, 0),
                         new SequentialCommandGroup(
-//                                new WaitCommand(15),
                                 new RawPowerDriveAction(drive, -1, 0.2)
                         )
                 ),
