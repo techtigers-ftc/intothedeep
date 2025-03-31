@@ -94,7 +94,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
 
-        DriveToFirstPushState driveToFirstPush = new DriveToFirstPushState(
+        DriveToGeneralSpecimenIntakeState driveToFirstPush = new DriveToGeneralSpecimenIntakeState(
                 "driveToFirstPush",
                 drive,
                 dropper,
@@ -268,10 +268,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(endState)
 
                 // Drives to the preload and clips it
-                .addTransition(driveToPreloadDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToPreloadDrop, clipSpecimen, AutoState.TIMEOUT)
-                // Goes to the first push once the first specimen has been clipped
-                .addTransition(clipSpecimen, driveToFirstPush, AutoState.SPECIMEN_PRELOAD_DROP_COMPLETE)
+                .addTransition(driveToPreloadDrop, driveToFirstPush, AutoState.DRIVE_END)
+                .addTransition(driveToPreloadDrop, driveToFirstPush, AutoState.TIMEOUT)
                 // Pushes the first sample
                 .addTransition(driveToFirstPush, firstPush, AutoState.DRIVE_END)
                 .addTransition(driveToFirstPush, firstPush, AutoState.TIMEOUT)
@@ -295,33 +293,36 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveToFirstIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the second specimen and clips it
                 .addTransition(intakeSpecimen, driveToFirstDrop, AutoState.SPECIMEN_1_INTAKE_COMPLETE)
-                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToFirstDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
+                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
                 // Drives to the third specimen intake
-                .addTransition(clipSpecimen, driveToSecondIntake, AutoState.SPECIMEN_1_DROP_COMPLETE)
                 // Intakes the third specimen
                 .addTransition(driveToSecondIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToSecondIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the third specimen and clips it
                 .addTransition(intakeSpecimen, driveToSecondDrop, AutoState.SPECIMEN_2_INTAKE_COMPLETE)
-                .addTransition(driveToSecondDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToSecondDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.DRIVE_END)
+                .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.TIMEOUT)
                 // Drives to the fourth specimen intake
-                .addTransition(clipSpecimen, driveToThirdIntake, AutoState.SPECIMEN_2_DROP_COMPLETE)
                 // Intakes the fourth specimen
                 .addTransition(driveToThirdIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToThirdIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fourth specimen and clips it
                 .addTransition(intakeSpecimen, driveToThirdDrop, AutoState.SPECIMEN_3_INTAKE_COMPLETE)
-                .addTransition(driveToThirdDrop, clipSpecimen, AutoState.DRIVE_END)
-                .addTransition(driveToThirdDrop, clipSpecimen, AutoState.TIMEOUT)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
                 // Drives to the fifth specimen intake
-                .addTransition(clipSpecimen, driveToFourthIntake, AutoState.SPECIMEN_3_DROP_COMPLETE)
                 // Intakes the fifth specimen
                 .addTransition(driveToFourthIntake, intakeSpecimen, AutoState.DRIVE_END)
                 .addTransition(driveToFourthIntake, intakeSpecimen, AutoState.TIMEOUT)
                 // Drives to drop the fifth specimen and clips it
                 .addTransition(intakeSpecimen, driveToFourthDrop, AutoState.SPECIMEN_4_INTAKE_COMPLETE)
+
+                .addTransition(driveToFourthDrop, driveToPark, AutoState.DRIVE_END)
+                .addTransition(driveToFourthDrop, driveToPark, AutoState.TIMEOUT)
+
+                .addTransition(driveToPark, endState, AutoState.DRIVE_END)
+
 //                .addTransition(driveToFourthDrop, clipSpecimen, AutoState.DRIVE_END)
 //                .addTransition(driveToFourthDrop, clipSpecimen, AutoState.TIMEOUT)
                 // Drives to the sample intake
@@ -337,18 +338,18 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 //                .addTransition(driveToPark, endState, AutoState.TIMEOUT)
 
                 // OLD CODE FOR SAMPLE INTAKE + DROP
-                .addTransition(driveToFourthDrop, intakeSample, AutoState.DRIVE_END)
-                .addTransition(driveToFourthDrop, intakeSample, AutoState.TIMEOUT)
-
-                // Goes to park if the sample intake times out or fails
-                .addTransition(intakeSample, driveToPark, AutoState.SAMPLE_INTAKE_FAILED)
-                .addTransition(intakeSample, driveToPark, AutoState.TIMEOUT)
-                .addTransition(intakeSample, driveToPark, AutoState.NO_TIME)
-
-                //Transitions to end state when done with either park or sample drop drive
-
-                .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
-                .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
+//                .addTransition(driveToFourthDrop, intakeSample, AutoState.DRIVE_END)
+//                .addTransition(driveToFourthDrop, intakeSample, AutoState.TIMEOUT)
+//
+//                // Goes to park if the sample intake times out or fails
+//                .addTransition(intakeSample, driveToPark, AutoState.SAMPLE_INTAKE_FAILED)
+//                .addTransition(intakeSample, driveToPark, AutoState.TIMEOUT)
+//                .addTransition(intakeSample, driveToPark, AutoState.NO_TIME)
+//
+//                //Transitions to end state when done with either park or sample drop drive
+//
+//                .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
+//                .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveToPreloadDrop);
 

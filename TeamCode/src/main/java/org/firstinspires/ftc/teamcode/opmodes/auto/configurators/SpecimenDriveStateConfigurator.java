@@ -112,7 +112,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configDriveToFirstPush(DriveToFirstPushState state) {
+    public static void configDriveToFirstPush(DriveToGeneralSpecimenIntakeState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
         state.setDrivePIDF(0.004, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(1.1, 0, 0.015, 0);
