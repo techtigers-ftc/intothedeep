@@ -20,8 +20,8 @@ public class IntakeTrackingAction extends CommandBase {
     private double frameCount;
     private double detectedSlidePosition;
 
-    private static final double BASE_POWER = 0.275;
-    private static final double INCREMENTAL_POWER = 0.005;
+    public static double BASE_POWER = 0.4;
+    public static double INCREMENTAL_POWER = 0.005;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -73,10 +73,10 @@ public class IntakeTrackingAction extends CommandBase {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         robotState.setIntakeTracking(false);
-        if (!interrupted) {
-            intake.moveSlidesAbsolute(detectedSlidePosition - 0.5);
-        } else {
+//        if (!interrupted) {
+//            intake.moveSlidesAbsolute(detectedSlidePosition);
+//        } else {
             intake.moveSlidesRelative(0);
-        }
+//        }
     }
 }
