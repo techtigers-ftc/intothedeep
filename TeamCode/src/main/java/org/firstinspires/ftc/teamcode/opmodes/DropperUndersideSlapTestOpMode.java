@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideCarryWallAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideSlapAction;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 import team.techtigers.base.BaseOpMode;
 
+@TeleOp(name = "Dropper Underside Slap Test OpMode", group = "Test")
 public class DropperUndersideSlapTestOpMode extends BaseOpMode {
     private RobotState robotState;
 

@@ -28,9 +28,9 @@ public class DropperUndersideCarryNoTransferAction extends ParallelCommandGroup 
         addRequirements(dropper);
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper, 5, 0.5),
-                new DropperPitchAction(dropper, 80, 200),
+                new DropperPitchAction(dropper, 90, 200),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_TRANSFER_POSITION, 100)
+                        5, 100)
         );
     }
 
