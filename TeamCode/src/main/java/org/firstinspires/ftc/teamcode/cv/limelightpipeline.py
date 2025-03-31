@@ -1,8 +1,19 @@
 ### CONFIG
-# Exposure = 1822
+# For red
+# Exposure = 1834
+# Black Level Offset = 4
 # Sensor Gain = 32.2
-# Red Balance = 1175
-# Blue Balance = 1594
+# Red Balance = 1184
+# Blue Balance = 1515
+
+# For blue
+# Exposure = 3300
+# Black Level Offset = 3
+# Sensor Gain = 15.7
+# Red Balance = 1184
+# Blue Balance = 1532
+
+
 import cv2
 import numpy as np
 import math
@@ -74,8 +85,9 @@ HSV_YELLOW_RANGE = ([20, 90, 150], [80, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 25000
+SMALL_CONTOUR_AREA_FINE = 15000
 SMALL_CONTOUR_AREA_COARSE = 1500
+LARGE_CONTOUR_AREA_FINE = 42000
 
 
 # Minimum average brightness threshold (0-255)
@@ -151,7 +163,7 @@ def explore_touching_contours(frame, contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
     return frame
 
@@ -167,6 +179,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
     max_count = 1
 
     dist_transform = cv2.distanceTransform(mask, cv2.DIST_L2, 3)
+    # dist_transform = cv2.distanceTransform(dist_transform, cv2.DIST_L2, 1)
 
     for threshold in np.linspace(0.1, 0.9, 9):
         _, thresh = cv2.threshold(
@@ -177,7 +190,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
         valid_contours = [
             contour
@@ -196,10 +209,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    # llrobot[0] = 1
-    # llrobot[1] = 1
-    # llrobot[2] = 1
-    # llrobot[3] = 0
+    llrobot[0] = 1
+    llrobot[1] = 1
+    llrobot[2] = 1
+    llrobot[3] = 1
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
@@ -282,7 +295,11 @@ def runPipeline(frame, llrobot):
             small_contour_area = (
                 SMALL_CONTOUR_AREA_FINE if isFine == 1 else SMALL_CONTOUR_AREA_COARSE
             )
+
             if cv2.contourArea(contour) < small_contour_area:
+                continue
+
+            if cv2.contourArea(contour) > LARGE_CONTOUR_AREA_FINE:
                 continue
 
             frame = explore_touching_contours(frame, contour)
