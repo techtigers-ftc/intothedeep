@@ -27,10 +27,10 @@ public class DropperUndersideCarryNoTransferAction extends ParallelCommandGroup 
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 5, 0.5),
-                new DropperPitchAction(dropper, 90, 200),
+                new DropperSlidesAbsoluteAction(dropper, 5.5, 0.5),
+                new DropperPitchAction(dropper, 135, 200),
                 new DropperRotationAction(dropper,
-                        5, 100)
+                        5, 105)
         );
     }
 

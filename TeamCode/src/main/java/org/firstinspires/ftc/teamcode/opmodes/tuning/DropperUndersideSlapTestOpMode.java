@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -18,6 +18,7 @@ import team.techtigers.base.BaseOpMode;
 @TeleOp(name = "Dropper Underside Slap Test OpMode", group = "Test")
 public class DropperUndersideSlapTestOpMode extends BaseOpMode {
     private RobotState robotState;
+    private DropperSubsystem dropper;
 
     public void initialize() {
         robotState = new RobotState(false, false);
@@ -25,7 +26,7 @@ public class DropperUndersideSlapTestOpMode extends BaseOpMode {
 
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
-        DropperSubsystem dropper = new DropperSubsystem(hardwareMap, robotState);
+        dropper = new DropperSubsystem(hardwareMap, robotState);
         DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         registerSubsystems(odometry, sensor, dropper, drive);
 
@@ -41,5 +42,6 @@ public class DropperUndersideSlapTestOpMode extends BaseOpMode {
 
     public void update() {
         telemetry.addData("Dropper state: ", robotState.getDropperState());
+        telemetry.addData("Dropper Slide POS", dropper.getCurrentSlidePositionInches());
     }
 }
