@@ -7,6 +7,10 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideCarryNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideSlapAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideSlapNoDriveAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -65,7 +69,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 2
                         ),
-                        new DropperPitchAction(dropper, 80, 250)
+                        new DropperUndersideCarryNoTransferAction(dropper, robotState)
                 ),
 //                new ClipSpecimenState("clipSpecimen", drive, dropper, robotState),
                 // Drive back
@@ -82,11 +86,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                                 SpecimenDriveStateConfigurator.LARGE_ANGLE_TOLERANCE,
                                 2
                         ),
-                        new DropperPitchAction(dropper, 120, 75),
-                        new SequentialCommandGroup(
-                                new WaitCommand(100),
-                                new DropperOpenAction(dropper)
-                        )
+                        new DropperUndersideSlapNoDriveAction(dropper, robotState)
                 )
         );
     }

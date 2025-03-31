@@ -18,7 +18,7 @@ public class DropperUndersideCarryNoTransferAction extends ParallelCommandGroup 
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperCarryNoTransferAction
+     * Creates a new DropperUndersideCarryNoTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
@@ -27,10 +27,10 @@ public class DropperUndersideCarryNoTransferAction extends ParallelCommandGroup 
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, 5.5, 0.5),
-                new DropperPitchAction(dropper, 135, 200),
+                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_UNDERSIDE_CARRY_POSITION, 0.5),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACKWARD_CARRY_POSITION, 200),
                 new DropperRotationAction(dropper,
-                        5, 105)
+                        DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 105)
         );
     }
 
