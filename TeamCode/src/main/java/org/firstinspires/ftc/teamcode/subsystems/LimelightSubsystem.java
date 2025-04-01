@@ -30,9 +30,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     // Limelight fine horizontal linear equation parameters
     private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
     private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
+    private static final double CAMERA_FINE_ANGLE = 16;
     public static double LIMELIGHT_HEIGHT = 8;
     public static double CAMERA_COARSE_ANGLE = 40;
-    private static final double CAMERA_FINE_ANGLE = 16;
     private final RobotState robotState;
     private final Limelight3A limelight;
     private final AbsoluteBlockPosition absoluteBlockPosition;
@@ -126,7 +126,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
             yellow = 1;
         }
 
-        limelight.updatePythonInputs(yellow, red, blue, coarseCamera, 0, 0, 0, 0);
+        limelight.updatePythonInputs(yellow, red, blue, coarseCamera, robotState.getIntakeSlidePosition(), IntakeSubsystem.SLIDES_MAX, 0, 0);
 
         LLResult result = limelight.getLatestResult();
 
