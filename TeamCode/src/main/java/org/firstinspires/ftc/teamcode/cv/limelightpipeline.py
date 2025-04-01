@@ -70,6 +70,9 @@ GAUSSIAN_BLUR_KERNEL_SIZE = (5, 5)
 MORPHOLOGY_KERNEL = np.ones((5, 5), np.uint8)
 DILATE_KERNEL = np.ones((3, 3), np.uint8)
 
+INCHES_VERTICAL = 6.5
+PIXELS_PER_INCH = 480/INCHES_VERTICAL
+
 
 # Color detection ranges for different color spaces
 HSV_BLUE_RANGE = ([90, 150, 20], [140, 255, 255])
@@ -206,12 +209,18 @@ def runPipeline(frame, llrobot):
     # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
-    llrobot[3] = 1
+    # llrobot[3] = 1
+    # current_slide_pos = 0
+    # max_slide_extension = 18
+
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
         usingBlue = llrobot[2] == 1
         isFine = llrobot[3] == 1
+
+        current_slide_pos = llrobot[4]
+        max_slide_extension = llrobot[5]
 
         llpython = [0, 0, 0, 0, 0, 0, 0, 0]
         largest_contour = np.array([[]])
@@ -309,6 +318,10 @@ def runPipeline(frame, llrobot):
                 if M["m00"] != 0:
                     center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
                 else:
+                    continue
+
+                vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
+                if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
                     continue
 
                 area = cv2.contourArea(sep_contour)
