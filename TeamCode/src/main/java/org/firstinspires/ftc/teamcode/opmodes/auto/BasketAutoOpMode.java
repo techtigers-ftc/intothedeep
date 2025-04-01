@@ -212,6 +212,32 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         );
         BasketDriveStateConfigurator.configFifthSampleDrop(driveToFifthDrop);
 
+        SubmersibleIntakeState intakeSixthSample = new SubmersibleIntakeState(
+                "intakeSixthSample",
+                drive,
+                intake,
+                limelight,
+                robotState
+        );
+
+        DriveToGeneralSubmersibleIntakeState driveToSixthIntake = new DriveToGeneralSubmersibleIntakeState(
+                "driveToSixthIntake",
+                drive,
+                intake,
+                dropper,
+                robotState
+        );
+        BasketDriveStateConfigurator.configSixthSampleIntake(driveToSixthIntake);
+
+        DriveFromSubmersibleSampleDropState driveToSixthDrop = new DriveFromSubmersibleSampleDropState(
+                "driveToSixthDrop",
+                drive,
+                dropper,
+                intake,
+                robotState
+        );
+        BasketDriveStateConfigurator.configSixthSampleDrop(driveToSixthDrop);
+
         DriveToSamplePark driveToPark = new DriveToSamplePark(
                 "driveToPark",
                 drive,
@@ -249,6 +275,9 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addState(intakeFifthSample)
                 .addState(driveToFifthIntake)
                 .addState(driveToFifthDrop)
+                .addState(intakeSixthSample)
+                .addState(driveToSixthIntake)
+                .addState(driveToSixthDrop)
                 .addState(driveToPark)
                 .addState(firstLevelAscent)
 
@@ -327,8 +356,19 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 //                .addTransition(intakeFifthSample, firstLevelAscent, AutoState.PARK)
                 .addTransition(failedIntakeSubmersible, driveToFifthDrop, AutoState.SAMPLE_5_INTAKE_RECOVERED)
 //                .addTransition(driveToFifthDrop, driveToPark, AutoState.PARK)
-                .addTransition(driveToFifthDrop, driveToPark, AutoState.DRIVE_END)
-                .addTransition(driveToFifthDrop, driveToPark, AutoState.TIMEOUT)
+//                .addTransition(driveToFifthDrop, driveToPark, AutoState.DRIVE_END)
+//                .addTransition(driveToFifthDrop, driveToPark, AutoState.TIMEOUT)
+
+                // Drives to the fourth drop, drops it off, and goes to the fifth intake
+                .addTransition(driveToFifthDrop, driveToSixthIntake, AutoState.DRIVE_END)
+
+                // Intakes the fifth sample
+                .addTransition(driveToSixthIntake, intakeSixthSample, AutoState.DRIVE_END)
+
+                // Transitions from the fifth sample intake to the drop, including transitions if the intake fails
+                .addTransition(intakeSixthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
+                .addTransition(intakeSixthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
+                .addTransition(intakeSixthSample, driveToSixthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
                 .addTransition(driveToPark, firstLevelAscent, AutoState.DRIVE_END)
                 .addTransition(driveToPark, firstLevelAscent, AutoState.TIMEOUT)

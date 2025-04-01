@@ -22,8 +22,8 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 2;
-    private static final double TIME_TO_DROP = 2.5;
+    private static final double TIME_TO_INTAKE = 0;
+    private static final double TIME_TO_DROP = 0;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private boolean blockDetected;

@@ -22,7 +22,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToGeneralSubmersibleIntakeState.class.getSimpleName();
-    private static final long DELAY_FOR_INTAKE = 200;
 
     /**
      * Constructor for the DriveToGeneralSubmersibleIntakeState
