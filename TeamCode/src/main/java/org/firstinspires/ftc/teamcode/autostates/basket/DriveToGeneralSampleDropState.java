@@ -47,7 +47,7 @@ public class DriveToGeneralSampleDropState extends DriveStateBase {
         addCommands(
                 new SequentialCommandGroup(
                         new ReadyToTransferAction(intake, dropper, robotState),
-                        new WaitCommand(100),
+//                        new WaitCommand(100),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 autoDriveCommand,
