@@ -81,7 +81,7 @@ HSV_YELLOW_RANGE = ([20, 90, 150], [80, 255, 255])
 # Constants for filtering contours
 SMALL_CONTOUR_AREA_FINE = 15000
 SMALL_CONTOUR_AREA_COARSE = 1500
-LARGE_CONTOUR_AREA_FINE = 42000
+LARGE_CONTOUR_AREA_FINE = 45000
 
 
 # Minimum average brightness threshold (0-255)
@@ -206,7 +206,7 @@ def runPipeline(frame, llrobot):
     # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
-    # llrobot[3] = 1
+    llrobot[3] = 1
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1

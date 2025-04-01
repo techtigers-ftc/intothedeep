@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperCloseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeOpenAction;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotError;
 /**
  * A command group that transfers a block from the intake to the dropper.
  */
-public class TransferAction extends ParallelCommandGroup {
+public class TransferAction extends SequentialCommandGroup {
     private static final String LOG_TAG = TransferAction.class.getSimpleName();
     private final RobotState robotState;
 
@@ -28,8 +29,8 @@ public class TransferAction extends ParallelCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new DropperCloseAction(dropper, 100),
-                new IntakeOpenAction(intake, 100)
+                new DropperCloseAction(dropper, 50),
+                new IntakeOpenAction(intake, 75)
         );
     }
 
