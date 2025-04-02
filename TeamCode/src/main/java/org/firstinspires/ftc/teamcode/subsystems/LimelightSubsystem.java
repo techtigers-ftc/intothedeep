@@ -111,12 +111,19 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return lateralFine * LATERAL_FINE_VERTICAL_COMPRESSION + LATERAL_FINE_VERTICAL_SHIFT;
     }
 
+    /**
+     * Resets the current detection stored in the absolute block position
+     */
+    public void resetAbsoluteBlockDetection() {
+        absoluteBlockPosition.resetBlockDetection();
+    }
+
     @Override
     public void periodic() {
         double blue = robotState.isBlue() ? 1 : 0;
         double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;
-        double coarseCamera = robotState.isCoarseCameraMode() ? 0 : 1;
+        double coarseCamera = 1;
 
         if (robotState.getBlockColorPreference() == BlockColorPreference.YELLOW) {
             yellow = 1;
@@ -136,7 +143,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                 robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                 robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
             } else {
-                if (!robotState.isCoarseCameraMode()) {
+//                if (!robotState.isCoarseCameraMode()) {
                     double forwardFine =
                             LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(CAMERA_FINE_ANGLE + result.getTy()));
                     double lateralFine =
@@ -158,25 +165,25 @@ public class LimelightSubsystem extends CloseableSubsystem {
                     );
 
                     robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
-                } else {
-                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(CAMERA_COARSE_ANGLE + result.getTy()));
-                    double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
-
-                    robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
-                    robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
-                    robotState.setBlockForwardCoarse(forwardCoarse);
-                    robotState.setBlockLateralCoarse(lateralCoarse);
-
-                    // Saving the block's relative position whenever a block is seen
-                    absoluteBlockPosition.updatePosition(
-                            robotState.getRobotCurrentPose(),
-                            lateralCoarse,
-                            forwardCoarse + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition(),
-                            robotState.getBlockOrientation()
-                    );
-
-                    robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
-                }
+//                } else {
+//                    double forwardCoarse = LIMELIGHT_HEIGHT * Math.tan(Math.toRadians(CAMERA_COARSE_ANGLE + result.getTy()));
+//                    double lateralCoarse = forwardCoarse * Math.tan(Math.toRadians(result.getTx()));
+//
+//                    robotState.setCoarseBlockDetectionState(BlockDetectionState.DETECTED);
+//                    robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+//                    robotState.setBlockForwardCoarse(forwardCoarse);
+//                    robotState.setBlockLateralCoarse(lateralCoarse);
+//
+//                    // Saving the block's relative position whenever a block is seen
+//                    absoluteBlockPosition.updatePosition(
+//                            robotState.getRobotCurrentPose(),
+//                            lateralCoarse,
+//                            forwardCoarse + SLIDES_OFFSET + LIMELIGHT_COARSE_OFFSET + robotState.getIntakeSlidePosition(),
+//                            robotState.getBlockOrientation()
+//                    );
+//
+//                    robotState.setAbsoluteBlockPosition(absoluteBlockPosition.getAbsoluteBlockPosition());
+//                }
             }
         }
 
