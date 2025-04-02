@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -31,7 +32,7 @@ public class DropperUndersideSlapNoDriveAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new ParallelCommandGroup(
-                        new DropperSlidesAbsoluteAction(dropper, 8, 1),
+                        new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_UNDERSIDE_SLAP_POSITION, 1),
                         new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACK_SLAP_POSITION, 0)
                 ),
                 new DropperOpenAction(dropper)

@@ -5,6 +5,9 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideSlapNoDriveAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
+import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -29,12 +32,15 @@ public class DriveToSpecimenPark extends DriveStateBase {
     public DriveToSpecimenPark(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState, 5);
         addCommands(
-                autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new RawPowerDriveAction(drive, 1, 0.1),
+                        new RawPowerDriveAction(drive, -0.8, 0.2),
+                        autoDriveCommand
+                ),
+                new SequentialCommandGroup(
+                        new DropperUndersideSlapNoDriveAction(dropper, robotState),
                         new DropperPreTransferAction(dropper, robotState)
-                )//,
-//                new IntakeSlidesAbsoluteAction(intake, () -> 17, 1)
+                )
         );
     }
 }

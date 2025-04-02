@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
@@ -27,7 +29,10 @@ public class DropperUndersideCarryNoTransferAction extends ParallelCommandGroup 
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
-                new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_UNDERSIDE_CARRY_POSITION, 0.5),
+                new SequentialCommandGroup(
+                        new WaitCommand(200),
+                        new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_UNDERSIDE_CARRY_POSITION, 0.5)
+                ),
                 new DropperPitchAction(dropper, DropperSubsystem.PITCH_BACKWARD_CARRY_POSITION, 200),
                 new DropperRotationAction(dropper,
                         DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 105)
