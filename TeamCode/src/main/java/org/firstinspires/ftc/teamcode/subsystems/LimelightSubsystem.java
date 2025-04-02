@@ -111,6 +111,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
         return lateralFine * LATERAL_FINE_VERTICAL_COMPRESSION + LATERAL_FINE_VERTICAL_SHIFT;
     }
 
+    /**
+     * Resets the current detection stored in the absolute block position
+     */
     public void resetAbsoluteBlockDetection() {
         absoluteBlockPosition.resetBlockDetection();
     }
