@@ -150,11 +150,11 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(11.5, 17),
-                                        new Point(9, 12)
+                                        new Point(8, 12)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(90),
-                                Math.toRadians(72))
+                                Math.toRadians(80))
                         .build()
         );
 
@@ -171,16 +171,17 @@ public class BasketDriveStateConfigurator {
         state.setTranslationalPIDF(0.12, 0, 0.001, 0);
         state.setHeadingPIDF(0.7, 0, 0.035, 0);
         state.setDrivePIDF(0.001, 0, 0.0035, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(9, 12),
+                                        new Point(8, 12),
                                         new Point(10.5, 19)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(72),
+                        .setLinearHeadingInterpolation(Math.toRadians(80),
                                 Math.toRadians(108))
                         .build()
         );
