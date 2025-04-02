@@ -19,28 +19,13 @@ import team.techtigers.base.CloseableSubsystem;
 public class LimelightSubsystem extends CloseableSubsystem {
     public static final double SLIDES_OFFSET = 7; // forward distance from center of robot to slides
     public static final double LIMELIGHT_COARSE_OFFSET = 2; // forward distance from end of slides to limelight lens in coarse
-    public static final double LIMELIGHT_FINE_OFFSET = 4; // forward distance
-    // from end of slides to limelight lens in fine
-    private static final int BLOCK_CACHE_LIMIT = 3;
-
-    private static final double WIDTH_RANGE = 6; // TODO: Tune properly
-    private static final double HEIGHT_RANGE = 5.6;
-    private static final double PIXELS_PER_INCH = 94.5;
-
-    // Limelight fine horizontal linear equation parameters
-    private static final double LATERAL_FINE_VERTICAL_COMPRESSION = 0.0110083;
-    private static final double LATERAL_FINE_VERTICAL_SHIFT = -3.55128;
+    public static final double LIMELIGHT_FINE_OFFSET = 4; // forward distance from end of slides to limelight lens in fine
     private static final double CAMERA_FINE_ANGLE = 16;
     public static double LIMELIGHT_HEIGHT = 8;
     public static double CAMERA_COARSE_ANGLE = 40;
     private final RobotState robotState;
     private final Limelight3A limelight;
     private final AbsoluteBlockPosition absoluteBlockPosition;
-
-    // Lateral bounds
-    private double lateralLowerBound = -5;
-    private double lateralUpperBound = 1;
-    private double framesCached;
 
     private boolean isLastModeCourse;
 
@@ -55,7 +40,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         this.robotState = robotState;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         absoluteBlockPosition = new AbsoluteBlockPosition(robotState);
-        framesCached = 1;
         isLastModeCourse = robotState.isCoarseCameraMode();
     }
 
@@ -64,51 +48,6 @@ public class LimelightSubsystem extends CloseableSubsystem {
         limelight.setPollRateHz(50);
         limelight.start();
         limelight.pipelineSwitch(3);
-    }
-
-    /**
-     * Checks that the block is detected over multiple frames before setting the block detection state
-     *
-     * @param state the block detection state to set
-     */
-    private void replaceCache(BlockDetectionState state) {
-        boolean unCache = framesCached > BLOCK_CACHE_LIMIT
-                || robotState.getRobotVelocity().getPoint().magnitude() > 1
-                || robotState.getRobotVelocity().getHeading() > Math.toRadians(3);
-        if (unCache) {
-            robotState.setCoarseBlockDetectionState(state);
-            framesCached = 1;
-        } else {
-            framesCached++;
-        }
-    }
-
-    /**
-     * Sets the lower bound for determining if blocks are too far laterally
-     *
-     * @param lateralLowerBound the bound to set
-     */
-    public void setLateralLowerBound(double lateralLowerBound) {
-        this.lateralLowerBound = lateralLowerBound;
-    }
-
-    /**
-     * Sets the upper bound for determining if blocks are too far laterally
-     *
-     * @param lateralUpperBound the bound to set
-     */
-    public void setLateralUpperBound(double lateralUpperBound) {
-        this.lateralUpperBound = lateralUpperBound;
-    }
-
-    /**
-     * Gets the corrected lateral fine distance of the block from the robot
-     *
-     * @param lateralFine the raw lateral fine distance of the block from the limelight (in pixels)
-     * @return the corrected lateral fine distances
-     */
-    private double getCorrectedLateralFine(double lateralFine) {
-        return lateralFine * LATERAL_FINE_VERTICAL_COMPRESSION + LATERAL_FINE_VERTICAL_SHIFT;
     }
 
     @Override
