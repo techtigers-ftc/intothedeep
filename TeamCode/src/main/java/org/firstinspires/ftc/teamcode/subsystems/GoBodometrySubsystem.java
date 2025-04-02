@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -164,8 +165,14 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         robotState.setRobotVelocity(robotVelocity);
     }
 
-    public void setPose(Waypoint waypoint) {
-        startPose = startPose.add(waypoint);
-        startPose = new Waypoint(startPose.getX(), startPose.getY(), robotState.getRobotCurrentPose().getHeading() - waypoint.getHeading());
+    /**
+     * Sets the heading of the robot to the specified value
+     *
+     * @param newHeading The new heading of the robot
+     */
+    public void setHeading(double newHeading) {
+        startPose = new Waypoint(startPose.getPoint(), newHeading - robotState.getRobotCurrentPose().getHeading() + startPose.getHeading());
+
+        periodic();
     }
 }
