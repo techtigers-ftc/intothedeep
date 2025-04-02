@@ -47,7 +47,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 16),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 15),
                                         new DropperOpenAction(dropper, 50),
                                         new InstantCommand(() -> isOpenFinished = true)
                                 ),

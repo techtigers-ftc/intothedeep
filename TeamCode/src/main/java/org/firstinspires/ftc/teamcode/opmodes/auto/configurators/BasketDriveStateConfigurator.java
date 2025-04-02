@@ -29,9 +29,9 @@ public class BasketDriveStateConfigurator {
      */
     public static void configPreloadDrop(DriveToPreloadDropState state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
-        state.setDrivePIDF(0.0035, 0, 0.0035, 0.6, 0);
+        state.setDrivePIDF(0.0035, 0, 0.002, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
-//        state.setPrimaryPIDSToTuning();
+        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -85,11 +85,8 @@ public class BasketDriveStateConfigurator {
      */
     public static void configFirstSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setHeadingPIDF(1, 0, 0.03, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -144,11 +141,9 @@ public class BasketDriveStateConfigurator {
      */
     public static void configSecondSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setHeadingPIDF(2, 0, 0, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -201,11 +196,10 @@ public class BasketDriveStateConfigurator {
      */
     public static void configThirdSampleDrop(DriveToGeneralSampleDropState state) {
         state.setTranslationalPIDF(0.1, 0, 0.01, 0);
-        state.setDrivePIDF(0.002, 0, 0.00035, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.00035, 0.6, 0);
         state.setHeadingPIDF(2, 0, 0, 0);
-        state.setSecondaryTranslationalPIDF(0.15, 0, 0.01, 0);
-        state.setSecondaryHeadingPIDF(1, 0, 0.06, 0);
-        state.setSecondaryDrivePIDF(0.003, 0, 0.0002, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
+
 
         state.setPathChain(
                 new PathBuilder()
