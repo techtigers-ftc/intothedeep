@@ -325,8 +325,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the third drop, drops it off, and goes to the fourth intake
 //                .addTransition(driveToThirdDrop, driveToPark, AutoState.PARK)
-//                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
-//                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.DRIVE_END)
+                .addTransition(driveToThirdDrop, driveToFourthIntake, AutoState.TIMEOUT)
 
                 // Intakes the fourth sample
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
