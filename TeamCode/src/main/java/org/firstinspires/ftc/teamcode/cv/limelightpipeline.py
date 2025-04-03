@@ -209,7 +209,7 @@ def runPipeline(frame, llrobot):
     # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
-    # llrobot[3] = 1
+    llrobot[3] = 1
     # current_slide_pos = 0
     # max_slide_extension = 18
 
