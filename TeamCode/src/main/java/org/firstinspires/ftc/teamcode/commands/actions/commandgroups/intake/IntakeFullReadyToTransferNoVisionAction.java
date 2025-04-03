@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.SequentialReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.intake.IntakeCheckSensorAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;

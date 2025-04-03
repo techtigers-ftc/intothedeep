@@ -1,8 +1,13 @@
 ### CONFIG
-# Exposure = 1822
-# Sensor Gain = 32.2
-# Red Balance = 1175
-# Blue Balance = 1594
+
+# For blue
+# Exposure = 3300
+# Black Level Offset = 3
+# Sensor Gain = 15.7
+# Red Balance = 1184
+# Blue Balance = 1532
+
+
 import cv2
 import numpy as np
 import math
@@ -65,6 +70,9 @@ GAUSSIAN_BLUR_KERNEL_SIZE = (5, 5)
 MORPHOLOGY_KERNEL = np.ones((5, 5), np.uint8)
 DILATE_KERNEL = np.ones((3, 3), np.uint8)
 
+INCHES_VERTICAL = 6.5
+PIXELS_PER_INCH = 480/INCHES_VERTICAL
+
 
 # Color detection ranges for different color spaces
 HSV_BLUE_RANGE = ([90, 150, 20], [140, 255, 255])
@@ -74,8 +82,9 @@ HSV_YELLOW_RANGE = ([20, 90, 150], [80, 255, 255])
 
 
 # Constants for filtering contours
-SMALL_CONTOUR_AREA_FINE = 25000
+SMALL_CONTOUR_AREA_FINE = 15000
 SMALL_CONTOUR_AREA_COARSE = 1500
+LARGE_CONTOUR_AREA_FINE = 45000
 
 
 # Minimum average brightness threshold (0-255)
@@ -151,7 +160,7 @@ def explore_touching_contours(frame, contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
     return frame
 
@@ -167,6 +176,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
     max_count = 1
 
     dist_transform = cv2.distanceTransform(mask, cv2.DIST_L2, 3)
+    # dist_transform = cv2.distanceTransform(dist_transform, cv2.DIST_L2, 1)
 
     for threshold in np.linspace(0.1, 0.9, 9):
         _, thresh = cv2.threshold(
@@ -177,7 +187,7 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
         contours, _ = cv2.findContours(
             thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
         )
-        print(f"Contour count = {len(contours)})")
+        # print(f"Contour count = {len(contours)})")
 
         valid_contours = [
             contour
@@ -199,12 +209,18 @@ def runPipeline(frame, llrobot):
     # llrobot[0] = 1
     # llrobot[1] = 1
     # llrobot[2] = 1
-    # llrobot[3] = 0
+    # llrobot[3] = 1
+    # current_slide_pos = 0
+    # max_slide_extension = 18
+
     try:
         usingYellow = llrobot[0] == 1
         usingRed = llrobot[1] == 1
         usingBlue = llrobot[2] == 1
         isFine = llrobot[3] == 1
+
+        current_slide_pos = llrobot[4]
+        max_slide_extension = llrobot[5]
 
         llpython = [0, 0, 0, 0, 0, 0, 0, 0]
         largest_contour = np.array([[]])
@@ -282,7 +298,11 @@ def runPipeline(frame, llrobot):
             small_contour_area = (
                 SMALL_CONTOUR_AREA_FINE if isFine == 1 else SMALL_CONTOUR_AREA_COARSE
             )
+
             if cv2.contourArea(contour) < small_contour_area:
+                continue
+
+            if cv2.contourArea(contour) > LARGE_CONTOUR_AREA_FINE:
                 continue
 
             frame = explore_touching_contours(frame, contour)
@@ -298,6 +318,10 @@ def runPipeline(frame, llrobot):
                 if M["m00"] != 0:
                     center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
                 else:
+                    continue
+
+                vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
+                if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
                     continue
 
                 area = cv2.contourArea(sep_contour)

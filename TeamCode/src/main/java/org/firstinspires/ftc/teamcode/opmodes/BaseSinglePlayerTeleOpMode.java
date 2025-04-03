@@ -149,7 +149,6 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 //        autoRetractTrigger.and(inReadyToTransfer).and(blockDetected.negate()).whenActive(
 //                () -> {
 //                    prepareToPickupManual.schedule();
-//                    gamepad2.rumbleBlips(3);
 //                }
 //        );
 
@@ -167,7 +166,6 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
 //        autoExtendTrigger.and(inTuck).and(blockDetected.negate()).whenActive(
 //                () -> {
 //                    prepareToPickupManual.schedule();
-//                    gamepad2.rumbleBlips(3);
 //                }
 //        );
 
@@ -180,11 +178,9 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         playerGamepad.getGamepadButton(GamepadKeys.Button.START).toggleWhenPressed(
                 () -> {
                     robotState.setManualIntakeSelected(true);
-                    gamepad1.rumbleBlips(1);
                 },
                 () -> {
                     robotState.setManualIntakeSelected(false);
-                    gamepad1.rumbleBlips(2);
                 }
         );
 
@@ -279,31 +275,6 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         );
 
         unsafeDropper.whileActiveOnce(unsafeDropperSlidesCommand);
-
-        // Endgame RUMBLE
-
-        Trigger endgameRumbleTrigger = new Trigger(() -> robotState.getRunTime() > 90000);
-
-        endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
-            Gamepad.RumbleEffect endgameRumbleEffect = new Gamepad.RumbleEffect.Builder()
-                    .addStep(
-                            1, 1, 1000
-                    )
-                    .addStep(
-                            0, 0, 500
-                    )
-                    .addStep(
-                            1, 1, 1000
-                    )
-                    .build();
-            gamepad1.runRumbleEffect(endgameRumbleEffect);
-        }));
-
-        Trigger finalRumble = new Trigger(() -> robotState.getRunTime() > 115000);
-
-        endgameRumbleTrigger.whileActiveOnce(new InstantCommand(() -> {
-            gamepad1.rumbleBlips(5);
-        }));
 
         telemetry.addData("Voltage: ", robotState.getVoltage());
         telemetry.update();

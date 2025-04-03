@@ -4,13 +4,14 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -21,9 +22,10 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 2;
-    private static final double TIME_TO_DROP = 2.5;
+    private static final double TIME_TO_INTAKE = 0;
+    private static final double TIME_TO_DROP = 0;
     private final RobotState robotState;
+    private final IntakeSubsystem intake;
     private boolean blockDetected;
 
     /**
@@ -34,15 +36,17 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
+    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
+        this.intake = intake;
         blockDetected = true;
         addCommands(
-                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 2),
-                new IntakeCoarseAlignAction(drive, intake, robotState),
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 10),
+                new LimelightBlockDetectionResetAction(limelight),
+                new IntakeTrackingAction(intake, robotState),
                 new WaitCommand(100),
-                new InstantCommand(() -> blockDetected = robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
+                new InstantCommand(robotState::isBlockDetected),
                 new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );
     }
@@ -55,8 +59,10 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
+        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5)
+                && !robotState.isVisionAligning();
         boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
-        if (blockNotDetected || super.isTimeoutReached()) {
+        if (trackingTimeout || blockNotDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {

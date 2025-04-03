@@ -35,15 +35,15 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 50;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 172;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 170;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 100;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
 
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 132;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 115;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
 
     public static final double WRIST_PITCH_PECK_POSITION = 159;
 
@@ -65,11 +65,11 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_LOOSE_POSITION = 0.97;
     public static double CLAW_CLOSED_POSITION = 1;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double PRIMARY_KP = 0.007;
+    public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0.0002;
+    public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0.001;
-    public static double SECONDARY_KP = 0.011;
+    public static double SECONDARY_KP = 0.008;
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;

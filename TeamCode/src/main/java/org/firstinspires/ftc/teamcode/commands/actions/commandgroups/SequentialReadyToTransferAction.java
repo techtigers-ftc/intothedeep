@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
@@ -52,7 +51,7 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeLoosenAction(intake, 100),
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.75)
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
                 )
         );
     }
