@@ -35,7 +35,6 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_UNDERSIDE_CARRY_POSITION = 5.5;
     public static final double SLIDES_UNDERSIDE_SLAP_POSITION = 8;
 
-
     // PITCH POSITIONS
     public static final double PITCH_INIT_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 38;
@@ -48,8 +47,8 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 205;
-    public static final double ROTATION_BASKET_POSITION = 205;
-    public static final double ROTATION_SLAP_POSITION = 205;
+    public static final double ROTATION_BASKET_POSITION = 105;
+    public static final double ROTATION_SLAP_POSITION = 5;
     public static final double ROTATION_WALL_INTAKE_POSITION = 5;
 
     private static final double SPOOL_CIRCUMFERENCE_INCHES = 1.403543 * Math.PI;

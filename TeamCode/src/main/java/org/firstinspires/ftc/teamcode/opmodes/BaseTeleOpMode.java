@@ -29,6 +29,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperSlapNoReleaseAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideCarryWallAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperUndersideSlapAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFullReadyToTransferAction;
@@ -184,11 +186,13 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperCarryWallAction dropperCarryWallAction = new DropperCarryWallAction(dropper, robotState);
         DropperWallIntakeAction dropperWallIntakeAction = new DropperWallIntakeAction(dropper, intake, robotState);
         DropperWallIntakeNoTransferAction dropperWallIntakeNoTransferAction = new DropperWallIntakeNoTransferAction(dropper, robotState);
-        DropperSlapAction dropperSlapAction = new DropperSlapAction(dropper, robotState);
+//        DropperSlapAction dropperSlapAction = new DropperSlapAction(dropper, robotState);
+        DropperUndersideSlapAction dropperSlapAction = new DropperUndersideSlapAction(drive, dropper, robotState);
         DropperSlapNoReleaseAction dropperSlapNoReleaseAction =
                 new DropperSlapNoReleaseAction(dropper, robotState);
         DropperCarryNoTransferAction dropperCarryNoTransferAction = new DropperCarryNoTransferAction(dropper, robotState);
-        DropperCarryAction dropperCarryAction = new DropperCarryAction(dropper, intake, robotState);
+//        DropperCarryAction dropperCarryAction = new DropperCarryAction(dropper, intake, robotState);
+        DropperUndersideCarryWallAction dropperCarryAction = new DropperUndersideCarryWallAction(dropper, robotState);
         DropperHighBasketNoTransferAction dropperHighBasketNoTransferAction = new DropperHighBasketNoTransferAction(dropper, robotState);
         DropperHighBasketAction dropperHighBasketAction = new DropperHighBasketAction(dropper, intake, robotState);
         DropperPreTransferAction dropperPreTransferAction = new DropperPreTransferAction(dropper, robotState);
