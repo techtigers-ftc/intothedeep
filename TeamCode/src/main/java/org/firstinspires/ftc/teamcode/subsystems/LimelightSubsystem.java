@@ -63,7 +63,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     public void init() {
         limelight.setPollRateHz(50);
         limelight.start();
+        // TODO: Pipeline 7 is the same as pipeline 3 but with a lower resolution for better framerate
         limelight.pipelineSwitch(3);
+//        limelight.pipelineSwitch(7);
     }
 
     /**
