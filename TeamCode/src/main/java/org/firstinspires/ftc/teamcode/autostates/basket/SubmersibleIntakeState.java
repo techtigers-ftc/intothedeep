@@ -46,7 +46,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                 new LimelightBlockDetectionResetAction(limelight),
                 new IntakeTrackingAction(intake, robotState),
                 new InstantCommand(robotState::isBlockDetected),
-                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
 
