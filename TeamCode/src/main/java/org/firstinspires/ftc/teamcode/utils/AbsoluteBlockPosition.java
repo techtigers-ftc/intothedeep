@@ -8,8 +8,8 @@ import team.techtigers.core.paths.Waypoint;
  * Class to calculate the absolute position of a block based on the robot's position and the block's offsets
  */
 public class AbsoluteBlockPosition {
-    private static final double CACHE_TIMEOUT = 100;
-    private static final double TELE_CACHE_TIMEOUT = 100;
+    private static final double CACHE_TIMEOUT = 200;
+    private static final double TELE_CACHE_TIMEOUT = 300;
     private Waypoint robotPos;
     private final ElapsedTime timer;
 

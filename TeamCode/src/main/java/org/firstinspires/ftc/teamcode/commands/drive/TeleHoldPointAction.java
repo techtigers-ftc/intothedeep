@@ -60,6 +60,35 @@ public class TeleHoldPointAction extends TimeoutCommand {
     }
 
     /**
+     * Creates a new HoldPointAction and allows you to specify a timeout
+     *
+     * @param drive           the drive subsystem
+     * @param robotState      the robot state
+     * @param xSupplier       a supplier which gives x values for the target position
+     * @param ySupplier       a supplier which gives x values for the target position
+     * @param headingSupplier a supplier which gives heading values for the target position
+     * @param tolerance       the tolerance for the distance to the target
+     * @param angleTolerance  the tolerance for the angle to the target
+     * @param timeout         the timeout for the hold point
+     */
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                               DoubleSupplier xSupplier,
+                               DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                               double tolerance, double angleTolerance, double timeout) {
+        super(timeout);
+        this.drive = drive;
+        this.robotState = robotState;
+        this.xSupplier = xSupplier;
+        this.ySupplier = ySupplier;
+        this.headingSupplier = headingSupplier;
+        this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
+        follower = new Follower(new RobotStateLocalizer(robotState));
+        end = false;
+//        addRequirements(drive);
+    }
+
+    /**
      * Creates a new TeleHoldPointAction (overload constructor)
      *
      * @param drive          the drive subsystem

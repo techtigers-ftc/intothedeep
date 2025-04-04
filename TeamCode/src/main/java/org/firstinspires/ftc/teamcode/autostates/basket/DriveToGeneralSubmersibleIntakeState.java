@@ -40,7 +40,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
                         new DropperPreTransferAction(dropper, robotState)
                 ),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 55),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() > 36),
                         new IntakeReadyToPickupAction(intake, robotState, () -> 2)
                 )
         );

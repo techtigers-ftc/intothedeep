@@ -63,7 +63,6 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 15),
                 new LimelightBlockDetectionResetAction(limelight),
                 new IntakeTrackingAction(intake, robotState),
-                new WaitCommand(100),
                 new InstantCommand(robotState::isBlockDetected),
                 new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
         );

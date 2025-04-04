@@ -370,6 +370,8 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeSixthSample, failedIntakeSubmersible, AutoState.TIMEOUT)
                 .addTransition(intakeSixthSample, driveToSixthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
+                .addTransition(driveToSixthDrop, driveToPark, AutoState.DRIVE_END)
+
                 .addTransition(driveToPark, firstLevelAscent, AutoState.DRIVE_END)
                 .addTransition(driveToPark, firstLevelAscent, AutoState.TIMEOUT)
 
