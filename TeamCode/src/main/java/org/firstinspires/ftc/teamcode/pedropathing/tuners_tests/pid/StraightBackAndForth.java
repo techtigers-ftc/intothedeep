@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoeffi
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
@@ -35,7 +36,6 @@ import org.firstinspires.ftc.teamcode.utils.TuningConstants;
  * @version 1.0, 3/12/2024
  */
 @Config
-@Disabled
 @Autonomous (name = "Straight Back And Forth ", group = "PIDF Tuning")
 public class StraightBackAndForth extends OpMode {
     private Telemetry telemetryA;
@@ -51,6 +51,7 @@ public class StraightBackAndForth extends OpMode {
 
     private GoBodometrySubsystem odometry;
     private DriveSubsystem drive;
+    private SensorSubsystem sensor;
 
     /**
      * This initializes the Follower and creates the forward and backward Paths. Additionally, this
@@ -62,6 +63,8 @@ public class StraightBackAndForth extends OpMode {
         RobotStateLocalizer robotStateLocalizer = new RobotStateLocalizer(robotState);
         odometry = new GoBodometrySubsystem(hardwareMap, robotState);
         drive = new DriveSubsystem(hardwareMap, robotState);
+        sensor = new SensorSubsystem(hardwareMap, robotState);
+
         follower = new Follower(robotStateLocalizer);
 
         forwards = new Path(new BezierLine(new Point(0,0, Point.CARTESIAN), new Point(DISTANCE,0, Point.CARTESIAN)));
@@ -86,6 +89,7 @@ public class StraightBackAndForth extends OpMode {
     public void loop() {
         odometry.periodic();
         drive.periodic();
+        sensor.periodic();
         follower.update();
         drive.drivePedroPath(follower.getCurrentDriveVectors());
 
