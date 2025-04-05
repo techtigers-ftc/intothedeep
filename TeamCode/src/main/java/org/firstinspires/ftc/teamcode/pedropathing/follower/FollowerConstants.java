@@ -28,23 +28,23 @@ public class FollowerConstants {
 
     /** The Localizer that the Follower & Pose Updater will use
      *  Default Value: Localizers.THREE_WHEEL */
-    public static Localizers localizers = Localizers.THREE_WHEEL;
+    public static Localizers localizers = Localizers.PINPOINT;
 
     /** The name of the left front motor
      *  Default Value: "leftFront" */
-    public static String leftFrontMotorName = "leftFront";
+    public static String leftFrontMotorName = "left_front";
 
     /** The name of the left rear motor
      *  Default Value: "leftRear" */
-    public static String leftRearMotorName = "leftRear";
+    public static String leftRearMotorName = "left_back";
 
     /** The name of the right front motor
      *  Default Value: "rightFront" */
-    public static String rightFrontMotorName = "rightFront";
+    public static String rightFrontMotorName = "right_front";
 
     /** The name of the right rear motor
      *  Default Value: "rightRear" */
-    public static String rightRearMotorName = "rightRear";
+    public static String rightRearMotorName = "right_back";
 
     /** The direction of the left front motor
      *  Default Value: DcMotorSimple.Direction.REVERSE */
@@ -52,11 +52,13 @@ public class FollowerConstants {
 
     /** The direction of the right front motor
      *  Default Value: DcMotorSimple.Direction.REVERSE */
-    public static DcMotorSimple.Direction rightFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
+    public static DcMotorSimple.Direction rightFrontMotorDirection =
+            DcMotorSimple.Direction.FORWARD;
 
     /** The direction of the left rear motor
      *  Default Value: DcMotorSimple.Direction.FORWARD */
-    public static DcMotorSimple.Direction leftRearMotorDirection = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction leftRearMotorDirection =
+            DcMotorSimple.Direction.REVERSE;
 
     /** The direction of the right rear motor
      *  Default Value: DcMotorSimple.Direction.FORWARD */
@@ -68,11 +70,11 @@ public class FollowerConstants {
 
     /** The Forward Velocity of the Robot - Different for each robot
      *  Default Value: 81.34056 */
-    public static double xMovement = 81.34056;
+    public static double xMovement = 77.5;
 
     /** The Lateral Velocity of the Robot - Different for each robot
      *  Default Value: 65.43028 */
-    public static double yMovement = 65.43028;
+    public static double yMovement = 61.2309;
 
 
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
@@ -106,7 +108,7 @@ public class FollowerConstants {
 
     /** Feed forward constant added on to the translational PIDF
      *  Default Value: 0.015 */
-    public static double translationalPIDFFeedForward = 0.015;
+    public static double translationalPIDFFeedForward = 0;
 
 
     /** Heading error PIDF coefficients
@@ -119,7 +121,7 @@ public class FollowerConstants {
 
     /** Feed forward constant added on to the heading PIDF
      *  Default Value: 0.01 */
-    public static double headingPIDFFeedForward = 0.01;
+    public static double headingPIDFFeedForward = 0;
 
 
     /** Drive PIDF coefficients
@@ -144,24 +146,24 @@ public class FollowerConstants {
 
     /** Mass of robot in kilograms
      *  Default Value: 10.65942 */
-    public static double mass = 10.65942;
+    public static double mass = 15.406;
 
     /** Centripetal force to power scaling
      *  Default Value: 0.0005 */
-    public static double centripetalScaling = 0.0005;
+    public static double centripetalScaling = 0.00025;
 
 
     /** Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
      * if not negative, then the robot thinks that its going to go faster under 0 power
      *  Default Value: -34.62719
      * @implNote This value is found via 'ForwardZeroPowerAccelerationTuner'*/
-    public static double forwardZeroPowerAcceleration = -34.62719;
+    public static double forwardZeroPowerAcceleration = -70;
 
     /** Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
      * if not negative, then the robot thinks that its going to go faster under 0 power
      *  Default Value: -78.15554
      * @implNote This value is found via 'LateralZeroPowerAccelerationTuner'*/
-    public static double lateralZeroPowerAcceleration = -78.15554;
+    public static double lateralZeroPowerAcceleration = -111.0828;
 
 
     /** A multiplier for the zero power acceleration to change the speed the robot decelerates at
@@ -295,7 +297,7 @@ public class FollowerConstants {
      * @see #useSecondaryHeadingPID
      * @see #secondaryHeadingPIDFCoefficients
      *  Default Value: 0.01 */
-    public static double secondaryHeadingPIDFFeedForward = 0.01;
+    public static double secondaryHeadingPIDFFeedForward = 0;
 
     /** The limit at which the heading PIDF switches between the main and secondary drive PIDFs.
      * @see #useSecondaryDrivePID
