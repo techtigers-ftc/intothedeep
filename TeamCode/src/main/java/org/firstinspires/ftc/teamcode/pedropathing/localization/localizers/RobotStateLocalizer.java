@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.localizers;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Localizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.MathFunctions;

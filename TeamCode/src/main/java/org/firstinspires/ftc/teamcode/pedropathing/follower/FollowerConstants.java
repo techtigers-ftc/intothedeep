@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilterParameters;
  * @author Baron Henderson - 20077 The Indubitables
  * @version 1.0, 3/4/2024
  */
+
 @Config
 public class FollowerConstants {
 
@@ -346,4 +347,9 @@ public class FollowerConstants {
      *  Will only read voltage if useVoltageCompensation is true.
      *  Default Value: 0.5 */
     public static double cacheInvalidateSeconds = 0.5;
+
+    /** Threshold that the turn and turnTo methods will be considered to be finished
+     *  In Radians
+     *  Default Value: 0.01 */
+    public static double turnHeadingErrorThreshold = 0.01;
 }

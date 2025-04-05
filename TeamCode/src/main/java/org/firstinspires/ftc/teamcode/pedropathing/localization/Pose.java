@@ -243,7 +243,7 @@ public class Pose {
      * This sets the Pose to be in Pedro coordinates or FTC Standard coordinates.
      * This will automatically convert the Pose to the new coordinate system.
      *
-     * @param pedroCoordinates whether the Pose is in Pedro coordinates or FTC Standard coordinates
+     * @param pedroCoordinates whether the Pose is set to be in Pedro coordinates or FTC Standard coordinates
      */
     public void setCoordinateSystem(boolean pedroCoordinates) {
         if (pedroCoordinates) {
