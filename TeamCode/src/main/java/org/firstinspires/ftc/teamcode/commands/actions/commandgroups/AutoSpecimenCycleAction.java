@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.Dro
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.drive.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;

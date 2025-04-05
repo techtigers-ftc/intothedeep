@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
-import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.PathBuilder;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.PathChain;
+import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.Point;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;

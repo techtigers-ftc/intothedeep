@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.follower.DriveVectorScaler;
-import org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants;
-import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
+import org.firstinspires.ftc.teamcode.pedropathing_old.follower.DriveVectorScaler;
+import org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants;
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.DriveVectors;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.SlidingAverageCalculator;
 import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
