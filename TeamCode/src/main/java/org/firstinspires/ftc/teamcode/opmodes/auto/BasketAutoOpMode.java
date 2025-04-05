@@ -283,9 +283,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the preload, drops it off, and goes to the first intake
                 .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.DRIVE_END)
+                .addTransition(driveToPreloadDrop, driveToFirstIntake, AutoState.TIMEOUT)
 
                 // Intakes the first sample
                 .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.DRIVE_END)
+                .addTransition(driveToFirstIntake, intakeFirstSample, AutoState.TIMEOUT)
 
                 // Transitions from the first sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeFirstSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
@@ -298,9 +300,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the first drop, drops it off, and goes to the second intake
                 .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.DRIVE_END)
+                .addTransition(driveToFirstDrop, driveToSecondIntake, AutoState.TIMEOUT)
 
                 // Intakes the second sample
                 .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.DRIVE_END)
+                .addTransition(driveToSecondIntake, intakeSecondSample, AutoState.TIMEOUT)
 
                 // Transitions from the second sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeSecondSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
@@ -312,9 +316,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the second drop, drops it off, and goes to the third intake
                 .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.DRIVE_END)
+                .addTransition(driveToSecondDrop, driveToThirdIntake, AutoState.TIMEOUT)
 
                 // Intakes the third sample
                 .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.DRIVE_END)
+                .addTransition(driveToThirdIntake, intakeThirdSample, AutoState.TIMEOUT)
 
                 // Transitions from the third sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeThirdSample, failedIntakeSample, AutoState.SAMPLE_INTAKE_FAILED)
@@ -330,6 +336,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Intakes the fourth sample
                 .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.DRIVE_END)
+                .addTransition(driveToFourthIntake, intakeFourthSample, AutoState.TIMEOUT)
 
                 // Transitions from the fourth sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeFourthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
@@ -344,9 +351,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the fourth drop, drops it off, and goes to the fifth intake
                 .addTransition(driveToFourthDrop, driveToFifthIntake, AutoState.DRIVE_END)
+                .addTransition(driveToFourthDrop, driveToFifthIntake, AutoState.TIMEOUT)
 
                 // Intakes the fifth sample
                 .addTransition(driveToFifthIntake, intakeFifthSample, AutoState.DRIVE_END)
+                .addTransition(driveToFifthIntake, intakeFifthSample, AutoState.TIMEOUT)
 
                 // Transitions from the fifth sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeFifthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
@@ -361,9 +370,11 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
                 // Drives to the fourth drop, drops it off, and goes to the fifth intake
                 .addTransition(driveToFifthDrop, driveToSixthIntake, AutoState.DRIVE_END)
+                .addTransition(driveToFifthDrop, driveToSixthIntake, AutoState.TIMEOUT)
 
                 // Intakes the fifth sample
                 .addTransition(driveToSixthIntake, intakeSixthSample, AutoState.DRIVE_END)
+                .addTransition(driveToSixthIntake, intakeSixthSample, AutoState.TIMEOUT)
 
                 // Transitions from the fifth sample intake to the drop, including transitions if the intake fails
                 .addTransition(intakeSixthSample, failedIntakeSubmersible, AutoState.SAMPLE_INTAKE_FAILED)
@@ -371,6 +382,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
                 .addTransition(intakeSixthSample, driveToSixthDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
                 .addTransition(driveToSixthDrop, driveToPark, AutoState.DRIVE_END)
+                .addTransition(driveToSixthDrop, driveToPark, AutoState.TIMEOUT)
 
                 .addTransition(driveToPark, firstLevelAscent, AutoState.DRIVE_END)
                 .addTransition(driveToPark, firstLevelAscent, AutoState.TIMEOUT)
