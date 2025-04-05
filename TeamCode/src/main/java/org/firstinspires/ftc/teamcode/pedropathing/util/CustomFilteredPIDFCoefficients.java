@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.pedropathing.util;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.teamcode.pedropathing_old.util.FeedForwardConstant;
+
 import kotlin.jvm.JvmField;
 
 /**
