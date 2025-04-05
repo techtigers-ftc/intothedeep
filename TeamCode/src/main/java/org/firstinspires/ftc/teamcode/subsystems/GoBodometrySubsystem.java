@@ -12,7 +12,7 @@ import team.techtigers.core.paths.geometry.Point;
 import team.techtigers.core.paths.geometry.Rectangle;
 
 /**
- * The odometry subsystem, using the localizer from Roadrunner.
+ * The odometry subsystem, using Gobilda Pinpoint.
  */
 public class GoBodometrySubsystem extends CloseableSubsystem {
     //Defines the points and rectangle for the ascent zone submersible zone on red side
@@ -49,7 +49,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
 
 
     /**
-     * Initializes a new RoadometrySubsystem.
+     * Initializes a new GoBodometrySubsystem.
      *
      * @param hardwareMap The hardware map, used to get hardware references
      * @param robotState  The state into which localization values are
@@ -152,7 +152,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
         Waypoint robotPose = new Waypoint(odo.getPosX() / 25.4,
                 odo.getPosY() / 25.4, heading);
 
-        RobotLog.dd(tag, "Odo X: %f, Odo Y: %f, H: %f", robotPose.getX(), robotPose.getY(), robotPose.getHeading());
+//        RobotLog.dd(tag, "Odo X: %f, Odo Y: %f, H: %f", robotPose.getX(), robotPose.getY(), robotPose.getHeading());
 
         robotPose = rotateWaypoint(robotPose, startPose.getHeading());
         robotPose = new Waypoint(robotPose.getX() + startPose.getX(),
@@ -167,7 +167,7 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
 
         Waypoint robotVelocity = new Waypoint(odo.getVelX() / 25.4,
                 odo.getVelY() / 25.4, headingVelocity);
-        RobotLog.dd(tag, "Odo Vel X: %f, Odo Vel Y: %f, Odo Vel H: %f", robotVelocity.getX(), robotVelocity.getY(), robotVelocity.getHeading());
+//        RobotLog.dd(tag, "Odo Vel X: %f, Odo Vel Y: %f, Odo Vel H: %f", robotVelocity.getX(), robotVelocity.getY(), robotVelocity.getHeading());
         robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
 
         if (Double.isNaN(robotVelocity.getX()) || Double.isNaN(robotVelocity.getY()) || Double.isNaN(robotVelocity.getHeading())) {
