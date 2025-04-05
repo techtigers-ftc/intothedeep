@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.constants;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 
 /**
  * This is the PinpointConstants class. It holds many constants and parameters for the Pinpoint Localizer.

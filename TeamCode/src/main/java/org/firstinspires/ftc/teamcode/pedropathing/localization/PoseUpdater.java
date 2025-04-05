@@ -5,9 +5,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.DriveEncoderLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.OTOSLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.TwoWheelLocalizer;
@@ -25,7 +22,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
  * @version 1.0, 3/4/2024
  */
 public class PoseUpdater {
-    private HardwareMap hardwareMap;
 
     private IMU imu;
 
@@ -53,86 +49,13 @@ public class PoseUpdater {
     /**
      * Creates a new PoseUpdater from a HardwareMap and a Localizer.
      *
-     * @param hardwareMap the HardwareMap
      * @param localizer the Localizer
-     * @param FConstants the constants for the Follower
-     * @param LConstants the constants for the Localizer
      */
-    public PoseUpdater(HardwareMap hardwareMap, Localizer localizer, Class<?> FConstants, Class<?> LConstants) {
-        Constants.setConstants(FConstants, LConstants);
-
-        this.hardwareMap = hardwareMap;
+    public PoseUpdater(Localizer localizer) {
         this.localizer = localizer;
-
-        if (localizer.getClass() != PinpointLocalizer.class) {
-            try {
-                localizer.resetIMU();
-            } catch (InterruptedException ignored) {
-            }
-        }
 
         imu = localizer.getIMU();
     }
-
-    /**
-     * Creates a new PoseUpdater from a HardwareMap.
-     *
-     * @param hardwareMap the HardwareMap
-     * @param FConstants the constants for the Follower
-     * @param LConstants the constants for the Localizer
-     */
-    public PoseUpdater(HardwareMap hardwareMap, Class<?> FConstants, Class<?> LConstants) {
-        this(hardwareMap, createLocalizer(hardwareMap), FConstants, LConstants);
-    }
-
-    /**
-     * Creates a new PoseUpdater from a HardwareMap and a Localizer.
-     *
-     * @param hardwareMap the HardwareMap
-     * @param localizer the Localizer
-     */
-    public PoseUpdater(HardwareMap hardwareMap, Localizer localizer) {
-        this.hardwareMap = hardwareMap;
-        this.localizer = localizer;
-
-        if (localizer.getClass() != PinpointLocalizer.class) {
-            try {
-                localizer.resetIMU();
-            } catch (InterruptedException ignored) {
-            }
-        }
-
-        imu = localizer.getIMU();
-    }
-
-    /**
-     * Creates a new PoseUpdater from a HardwareMap.
-     *
-     * @param hardwareMap the HardwareMap
-     */
-    public PoseUpdater(HardwareMap hardwareMap) {
-        this(hardwareMap, createLocalizer(hardwareMap));
-    }
-
-    private static Localizer createLocalizer(HardwareMap hardwareMap) {
-        switch (localizers) {
-            case DRIVE_ENCODERS:
-                return new DriveEncoderLocalizer(hardwareMap);
-            case TWO_WHEEL:
-                return new TwoWheelLocalizer(hardwareMap);
-            case THREE_WHEEL:
-                return new ThreeWheelLocalizer(hardwareMap);
-            case THREE_WHEEL_IMU:
-                return new ThreeWheelIMULocalizer(hardwareMap);
-            case OTOS:
-                return new OTOSLocalizer(hardwareMap);
-            case PINPOINT:
-                return new PinpointLocalizer(hardwareMap);
-            default:
-                throw new IllegalArgumentException("Unsupported localizer type");
-        }
-    }
-
 
     /**
      * This updates the robot's pose, as well as updating the previous pose, velocity, and
@@ -410,7 +333,7 @@ public class PoseUpdater {
     }
 
     /**
-     *
+     * Resets the IMU
      */
     public void resetIMU() throws InterruptedException {
         localizer.resetIMU();

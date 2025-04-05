@@ -55,9 +55,12 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
+import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
 import org.firstinspires.ftc.teamcode.pedropathing.util.FilteredPIDFController;
 import org.firstinspires.ftc.teamcode.pedropathing.util.KalmanFilter;
 import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
+import org.firstinspires.ftc.teamcode.utils.TuningConstants;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
@@ -75,14 +78,6 @@ import java.util.List;
  */
 @Config
 public class Follower {
-    private HardwareMap hardwareMap;
-
-    private DcMotorEx leftFront;
-    private DcMotorEx leftRear;
-    private DcMotorEx rightFront;
-    private DcMotorEx rightRear;
-    private List<DcMotorEx> motors;
-
     private DriveVectorScaler driveVectorScaler;
 
     public PoseUpdater poseUpdater;
@@ -94,8 +89,8 @@ public class Follower {
 
     private PathChain currentPathChain;
 
-    private int BEZIER_CURVE_SEARCH_LIMIT;
-    private int AVERAGED_VELOCITY_SAMPLE_NUMBER;
+    private final int BEZIER_CURVE_SEARCH_LIMIT = FollowerConstants.BEZIER_CURVE_SEARCH_LIMIT;
+    private final int AVERAGED_VELOCITY_SAMPLE_NUMBER = FollowerConstants.AVERAGED_VELOCITY_SAMPLE_NUMBER;
 
     private int chainIndex;
 
@@ -111,14 +106,13 @@ public class Follower {
     private double globalMaxPower = 1;
     private double previousSecondaryTranslationalIntegral;
     private double previousTranslationalIntegral;
-    private double holdPointTranslationalScaling;
-    private double holdPointHeadingScaling;
+    private double holdPointTranslationalScaling = FollowerConstants.holdPointTranslationalScaling;
+    private double holdPointHeadingScaling = FollowerConstants.holdPointHeadingScaling;
     public double driveError;
     public double headingError;
 
     private long reachedParametricPathEndTime;
-
-    private double[] drivePowers;
+    private DriveVectors currentDriveVectors;
     private double[] teleopDriveValues;
 
     private ArrayList<Vector> velocities = new ArrayList<>();
@@ -137,18 +131,27 @@ public class Follower {
     public Vector centripetalVector;
     public Vector correctiveVector;
 
-    private double centripetalScaling;
+    private double centripetalScaling = FollowerConstants.centripetalScaling;
 
-    private PIDFController secondaryTranslationalPIDF;
-    private PIDFController secondaryTranslationalIntegral;
-    private PIDFController translationalPIDF;
-    private PIDFController translationalIntegral;
-    private PIDFController secondaryHeadingPIDF;
-    private PIDFController headingPIDF;
-    private FilteredPIDFController secondaryDrivePIDF;
-    private FilteredPIDFController drivePIDF;
+//    private PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
+//    private PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
+//    private PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(0,0,0,0));
+//    private FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+//    private FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(0,0,0,0,0));
+//
+    public static PIDFController secondaryTranslationalPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP,0,TuningConstants.hSecondaryTranslationalD,0));
+    public static PIDFController secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
+    public static PIDFController translationalPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.aTranslationalP,0,TuningConstants.bTranslationalD,0));
+    public static PIDFController translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
+    public static PIDFController secondaryHeadingPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.kSecondaryHeadingP,0,TuningConstants.lSecondaryHeadingD,0));
+    public static PIDFController headingPIDF = new PIDFController(new CustomPIDFCoefficients(TuningConstants.eHeadingP,0,TuningConstants.fHeadingD,0));
+    public static FilteredPIDFController secondaryDrivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(TuningConstants.iSecondaryDriveP,0,TuningConstants.jSecondaryDriveD,0.6,0));
+    public static FilteredPIDFController drivePIDF = new FilteredPIDFController(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP,0,TuningConstants.dDriveD,0.6,0));
 
-    private KalmanFilter driveKalmanFilter;
+    private KalmanFilter driveKalmanFilter = new KalmanFilter(FollowerConstants.driveKalmanFilterParameters);
     private double[] driveErrors;
     private double rawDriveError;
     private double previousRawDriveError;
@@ -167,7 +170,6 @@ public class Follower {
      */
     private boolean cached = false;
 
-    private VoltageSensor voltageSensor;
     public double voltage = 0;
     private final ElapsedTime voltageTimer = new ElapsedTime();
 
@@ -176,146 +178,67 @@ public class Follower {
     private ElapsedTime zeroVelocityDetectedTimer;
 
     /**
-     * This creates a new Follower given a HardwareMap.
-     * @param hardwareMap HardwareMap required
-     */
-    public Follower(HardwareMap hardwareMap, Class<?> FConstants, Class<?> LConstants) {
-        this.hardwareMap = hardwareMap;
-        setupConstants(FConstants, LConstants);
-        initialize();
-    }
-
-    /**
      * This creates a new Follower given a HardwareMap and a localizer.
-     * @param hardwareMap HardwareMap required
      * @param localizer the localizer you wish to use
      */
-    public Follower(HardwareMap hardwareMap, Localizer localizer, Class<?> FConstants, Class<?> LConstants) {
-        this.hardwareMap = hardwareMap;
-        setupConstants(FConstants, LConstants);
+    public Follower(Localizer localizer) {
         initialize(localizer);
     }
 
     /**
-     * Setup constants for the Follower.
-     * @param FConstants the constants for the Follower
-     * @param LConstants the constants for the Localizer
-     */
-    public void setupConstants(Class<?> FConstants, Class<?> LConstants) {
-        Constants.setConstants(FConstants, LConstants);
-        BEZIER_CURVE_SEARCH_LIMIT = FollowerConstants.BEZIER_CURVE_SEARCH_LIMIT;
-        AVERAGED_VELOCITY_SAMPLE_NUMBER = FollowerConstants.AVERAGED_VELOCITY_SAMPLE_NUMBER;
-        holdPointTranslationalScaling = FollowerConstants.holdPointTranslationalScaling;
-        holdPointHeadingScaling = FollowerConstants.holdPointHeadingScaling;
-        centripetalScaling = FollowerConstants.centripetalScaling;
-        secondaryTranslationalPIDF = new PIDFController(FollowerConstants.secondaryTranslationalPIDFCoefficients);
-        secondaryTranslationalIntegral = new PIDFController(FollowerConstants.secondaryTranslationalIntegral);
-        translationalPIDF = new PIDFController(FollowerConstants.translationalPIDFCoefficients);
-        translationalIntegral = new PIDFController(FollowerConstants.translationalIntegral);
-        secondaryHeadingPIDF = new PIDFController(FollowerConstants.secondaryHeadingPIDFCoefficients);
-        headingPIDF = new PIDFController(FollowerConstants.headingPIDFCoefficients);
-        secondaryDrivePIDF = new FilteredPIDFController(FollowerConstants.secondaryDrivePIDFCoefficients);
-        drivePIDF = new FilteredPIDFController(FollowerConstants.drivePIDFCoefficients);
-        driveKalmanFilter = new KalmanFilter(FollowerConstants.driveKalmanFilterParameters);
-        turnHeadingErrorThreshold = FollowerConstants.turnHeadingErrorThreshold;
-    }
-
-    /**
      * This initializes the follower.
      * In this, the DriveVectorScaler and PoseUpdater is instantiated, the drive motors are
      * initialized and their behavior is set, and the variables involved in approximating first and
      * second derivatives for teleop are set.
-     */
-    public void initialize() {
-        poseUpdater = new PoseUpdater(hardwareMap);
-        driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
-
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
-        voltageTimer.reset();
-
-        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
-        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
-        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
-        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
-        leftFront.setDirection(leftFrontMotorDirection);
-        leftRear.setDirection(leftRearMotorDirection);
-        rightFront.setDirection(rightFrontMotorDirection);
-        rightRear.setDirection(rightRearMotorDirection);
-
-        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
-        }
-
-        setMotorsToFloat();
-
-        dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
-
-        breakFollowing();
-    }
-
-    /**
-     * This initializes the follower.
-     * In this, the DriveVectorScaler and PoseUpdater is instantiated, the drive motors are
-     * initialized and their behavior is set, and the variables involved in approximating first and
-     * second derivatives for teleop are set.
+     *
      * @param localizer the localizer you wish to use
      */
-
     public void initialize(Localizer localizer) {
-        poseUpdater = new PoseUpdater(hardwareMap, localizer);
+        poseUpdater = new PoseUpdater(localizer);
         driveVectorScaler = new DriveVectorScaler(FollowerConstants.frontLeftVector);
 
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageTimer.reset();
-
-        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
-        leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);
-        rightRear = hardwareMap.get(DcMotorEx.class, rightRearMotorName);
-        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontMotorName);
-        leftFront.setDirection(leftFrontMotorDirection);
-        leftRear.setDirection(leftRearMotorDirection);
-        rightFront.setDirection(rightFrontMotorDirection);
-        rightRear.setDirection(rightRearMotorDirection);
-
-        motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
-        }
-
-        setMotorsToFloat();
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
         breakFollowing();
+    }
+
+    public void setSecondaryTranslationalPIDF(CustomPIDFCoefficients coefficients) {
+        secondaryTranslationalPIDF.setCoefficients(coefficients);
+        useSecondaryTranslationalPID = true;
+    }
+
+    public void setTranslationalPIDF(CustomPIDFCoefficients coefficients) {
+        translationalPIDF.setCoefficients(coefficients);
+    }
+
+    public void setSecondaryHeadingPIDF(CustomPIDFCoefficients coefficients) {
+        secondaryHeadingPIDF.setCoefficients(coefficients);
+        useSecondaryHeadingPID = true;
+    }
+
+    public void setHeadingPIDF(CustomPIDFCoefficients coefficients) {
+        headingPIDF.setCoefficients(coefficients);
+    }
+
+    public void setSecondaryDrivePIDF(CustomFilteredPIDFCoefficients coefficients) {
+        secondaryDrivePIDF.setCoefficients(coefficients);
+        useSecondaryDrivePID = true;
+    }
+
+    public void setDrivePIDF(CustomFilteredPIDFCoefficients coefficients) {
+        drivePIDF.setCoefficients(coefficients);
+    }
+
+    public void disableSecondaryPIDS() {
+        useSecondaryTranslationalPID = false;
+        useSecondaryHeadingPID = false;
+        useSecondaryDrivePID = false;
     }
 
     public void setCentripetalScaling(double set) {
         centripetalScaling = set;
-    }
-
-    /**
-     * This sets the motors to the zero power behavior of brake.
-     */
-    private void setMotorsToBrake() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-    }
-
-    /**
-     * This sets the motors to the zero power behavior of float.
-     */
-    private void setMotorsToFloat() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
     }
 
     /**
@@ -589,10 +512,6 @@ public class Follower {
     public void startTeleopDrive() {
         breakFollowing();
         teleopDrive = true;
-
-        if(FollowerConstants.useBrakeModeInTeleOp) {
-            setMotorsToBrake();
-        }
     }
 
     /**
@@ -618,20 +537,19 @@ public class Follower {
                 if (holdingPosition) {
                     closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), 1);
 
-                    drivePowers = driveVectorScaler.getDrivePowers(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), poseUpdater.getPose().getHeading());
+                    currentDriveVectors = new DriveVectors(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), getPose().getHeading());
 
-                    for (int i = 0; i < motors.size(); i++) {
-                        if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                            double voltageNormalized = getVoltageNormalized();
-
-                            if (useVoltageCompensationInAuto) {
-                                motors.get(i).setPower(drivePowers[i] * voltageNormalized);
-                            } else {
-                                motors.get(i).setPower(drivePowers[i]);
-                            }
-                        }
-                    }
-
+//                    for (int i = 0; i < motors.size(); i++) {
+//                        if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                            double voltageNormalized = getVoltageNormalized();
+//
+//                            if (useVoltageCompensationInAuto) {
+//                                motors.get(i).setPower(drivePowers[i] * voltageNormalized);
+//                            } else {
+//                                motors.get(i).setPower(drivePowers[i]);
+//                            }
+//                        }
+//                    }
                     if(headingError < turnHeadingErrorThreshold && isTurning) {
                         isTurning = false;
                         isBusy = false;
@@ -642,19 +560,19 @@ public class Follower {
 
                         if (followingPathChain) updateCallbacks();
 
-                        drivePowers = driveVectorScaler.getDrivePowers(getCorrectiveVector(), getHeadingVector(), getDriveVector(), poseUpdater.getPose().getHeading());
+                        currentDriveVectors = new DriveVectors(getCorrectiveVector(), getHeadingVector(), getDriveVector(), getPose().getHeading());
 
-                        for (int i = 0; i < motors.size(); i++) {
-                            if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                                double voltageNormalized = getVoltageNormalized();
-
-                                if (useVoltageCompensationInAuto) {
-                                    motors.get(i).setPower(drivePowers[i] * voltageNormalized);
-                                } else {
-                                    motors.get(i).setPower(drivePowers[i]);
-                                }
-                            }
-                        }
+//                        for (int i = 0; i < motors.size(); i++) {
+//                            if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                                double voltageNormalized = getVoltageNormalized();
+//
+//                                if (useVoltageCompensationInAuto) {
+//                                    motors.get(i).setPower(drivePowers[i] * voltageNormalized);
+//                                } else {
+//                                    motors.get(i).setPower(drivePowers[i]);
+//                                }
+//                            }
+//                        }
                     }
 
                     // try to fix the robot stop near the end issue
@@ -716,7 +634,6 @@ public class Follower {
                             }
                         }
                     }
-                    //RobotLog.d("Follower:: isBusy:" + isBusy);
                 }
             }
         } else {
@@ -725,20 +642,26 @@ public class Follower {
 
             calculateAveragedVelocityAndAcceleration();
 
-            drivePowers = driveVectorScaler.getDrivePowers(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, poseUpdater.getPose().getHeading());
+            currentDriveVectors = new DriveVectors(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, getPose().getHeading());
 
-            for (int i = 0; i < motors.size(); i++) {
-                if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
-                    double voltageNormalized = getVoltageNormalized();
-
-                    if (useVoltageCompensationInTeleOp) {
-                        motors.get(i).setPower(drivePowers[i] * voltageNormalized);
-                    } else {
-                        motors.get(i).setPower(drivePowers[i]);
-                    }
-                }
-            }
+//            for (int i = 0; i < motors.size(); i++) {
+//                if (Math.abs(motors.get(i).getPower() - drivePowers[i]) > FollowerConstants.motorCachingThreshold) {
+//                    double voltageNormalized = getVoltageNormalized();
+//
+//                    if (useVoltageCompensationInTeleOp) {
+//                        motors.get(i).setPower(drivePowers[i] * voltageNormalized);
+//                    } else {
+//                        motors.get(i).setPower(drivePowers[i]);
+//                    }
+//                }
+//            }
         }
+    }
+
+    public DriveVectors getCurrentDriveVectors() {
+        update();
+        
+        return currentDriveVectors;
     }
 
     /**
@@ -834,7 +757,6 @@ public class Follower {
      */
     public void breakFollowing() {
         teleopDrive = false;
-        setMotorsToFloat();
         holdingPosition = false;
         isBusy = false;
         reachedParametricPathEnd = false;
@@ -875,10 +797,6 @@ public class Follower {
         teleopDriveValues = new double[3];
         teleopDriveVector = new Vector();
         teleopHeadingVector = new Vector();
-
-        for (int i = 0; i < motors.size(); i++) {
-            motors.get(i).setPower(0);
-        }
 
         zeroVelocityDetectedTimer = null;
     }
@@ -1301,7 +1219,7 @@ public class Follower {
      */
     public void refreshVoltage() {
         cached = true;
-        voltage = voltageSensor.getVoltage();
+//        voltage = voltageSensor.getVoltage();
         voltageTimer.reset();
     }
 
@@ -1343,67 +1261,6 @@ public class Follower {
     public boolean isTurning() {
         return isTurning;
     }
-
-    /**
-     * This will update the PIDF coefficients for primary Heading PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setHeadingPIDF(CustomPIDFCoefficients set){
-        headingPIDF.setCoefficients(set);
-    }
-
-    /**
-     * This will update the PIDF coefficients for primary Translational PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setTranslationalPIDF(CustomPIDFCoefficients set){
-        translationalPIDF.setCoefficients(set);
-    }
-
-    /**
-     * This will update the PIDF coefficients for primary Drive PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setDrivePIDF(CustomFilteredPIDFCoefficients set){
-        drivePIDF.setCoefficients(set);
-    }
-
-    /**
-     * This will update the PIDF coefficients for secondary Heading PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setSecondaryHeadingPIDF(CustomPIDFCoefficients set){
-        secondaryHeadingPIDF.setCoefficients(set);
-    }
-
-    /**
-     * This will update the PIDF coefficients for secondary Translational PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setSecondaryTranslationalPIDF(CustomPIDFCoefficients set){
-        secondaryTranslationalPIDF.setCoefficients(set);
-    }
-
-    /**
-     * This will update the PIDF coefficients for secondary Drive PIDF mid run
-     * can be used between paths
-     *
-     * @param set PIDF coefficients you would like to set.
-     */
-    public void setSecondaryDrivePIDF(CustomFilteredPIDFCoefficients set){
-        secondaryDrivePIDF.setCoefficients(set);
-    }
-
     /**
      * Checks if the robot is at a certain point within certain tolerances
      * @param point Point to compare with the current point
