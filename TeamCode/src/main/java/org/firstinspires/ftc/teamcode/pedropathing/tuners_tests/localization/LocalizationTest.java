@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.pedropathing.tuners_tests.localization;
 
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.leftFrontMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.leftFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.leftRearMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.leftRearMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.rightFrontMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.rightFrontMotorName;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.rightRearMotorDirection;
-import static org.firstinspires.ftc.teamcode.pedropathing_old.follower.FollowerConstants.rightRearMotorName;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftFrontMotorName;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.leftRearMotorName;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightFrontMotorName;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.rightRearMotorName;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;

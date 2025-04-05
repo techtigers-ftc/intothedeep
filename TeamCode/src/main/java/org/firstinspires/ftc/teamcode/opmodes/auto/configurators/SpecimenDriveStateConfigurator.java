@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimen
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.BezierCurve;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.BezierLine;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.PathBuilder;
-import org.firstinspires.ftc.teamcode.pedropathing_old.pathgen.Point;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierLine;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
+import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 
 /**
  * A class used to configure Specimen Drive States.
