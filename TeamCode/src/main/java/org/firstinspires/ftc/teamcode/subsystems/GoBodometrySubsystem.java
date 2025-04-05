@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.localization.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -150,18 +151,32 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
 
         Waypoint robotPose = new Waypoint(odo.getPosX() / 25.4,
                 odo.getPosY() / 25.4, heading);
+
+        RobotLog.dd(tag, "Odo X: %f, Odo Y: %f, H: %f", robotPose.getX(), robotPose.getY(), robotPose.getHeading());
+
         robotPose = rotateWaypoint(robotPose, startPose.getHeading());
         robotPose = new Waypoint(robotPose.getX() + startPose.getX(),
                 robotPose.getY() + startPose.getY(),
                 (robotPose.getHeading() + startPose.getHeading()) % (2 * Math.PI));
 
+        if (Double.isNaN(robotPose.getX()) || Double.isNaN(robotPose.getY()) || Double.isNaN(robotPose.getHeading())) {
+            RobotLog.ww(tag, "Pose is dead");
+            return;
+        }
+        robotState.setRobotPose(robotPose);
+
         Waypoint robotVelocity = new Waypoint(odo.getVelX() / 25.4,
                 odo.getVelY() / 25.4, headingVelocity);
+        RobotLog.dd(tag, "Odo Vel X: %f, Odo Vel Y: %f, Odo Vel H: %f", robotVelocity.getX(), robotVelocity.getY(), robotVelocity.getHeading());
         robotVelocity = rotateWaypoint(robotVelocity, startPose.getHeading());
 
-        robotState.setVisionIntakeHeading(getVisionIntakeHeading(robotPose));
-        robotState.setRobotPose(robotPose);
+        if (Double.isNaN(robotVelocity.getX()) || Double.isNaN(robotVelocity.getY()) || Double.isNaN(robotVelocity.getHeading())) {
+            RobotLog.ww(tag, "Velocity is dead");
+            return;
+        }
         robotState.setRobotVelocity(robotVelocity);
+
+//        robotState.setVisionIntakeHeading(getVisionIntakeHeading(robotPose));
     }
 
     public void setPose(Waypoint waypoint) {
