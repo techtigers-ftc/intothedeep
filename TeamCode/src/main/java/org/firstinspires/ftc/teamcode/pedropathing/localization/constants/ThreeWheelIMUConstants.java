@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.constants;
 
-import org.firstinspires.ftc.teamcode.pedropathing.localization.Encoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+
+import org.firstinspires.ftc.teamcode.pedropathing.localization.Encoder;
 
 /**
  * This is the ThreeWheelIMUConstants class. It holds many constants and parameters for the Three Wheel + IMU Localizer.

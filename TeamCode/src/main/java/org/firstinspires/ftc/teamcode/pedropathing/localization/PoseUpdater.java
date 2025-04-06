@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization;
 import static org.firstinspires.ftc.teamcode.pedropathing.follower.FollowerConstants.localizers;
 
+import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.DriveEncoderLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.TwoWheelLocalizer;
@@ -54,13 +53,6 @@ public class PoseUpdater {
      */
     public PoseUpdater(Localizer localizer) {
         this.localizer = localizer;
-
-        if (localizer.getClass() != PinpointLocalizer.class) {
-            try {
-                localizer.resetIMU();
-            } catch (InterruptedException ignored) {
-            }
-        }
 
         imu = localizer.getIMU();
     }
