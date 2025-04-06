@@ -153,7 +153,7 @@ public class LimelightSubsystem extends CloseableSubsystem {
                             Math.hypot(forwardFine, LIMELIGHT_HEIGHT) * Math.tan(Math.toRadians(result.getTx()));
                     double orientation = (results[3] + 180) % 180;
 
-                RobotLog.dd("Limelight Subsystem", "Tx: %f, Ty: %f", result.getTx(), result.getTy());
+//                RobotLog.dd("Limelight Subsystem", "Tx: %f, Ty: %f", result.getTx(), result.getTy());
 
                     robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
                     robotState.setFineBlockDetectionState(BlockDetectionState.DETECTED);
