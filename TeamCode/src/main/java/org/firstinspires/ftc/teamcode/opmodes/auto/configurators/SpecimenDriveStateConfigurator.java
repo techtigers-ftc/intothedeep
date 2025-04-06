@@ -429,7 +429,7 @@ public class SpecimenDriveStateConfigurator {
     public static void configSampleDrop(DriveFromChamberSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.004, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0.0055, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -441,7 +441,7 @@ public class SpecimenDriveStateConfigurator {
                                         new Point(12, 10)
                                 )
                         )
-//                        .setConstantHeadingInterpolation(Math.toRadians(30))
+//                        .setConstantHeadingInterpolation(Math.toRadians(45))
                         .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(30))
                         .build()
         );
