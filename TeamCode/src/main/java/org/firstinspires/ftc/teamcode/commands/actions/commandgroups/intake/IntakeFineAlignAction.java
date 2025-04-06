@@ -78,10 +78,11 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
         targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
         if (!robotState.isBlockDetected()) {
             // TODO: Replace with something that won't crash the robot
-            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
-            RobotLog.dd(LOG_TAG, "X: %f, Y: %f, Heading: %f", targetPositions[0], targetPositions[1], targetPositions[2]);
-            RobotLog.dd(LOG_TAG, "Pose: %s", robotState.getRobotCurrentPose().toString());
-            throw new IllegalStateException("Block not detected");
+//            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+//            RobotLog.dd(LOG_TAG, "X: %f, Y: %f, Heading: %f", targetPositions[0], targetPositions[1], targetPositions[2]);
+//            RobotLog.dd(LOG_TAG, "Pose: %s", robotState.getRobotCurrentPose().toString());
+//            throw new IllegalStateException("Block not detected");
+            RobotLog.ww(LOG_TAG, "Block not detected");
         }
 //        this.cancel();
 
