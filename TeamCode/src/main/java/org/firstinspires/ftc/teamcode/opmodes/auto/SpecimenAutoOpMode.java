@@ -225,7 +225,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         SpecimenDriveStateConfigurator.configDriveFromChamberPark(driveFromChamberPark);
 
         DriveFromBasketToSpecimenPark driveFromBasketPark = new DriveFromBasketToSpecimenPark(
-                "driveFromChamberPark",
+                "driveFromBasketPark",
                 drive,
                 intake,
                 dropper,
@@ -264,6 +264,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addState(driveToFourthIntake)
                 .addState(driveToFourthDrop)
                 .addState(driveFromChamberPark)
+                .addState(driveFromBasketPark)
                 .addState(driveToSampleDrop)
                 .addState(intakeSample)
                 .addState(endState)
@@ -349,8 +350,11 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
                 //Transitions to end state when done with either park or sample drop drive
 
-                .addTransition(driveToSampleDrop, endState, AutoState.DRIVE_END)
-                .addTransition(driveToSampleDrop, endState, AutoState.TIMEOUT)
+                .addTransition(driveToSampleDrop, driveFromBasketPark, AutoState.DRIVE_END)
+                .addTransition(driveToSampleDrop, driveFromBasketPark, AutoState.TIMEOUT)
+
+                .addTransition(driveFromBasketPark, endState, AutoState.DRIVE_END)
+                .addTransition(driveFromBasketPark, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveToPreloadDrop);
 

@@ -277,7 +277,7 @@ public class SpecimenDriveStateConfigurator {
      */
     public static void configSecondIntake(DriveToPoseState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-        state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
+        state.setDrivePIDF(0.002, 0, 0.0025, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -286,7 +286,7 @@ public class SpecimenDriveStateConfigurator {
                         .addBezierLine(
                                 // 100 is correct for the y, don't change it
                                 new Point(135, 100),
-                                new Point(129, 12)
+                                new Point(129, 15)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
                         .build()
@@ -410,7 +410,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(11, 11),
+                                new Point(12, 10),
                                 new Point(100, 15)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -429,7 +429,7 @@ public class SpecimenDriveStateConfigurator {
     public static void configSampleDrop(DriveFromChamberSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.003, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0.004, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -438,10 +438,11 @@ public class SpecimenDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(75, 41.5),
                                         new Point(60, 35),
-                                        new Point(11, 11)
+                                        new Point(12, 10)
                                 )
                         )
-                        .setConstantHeadingInterpolation(Math.toRadians(45))
+//                        .setConstantHeadingInterpolation(Math.toRadians(30))
+                        .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(30))
                         .build()
         );
 

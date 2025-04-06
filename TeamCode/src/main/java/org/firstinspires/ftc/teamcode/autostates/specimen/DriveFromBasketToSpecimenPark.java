@@ -37,7 +37,7 @@ public class DriveFromBasketToSpecimenPark extends DriveStateBase {
                         new DropperPreTransferAction(dropper, robotState)
                 ),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 45),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() > 25),
                         new IntakeSlidesAbsoluteAction(intake, () -> IntakeSubsystem.SLIDES_MAX, 2)
                 )
         );

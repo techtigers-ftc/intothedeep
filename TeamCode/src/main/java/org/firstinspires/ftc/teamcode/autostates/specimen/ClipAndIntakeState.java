@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
@@ -47,23 +46,22 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
         this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
-                        new RawPowerDriveAction(drive, 0.8, 0.1),
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 0)
-                ),
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new DropperPitchAction(dropper,
-                                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
-                                new WaitCommand(100),
-                                new DropperOpenAction(dropper)
-                        ),
-                        new SequentialCommandGroup(
-                                new LimelightBlockDetectionResetAction(limelight),
-                                new IntakeTrackingAction(intake, robotState),
-                                new WaitUntilCommand(robotState::isBlockDetected),
-                                new WaitCommand(100)
-                        )
-                ),
+                        new RawPowerDriveAction(drive, 0.5, 0.2),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WaitCommand(50),
+                                        new DropperPitchAction(dropper,
+                                                DropperSubsystem.PITCH_SLAP_POSITION, 0),
+                                        new WaitCommand(50),
+                                        new DropperOpenAction(dropper)
+                                ),
+                                new SequentialCommandGroup(
+                                        new LimelightBlockDetectionResetAction(limelight),
+                                        new IntakeTrackingAction(intake, robotState),
+                                        new WaitUntilCommand(robotState::isBlockDetected),
+                                        new WaitCommand(100)
+                                )
+                        )),
 //                new WaitCommand(100),
 //                new WaitUntilCommand(robotState::isBlockDetected),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
