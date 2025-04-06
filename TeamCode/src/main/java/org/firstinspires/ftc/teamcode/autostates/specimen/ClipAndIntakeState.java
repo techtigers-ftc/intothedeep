@@ -46,7 +46,7 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
         this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
-                        new RawPowerDriveAction(drive, 0.5, 0.2),
+                        new RawPowerDriveAction(drive, 0.5, 0.1),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new WaitCommand(50),

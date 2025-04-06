@@ -277,7 +277,7 @@ public class SpecimenDriveStateConfigurator {
      */
     public static void configSecondIntake(DriveToPoseState state) {
         state.setTranslationalPIDF(0.06, 0, 0.001, 0);
-        state.setDrivePIDF(0.002, 0, 0.0025, 0.6, 0);
+        state.setDrivePIDF(0.003, 0, 0.0019, 0.6, 0);
         state.setHeadingPIDF(0.7, 0, 0.015, 0);
 //        state.setPrimaryPIDSToTuning();
 
@@ -442,7 +442,7 @@ public class SpecimenDriveStateConfigurator {
                                 )
                         )
 //                        .setConstantHeadingInterpolation(Math.toRadians(30))
-                        .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(30))
+                        .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(30))
                         .build()
         );
 
