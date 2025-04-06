@@ -42,9 +42,9 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         previousAutoState = "";
         addCommands(
                 new LimelightBlockDetectionResetAction(limelight),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 2),
                 new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
 

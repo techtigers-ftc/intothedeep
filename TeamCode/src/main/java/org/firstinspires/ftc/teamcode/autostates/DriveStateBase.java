@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autostates;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
@@ -17,11 +19,13 @@ import team.techtigers.core.paths.Waypoint;
  */
 public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState> {
     private static final String LOG_TAG = DriveStateBase.class.getSimpleName();
+    private static final double RECOVERY_TIMEOUT = 4000;
     protected final AutoDriveCommand autoDriveCommand;
     protected final RobotState robotState;
     private double tolerance;
     private double angleTolerance;
-    private double recoveryCounter;
+    private boolean hasRecovered;
+    private ElapsedTime recoveryTimer;
 
     /**
      * Constructor for the SequentialCommandGroupState
@@ -37,7 +41,8 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
         autoDriveCommand = new AutoDriveCommand(drive, robotState);
         tolerance = -1;
         angleTolerance = -1;
-        recoveryCounter = 0;
+        hasRecovered = false;
+        recoveryTimer = new ElapsedTime();
     }
 
     /**
@@ -219,26 +224,26 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     @Override
     public void initialize() {
         super.initialize();
-        recoveryCounter = 0; // Reset the recovery counter on initialization
+        hasRecovered = false;
     }
 
     @Override
     public void execute() {
         super.execute();
         // If the robot is stuck or the timeout is reached for the first time, we need to recover
-        if (autoDriveCommand.isRobotStuck() || (isTimeoutReached() && recoveryCounter == 0)) {
-            // Generate a new path chain using the robot's current and final poses
-            PathChain pathChain = new PathBuilder().addBezierLine(
-                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
-                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
-            ).setLinearHeadingInterpolation(
-                    robotState.getRobotCurrentPose().getHeading(),
-                    robotState.getRobotFinalPose().getHeading()
-            ).build();
-            autoDriveCommand.setPathChain(pathChain);
-            recoveryCounter++;
-//            RobotLog.dd(LOG_TAG, "Recovery attempt: %f", recoveryCounter);
-        }
+//        if (isTimeoutReached() && !hasRecovered) {
+//            // Generate a new path chain using the robot's current and final poses
+//            PathChain pathChain = new PathBuilder().addBezierLine(
+//                    new Point(robotState.getRobotCurrentPose().getX(), robotState.getRobotCurrentPose().getY()),
+//                    new Point(robotState.getRobotFinalPose().getX(), robotState.getRobotFinalPose().getY())
+//            ).setLinearHeadingInterpolation(
+//                    robotState.getRobotCurrentPose().getHeading(),
+//                    robotState.getRobotFinalPose().getHeading()
+//            ).build();
+//            autoDriveCommand.setPathChain(pathChain);
+//            hasRecovered = true;
+//            recoveryTimer.reset();
+//        }
     }
 
     @Override
@@ -257,6 +262,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
         if (distToTarget(current, target) < tolerance
                 && angleDistance(current.getHeading(), target.getHeading()) < angleTolerance) {
             return AutoState.DRIVE_END;
+        }
+
+        if (recoveryTimer.milliseconds() > RECOVERY_TIMEOUT && hasRecovered) {
+            return AutoState.TIMEOUT;
         }
 
         return AutoState.RUNNING;

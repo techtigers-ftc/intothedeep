@@ -20,7 +20,7 @@ public class IntakeTrackingAction extends CommandBase {
     private double frameCount;
     private double detectedSlidePosition;
 
-    public static double BASE_POWER = 0.4;
+    public static double BASE_POWER = 0.35;
     public static double INCREMENTAL_POWER = 0.005;
 
     /**
