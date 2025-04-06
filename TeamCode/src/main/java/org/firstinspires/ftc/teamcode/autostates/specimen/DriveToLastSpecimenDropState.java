@@ -13,11 +13,12 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.core.display.Color;
 
 /**
- * Drives to general specimen drop
+ * Drives to the last specimen drop, getting the intake ready for intaking a sample
  */
 public class DriveToLastSpecimenDropState extends DriveStateBase {
     private static final String LOG_TAG =
@@ -28,6 +29,7 @@ public class DriveToLastSpecimenDropState extends DriveStateBase {
      *
      * @param name       The name of the state
      * @param drive      The drive subsystem
+     * @param intake     The intake subsystem
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
@@ -47,7 +49,8 @@ public class DriveToLastSpecimenDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
+                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
             robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {

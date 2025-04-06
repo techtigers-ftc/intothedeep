@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSample
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.BezierCurve;
@@ -372,11 +372,11 @@ public class SpecimenDriveStateConfigurator {
     }
 
     /**
-     * Configures the drive to park state with PIDF coefficients and a path
+     * Configures the drive to park state from the chamber with PIDF coefficients and a path
      *
      * @param state the state to configure
      */
-    public static void configDriveFromChamberPark(DriveToSpecimenPark state) {
+    public static void configDriveFromChamberPark(DriveFromChamberToSpecimenPark state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
         state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
@@ -397,7 +397,7 @@ public class SpecimenDriveStateConfigurator {
     }
 
     /**
-     * Configures the drive to park state with PIDF coefficients and a path
+     * Configures the drive to park state from the basket with PIDF coefficients and a path
      *
      * @param state the state to configure
      */

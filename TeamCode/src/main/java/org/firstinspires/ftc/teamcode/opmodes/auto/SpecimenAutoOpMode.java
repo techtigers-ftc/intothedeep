@@ -15,9 +15,8 @@ import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimen
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToLastSpecimenDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
-import org.firstinspires.ftc.teamcode.display.view.AutoView;
 import org.firstinspires.ftc.teamcode.opmodes.auto.configurators.SpecimenDriveStateConfigurator;
 import org.firstinspires.ftc.teamcode.subsystems.AutoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -31,8 +30,6 @@ import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 
 import team.techtigers.base.BaseOpMode;
 import team.techtigers.base.statemachine.StateMachine;
-import team.techtigers.base.visualdisplay.AdafruitNeoPixel;
-import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
@@ -236,7 +233,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 robotState
         );
 
-        DriveToSpecimenPark driveFromChamberPark = new DriveToSpecimenPark(
+        DriveFromChamberToSpecimenPark driveFromChamberPark = new DriveFromChamberToSpecimenPark(
                 "driveFromChamberPark",
                 drive,
                 intake,
