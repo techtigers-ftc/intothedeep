@@ -54,18 +54,18 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
         RobotSaveState.reset();
 
         // Initialize subsystems
-        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
-        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
-                robotState, new Waypoint(79.25, 7.25, Math.toRadians(90)));
         dropper = new DropperSubsystem(hardwareMap,
                 robotState);
         intake = new IntakeSubsystem(hardwareMap, robotState);
+        DriveSubsystem drive = new DriveSubsystem(hardwareMap, robotState);
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
+        GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap,
+                robotState, new Waypoint(79.25, 7.25, Math.toRadians(90)));
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
 
-        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
-        displayDriver.initialize(224, 3);
-        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
+//        AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
+//        displayDriver.initialize(224, 3);
+//        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
 
         // Sets color preference to alliance color
 //        robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
@@ -388,7 +388,7 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);
-        registerSubsystems(auto, drive, odometry, dropper, intake, limelight, sensor, visualDisplaySubsystem);
+        registerSubsystems(limelight, auto, drive, odometry, dropper, intake, sensor);
         telemetry.addData("Current X", robotState.getRobotCurrentPose().getX());
         telemetry.addData("Current Y", robotState.getRobotCurrentPose().getY());
         telemetry.addData("Current Heading", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));

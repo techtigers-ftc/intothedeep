@@ -293,7 +293,7 @@ public class SpecimenDriveStateConfigurator {
         );
 
         state.setTolerance(LARGE_TOLERANCE);
-        state.setAngleTolerance(SMALL_ANGLE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
     }
 
     /**
@@ -404,14 +404,14 @@ public class SpecimenDriveStateConfigurator {
     public static void configDriveFromBasketPark(DriveFromBasketToSpecimenPark state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.003, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
                                 new Point(12, 10),
-                                new Point(100, 15)
+                                new Point(100, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(0))
                         .build()
