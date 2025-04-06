@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
@@ -30,7 +32,10 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new InstantCommand(() -> robotState.setIntakeState(IntakeState.READY_TO_PICKUP)),
-                new DropperPreTransferAction(dropper, robotState)
+                new SequentialCommandGroup(
+                        new WaitCommand(200),
+                        new DropperPreTransferAction(dropper, robotState)
+                )
         );
     }
 }

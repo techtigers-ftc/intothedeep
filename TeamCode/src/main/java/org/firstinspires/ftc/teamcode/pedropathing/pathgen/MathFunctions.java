@@ -74,9 +74,10 @@ public class MathFunctions {
      * @return returns the normalized angle.
      */
     public static double normalizeAngle(double angleRadians) {
-        double angle = angleRadians;
-        while (angle < 0) angle += 2 * Math.PI;
-        while (angle > 2 * Math.PI) angle -= 2 * Math.PI;
+        double angle = angleRadians % (2*Math.PI);
+        if (angle < 0) {
+            return angle + 2*Math.PI;
+        }
         return angle;
     }
 
@@ -321,13 +322,11 @@ public class MathFunctions {
         return roughlyEquals(one, two, 0.0001);
     }
 
-    public Pose globalCoordinates(Pose currentPose) {
-        Pose normalized = new Pose(currentPose.getX()-72, currentPose.getY()-72, currentPose.getHeading());
-        return rotatePose(normalized, -Math.PI/2, true);
+    public static double inToMM(double in) {
+        return in * 25.4;
     }
 
-    public Pose pedroCoordinates(Pose currentPose) {
-        Pose rotatedPose = rotatePose(currentPose, Math.PI/2, true);
-        return new Pose(rotatedPose.getX() + 72, rotatedPose.getY() + 72, rotatedPose.getHeading());
+    public static double mmToIn(double mm) {
+        return mm / 25.4;
     }
 }
