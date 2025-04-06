@@ -29,7 +29,6 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndIntakeState.class.getSimpleName();
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Constructor for the ClipAndIntakeState
@@ -43,7 +42,6 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
-        this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
                         new RawPowerDriveAction(drive, 0.5, 0.1),
@@ -61,9 +59,8 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                         new WaitUntilCommand(robotState::isBlockDetected),
                                         new WaitCommand(100)
                                 )
-                        )),
-//                new WaitCommand(100),
-//                new WaitUntilCommand(robotState::isBlockDetected),
+                        )
+                ),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
