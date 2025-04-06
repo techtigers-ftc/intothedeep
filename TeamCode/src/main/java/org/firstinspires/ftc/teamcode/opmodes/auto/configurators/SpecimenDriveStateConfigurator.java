@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromWallSampleDropState;
+import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromBasketToSpecimenPark;
+import org.firstinspires.ftc.teamcode.autostates.specimen.DriveFromChamberSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstPushState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToFirstSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenDropState;
-import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToGeneralSpecimenIntakeState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToSpecimenPark;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPoseState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.DriveToPreloadDropSpecimenState;
@@ -325,7 +326,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configGeneralIntake(DriveToGeneralSpecimenIntakeState state) {
+    public static void configGeneralIntake(DriveStateBase state) {
         state.setTranslationalPIDF(0.03, 0, 0.001, 0);
         state.setDrivePIDF(0.008, 0, 0.0045, 0.6, 0);
         state.setHeadingPIDF(0.5, 0, 0.03, 0);
@@ -350,7 +351,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configGeneralDrop(DriveToGeneralSpecimenDropState state) {
+    public static void configGeneralDrop(DriveStateBase state) {
         state.setTranslationalPIDF(0.08, 0, 0.004, 0);
         state.setDrivePIDF(0.007, 0, 0.004, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
@@ -375,7 +376,7 @@ public class SpecimenDriveStateConfigurator {
      *
      * @param state the state to configure
      */
-    public static void configDriveToPark(DriveToSpecimenPark state) {
+    public static void configDriveFromChamberPark(DriveToSpecimenPark state) {
         state.setTranslationalPIDF(0.08, 0, 0.001, 0);
         state.setDrivePIDF(0.0055, 0, 0.0035, 0.6, 0);
         state.setHeadingPIDF(0.9, 0, 0.015, 0);
@@ -396,14 +397,39 @@ public class SpecimenDriveStateConfigurator {
     }
 
     /**
+     * Configures the drive to park state with PIDF coefficients and a path
+     *
+     * @param state the state to configure
+     */
+    public static void configDriveFromBasketPark(DriveFromBasketToSpecimenPark state) {
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.012, 0, 0.003, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
+
+        state.setPathChain(
+                new PathBuilder()
+                        .addBezierLine(
+                                new Point(11, 11),
+                                new Point(100, 15)
+                        )
+                        .setConstantHeadingInterpolation(Math.toRadians(0))
+                        .build()
+        );
+
+        state.setTolerance(LARGE_TOLERANCE);
+        state.setAngleTolerance(LARGE_ANGLE_TOLERANCE);
+    }
+
+    /**
      * Configures the Sample Drop.
      *
      * @param state The DriveToGeneralSampleDropState to configure
      */
-    public static void configSampleDrop(DriveFromWallSampleDropState state) {
-        state.setTranslationalPIDF(0.06, 0, 0, 0);
-        state.setDrivePIDF(0.007, 0, 0.0065, 0.6, 0);
-        state.setHeadingPIDF(0.7, 0, 0.015, 0);
+    public static void configSampleDrop(DriveFromChamberSampleDropState state) {
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.012, 0, 0.003, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -415,8 +441,7 @@ public class SpecimenDriveStateConfigurator {
                                         new Point(11, 11)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(45),
-                                Math.toRadians(45))
+                        .setConstantHeadingInterpolation(Math.toRadians(45))
                         .build()
         );
 
