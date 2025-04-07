@@ -100,7 +100,6 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
             odometry.setHeading(Math.toRadians(90));
             startPosition = robotState.getRobotCurrentPose();
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
-//            needsReset = false;
         }
     }
 
@@ -110,11 +109,11 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         if (!interrupted) {
             // If the command is not interrupted, recursively schedule it to run again
             this.schedule();
-            RobotLog.dd(LOG_TAG, "command scheduled again");
+//            RobotLog.dd(LOG_TAG, "command scheduled again");
         } else {
             // If the command is interrupted, tell the command it needs to reset the next time you run it
             needsReset = true;
-            RobotLog.dd(LOG_TAG, "Auto Specimen Cycle interrupted");
+//            RobotLog.dd(LOG_TAG, "Auto Specimen Cycle interrupted");
         }
     }
 }
