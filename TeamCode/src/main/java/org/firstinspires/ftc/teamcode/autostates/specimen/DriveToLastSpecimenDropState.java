@@ -40,7 +40,7 @@ public class DriveToLastSpecimenDropState extends DriveStateBase {
                 new DropperCarryNoTransferAction(dropper, robotState),
                 new DropperCloseAction(dropper),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 90),
+                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 85),
                         new IntakeReadyToPickupAction(intake, robotState, () -> 0)
                 )
         );

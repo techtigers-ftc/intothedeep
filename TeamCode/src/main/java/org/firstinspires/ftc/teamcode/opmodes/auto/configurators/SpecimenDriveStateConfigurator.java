@@ -71,7 +71,7 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierCurve(
+                        .addBezierLine(
                                 new Point(72, 42),
                                 new Point(113, 12)
                         )
@@ -334,7 +334,7 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierCurve(
+                        .addBezierLine(
                                 new Point(71, 42),
                                 new Point(113, 13.5)
                         )
@@ -359,8 +359,8 @@ public class SpecimenDriveStateConfigurator {
 
         state.setPathChain(
                 new PathBuilder()
-                        .addBezierCurve(
-                                new Point(113, 13.5),
+                        .addBezierLine(
+                                new Point(113, 8),
                                 new Point(72, 42)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -410,7 +410,7 @@ public class SpecimenDriveStateConfigurator {
         state.setPathChain(
                 new PathBuilder()
                         .addBezierLine(
-                                new Point(12, 10),
+                                new Point(10, 8),
                                 new Point(100, 12)
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -438,7 +438,7 @@ public class SpecimenDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(75, 41.5),
                                         new Point(60, 35),
-                                        new Point(12, 10)
+                                        new Point(10, 8)
                                 )
                         )
 //                        .setConstantHeadingInterpolation(Math.toRadians(45))
