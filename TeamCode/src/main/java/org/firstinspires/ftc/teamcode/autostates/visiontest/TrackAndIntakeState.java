@@ -76,8 +76,8 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1.5)
-                && !robotState.isVisionAligning();
+        boolean trackingTimeout = super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1.5
+                && !robotState.isVisionAligning());
         boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
         if (trackingTimeout || blockNotDetected) {
             RobotLog.dd("AutoVisionDebug", "Timeout");
