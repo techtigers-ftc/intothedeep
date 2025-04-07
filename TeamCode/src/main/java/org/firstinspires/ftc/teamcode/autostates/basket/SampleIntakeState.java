@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToTransferAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -35,8 +36,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         this.robotState = robotState;
         addCommands(
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 5),
-                new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeFinePickupAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new IntakePrepareToTransferAction(intake, robotState)
         );
     }
 
