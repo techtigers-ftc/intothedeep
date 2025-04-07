@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.constants;
 
+import com.acmerobotics.dashboard.config.Config;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Encoder;
 
 /**
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.localization.Encoder;
  * @version 1.0, 12/24/2024
  */
 
+@Config
 public class ThreeWheelConstants {
 
     /** The number of inches per tick of the encoder for forward movement

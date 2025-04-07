@@ -7,13 +7,14 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.drive.RawPowerDriveAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -28,7 +29,6 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndIntakeState.class.getSimpleName();
     private final RobotState robotState;
-    private final IntakeSubsystem intake;
 
     /**
      * Constructor for the ClipAndIntakeState
@@ -39,29 +39,29 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
      * @param dropper    The dropper subsystem
      * @param robotState The robot state
      */
-    public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
+    public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
-        this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
-                        new RawPowerDriveAction(drive, 0.8, 0.1),
-                        new IntakeReadyToPickupAction(intake, robotState, () -> 0)
-                ),
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new DropperPitchAction(dropper,
-                                        DropperSubsystem.PITCH_SLAP_POSITION, 0),
-                                new WaitCommand(100),
-                                new DropperOpenAction(dropper)
-                        ),
-                        new SequentialCommandGroup(
-                                new IntakeTrackingAction(intake, robotState)
+                        new RawPowerDriveAction(drive, 0.5, 0.1),
+                        new ParallelCommandGroup(
+                                new SequentialCommandGroup(
+                                        new WaitCommand(50),
+                                        new DropperPitchAction(dropper,
+                                                DropperSubsystem.PITCH_SLAP_POSITION, 0),
+                                        new WaitCommand(50),
+                                        new DropperOpenAction(dropper)
+                                ),
+                                new SequentialCommandGroup(
+                                        new LimelightBlockDetectionResetAction(limelight),
+                                        new IntakeTrackingAction(intake, robotState),
+                                        new WaitUntilCommand(robotState::isBlockDetected),
+                                        new WaitCommand(100)
+                                )
                         )
                 ),
-                new WaitCommand(100),
-                new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeFinePickupAction(drive, intake, robotState::getBlockOrientation, robotState)
+                new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
 

@@ -32,14 +32,15 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      * @param robotState The robot state
      */
     public IntakeSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name);
+        super(name, 2);
         this.robotState = robotState;
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.4, 1.5),
-                new DropperCloseAction(dropper, 50),
-                new DropperPitchAction(dropper, 275, 100),
+//                new WaitCommand(500000),
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.3, 2.5),
+                new DropperCloseAction(dropper, 0),
+                new DropperPitchAction(dropper, 240, 20),
 //                new WaitCommand(10),
                 new InstantCommand(() -> dropperPitchUp = true)
         );
@@ -62,18 +63,11 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      */
     @Override
     public AutoState getCurrentCondition() {
+        if (isTimeoutReached()) {
+            return AutoState.TIMEOUT;
+        }
         if (dropperPitchUp) {
-            if (runCounter == 1) {
-                return AutoState.SPECIMEN_1_INTAKE_COMPLETE;
-            } else if (runCounter == 2) {
-                return AutoState.SPECIMEN_2_INTAKE_COMPLETE;
-            } else if (runCounter == 3) {
-                return AutoState.SPECIMEN_3_INTAKE_COMPLETE;
-            } else if (runCounter == 4) {
-                return AutoState.SPECIMEN_4_INTAKE_COMPLETE;
-            } else {
-                return AutoState.SPECIMEN_5_INTAKE_COMPLETE;
-            }
+            return AutoState.SPECIMEN_INTAKE_COMPLETE;
         }
         return AutoState.RUNNING;
     }

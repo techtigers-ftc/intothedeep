@@ -34,20 +34,20 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
 
     public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = 50;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 172;
+    public static final double WRIST_PITCH_TUCK_POSITION = 60;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 170;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 100;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 110;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 170;
 
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 120;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
+    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 125;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 170;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 159;
+    public static final double WRIST_PITCH_PECK_POSITION = 169;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 107;
+    public static final double WRIST_PITCH_TRANSFER_POSITION = 114;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
     public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
 

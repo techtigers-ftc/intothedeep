@@ -4,11 +4,12 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
@@ -30,18 +31,20 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
      * @param name       The name of the state
      * @param drive      The drive subsystem
      * @param intake     The intake subsystem
+     * @param limelight  The limelight subsystem
      * @param robotState The robot state
      */
-    public FailedIntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake,
+    public FailedIntakeSampleState(String name, DriveSubsystem drive, IntakeSubsystem intake, LimelightSubsystem limelight,
                                    RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
         runCounter = 0;
         previousAutoState = "";
         addCommands(
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3.5),
-                new WaitUntilCommand(() -> robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED),
-                new IntakeFinePickupAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
+                new LimelightBlockDetectionResetAction(limelight),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 2),
+                new WaitUntilCommand(robotState::isBlockDetected),
+                new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
 

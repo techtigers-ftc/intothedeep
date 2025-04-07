@@ -11,7 +11,6 @@ import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.paths.geometry.Point;
 
 @TeleOp(name = "Localization Tuning OpMode", group = "Tuning")
-@Disabled
 public class LocalizationTuningOpMode extends BaseOpMode {
     private RobotState robotState;
 

@@ -205,6 +205,14 @@ public class Path {
     }
 
     /**
+     * This returns the end heading of the Path.
+     * @return the end heading of the Path.
+     */
+    public double getEndHeading() {
+        return endHeading;
+    }
+
+    /**
      * This returns the point on the Bezier curve that is specified by the parametric t value. A
      * Bezier curve is a parametric function that returns points along it with t ranging from [0, 1],
      * with 0 being the beginning of the curve and 1 being at the end. The Follower will follow
@@ -285,13 +293,6 @@ public class Path {
         } else {
             return getHeadingGoal(closestPointTValue);
         }
-    }
-
-    /**
-     * @return returns the end heading.
-     */
-    public double getEndHeading() {
-        return endHeading;
     }
 
     /**

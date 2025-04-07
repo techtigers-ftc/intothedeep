@@ -23,7 +23,8 @@ import team.techtigers.core.paths.Waypoint;
  * Command to align to a block using fine camera vision
  */
 public class IntakeFineAlignAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = IntakePrepareToPickupAction.class.getSimpleName();
+    private static final String LOG_TAG =
+        IntakeFineAlignAction.class.getSimpleName();
     private final RobotState robotState;
     private double[] targetPositions;
 
@@ -48,13 +49,13 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 3, 0.75, 0.3),
+                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 2.25, 0.75, 0.3),
                         new IntakeClawRotationAction(intake, clawRotationSupplier, 150),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> targetPositions[0],
                                 () -> targetPositions[1],
                                 () -> targetPositions[2],
-                                0.6, Math.toRadians(2))
+                                0.5, Math.toRadians(2), 1)
                 )
         );
     }
@@ -73,15 +74,20 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
-//        if (!robotState.isBlockDetected()) {
-//            // TODO: Replace with something that won't crash the robot
-//            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
-//            throw new IllegalStateException("Block not detected");
-//        }
-//        this.cancel();
-
         Waypoint blockPos = robotState.getAbsoluteBlockPosition();
         targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
+        if (!robotState.isBlockDetected()) {
+            // TODO: Replace with something that won't crash the robot
+//            RobotLog.ww(LOG_TAG, "Skipping fine align because block is not detected");
+//            RobotLog.dd(LOG_TAG, "X: %f, Y: %f, Heading: %f", targetPositions[0], targetPositions[1], targetPositions[2]);
+//            RobotLog.dd(LOG_TAG, "Pose: %s", robotState.getRobotCurrentPose().toString());
+//            throw new IllegalStateException("Block not detected");
+            RobotLog.ww(LOG_TAG, "Block not detected");
+        }
+//        this.cancel();
+
+//        Waypoint blockPos = robotState.getAbsoluteBlockPosition();
+//        targetPositions = TargetRobotPoseCalculator.getTargetIntakePosition(robotState.getRobotCurrentPose(), blockPos);
     }
 
     @Override

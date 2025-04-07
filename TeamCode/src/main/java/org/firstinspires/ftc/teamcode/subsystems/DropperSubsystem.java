@@ -36,7 +36,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     // PITCH POSITIONS
     public static final double PITCH_INIT_POSITION = 90;
     public static final double PITCH_TRANSFER_POSITION = 38;
-    public static final double PITCH_BASKET_POSITION = 225;
+    public static final double PITCH_BASKET_POSITION = 230;
     public static final double PITCH_CHAMBER_POSITION = 145; // 180
     public static final double PITCH_SLAP_POSITION = 80;
     public static final double PITCH_WALL_INTAKE_POSITION = 310;
@@ -59,7 +59,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     // New values for an injora: closed 0.6, open 0.26
     // claw open/close positions are swapped for the gobilda servo
     public static double CLAW_OPENED_POSITION = 0.23;
-    public static double CLAW_CLOSED_POSITION = 0.41;
+    public static double CLAW_CLOSED_POSITION = 0.40;
     public static double PRIMARY_KP = 0.009;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;
