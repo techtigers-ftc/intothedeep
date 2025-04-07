@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -25,9 +26,9 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     private static final String LOG_TAG = AutoSpecimenCycleAction.class.getSimpleName();
-    private static final double X_TO_SLAP = 43;
-    private static final double Y_TO_SLAP = 37;
-    private static final double Y_TO_INTAKE = 4;
+    private static final double X_TO_SLAP = 40;
+    private static final double Y_TO_SLAP = 35;
+    private static final double Y_TO_INTAKE = 5;
     private final RobotState robotState;
     private final GoBodometrySubsystem odometry;
     private boolean needsReset;
@@ -50,6 +51,12 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         needsReset = true;
         addCommands(
                 new IntakeSpecimenState("intakeSpecimen", drive, dropper, robotState),
+                new InstantCommand(() -> {
+                    if (needsReset) {
+                        startPosition = robotState.getRobotCurrentPose();
+                        needsReset = false;
+                    }
+                }),
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
                                 new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
@@ -93,7 +100,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
             odometry.setHeading(Math.toRadians(90));
             startPosition = robotState.getRobotCurrentPose();
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
-            needsReset = false;
+//            needsReset = false;
         }
     }
 
