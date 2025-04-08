@@ -31,8 +31,8 @@ public class VisionStreamRegion extends DisplayRegion {
     private int blockX;
     private int blockY;
     private double blockOrientation;
-    private double LATERAL_INCHES_LIMIT = 4.6;
-    private double VERTICAL_INCHES_LIMIT = 2;
+    private static final double LATERAL_INCHES_LIMIT = 5.25;
+    private static final double VERTICAL_INCHES_LIMIT = 4.25;
 
     public VisionStreamRegion(int x, int y, RobotState robotState) {
         super(x, y, 13, 8);
