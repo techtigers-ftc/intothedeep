@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autostates.specimen.ClipSpecimenState;
 import org.firstinspires.ftc.teamcode.autostates.specimen.IntakeSpecimenState;
@@ -24,9 +26,9 @@ import team.techtigers.core.paths.Waypoint;
  */
 public class AutoSpecimenCycleAction extends SequentialCommandGroup {
     private static final String LOG_TAG = AutoSpecimenCycleAction.class.getSimpleName();
-    private static final double X_TO_SLAP = 43;
-    private static final double Y_TO_SLAP = 37;
-    private static final double Y_TO_INTAKE = 2;
+    private static final double X_TO_SLAP = 40;
+    private static final double Y_TO_SLAP = 35;
+    private static final double Y_TO_INTAKE = 5;
     private final RobotState robotState;
     private final GoBodometrySubsystem odometry;
     private boolean needsReset;
@@ -49,6 +51,12 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         needsReset = true;
         addCommands(
                 new IntakeSpecimenState("intakeSpecimen", drive, dropper, robotState),
+                new InstantCommand(() -> {
+                    if (needsReset) {
+                        startPosition = robotState.getRobotCurrentPose();
+                        needsReset = false;
+                    }
+                }),
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
                                 new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
@@ -89,12 +97,9 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
         super.initialize();
 //        RobotLog.dd(LOG_TAG,"Auto Specimen Cycle initialized, needs reset: %s", String.valueOf(needsReset));
         if (needsReset) {
-            odometry.setPose(new Waypoint(113, 13, Math.toRadians(90)));
-            startPosition = new Waypoint(113,
-                    13,
-                    Math.toRadians(90));
+            odometry.setHeading(Math.toRadians(90));
+            startPosition = robotState.getRobotCurrentPose();
 //            RobotLog.dd(LOG_TAG, "Start position reset: %s", startPosition);
-            needsReset = false;
         }
     }
 
