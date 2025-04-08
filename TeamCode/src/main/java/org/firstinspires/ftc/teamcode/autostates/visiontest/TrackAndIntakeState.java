@@ -6,13 +6,11 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperPreTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperOpenAction;
-import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperPitchAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperRotationAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
@@ -26,7 +24,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 import team.techtigers.base.statemachine.SequentialCommandGroupState;
 
 /**
- * State for using the vision system to pick a sample out from the submersible
+ * State for running the tracking and picking up a sample with the fine vision
  */
 public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = TrackAndIntakeState.class.getSimpleName();
@@ -37,11 +35,13 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
     private boolean blockDetected;
 
     /**
-     * Creates a new SubmersibleIntakeState
+     * Creates a new TrackAndIntakeState
      *
      * @param name       the name of the state
      * @param drive      the drive subsystem
      * @param intake     the intake subsystem
+     * @param dropper    the dropper subsystem
+     * @param limelight  the limelight subsystem
      * @param robotState the robot state
      */
     public TrackAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, LimelightSubsystem limelight, RobotState robotState) {
@@ -60,11 +60,11 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
                                 new IntakeFinePickupAction(drive, intake, null, robotState)
                         ),
                         new SequentialCommandGroup(
-                            new DropperOpenAction(dropper),
-                            new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 100)
+                                new DropperOpenAction(dropper),
+                                new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 100)
                         )
                 )
-                );
+        );
     }
 
     @Override

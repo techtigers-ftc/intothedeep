@@ -66,6 +66,7 @@ public class VisionPickupInAutoTestOpMode extends BaseOpMode {
                 .setCurrentState(trackAndIntakeState);
     }
 
+    @Override
     public void update() {
         telemetry.addData("Intake State: ", robotState.getIntakeState());
         telemetry.addData("Dropper State: ", robotState.getDropperState());
