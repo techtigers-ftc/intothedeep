@@ -37,18 +37,6 @@ public class DropperWallIntakeAction extends SequentialCommandGroup {
         addRequirements(dropper);
         addCommands(
                 new TransferAction(dropper, intake, robotState),
-//                new ParallelCommandGroup(
-//                        new IntakeTuckAfterTransferAction(dropper, intake,
-//                                robotState),
-//                        new DropperSlidesAbsoluteAction(dropper, 6,
-//                                0.5),
-//                        new DropperPitchAction(dropper,
-//                                DropperSubsystem.PITCH_WALL_INTAKE_POSITION, 200),
-//                        new DropperRotationAction(dropper,
-//                                DropperSubsystem.ROTATION_WALL_INTAKE_POSITION, 200)
-//                ),
-//                new DropperSlidesAbsoluteAction(dropper,
-//                        DropperSubsystem.SLIDES_WALL_INTAKE_POSITION, 0.5)
                 new IntakeWristPitchAction(intake,
                         IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION + 20, 0),
                 new ParallelCommandGroup(
