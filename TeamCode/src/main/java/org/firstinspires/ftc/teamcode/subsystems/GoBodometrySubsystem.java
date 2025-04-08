@@ -179,8 +179,14 @@ public class GoBodometrySubsystem extends CloseableSubsystem {
 //        robotState.setVisionIntakeHeading(getVisionIntakeHeading(robotPose));
     }
 
-    public void setPose(Waypoint waypoint) {
-        startPose = startPose.add(waypoint);
-        startPose = new Waypoint(startPose.getX(), startPose.getY(), robotState.getRobotCurrentPose().getHeading() - waypoint.getHeading());
+    /**
+     * Sets the heading of the robot to the specified value
+     *
+     * @param newHeading The new heading of the robot
+     */
+    public void setHeading(double newHeading) {
+        startPose = new Waypoint(startPose.getPoint(), newHeading - robotState.getRobotCurrentPose().getHeading() + startPose.getHeading());
+
+        periodic();
     }
 }
