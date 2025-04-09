@@ -43,7 +43,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 205;
-    public static final double ROTATION_BASKET_POSITION = 205;
+    public static final double ROTATION_BASKET_POSITION = 105;
     public static final double ROTATION_SLAP_POSITION = 205;
     public static final double ROTATION_WALL_INTAKE_POSITION = 5;
 
