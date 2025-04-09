@@ -5,12 +5,15 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.display.sprite.CheckmarkSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteLeft;
 import org.firstinspires.ftc.teamcode.display.sprite.DiagonalBlockSpriteRight;
+import org.firstinspires.ftc.teamcode.display.sprite.DownArrowSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.FrameSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.RectangleSprite;
 import org.firstinspires.ftc.teamcode.display.sprite.XSprite;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
+import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 
 import team.techtigers.core.display.Color;
 import team.techtigers.core.display.DisplayRegion;
@@ -24,6 +27,7 @@ public class VisionStreamRegion extends DisplayRegion {
     private final DiagonalBlockSpriteRight diagonalBlockRight;
     private final CheckmarkSprite checkmark;
     private final XSprite noBlockDetected;
+    private final DownArrowSprite cacheBlock;
 
     private final Sprite[] sprites;
     private RobotState robotState;
@@ -31,8 +35,8 @@ public class VisionStreamRegion extends DisplayRegion {
     private int blockX;
     private int blockY;
     private double blockOrientation;
-    private double LATERAL_INCHES_LIMIT = 7.6;
-    private double VERTICAL_INCHES_LIMIT = 5;
+    private double LATERAL_INCHES_LIMIT = 5.25;
+    private double VERTICAL_INCHES_LIMIT = 4.25;
 
     public VisionStreamRegion(int x, int y, RobotState robotState) {
         super(x, y, 13, 8);
@@ -45,6 +49,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockRight = new DiagonalBlockSpriteRight(1, 1);
         noBlockDetected = new XSprite(3, 1, 6, 6);
         checkmark = new CheckmarkSprite(2, 1);
+        cacheBlock = new DownArrowSprite(4, 1, 5, 6);
 
         frame.setColor(Color.WHITE);
         verticalBlock.setColor(Color.YELLOW);
@@ -53,9 +58,10 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockLeft.setColor(Color.YELLOW);
         noBlockDetected.setColor(Color.ORANGE);
         checkmark.setColor(Color.GREEN);
+        cacheBlock.setColor(Color.BLUE);
         frame.enable();
 
-        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected, checkmark};
+        sprites = new Sprite[]{verticalBlock, horizontalBlock, diagonalBlockLeft, diagonalBlockRight, frame, noBlockDetected, cacheBlock, checkmark};
     }
 
     @Override
@@ -64,39 +70,43 @@ public class VisionStreamRegion extends DisplayRegion {
         blockY = (int) ((robotState.getBlockForwardFine() + (VERTICAL_INCHES_LIMIT / 2)) / (VERTICAL_INCHES_LIMIT) * 3) - 1;
         blockOrientation = robotState.getBlockOrientation();
 
-        if (robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
-            if (robotState.getCoarseBlockDetectionState() == BlockDetectionState.DETECTED) {
-                disableAllBlocks();
-                checkmark.enable();
-            } else {
+
+        if (robotState.getIntakeState() == IntakeState.READY_TO_TRANSFER && robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
+            disableAllBlocks();
+            checkmark.enable();
+        } else {
+            if (!robotState.isBlockDetected()) {
                 disableAllBlocks();
                 noBlockDetected.enable();
+            } else if (robotState.isBlockDetected() && robotState.getFineBlockDetectionState() == BlockDetectionState.NOT_DETECTED) {
+                disableAllBlocks();
+                cacheBlock.enable();
+            } else if (0 <= blockOrientation && blockOrientation < 22.5) {
+                disableAllBlocks();
+                horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
+                horizontalBlock.enable();
+                setColor();
+            } else if (22.5 < blockOrientation && blockOrientation < 67.5) {
+                disableAllBlocks();
+                diagonalBlockLeft.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
+                diagonalBlockLeft.enable();
+                setColor();
+            } else if (67.5 < blockOrientation && blockOrientation < 112.5) {
+                disableAllBlocks();
+                verticalBlock.setPosition(Range.clip(blockX + 1, 1, 10), Range.clip(blockY + 1, 1, 3));
+                verticalBlock.enable();
+                setColor();
+            } else if (112.5 < blockOrientation && blockOrientation < 157.5) {
+                disableAllBlocks();
+                diagonalBlockRight.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
+                diagonalBlockRight.enable();
+                setColor();
+            } else if (157.5 < blockOrientation && blockOrientation <= 180) {
+                disableAllBlocks();
+                horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
+                horizontalBlock.enable();
+                setColor();
             }
-        } else if (0 <= blockOrientation && blockOrientation < 22.5) {
-            disableAllBlocks();
-            horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
-            horizontalBlock.enable();
-            setColor();
-        } else if (22.5 < blockOrientation && blockOrientation < 67.5) {
-            disableAllBlocks();
-            diagonalBlockLeft.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
-            diagonalBlockLeft.enable();
-            setColor();
-        } else if (67.5 < blockOrientation && blockOrientation < 112.5) {
-            disableAllBlocks();
-            verticalBlock.setPosition(Range.clip(blockX + 1, 1, 10), Range.clip(blockY + 1, 1, 3));
-            verticalBlock.enable();
-            setColor();
-        } else if (112.5 < blockOrientation && blockOrientation < 157.5) {
-            disableAllBlocks();
-            diagonalBlockRight.setPosition(Range.clip(blockX, 1, 9), Range.clip(blockY + 1, 1, 3));
-            diagonalBlockRight.enable();
-            setColor();
-        } else if (157.5 < blockOrientation && blockOrientation <= 180) {
-            disableAllBlocks();
-            horizontalBlock.setPosition(Range.clip(blockX, 1, 8), Range.clip(blockY + 2, 1, 5));
-            horizontalBlock.enable();
-            setColor();
         }
     }
 
@@ -112,6 +122,7 @@ public class VisionStreamRegion extends DisplayRegion {
         diagonalBlockRight.disable();
         noBlockDetected.disable();
         checkmark.disable();
+        cacheBlock.disable();
     }
 
     // TODO: Make this use color from Govind's pipeline
