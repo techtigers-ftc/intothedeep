@@ -474,11 +474,11 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-            if (timer.seconds() > 0.05) {
+        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+//            if (timer.seconds() > 0.05) {
                 updateBlockPosition();
-                timer.reset();
-            }
+//                timer.reset();
+//            }
         }
     }
 }

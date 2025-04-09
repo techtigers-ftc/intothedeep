@@ -32,6 +32,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     private int runCounter;
     private String previousAutoState;
     private boolean blockDetected;
+    private int frameCounter;
 
     /**
      * Creates a new FailedSubmersibleIntakeState
@@ -72,6 +73,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
     public void initialize() {
         super.initialize();
         blockDetected = true;
+        frameCounter = 0;
     }
 
     @Override
@@ -101,6 +103,10 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                         }
                     }
                 } else {
+                    if (frameCounter < 5) {
+                        frameCounter++;
+                        return AutoState.RUNNING;
+                    }
                     runCounter++;
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }

@@ -24,6 +24,7 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
     private final RobotState robotState;
     private int runCounter;
     private String previousAutoState;
+    private int frameCounter;
 
     /**
      * Constructor for the FailedIntakeSampleState
@@ -74,6 +75,10 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
                         return AutoState.SAMPLE_3_INTAKE_RECOVERED;
                     }
                 } else {
+                    if (frameCounter < 5) {
+                        frameCounter++;
+                        return AutoState.RUNNING;
+                    }
                     runCounter++;
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }

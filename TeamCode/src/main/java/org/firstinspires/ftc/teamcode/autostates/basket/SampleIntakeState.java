@@ -20,6 +20,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             SampleIntakeState.class.getSimpleName();
     private final RobotState robotState;
+    private int frameCounter;
 
     /**
      * Constructor for the SampleIntakeState
@@ -40,6 +41,12 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
         );
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        frameCounter = 0;
+    }
+
     /**
      * Get the current condition of the robot
      *
@@ -54,6 +61,10 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
+                    if (frameCounter < 5) {
+                        frameCounter++;
+                        return AutoState.RUNNING;
+                    }
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {
