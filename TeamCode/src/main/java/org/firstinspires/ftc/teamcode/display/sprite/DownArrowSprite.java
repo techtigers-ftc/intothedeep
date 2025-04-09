@@ -5,12 +5,12 @@ import team.techtigers.core.display.Color;
 import team.techtigers.core.display.Sprite;
 
 /**
- * A class which represents a up arrow shaped sprite
+ * A class which represents a down arrow shaped sprite
  */
 public class DownArrowSprite extends Sprite {
 
     /**
-     * Creates a new up arrow sprite
+     * Creates a new down arrow sprite
      *
      * @param x     the x coordinate of the bottom left corner of the sprite within the region
      * @param y     the y coordinate of the bottom left corner of the sprite within the region
