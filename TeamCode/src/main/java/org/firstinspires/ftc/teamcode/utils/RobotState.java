@@ -942,9 +942,19 @@ public class RobotState extends GlobalState {
     public void setIntakeSlidePosition(double intakeSlidePosition) {
         this.intakeSlidePosition = intakeSlidePosition;
     }
+
+    /**
+     * Returns whether the manipulator is in low basket mode
+     * @return whether the manipulator is in low basket mode
+     */
     public boolean getIsLowBasketMode(){
         return isLowBasketMode;
     }
+
+    /**
+     * Sets whether the manipulator is in low basket mode
+     * @param isLowBasketMode whether the manipulator is in low basket mode
+     */
     public void setIsLowBasketMode(boolean isLowBasketMode){
         this.isLowBasketMode = isLowBasketMode;
     }
