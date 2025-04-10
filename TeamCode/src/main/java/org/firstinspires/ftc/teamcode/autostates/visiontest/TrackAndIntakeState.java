@@ -33,6 +33,7 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private boolean blockDetected;
+    private double frameCount;
 
     /**
      * Creates a new TrackAndIntakeState
@@ -72,12 +73,13 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
         super.initialize();
         robotState.setIntakeState(IntakeState.READY_TO_PICKUP);
         blockDetected = true;
+        frameCount = 0;
     }
 
     @Override
     public AutoState getCurrentCondition() {
         boolean trackingTimeout = super.isTimeoutReached() || (IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1.5
-                && !robotState.isVisionAligning());
+                && robotState.isIntakeTracking());
         boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
         if (trackingTimeout || blockNotDetected) {
             RobotLog.dd("AutoVisionDebug", "Timeout");
@@ -89,6 +91,10 @@ public class TrackAndIntakeState extends SequentialCommandGroupState<AutoState> 
                     RobotLog.dd("AutoVisionDebug", "Sample Intake Complete");
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
+                    if (frameCount < 5) {
+                        frameCount++;
+                        return AutoState.RUNNING;
+                    }
                     RobotLog.dd("AutoVisionDebug", "Sample Intake Failed");
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }

@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -35,17 +37,17 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     public static final double SLIDES_MAX = 18.75;
     public static final double WRIST_PITCH_TUCK_POSITION = 60;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 165;
+    public static final double WRIST_ROTATION_TUCK_POSITION = 175;
     public static final double CLAW_ROTATION_TUCK_POSITION = 90;
 
     public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 110;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 165;
+    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 175;
 
     public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
     public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 120;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 165;
+    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 175;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 165;
+    public static final double WRIST_PITCH_PECK_POSITION = 157.5;
 
     public static final double WRIST_PITCH_TRANSFER_POSITION = 109;
     public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
@@ -92,6 +94,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private boolean isDirectControlEnabled;
     private final DigitalChannel breakBeamSensor;
     private boolean inPrimarySlideMode;
+    private final ElapsedTime timer;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -145,6 +148,9 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         }
 
         moveSlidesAbsolute(getCurrentSlidePositionInches());
+
+        timer = new ElapsedTime();
+        timer.reset();
 
     }
 
@@ -401,6 +407,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
+        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
+                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
         return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
     }
 
@@ -466,8 +474,11 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-            updateBlockPosition();
+        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+//            if (timer.seconds() > 0.05) {
+                updateBlockPosition();
+//                timer.reset();
+//            }
         }
     }
 }

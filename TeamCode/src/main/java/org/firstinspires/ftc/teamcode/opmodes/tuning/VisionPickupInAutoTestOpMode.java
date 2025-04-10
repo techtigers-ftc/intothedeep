@@ -72,5 +72,7 @@ public class VisionPickupInAutoTestOpMode extends BaseOpMode {
         telemetry.addData("Dropper State: ", robotState.getDropperState());
         telemetry.addData("Is Block Detected? ", robotState.isBlockDetected());
         telemetry.addData("Current Auto State: ", robotState.getCurrentAutoState());
+        telemetry.addData("Block Lateral: ", robotState.getBlockLateralFine());
+        telemetry.addData("Block Forward: ", robotState.getBlockForwardFine());
     }
 }
