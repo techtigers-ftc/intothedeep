@@ -29,10 +29,10 @@ import team.techtigers.base.CloseableSubsystem;
 @Config
 public class  IntakeSubsystem extends CloseableSubsystem {
     public static double CLAW_ROTATION_BUFFER = 50;
-    // Zero position: Wrist Pitch: 165, Wrist Rotation: 172, Claw Rotation: 90,
+    // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
-    public static final double WRIST_PITCH_ZERO = 165;
+    public static final double WRIST_PITCH_ZERO = 170;
     public static final double WRIST_ROTATION_ZERO = 165;
 
     public static final double SLIDES_MAX = 18.75;
