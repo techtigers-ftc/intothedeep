@@ -32,7 +32,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
-    public static final double WRIST_PITCH_ZERO = 170;
+    public static final double WRIST_PITCH_ZERO = 174;
     public static final double WRIST_ROTATION_ZERO = 165;
 
     public static final double SLIDES_MAX = 18.75;
