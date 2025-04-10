@@ -63,7 +63,7 @@ public class ManualAscentCommand extends CommandBase {
         drive.frontLeft.setPower(-power);
         drive.frontRight.setPower(-power);
 
-        if (robotState.getIsAscending()
+        if (robotState.isAscending()
                 && dropper.getCurrentSlidePositionInches() < AscentSubsystem.JACKS_SLIDES_DISENGAGE_HEIGHT
                 && ascent.areJacksEngaged()) {
             ascent.disengageJacks();
