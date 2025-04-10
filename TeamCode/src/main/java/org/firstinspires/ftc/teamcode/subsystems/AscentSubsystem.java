@@ -14,8 +14,8 @@ public class AscentSubsystem extends CloseableSubsystem {
     public static final double JOSH_FAILSAFE_LIMIT = -1;
     public static final double ASCENT_SLIDES_INITIAL_HEIGHT = 14;
     public static final double JACKS_SLIDES_DISENGAGE_HEIGHT = 9;
-    public static final double ASCENT_UNENGAGED_POSITION = 0.21;
-    public static final double ASCENT_ENGAGED_POSITION = 0.3;
+    public static final double ASCENT_UNENGAGED_POSITION = 0.32;
+    public static final double ASCENT_ENGAGED_POSITION = 0.43;
     public static final double JACKS_UNENGAGED_POSITION = 0;
     public static final double JACKS_ENGAGED_POSITION = 0.84;
     private final Servo changingTransmission;
