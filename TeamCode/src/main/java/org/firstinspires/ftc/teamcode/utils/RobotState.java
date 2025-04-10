@@ -72,6 +72,7 @@ public class RobotState extends GlobalState {
     private boolean runDistanceSensor;
     private boolean headingLockEnabled;
     private double distanceSensorValue;
+    private boolean isLowBasketMode;
 
     /**
      * Initializes a new RobotState
@@ -128,6 +129,7 @@ public class RobotState extends GlobalState {
         intakeSlidePosition = 0;
         absoluteBlockPosition = new Waypoint(0, 0, 0);
         hasBlockBeenRecentlyDetected = false;
+        isLowBasketMode = false;
     }
 
     /**
@@ -939,5 +941,11 @@ public class RobotState extends GlobalState {
      */
     public void setIntakeSlidePosition(double intakeSlidePosition) {
         this.intakeSlidePosition = intakeSlidePosition;
+    }
+    public boolean getIsLowBasketMode(){
+        return isLowBasketMode;
+    }
+    public void setIsLowBasketMode(boolean isLowBasketMode){
+        this.isLowBasketMode = isLowBasketMode;
     }
 }

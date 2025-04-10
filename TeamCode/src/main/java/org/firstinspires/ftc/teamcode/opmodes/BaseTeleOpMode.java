@@ -212,6 +212,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
         Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
+        Trigger lowBasketMode = new Trigger(() -> robotState.getIsLowBasketMode());
 
         // Retract Trigger bindings
         (manualRetractTrigger.or(autoRetractTrigger)).and(inReadyToTransfer).whenActive(readyToPickupManual);
@@ -305,8 +306,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadDown.and(blockInIntake.negate()).whenActive(dropperPreTransferAction);
 
         // High Basket drop
-        dpadUp.and(blockInIntake).whenActive(dropperHighBasketAction);
-        dpadUp.and(blockInIntake.negate()).whenActive(dropperHighBasketNoTransferAction);
+        dpadUp.and(blockInIntake).and(lowBasketMode).whenActive(dropperLowBasketAction);
+        dpadUp.and(blockInIntake.negate()).and(lowBasketMode).whenActive(dropperLowBasketNoTransferAction);
+
+        dpadUp.and(blockInIntake).and(lowBasketMode.negate()).whenActive(dropperHighBasketAction);
+        dpadUp.and(blockInIntake.negate()).and(lowBasketMode.negate()).whenActive(dropperHighBasketNoTransferAction);
 
         // Wall Intake
         dpadLeft.and(wallIntake.negate()).and(blockInIntake).whenActive(dropperWallIntakeAction);
@@ -322,8 +326,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperCarryNoTransferAction);
 
         // Low Basket drop
-        driverB.and(blockInIntake).whenActive(dropperLowBasketAction);
-        driverB.and(blockInIntake.negate()).whenActive(dropperLowBasketNoTransferAction);
+        driverB.whenActive(new InstantCommand(() -> robotState.setIsLowBasketMode(!robotState.getIsLowBasketMode())));
 
         //Manual Dropper Stuff
 
