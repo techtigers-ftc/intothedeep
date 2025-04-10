@@ -32,26 +32,26 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
-    public static final double WRIST_PITCH_ZERO = 174;
-    public static final double WRIST_ROTATION_ZERO = 165;
+    public static double WRIST_PITCH_ZERO = 165;
+    public static double WRIST_ROTATION_ZERO = 170;
 
-    public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 105;
-    public static final double WRIST_ROTATION_TUCK_POSITION = WRIST_ROTATION_ZERO;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+    public static double SLIDES_MAX = 18.75;
+    public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 105;
+    public static double WRIST_ROTATION_TUCK_POSITION = WRIST_ROTATION_ZERO;
+    public static double CLAW_ROTATION_TUCK_POSITION = 90;
 
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 55;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
+    public static double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 55;
+    public static double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
 
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 45;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
+    public static double WRIST_PITCH_READY_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 42;
+    public static double WRIST_ROTATION_READY_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO - 2;
+    public static double CLAW_ROTATION_PICKUP_POSITION = 90;
 
-    public static final double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
+    public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 56;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 160;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 56;
+    public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 175;
+    public static double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
 
