@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -29,17 +30,16 @@ public class LevelThreeAscentCommandGroup extends SequentialCommandGroup {
 
         addRequirements(ascent, dropper, drive);
         addCommands(
+                new InstantCommand(ascent::engageAscent),
                 new StartAscentCommandGroup(robotState, ascent, dropper),
-                new WaitCommand(3000),
+                new WaitCommand(2000),
                 new MoveAscentSlidesCommand(robotState, ascent, dropper,
-                        drive, AscentSubsystem.JOSH_FAILSAFE_LIMIT),
-                new WaitCommand(1000),
+                        drive, -0.75),
                 new MoveAscentSlidesCommand(robotState, ascent, dropper,
-                        drive, 25),
-                new WaitCommand(1000),
+                        drive, 22),
                 new WaitUntilCommand(() -> Math.abs(robotState.getRobotPitch()) < 7),
                 new MoveAscentSlidesCommand(robotState, ascent, dropper,
-                        drive, AscentSubsystem.JOSH_FAILSAFE_LIMIT)
+                        drive, -1)
         );
     }
 }
