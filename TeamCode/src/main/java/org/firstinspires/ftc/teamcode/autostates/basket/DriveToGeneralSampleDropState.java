@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 public class DriveToGeneralSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveToGeneralSampleDropState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 5;
+    private static final double TIME_TO_INTAKE = 4;
     private boolean isOpenFinished;
 
     /**

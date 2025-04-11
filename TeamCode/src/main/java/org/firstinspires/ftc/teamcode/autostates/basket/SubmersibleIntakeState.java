@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutWaitUntilCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
@@ -22,8 +23,8 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 0;
-    private static final double TIME_TO_DROP = 0;
+    private static final double TIME_TO_INTAKE = 1.5;
+    private static final double TIME_TO_DROP = 1.5;
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private boolean blockDetected;
@@ -47,7 +48,10 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 15),
                 new LimelightBlockDetectionResetAction(limelight),
                 new IntakeTrackingAction(intake, robotState),
-                new WaitUntilCommand(robotState::isBlockDetected),
+                new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
+//                new WaitCommand(100),
+                new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
+//                new WaitUntilCommand(robotState::isBlockDetected),
                 new WaitCommand(100),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
@@ -62,7 +66,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 3.5)
+        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2)
                 && !robotState.isVisionAligning();
         boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
         if (trackingTimeout || blockNotDetected) {

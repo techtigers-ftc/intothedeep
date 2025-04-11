@@ -256,7 +256,7 @@ public class BasketDriveStateConfigurator {
     public static void configFourthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.005, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0.006, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -314,7 +314,7 @@ public class BasketDriveStateConfigurator {
     public static void configFifthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.005, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0.006, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
@@ -372,7 +372,7 @@ public class BasketDriveStateConfigurator {
     public static void configSixthSampleDrop(DriveFromSubmersibleSampleDropState state) {
         state.setTranslationalPIDF(0.15, 0, 0, 0);
         state.setHeadingPIDF(1, 0, 0, 0);
-        state.setDrivePIDF(0.012, 0, 0.005, 0.6, 0);
+        state.setDrivePIDF(0.012, 0, 0.006, 0.6, 0);
 //        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
