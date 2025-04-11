@@ -453,7 +453,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         registerSubsystems(limelight, auto, drive, odometry, dropper, intake, sensor);
 
-//        disableUpdate();
+        disableUpdate();
     }
 
     @Override

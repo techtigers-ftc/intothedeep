@@ -49,10 +49,8 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                 new LimelightBlockDetectionResetAction(limelight),
                 new IntakeTrackingAction(intake, robotState),
                 new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
-//                new WaitCommand(100),
                 new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
-//                new WaitUntilCommand(robotState::isBlockDetected),
-                new WaitCommand(100),
+//                new WaitCommand(100),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
@@ -66,10 +64,9 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2)
-                && !robotState.isVisionAligning();
-        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
-        if (trackingTimeout || blockNotDetected) {
+        boolean trackingTimeout = IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2
+                && robotState.isIntakeTracking();
+        if (super.isTimeoutReached() || trackingTimeout || !blockDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {

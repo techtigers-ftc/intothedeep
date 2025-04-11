@@ -69,7 +69,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                 new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
                 new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
 //                new WaitUntilCommand(robotState::isBlockDetected),
-                new WaitCommand(100),
+//                new WaitCommand(100),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
@@ -83,13 +83,12 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean trackingTimeout = (super.isTimeoutReached() || IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1)
-                && !robotState.isVisionAligning();
-        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
+        boolean trackingTimeout = IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 1
+                && robotState.isIntakeTracking();
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (trackingTimeout || blockNotDetected) {
+        if (super.isTimeoutReached() || trackingTimeout || !blockDetected) {
             runCounter++;
             return AutoState.TIMEOUT;
         } else {
