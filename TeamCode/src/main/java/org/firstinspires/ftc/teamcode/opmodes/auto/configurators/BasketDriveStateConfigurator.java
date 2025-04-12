@@ -283,10 +283,10 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
     public static void configFifthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
-//        state.setTranslationalPIDF(0.15, 0, 0, 0);
-//        state.setHeadingPIDF(1, 0, 0, 0);
-//        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()
@@ -341,10 +341,10 @@ public class BasketDriveStateConfigurator {
      * @param state The DriveToGeneralSampleIntakeState to configure
      */
     public static void configSixthSampleIntake(DriveToGeneralSubmersibleIntakeState state) {
-//        state.setTranslationalPIDF(0.15, 0, 0, 0);
-//        state.setHeadingPIDF(1, 0, 0, 0);
-//        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
-        state.setPrimaryPIDSToTuning();
+        state.setTranslationalPIDF(0.15, 0, 0, 0);
+        state.setHeadingPIDF(1, 0, 0, 0);
+        state.setDrivePIDF(0.01, 0, 0.007, 0.6, 0);
+//        state.setPrimaryPIDSToTuning();
 
         state.setPathChain(
                 new PathBuilder()

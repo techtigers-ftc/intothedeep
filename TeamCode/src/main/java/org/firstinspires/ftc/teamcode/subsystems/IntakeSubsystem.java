@@ -96,7 +96,6 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private boolean isDirectControlEnabled;
     private final DigitalChannel breakBeamSensor;
     private boolean inPrimarySlideMode;
-    private final ElapsedTime timer;
 
     /**
      * Initializes a new IntakeSubsystem
@@ -150,9 +149,6 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         }
 
         moveSlidesAbsolute(getCurrentSlidePositionInches());
-
-        timer = new ElapsedTime();
-        timer.reset();
 
     }
 
@@ -409,8 +405,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
-        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
-                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
+//        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
+//                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
         return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
     }
 
@@ -477,10 +473,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
         if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-//            if (timer.seconds() > 0.05) {
                 updateBlockPosition();
-//                timer.reset();
-//            }
         }
     }
 }
