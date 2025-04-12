@@ -10,7 +10,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.commands.AscendOneLevelCommand;
+import org.firstinspires.ftc.teamcode.commands.LevelThreeAscentCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.MoveAscentSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
@@ -101,29 +102,28 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         // ASCENT
         Trigger startAscentTrigger =
                 new Trigger(() -> gamepad1.touchpad_finger_2 || gamepad1.guide);
-        Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
+        Trigger isAscending = new Trigger(() -> robotState.isAscending());
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
-        AscendOneLevelCommand ascendOneLevelCommand = new AscendOneLevelCommand(robotState, ascent, dropper, drive);
-        StartAscentCommandGroup startAscentCommandGroup = new StartAscentCommandGroup(robotState, ascent, dropper);
+        MoveAscentSlidesCommand ascendOneLevel = new MoveAscentSlidesCommand(robotState, ascent, dropper, drive, AscentSubsystem.JOSH_FAILSAFE_LIMIT);
+        LevelThreeAscentCommandGroup levelThreeAscent = new LevelThreeAscentCommandGroup(robotState, ascent, dropper, drive);
+//        StartAscentCommandGroup startAscent = new StartAscentCommandGroup(robotState, ascent, dropper);
 
-
-        startAscentTrigger.whenActive(startAscentCommandGroup, false);
+        startAscentTrigger.whenActive(levelThreeAscent);
+//        startAscentTrigger.whenActive(startAscent, false);
 
         Trigger guide = new Trigger(() -> gamepad2.guide);
-        guide.whenActive(ascendOneLevelCommand);
+        guide.whenActive(ascendOneLevel);
 
-        Trigger runningEngageAscent =
-                new Trigger(() -> CommandScheduler.getInstance().isScheduled(startAscentCommandGroup));
         Trigger movingSlides = new Trigger(() -> gamepad2.right_stick_y != 0);
-        isAscending.and(runningEngageAscent.negate()).and(movingSlides).whenActive(manualAscentCommand);
+        isAscending.and(movingSlides).whenActive(manualAscentCommand);
+
+        // DRIVER TODO: Split into a different method
         Trigger driverB = driverGamepad.getGamepadButton(GamepadKeys.Button.B);
         Trigger manualDrive = new Trigger(() -> driverGamepad.getLeftX() != 0
                 || driverGamepad.getLeftY() != 0
                 || driverGamepad.getRightX() != 0);
-
-        // DRIVER TODO: Split into a different method
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
                 robotState, driverGamepad);
         manualDrive.whenActive(manualDriveCommand);
@@ -392,8 +392,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Robot Block Position", robotState.getBlockPosition());
 //        telemetry.addData("Intake Slide POS",
 //                intake.getCurrentSlidePositionInches());
-//        telemetry.addData("Dropper Slide POS",
-//                dropper.getCurrentSlidePositionInches());
+        telemetry.addData("Dropper Slide POS",
+                dropper.getCurrentSlidePositionInches());
 //        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
         telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
         telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
@@ -420,7 +420,8 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         telemetry.addData("Block Orientation", robotState.getBlockOrientation());
 //        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
 //        telemetry.addLine();
-//        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
+        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
+        telemetry.addData("Robot Pitch", robotState.getRobotPitch());
     }
 
     @Override

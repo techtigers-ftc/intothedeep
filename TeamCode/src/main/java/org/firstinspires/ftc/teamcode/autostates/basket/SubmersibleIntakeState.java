@@ -27,6 +27,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     private final RobotState robotState;
     private final IntakeSubsystem intake;
     private boolean blockDetected;
+    private int frameCount;
 
     /**
      * Creates a new SubmersibleIntakeState
@@ -41,6 +42,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
         this.robotState = robotState;
         this.intake = intake;
         blockDetected = true;
+        frameCount = 0;
         addCommands(
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 15),
                 new LimelightBlockDetectionResetAction(limelight),
@@ -55,6 +57,7 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     public void initialize() {
         super.initialize();
         blockDetected = true;
+        frameCount = 0;
     }
 
     @Override
@@ -75,6 +78,10 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                         return AutoState.SAMPLE_INTAKE_COMPLETE;
                     }
                 } else {
+                    if (frameCount < 5) {
+                        frameCount++;
+                        return AutoState.RUNNING;
+                    }
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {

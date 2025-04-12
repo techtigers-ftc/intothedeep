@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -403,6 +405,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
+//        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
+//                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
         return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
     }
 
@@ -468,8 +472,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
-            updateBlockPosition();
+        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
+                updateBlockPosition();
         }
     }
 }

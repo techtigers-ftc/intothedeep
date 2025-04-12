@@ -31,7 +31,9 @@ public class DropperHighBasketNoTransferAction extends ParallelCommandGroup {
                 new DropperSlidesAbsoluteAction(dropper,
                         DropperSubsystem.SLIDES_MAX, 1.5),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_BASKET_POSITION, 300),
+                        DropperSubsystem.ROTATION_BASKET_VERTICAL_POSITION,
+                        300), // TODO: Make acommand to have vertical drop
+                // and horizontal drop
                 new SequentialCommandGroup(
                         new DropperPitchAction(dropper, 180, 300),
                         new WaitUntilCommand(() -> dropper.getCurrentSlidePositionInches() > 19),

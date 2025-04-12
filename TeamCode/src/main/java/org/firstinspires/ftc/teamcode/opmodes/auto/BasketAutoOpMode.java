@@ -404,7 +404,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
 
         registerSubsystems(limelight, auto, drive, odometry, dropper, intake, sensor);
 
-        disableUpdate();
+//        disableUpdate();
     }
 
     @Override
@@ -420,9 +420,9 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
         telemetry.addData("Expected Y", robotState.getRobotFinalPose().getY());
         telemetry.addData("Expected Heading", Math.toDegrees(robotState.getRobotFinalPose().getHeading()));
         telemetry.addData("Block Detection State", robotState.getCoarseBlockDetectionState());
+        telemetry.addData("Block Forward Fine: ", robotState.getBlockForwardFine());
+        telemetry.addData("Block Lateral Fine: ", robotState.getBlockLateralFine());
         telemetry.addLine();
-        telemetry.addData("block forward distance", robotState.getBlockForwardCoarse());
-        telemetry.addData("block lateral distance", robotState.getBlockLateralCoarse());
         telemetry.addLine();
         double currentPos = intake.getCurrentSlidePositionInches();
         double expectedPos = intake.getTargetPositionInches();
