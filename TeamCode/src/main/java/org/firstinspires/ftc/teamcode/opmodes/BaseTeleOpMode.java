@@ -42,6 +42,7 @@ import org.firstinspires.ftc.teamcode.commands.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ControllerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -96,7 +97,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }
 
         registerSubsystems(intake, drive, dropper, limelight,
-                odometry, ascent, sensor, visualDisplaySubsystem);
+                odometry, ascent, sensor,  visualDisplaySubsystem);
 
         gamepad1.setLedColor(0, 255, 0, Gamepad.LED_DURATION_CONTINUOUS);
 
@@ -330,7 +331,19 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         dpadRight.and(forwardCarry.negate()).and(blockInDropper).whenActive(dropperCarryNoTransferAction);
 
         // Low Basket drop
-        driverB.whenActive(new InstantCommand(() -> robotState.setIsLowBasketMode(!robotState.getIsLowBasketMode())));
+        driverB.whenActive(
+                new InstantCommand(
+                        () -> {
+                            robotState.setIsLowBasketMode(!robotState.getIsLowBasketMode());
+                            if (robotState.getIsLowBasketMode()) {
+                                gamepad1.rumbleBlips(1);
+                                gamepad2.rumbleBlips(1);
+                            } else {
+                                gamepad1.rumbleBlips(2);
+                                gamepad2.rumbleBlips(2);
+                            }
+                        }
+                ));
 
         //Manual Dropper Stuff
 
