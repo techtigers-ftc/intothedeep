@@ -107,11 +107,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
         MoveAscentSlidesCommand ascendOneLevel = new MoveAscentSlidesCommand(robotState, ascent, dropper, drive, AscentSubsystem.JOSH_FAILSAFE_LIMIT);
-//        LevelThreeAscentCommandGroup levelThreeAscent = new LevelThreeAscentCommandGroup(robotState, ascent, dropper, drive);
-        StartAscentCommandGroup startAscent = new StartAscentCommandGroup(robotState, ascent, dropper);
+        LevelThreeAscentCommandGroup levelThreeAscent = new LevelThreeAscentCommandGroup(robotState, ascent, dropper, drive);
+//        StartAscentCommandGroup startAscent = new StartAscentCommandGroup(robotState, ascent, dropper);
 
-//        startAscentTrigger.whenActive(levelThreeAscent);
-        startAscentTrigger.whenActive(startAscent, false);
+        startAscentTrigger.whenActive(levelThreeAscent);
+//        startAscentTrigger.whenActive(startAscent, false);
 
         Trigger guide = new Trigger(() -> gamepad2.guide);
         guide.whenActive(ascendOneLevel);
