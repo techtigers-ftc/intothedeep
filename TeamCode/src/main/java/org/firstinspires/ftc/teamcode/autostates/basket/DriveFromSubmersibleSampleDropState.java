@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.SequentialReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -41,7 +42,7 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new ReadyToTransferAction(intake, dropper, robotState),
+                        new SequentialReadyToTransferAction(intake, dropper, robotState),
 //                        new WaitCommand(100),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
