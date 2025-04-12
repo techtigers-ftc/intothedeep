@@ -3,11 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
@@ -82,7 +80,7 @@ public abstract class BaseSinglePlayerTeleOpMode extends BaseOpMode {
         // ASCENT
         Trigger startAscentTrigger =
                 new Trigger(() -> gamepad1.touchpad_finger_2 || gamepad1.guide);
-        Trigger isAscending = new Trigger(() -> robotState.getIsAscending());
+        Trigger isAscending = new Trigger(() -> robotState.isAscending());
 
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -playerGamepad.getRightY(), ascent, dropper, drive);

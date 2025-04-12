@@ -35,7 +35,7 @@ public class ClimbReminderRumble implements ControllerEffect {
     @Override
     public void updateEffect() {
         boolean needToClimb = robotState.getRunTime() / 1000 >= 105;
-        if (needToClimb && !robotState.getIsAscending() && !hasRumbled) {
+        if (needToClimb && !robotState.isAscending() && !hasRumbled) {
             gamepad.gamepad.runRumbleEffect(climbRumble);
             hasRumbled = true;
         }
