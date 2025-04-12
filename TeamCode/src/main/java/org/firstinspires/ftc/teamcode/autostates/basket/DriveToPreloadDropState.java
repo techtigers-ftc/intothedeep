@@ -51,7 +51,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
                         new SequentialCommandGroup(
                                 new DropperHighBasketNoTransferAction(dropper, robotState),
                                 new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getX() < 15),
-                                new DropperOpenAction(dropper, 50),
+                                new DropperOpenAction(dropper, 0),
                                 new InstantCommand(() -> isOpenFinished = true)
                         )
                 )
@@ -67,8 +67,7 @@ public class DriveToPreloadDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (robotState.getDropperState() == DropperState.HIGH_BASKET &&
-                isOpenFinished &&
-                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+                isOpenFinished) {
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
             return AutoState.TIMEOUT;

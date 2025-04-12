@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.SequentialReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 0;
+    private static final double TIME_TO_INTAKE = 4;
     private boolean isOpenFinished;
 
     /**
@@ -41,14 +42,14 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new ReadyToTransferAction(intake, dropper, robotState),
+                        new SequentialReadyToTransferAction(intake, dropper, robotState),
 //                        new WaitCommand(100),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14),
-                                        new DropperOpenAction(dropper, 100),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14 || robotState.getAutoRemainingTime() < 0.1),
+                                        new DropperOpenAction(dropper, 0),
                                         new InstantCommand(() -> isOpenFinished = true)
                                 ),
                                 new IntakePrepareToPickupAction(intake, robotState)

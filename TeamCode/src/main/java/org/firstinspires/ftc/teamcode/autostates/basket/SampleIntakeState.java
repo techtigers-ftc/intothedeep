@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutWaitUntilCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -21,6 +23,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
             SampleIntakeState.class.getSimpleName();
     private final RobotState robotState;
     private int frameCounter;
+    private boolean blockDetected;
 
     /**
      * Constructor for the SampleIntakeState
@@ -34,9 +37,13 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
                              RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
+        blockDetected = true;
         addCommands(
                 new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 5),
-                new WaitUntilCommand(robotState::isBlockDetected),
+//                new WaitUntilCommand(robotState::isBlockDetected),
+//                new WaitCommand(50),
+                new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
+                new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
                 new IntakeFinePickupAction(drive, intake, () -> Math.toDegrees(robotState.getRobotCurrentPose().getHeading()), robotState)
         );
     }
@@ -44,6 +51,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
     @Override
     public void initialize() {
         super.initialize();
+        blockDetected = true;
         frameCounter = 0;
     }
 
@@ -54,7 +62,7 @@ public class SampleIntakeState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached()) {
+        if (super.isTimeoutReached() || !blockDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {

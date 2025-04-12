@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutWaitUntilCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
@@ -25,6 +26,7 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
     private int runCounter;
     private String previousAutoState;
     private int frameCounter;
+    private boolean blockDetected;
 
     /**
      * Constructor for the FailedIntakeSampleState
@@ -40,13 +42,24 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         super(name, 3);
         this.robotState = robotState;
         runCounter = 0;
+        blockDetected = true;
         previousAutoState = "";
         addCommands(
                 new LimelightBlockDetectionResetAction(limelight),
-                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 2),
-                new WaitUntilCommand(robotState::isBlockDetected),
+                new IntakeReadyToPickupAction(intake, robotState, () -> intake.getCurrentSlidePositionInches() - 3),
+                new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
+//                new WaitUntilCommand(robotState::isBlockDetected),
+//                new WaitCommand(50),
+                new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        blockDetected = true;
+        frameCounter = 0;
     }
 
     @Override
@@ -54,7 +67,7 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
         if (runCounter == 0) {
             previousAutoState = robotState.getPreviousAutoState();
         }
-        if (super.isTimeoutReached()) {
+        if (runCounter > 0) {
             runCounter = 0;
             if (previousAutoState.equals("intakeFirstSample")) {
                 return AutoState.FAILED_SAMPLE_1_TIMEOUT;
@@ -63,9 +76,12 @@ public class FailedIntakeSampleState extends SequentialCommandGroupState<AutoSta
             } else {
                 return AutoState.FAILED_SAMPLE_3_TIMEOUT;
             }
+        } else if (super.isTimeoutReached() || !blockDetected) {
+            runCounter ++;
+            return AutoState.SAMPLE_INTAKE_FAILED;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 0) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     runCounter = 0;
                     if (previousAutoState.equals("intakeFirstSample")) {
                         return AutoState.SAMPLE_1_INTAKE_RECOVERED;

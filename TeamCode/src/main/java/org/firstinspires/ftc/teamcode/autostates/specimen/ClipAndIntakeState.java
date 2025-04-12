@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.autostates.specimen;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.TimeoutWaitUntilCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
@@ -29,6 +31,9 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG =
             ClipAndIntakeState.class.getSimpleName();
     private final RobotState robotState;
+    private boolean blockDetected;
+    private final IntakeSubsystem intake;
+    private int frameCounter;
 
     /**
      * Constructor for the ClipAndIntakeState
@@ -42,6 +47,8 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
     public ClipAndIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 5);
         this.robotState = robotState;
+        blockDetected = true;
+        this.intake = intake;
         addCommands(
                 new ParallelCommandGroup(
                         new RawPowerDriveAction(drive, 0.5, 0.1),
@@ -56,13 +63,21 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                 new SequentialCommandGroup(
                                         new LimelightBlockDetectionResetAction(limelight),
                                         new IntakeTrackingAction(intake, robotState),
-                                        new WaitUntilCommand(robotState::isBlockDetected),
+                                        new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
+                                        new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
                                         new WaitCommand(100)
                                 )
                         )
                 ),
                 new IntakeFinePickupAction(drive, intake, null, robotState)
         );
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        blockDetected = true;
+        frameCounter = 0;
     }
 
     /**
@@ -72,13 +87,19 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
      */
     @Override
     public AutoState getCurrentCondition() {
-        if (super.isTimeoutReached()) {
+        boolean trackingTimeout = IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2
+                && robotState.isIntakeTracking();
+        if (super.isTimeoutReached() || trackingTimeout || !blockDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
                 if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE) {
                     return AutoState.SAMPLE_INTAKE_COMPLETE;
                 } else {
+                    if (frameCounter < 5) {
+                        frameCounter++;
+                        return AutoState.RUNNING;
+                    }
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {
