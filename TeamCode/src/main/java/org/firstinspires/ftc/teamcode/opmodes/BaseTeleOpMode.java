@@ -37,6 +37,7 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
 import org.firstinspires.ftc.teamcode.commands.drive.CancelDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
@@ -131,11 +132,12 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         DropperLowBasketAction dropperLowBasketAction = new DropperLowBasketAction(dropper, intake, robotState);
         DropperLowBasketNoTransferAction dropperLowBasketNoTransferAction = new DropperLowBasketNoTransferAction(dropper, robotState);
 
-
         CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
 
-//        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
+        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
+        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(headingLockCommand);
+
         AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(autoSpecimenCycle);
 
@@ -152,6 +154,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         ParallelCommandGroup readyToPickupManual = new ParallelCommandGroup(
                 new IntakeReadyToPickupAction(intake, robotState, () -> 8),
                 new DropperPreTransferAction(dropper, robotState)
+        );
+
+        ParallelCommandGroup clipAndIntake = new ParallelCommandGroup(
+                new IntakeReadyToPickupAction(intake, robotState, () -> 8),
+                new DropperSlapAction(dropper, robotState)
         );
 
         IntakeFullReadyToTransferAction fullReadyToTransfer = new IntakeFullReadyToTransferAction(
@@ -222,10 +229,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         manualExtendTrigger.and(inReadyToPickup).whenActive(fullReadyToTransferNoVision);
         manualExtendTrigger.or(autoExtendTrigger).and(inReadyToTransfer).whenActive(intakeToObservation);
 
-        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry).whenActive(() -> {
-            readyToPickupManual.schedule();
-            dropperSlapAction.schedule();
-        });
+        (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry).whenActive(clipAndIntake);
         (manualExtendTrigger.or(autoExtendTrigger)).and(inTuck).and(forwardCarry.negate()).whenActive(readyToPickupManual);
         (manualExtendTrigger.or(autoExtendTrigger)).and(inPrepareToPickup).whenActive(readyToPickupManual);
 
