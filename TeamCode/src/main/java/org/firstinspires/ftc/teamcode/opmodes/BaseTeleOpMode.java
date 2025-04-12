@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.MoveAscentSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
+import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.AutoSpecimenCycleAction;
@@ -106,9 +107,11 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         ManualAscentCommand manualAscentCommand = new ManualAscentCommand(robotState,
                 () -> -manipulatorGamepad.getRightY(), ascent, dropper, drive);
         MoveAscentSlidesCommand ascendOneLevel = new MoveAscentSlidesCommand(robotState, ascent, dropper, drive, AscentSubsystem.JOSH_FAILSAFE_LIMIT);
-        LevelThreeAscentCommandGroup levelThreeAscent = new LevelThreeAscentCommandGroup(robotState, ascent, dropper, drive);
+//        LevelThreeAscentCommandGroup levelThreeAscent = new LevelThreeAscentCommandGroup(robotState, ascent, dropper, drive);
+        StartAscentCommandGroup startAscent = new StartAscentCommandGroup(robotState, ascent, dropper);
 
-        startAscentTrigger.whenActive(levelThreeAscent);
+//        startAscentTrigger.whenActive(levelThreeAscent);
+        startAscentTrigger.whenActive(startAscent, false);
 
         Trigger guide = new Trigger(() -> gamepad2.guide);
         guide.whenActive(ascendOneLevel);
