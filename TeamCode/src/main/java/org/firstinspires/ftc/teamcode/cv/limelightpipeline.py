@@ -5,7 +5,7 @@
 # Black Level Offset = 3
 # Sensor Gain = 15.7
 # Red Balance = 1184
-# Blue Balance = 1532
+# Blue Balance = 1251
 
 
 import cv2
@@ -206,10 +206,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    # llrobot[0] = 1
-    # llrobot[1] = 1
-    # llrobot[2] = 1
-    # llrobot[3] = 1
+    llrobot[0] = 1
+    llrobot[1] = 1
+    llrobot[2] = 1
+    llrobot[3] = 1
     # current_slide_pos = 0
     # max_slide_extension = 18
 
@@ -276,7 +276,7 @@ def runPipeline(frame, llrobot):
         magnitude = np.uint8(magnitude * 255 / np.max(magnitude))
 
         # Threshold the magnitude image
-        _, edges = cv2.threshold(magnitude, 50, 255, cv2.THRESH_BINARY)
+        _, edges = cv2.threshold(magnitude, 60, 255, cv2.THRESH_BINARY)
 
         edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, MORPHOLOGY_KERNEL)
 
@@ -302,11 +302,12 @@ def runPipeline(frame, llrobot):
             if cv2.contourArea(contour) < small_contour_area:
                 continue
 
-            if cv2.contourArea(contour) > LARGE_CONTOUR_AREA_FINE:
-                continue
 
             frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
+
+                if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
+                    continue
                 mask = np.zeros(gray.shape, dtype=np.uint8)
                 cv2.drawContours(mask, [sep_contour], -1, 255, -1)
 
@@ -320,9 +321,9 @@ def runPipeline(frame, llrobot):
                 else:
                     continue
 
-                vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
-                if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
-                    continue
+                # vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
+                # if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
+                #     continue
 
                 area = cv2.contourArea(sep_contour)
 
