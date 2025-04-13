@@ -41,6 +41,8 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
     private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
+    protected abstract boolean doSample();
+
 
     @Override
     public void initialize() {
@@ -66,7 +68,11 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 //        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
 
         // Sets color preference to alliance color
-//        robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
+        if (doSample()) {
+            robotState.setBlockColorPreference(BlockColorPreference.ANY);
+        } else {
+            robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
+        }
 
         // Creating states
         DriveToPreloadDropSpecimenState driveToPreloadDrop = new DriveToPreloadDropSpecimenState(
@@ -367,7 +373,6 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 // OLD CODE FOR SAMPLE INTAKE + DROP
                 .addTransition(driveToFourthDrop, intakeSample, AutoState.DRIVE_END)
                 .addTransition(driveToFourthDrop, intakeSample, AutoState.TIMEOUT)
-                .addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE)
 
                 // Goes to park if the sample intake times out or fails
                 .addTransition(intakeSample, driveFromChamberPark, AutoState.SAMPLE_INTAKE_FAILED)
@@ -383,6 +388,12 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
                 .addTransition(driveFromBasketPark, endState, AutoState.TIMEOUT)
 
                 .setCurrentState(driveToPreloadDrop);
+
+        if (doSample()) {
+            stateMachine.addTransition(intakeSample, driveToSampleDrop, AutoState.SAMPLE_INTAKE_COMPLETE);
+        } else{
+            stateMachine.addTransition(intakeSample, driveFromChamberPark, AutoState.SAMPLE_INTAKE_COMPLETE);
+        }
 
         // Register subsystems + Create state machine subsystem
         AutoSubsystem auto = new AutoSubsystem(stateMachine, robotState);

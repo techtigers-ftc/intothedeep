@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.ReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.SequentialReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
@@ -17,8 +17,6 @@ import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
-import org.firstinspires.ftc.teamcode.utils.enums.ClawState;
-import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 
 /**
  * Drive state that drives the robot from the chamber to a sample drop
@@ -26,6 +24,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromChamberSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromChamberSampleDropState.class.getSimpleName();
+    private final double TIME_TO_GO = 30; // 2.5 for last second drop. TODO: If using this, uncomment wait lines below
     private boolean isOpenFinished;
 
     /**
@@ -40,9 +39,14 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
     public DriveFromChamberSampleDropState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
-                autoDriveCommand,
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> TIME_TO_GO > robotState.getAutoRemainingTime()),
+                        autoDriveCommand
+                ),
                 new SequentialCommandGroup(
                         new SequentialReadyToTransferAction(intake, dropper, robotState),
+//                        new WaitUntilCommand(() -> TIME_TO_GO > robotState.getAutoRemainingTime()),
+//                        new WaitCommand(500),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new DropperHighBasketNoTransferAction(dropper, robotState),
