@@ -52,6 +52,7 @@ import org.firstinspires.ftc.teamcode.subsystems.SensorSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.DriveGears;
 import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
@@ -121,27 +122,44 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger movingSlides = new Trigger(() -> gamepad2.right_stick_y != 0);
         isAscending.and(movingSlides).whenActive(manualAscentCommand);
 
-        // DRIVER TODO: Split into a different method
+        // Drive bumpers
+        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
+        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
+        Trigger isHeadingLock = new Trigger(headingLockCommand::isScheduled);
+
+        Trigger driveLeftBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
+        Trigger driveRightBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
+
+        driveLeftBumper.whenActive(() -> {
+            if (headingLockCommand.isScheduled()) {
+                autoSpecimenCycle.schedule();
+                gamepad1.rumbleBlips(2);
+            } else {
+                headingLockCommand.schedule();
+                gamepad1.rumbleBlips(1);
+            }
+        });
+        driveRightBumper.whenActive(() -> {
+            if (robotState.getCurrentGear() == DriveGears.NOT_ENGAGED) {
+                robotState.setCurrentGear(DriveGears.ENGAGED);
+                gamepad1.rumbleBlips(1);
+            } else {
+                robotState.setCurrentGear(DriveGears.NOT_ENGAGED);
+                gamepad1.rumbleBlips(2);
+            }
+        });
+
+        // DRIVER
         Trigger driverB = driverGamepad.getGamepadButton(GamepadKeys.Button.B);
         Trigger manualDrive = new Trigger(() -> driverGamepad.getLeftX() != 0
                 || driverGamepad.getLeftY() != 0
                 || driverGamepad.getRightX() != 0);
         ManualDriveCommand manualDriveCommand = new ManualDriveCommand(drive,
                 robotState, driverGamepad);
-        manualDrive.whenActive(manualDriveCommand);
+        manualDrive.and(isHeadingLock.negate()).whenActive(manualDriveCommand);
 
         DropperLowBasketAction dropperLowBasketAction = new DropperLowBasketAction(dropper, intake, robotState);
         DropperLowBasketNoTransferAction dropperLowBasketNoTransferAction = new DropperLowBasketNoTransferAction(dropper, robotState);
-
-        CancelDriveCommand cancelDriveCommand = new CancelDriveCommand(drive);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(cancelDriveCommand);
-
-        HeadingLockCommand headingLockCommand = new HeadingLockCommand(drive, robotState, driverGamepad);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(headingLockCommand);
-
-        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
-        driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(autoSpecimenCycle);
-
 
         // MANIPULATOR
 

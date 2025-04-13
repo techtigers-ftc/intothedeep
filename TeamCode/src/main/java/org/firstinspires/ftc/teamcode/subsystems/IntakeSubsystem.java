@@ -38,7 +38,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static double WRIST_ROTATION_ZERO = 170;
 
     public static double SLIDES_MAX = 18.75;
-    public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 105;
+    public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 135; // -105
     public static double WRIST_ROTATION_TUCK_POSITION = WRIST_ROTATION_ZERO;
     public static double CLAW_ROTATION_TUCK_POSITION = 90;
 

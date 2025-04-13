@@ -136,7 +136,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
             yellow = 1;
         }
 
-        limelight.updatePythonInputs(yellow, red, blue, coarseCamera, robotState.getIntakeSlidePosition(), IntakeSubsystem.SLIDES_MAX + 1, 0, 0);
+        limelight.updatePythonInputs(yellow, red, blue, coarseCamera,
+                robotState.getIntakeSlidePosition(),
+                IntakeSubsystem.SLIDES_MAX + 1.5, 0, 0);
 
         LLResult result = limelight.getLatestResult();
 
