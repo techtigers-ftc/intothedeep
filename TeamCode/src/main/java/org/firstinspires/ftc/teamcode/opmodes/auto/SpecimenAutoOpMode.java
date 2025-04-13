@@ -68,7 +68,11 @@ public abstract class SpecimenAutoOpMode extends BaseOpMode {
 //        VisualDisplaySubsystem visualDisplaySubsystem = new VisualDisplaySubsystem(displayDriver, new AutoView(robotState));
 
         // Sets color preference to alliance color
-//        robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
+        if (doSample()) {
+            robotState.setBlockColorPreference(BlockColorPreference.ANY);
+        } else {
+            robotState.setBlockColorPreference(BlockColorPreference.ALLIANCE);
+        }
 
         // Creating states
         DriveToPreloadDropSpecimenState driveToPreloadDrop = new DriveToPreloadDropSpecimenState(
