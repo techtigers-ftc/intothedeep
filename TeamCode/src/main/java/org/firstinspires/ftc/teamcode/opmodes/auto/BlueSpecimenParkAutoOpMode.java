@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * An autonomous opmode on the specimen side of the red alliance, clipping 5 specimens and dropping a sample
  */
-@Autonomous(name = "Red Specimen 5+1 Park", group = "Specimen Auto")
-public class RedSpecimenAutoOpMode extends SpecimenAutoOpMode {
+@Autonomous(name = "Blue Specimen 5+0 Park", group = "Specimen Auto")
+public class BlueSpecimenParkAutoOpMode extends SpecimenAutoOpMode {
     @Override
     protected boolean isBlue() {
-        return false;
+        return true;
     }
 
     protected boolean doSample(){
-        return true;
+        return false;
     }
 }

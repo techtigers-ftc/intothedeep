@@ -11,4 +11,8 @@ public class BlueSpecimenAutoOpMode extends SpecimenAutoOpMode {
     protected boolean isBlue() {
         return true;
     }
+
+    protected boolean doSample(){
+        return true;
+    }
 }

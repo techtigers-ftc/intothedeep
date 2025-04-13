@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autostates.specimen;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
@@ -26,6 +27,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromChamberSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromChamberSampleDropState.class.getSimpleName();
+    private final long TIME_TO_WAIT = 0;
     private boolean isOpenFinished;
 
     /**
@@ -40,7 +42,11 @@ public class DriveFromChamberSampleDropState extends DriveStateBase {
     public DriveFromChamberSampleDropState(String name, DriveSubsystem drive, IntakeSubsystem intake, DropperSubsystem dropper, RobotState robotState) {
         super(name, drive, robotState);
         addCommands(
-                autoDriveCommand,
+                new SequentialCommandGroup(
+                        new WaitCommand(TIME_TO_WAIT),
+                        autoDriveCommand
+
+                        ),
                 new SequentialCommandGroup(
                         new SequentialReadyToTransferAction(intake, dropper, robotState),
                         new TransferAction(dropper, intake, robotState),
