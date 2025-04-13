@@ -206,10 +206,10 @@ def separate_touching_contours(contour, min_area_ratio=0.15):
 
 
 def runPipeline(frame, llrobot):
-    llrobot[0] = 1
-    llrobot[1] = 1
-    llrobot[2] = 1
-    llrobot[3] = 1
+    # llrobot[0] = 1
+    # llrobot[1] = 1
+    # llrobot[2] = 1
+    # llrobot[3] = 1
     # current_slide_pos = 0
     # max_slide_extension = 18
 
@@ -321,9 +321,9 @@ def runPipeline(frame, llrobot):
                 else:
                     continue
 
-                # vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
-                # if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
-                #     continue
+                vertical_distance = INCHES_VERTICAL - center[1] / PIXELS_PER_INCH
+                if current_slide_pos + vertical_distance + 0.5 > max_slide_extension:
+                    continue
 
                 area = cv2.contourArea(sep_contour)
 
