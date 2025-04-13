@@ -64,8 +64,8 @@ public class ClipAndIntakeState extends SequentialCommandGroupState<AutoState> {
                                         new LimelightBlockDetectionResetAction(limelight),
                                         new IntakeTrackingAction(intake, robotState),
                                         new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
-                                        new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
-                                        new WaitCommand(100)
+                                        new InstantCommand(() -> blockDetected = robotState.isBlockDetected())
+//                                        new WaitCommand(100)
                                 )
                         )
                 ),

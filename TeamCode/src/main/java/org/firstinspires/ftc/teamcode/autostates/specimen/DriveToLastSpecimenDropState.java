@@ -49,8 +49,7 @@ public class DriveToLastSpecimenDropState extends DriveStateBase {
     @Override
     public AutoState getCurrentCondition() {
         if (super.getCurrentCondition() == AutoState.DRIVE_END &&
-                robotState.getDropperState() == DropperState.FORWARD_CARRY &&
-                robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+                robotState.getDropperState() == DropperState.FORWARD_CARRY) {
             robotState.setDebugColor(Color.BLUE);
             return AutoState.DRIVE_END;
         } else if (super.getCurrentCondition() == AutoState.TIMEOUT) {
