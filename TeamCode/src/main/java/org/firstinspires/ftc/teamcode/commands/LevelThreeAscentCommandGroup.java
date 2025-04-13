@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.ascent.AscentEngageAction;
 import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.dropper.DropperSlidesAbsoluteAction;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
@@ -29,17 +32,25 @@ public class LevelThreeAscentCommandGroup extends SequentialCommandGroup {
                                         DriveSubsystem drive) {
 
         addRequirements(ascent, dropper, drive);
+
+        MoveAscentSlidesCommand finalAscent = new MoveAscentSlidesCommand(robotState, ascent, dropper,
+                drive, -10);
         addCommands(
-                new InstantCommand(ascent::engageAscent),
                 new StartAscentCommandGroup(robotState, ascent, dropper),
-                new WaitCommand(2000),
                 new MoveAscentSlidesCommand(robotState, ascent, dropper,
-                        drive, -0.75),
+                        drive, -0.5),
                 new MoveAscentSlidesCommand(robotState, ascent, dropper,
                         drive, 22),
                 new WaitUntilCommand(() -> Math.abs(robotState.getRobotPitch()) < 7),
-                new MoveAscentSlidesCommand(robotState, ascent, dropper,
-                        drive, -1)
+                new ParallelCommandGroup(
+                        finalAscent,
+                        new SequentialCommandGroup(
+                            new WaitUntilCommand(() -> Math.abs(robotState.getRobotPitch()) > 15),
+                            new WaitUntilCommand(() -> Math.abs(robotState.getRobotPitch()) < 7),
+                            new WaitCommand(300),
+                            new InstantCommand(finalAscent::stop)
+                        )
+                )
         );
     }
 }

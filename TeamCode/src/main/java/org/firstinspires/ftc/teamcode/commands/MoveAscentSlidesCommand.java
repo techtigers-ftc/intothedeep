@@ -16,6 +16,7 @@ public class MoveAscentSlidesCommand extends CommandBase {
     private final DropperSubsystem dropper;
     private final DriveSubsystem drive;
     private final double targetPosition;
+    private boolean stopRequested;
 
     /**
      * Constructs a new MoveAscentSlidesCommand
@@ -36,8 +37,14 @@ public class MoveAscentSlidesCommand extends CommandBase {
         this.dropper = dropper;
         this.drive = drive;
         this.targetPosition = targetPosition;
+        stopRequested = false;
 
         addRequirements(ascent, dropper, drive);
+    }
+
+    @Override
+    public void initialize() {
+        stopRequested = false;
     }
 
     @Override
@@ -68,7 +75,7 @@ public class MoveAscentSlidesCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(dropper.getCurrentSlidePositionInches() - targetPosition) < 1;
+        return Math.abs(dropper.getCurrentSlidePositionInches() - targetPosition) < 1 || stopRequested;
     }
 
     @Override
@@ -79,5 +86,12 @@ public class MoveAscentSlidesCommand extends CommandBase {
         drive.backRight.setPower(0);
         drive.frontLeft.setPower(0);
         drive.frontRight.setPower(0);
+    }
+
+    /**
+     * Allows for an external command to request the stop of this command
+     */
+    public void stop() {
+        stopRequested = true;
     }
 }
