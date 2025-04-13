@@ -439,7 +439,7 @@ public class SpecimenDriveStateConfigurator {
                                 new BezierCurve(
                                         new Point(75, 41.5),
                                         new Point(60, 35),
-                                        new Point(10, 10)
+                                        new Point(11, 10)
                                 )
                         )
                         .setConstantHeadingInterpolation(Math.toRadians(45))
