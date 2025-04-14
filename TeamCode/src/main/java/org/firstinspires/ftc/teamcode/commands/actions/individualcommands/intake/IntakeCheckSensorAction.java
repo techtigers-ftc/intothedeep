@@ -39,7 +39,7 @@ public class IntakeCheckSensorAction extends CommandBase {
             blockDetected = true;
         }
 
-        if (runCounter > 5) {
+        if (runCounter > 3) {
             command.cancel();
         }
     }
