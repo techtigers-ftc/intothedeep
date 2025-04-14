@@ -30,7 +30,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 0;
-    public static final double SLIDES_CHAMBER_POSITION = 5.25;
+    public static final double SLIDES_CHAMBER_POSITION = 6.25;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
@@ -43,7 +43,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 205;
-    public static final double ROTATION_BASKET_VERTICAL_POSITION = 175;
+    public static final double ROTATION_BASKET_DIAGONAL_POSITION = 175;
     public static final double ROTATION_BASKET_HORIZONTAL_POSITION = 105;
     public static final double ROTATION_SLAP_POSITION = 205;
     public static final double ROTATION_WALL_INTAKE_POSITION = 5;
@@ -180,6 +180,17 @@ public class DropperSubsystem extends CloseableSubsystem {
             openClaw();
         } else {
             closeClaw();
+        }
+    }
+
+    /**
+     * Toggles the claw between vertical and horizontal drops
+     */
+    public void toggleRotation() {
+        if (Math.abs(getRotation() - ROTATION_BASKET_HORIZONTAL_POSITION) < 1) {
+            setWristAbsolute(getPitch(), ROTATION_BASKET_DIAGONAL_POSITION);
+        } else {
+            setWristAbsolute(getPitch(), ROTATION_BASKET_HORIZONTAL_POSITION);
         }
     }
 

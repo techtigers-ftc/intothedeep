@@ -37,11 +37,13 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
         addRequirements(intake);
         addCommands(
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new IntakeClawRotationAction(intake, () -> 60, 0),
-                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0)
-                        ),
+//                        new SequentialCommandGroup(
+//                                new IntakeClawRotationAction(intake, () -> 60, 0),
+//                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
+//                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0)
+//                        ),
+                        new IntakeClawRotationAction(intake,
+                                () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,

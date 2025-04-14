@@ -130,15 +130,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger driveLeftBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         Trigger driveRightBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
 
-        driveLeftBumper.whenActive(() -> {
-            if (headingLockCommand.isScheduled()) {
-                autoSpecimenCycle.schedule();
-                gamepad1.rumbleBlips(2);
-            } else {
-                headingLockCommand.schedule();
-                gamepad1.rumbleBlips(1);
-            }
-        });
+        driveLeftBumper.whenActive(autoSpecimenCycle);
         driveRightBumper.whenActive(() -> {
             if (robotState.getCurrentGear() == DriveGears.NOT_ENGAGED) {
                 robotState.setCurrentGear(DriveGears.ENGAGED);
@@ -236,6 +228,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger transfer =
                 new Trigger(() -> robotState.getDropperState() == DropperState.PRE_TRANSFER || robotState.getDropperState() == DropperState.TRANSFER);
         Trigger wallIntake = new Trigger(() -> robotState.getDropperState() == DropperState.WALL_INTAKE);
+        Trigger highBasket = new Trigger(() -> robotState.getDropperState() == DropperState.HIGH_BASKET);
         Trigger blockInDropper = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.DROPPER);
         Trigger blockInIntake = new Trigger(() -> robotState.getBlockPosition() == RobotBlockPosition.INTAKE);
         Trigger lowBasketMode = new Trigger(() -> robotState.getIsLowBasketMode());
@@ -315,8 +308,10 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         intakeRotationTrigger.and(inReadyToPickup).whileActiveContinuous(intakeManualRotationCommand);
 
         // Intake claw rotation toggle to 0 or 90
-        manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X).and(inReadyToPickup)
+        Trigger x = manipulatorGamepad.getGamepadButton(GamepadKeys.Button.X);
+        x.and(inReadyToPickup).and(highBasket.negate())
                 .whenActive(intake::togglePerpendicularRotation);
+        x.and(highBasket).whenActive(dropper::toggleRotation);
 
         // Changing Color Preference
         ChangeBlockColorPreferenceCommand changeBlockColorPreferenceCommand =

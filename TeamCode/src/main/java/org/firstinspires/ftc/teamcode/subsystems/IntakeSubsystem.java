@@ -35,7 +35,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
     public static double WRIST_PITCH_ZERO = 165;
-    public static double WRIST_ROTATION_ZERO = 175;
+    public static double WRIST_ROTATION_ZERO = 165;
 
     public static double SLIDES_MAX = 18.75;
     public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 135;
@@ -405,10 +405,9 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
-//        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
+//        RobotLog.dd(tag, "Result: %b, Break beam closed: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
 //                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
-//        return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
-        return true;
+        return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
     }
 
     /**
@@ -474,7 +473,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
         if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
-                updateBlockPosition();
+            updateBlockPosition();
         }
     }
 }
