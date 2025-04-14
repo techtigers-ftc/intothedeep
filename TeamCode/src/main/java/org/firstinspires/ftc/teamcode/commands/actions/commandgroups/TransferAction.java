@@ -29,7 +29,7 @@ public class TransferAction extends SequentialCommandGroup {
         this.robotState = robotState;
         addRequirements(dropper, intake);
         addCommands(
-                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 10, 25),
+                new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 15, 25),
                 new DropperCloseAction(dropper, 50),
                 new IntakeOpenAction(intake, 75)
         );

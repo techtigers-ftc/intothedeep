@@ -29,7 +29,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
         addRequirements(intake);
         addCommands(
                 new IntakeWristPitchAction(intake, IntakeSubsystem.WRIST_PITCH_PECK_POSITION, 50),
-                new IntakeCloseAction(intake, 150),
+                new IntakeCloseAction(intake, 200),
                 new ParallelCommandGroup(
 //                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.AbsoluteBlockPosition;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockColorPreference;
 import org.firstinspires.ftc.teamcode.utils.enums.BlockDetectionState;
+import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
 
 import team.techtigers.base.CloseableSubsystem;
 
@@ -123,6 +124,10 @@ public class LimelightSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
+        if (robotState.getIntakeState() != IntakeState.READY_TO_PICKUP) {
+            return;
+        }
+
         double blue = robotState.isBlue() ? 1 : 0;
         double red = robotState.isBlue() ? 0 : 1;
         double yellow = 0;

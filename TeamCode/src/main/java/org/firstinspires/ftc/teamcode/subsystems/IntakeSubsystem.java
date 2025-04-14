@@ -51,7 +51,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
 
-    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 56;
+    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 51;
     public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 170;
     public static double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
@@ -407,7 +407,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public boolean isBlockInIntake() {
 //        RobotLog.dd(tag, "Result: %b, Break beam sensor: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
 //                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
-        return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
+//        return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
+        return true;
     }
 
     /**
