@@ -5,7 +5,7 @@
 # Black Level Offset = 3
 # Sensor Gain = 15.7
 # Red Balance = 1184
-# Blue Balance = 1532
+# Blue Balance = 1251
 
 
 import cv2
@@ -276,7 +276,7 @@ def runPipeline(frame, llrobot):
         magnitude = np.uint8(magnitude * 255 / np.max(magnitude))
 
         # Threshold the magnitude image
-        _, edges = cv2.threshold(magnitude, 50, 255, cv2.THRESH_BINARY)
+        _, edges = cv2.threshold(magnitude, 60, 255, cv2.THRESH_BINARY)
 
         edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, MORPHOLOGY_KERNEL)
 
@@ -302,11 +302,12 @@ def runPipeline(frame, llrobot):
             if cv2.contourArea(contour) < small_contour_area:
                 continue
 
-            if cv2.contourArea(contour) > LARGE_CONTOUR_AREA_FINE:
-                continue
 
             frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
+
+                if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
+                    continue
                 mask = np.zeros(gray.shape, dtype=np.uint8)
                 cv2.drawContours(mask, [sep_contour], -1, 255, -1)
 
