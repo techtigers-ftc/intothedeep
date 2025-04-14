@@ -225,6 +225,7 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
     public void initialize() {
         super.initialize();
         hasRecovered = false;
+        recoveryTimer.reset();
     }
 
     @Override
@@ -264,7 +265,10 @@ public abstract class DriveStateBase extends ParallelCommandGroupState<AutoState
             return AutoState.DRIVE_END;
         }
 
-        if (recoveryTimer.milliseconds() > RECOVERY_TIMEOUT && hasRecovered) {
+//        if (recoveryTimer.milliseconds() > RECOVERY_TIMEOUT && hasRecovered) {
+//            return AutoState.TIMEOUT;
+//        }
+        if (isTimeoutReached()) {
             return AutoState.TIMEOUT;
         }
 

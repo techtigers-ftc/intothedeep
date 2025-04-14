@@ -125,6 +125,9 @@ public class LimelightSubsystem extends CloseableSubsystem {
     @Override
     public void periodic() {
         if (robotState.getIntakeState() != IntakeState.READY_TO_PICKUP) {
+            robotState.setFineBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+            robotState.setCoarseBlockDetectionState(BlockDetectionState.NOT_DETECTED);
+            robotState.setBlockDetected(absoluteBlockPosition.isBlockDetected());
             return;
         }
 

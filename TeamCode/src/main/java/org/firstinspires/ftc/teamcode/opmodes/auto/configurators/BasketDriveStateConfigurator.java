@@ -21,6 +21,9 @@ public class BasketDriveStateConfigurator {
     public static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     public static final double SMALL_TOLERANCE = 2;
     public static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
+    public static double x = 9.5;
+    public static double y = 23;
+    public static double h = 108;
 
     /**
      * Configures the DriveToPreloadDropState
@@ -178,11 +181,11 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(8, 12),
-                                        new Point(10.5, 19)
+                                        new Point(x, y)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(75),
-                                Math.toRadians(108))
+                                Math.toRadians(h))
                         .build()
         );
 
@@ -206,11 +209,11 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10.5, 19),
+                                        new Point(x, y),
                                         new Point(9, 12)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(108),
+                        .setLinearHeadingInterpolation(Math.toRadians(h),
                                 Math.toRadians(72))
                         .build()
         );
