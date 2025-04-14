@@ -130,15 +130,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         Trigger driveLeftBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         Trigger driveRightBumper = driverGamepad.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
 
-        driveLeftBumper.whenActive(() -> {
-            if (headingLockCommand.isScheduled()) {
-                autoSpecimenCycle.schedule();
-                gamepad1.rumbleBlips(2);
-            } else {
-                headingLockCommand.schedule();
-                gamepad1.rumbleBlips(1);
-            }
-        });
+        driveLeftBumper.whenActive(autoSpecimenCycle);
         driveRightBumper.whenActive(() -> {
             if (robotState.getCurrentGear() == DriveGears.NOT_ENGAGED) {
                 robotState.setCurrentGear(DriveGears.ENGAGED);

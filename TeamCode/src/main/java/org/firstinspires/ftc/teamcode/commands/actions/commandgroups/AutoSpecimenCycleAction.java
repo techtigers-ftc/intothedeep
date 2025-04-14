@@ -59,7 +59,7 @@ public class AutoSpecimenCycleAction extends SequentialCommandGroup {
                 }),
                 new ParallelCommandGroup(
                         new TeleDriveCommand(drive,
-                                new CustomPIDFCoefficients(0.08, 0, 0.001, 0),
+                                new CustomPIDFCoefficients(0.08, 0, 0.004, 0),
                                 new CustomFilteredPIDFCoefficients(0.0055, 0, 0.0035, 0.6, 0),
                                 new CustomPIDFCoefficients(0.9, 0, 0.015, 0),
                                 () -> startPosition.getX() - X_TO_SLAP,
