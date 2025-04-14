@@ -49,7 +49,7 @@ public class IntakeFineAlignAction extends SequentialCommandGroup {
                 new InstantCommand(() -> robotState.setVisionAligning(true)),
                 new ParallelCommandGroup(
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 2.5, 0.75, 0.3),
+                                () -> targetPositions[3] - LimelightSubsystem.SLIDES_OFFSET - 2, 0.5, 0.3),
                         new IntakeClawRotationAction(intake, clawRotationSupplier, 150),
                         new TeleHoldPointAction(drive, robotState,
                                 () -> targetPositions[0],
