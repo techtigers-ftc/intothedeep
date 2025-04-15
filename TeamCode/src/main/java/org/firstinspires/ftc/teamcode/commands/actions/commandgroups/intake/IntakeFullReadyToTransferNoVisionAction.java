@@ -42,7 +42,7 @@ public class IntakeFullReadyToTransferNoVisionAction extends SequentialCommandGr
         addRequirements(intake, dropper);
         addCommands(
                 new IntakePrepareToTransferAction(intake, robotState),
-                new WaitCommand(50),
+//                new WaitCommand(50),
                 new IntakeCheckSensorAction(robotState, command == null ? this : command),
                 new InstantCommand(() -> robotState.setVisionAligning(false)),
                 new SequentialReadyToTransferAction(intake, dropper, robotState)

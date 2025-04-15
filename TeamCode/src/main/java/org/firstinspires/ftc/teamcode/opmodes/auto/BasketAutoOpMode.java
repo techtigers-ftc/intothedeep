@@ -41,7 +41,7 @@ public abstract class BasketAutoOpMode extends BaseOpMode {
     private DropperSubsystem dropper;
     private static final double FIRST_INTAKE_SLIDES_EXTENSION = 12;
     private static final double SECOND_INTAKE_SLIDES_EXTENSION = 15;
-    private static final double THIRD_INTAKE_SLIDES_EXTENSION = 15;
+    private static final double THIRD_INTAKE_SLIDES_EXTENSION = 13.5;
 
     protected abstract boolean isBlue();
 

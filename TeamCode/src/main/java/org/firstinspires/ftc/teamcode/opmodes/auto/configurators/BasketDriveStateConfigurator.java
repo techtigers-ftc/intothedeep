@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
@@ -178,7 +180,7 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(8, 12),
-                                        new Point(10.5, 19)
+                                        new Point(10, 19)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(75),
@@ -206,7 +208,7 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(10.5, 19),
+                                        new Point(10, 19),
                                         new Point(9, 12)
                                 )
                         )
