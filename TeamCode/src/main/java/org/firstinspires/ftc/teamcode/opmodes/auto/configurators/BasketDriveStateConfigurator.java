@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.configurators;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveFromSubmersibleSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleDropState;
 import org.firstinspires.ftc.teamcode.autostates.basket.DriveToGeneralSampleIntakeState;
@@ -21,9 +23,6 @@ public class BasketDriveStateConfigurator {
     public static final double LARGE_ANGLE_TOLERANCE = Math.toRadians(5);
     public static final double SMALL_TOLERANCE = 2;
     public static final double SMALL_ANGLE_TOLERANCE = Math.toRadians(3);
-    public static double x = 9.5;
-    public static double y = 23;
-    public static double h = 108;
 
     /**
      * Configures the DriveToPreloadDropState
@@ -181,11 +180,11 @@ public class BasketDriveStateConfigurator {
                         .addPath(
                                 new BezierLine(
                                         new Point(8, 12),
-                                        new Point(x, y)
+                                        new Point(10, 19)
                                 )
                         )
                         .setLinearHeadingInterpolation(Math.toRadians(75),
-                                Math.toRadians(h))
+                                Math.toRadians(108))
                         .build()
         );
 
@@ -209,11 +208,11 @@ public class BasketDriveStateConfigurator {
                 new PathBuilder()
                         .addPath(
                                 new BezierLine(
-                                        new Point(x, y),
+                                        new Point(10, 19),
                                         new Point(9, 12)
                                 )
                         )
-                        .setLinearHeadingInterpolation(Math.toRadians(h),
+                        .setLinearHeadingInterpolation(Math.toRadians(108),
                                 Math.toRadians(72))
                         .build()
         );
