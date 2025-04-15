@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
@@ -19,8 +20,8 @@ public class IntakeTrackingAction extends CommandBase {
     private double frameCount;
     private double detectedSlidePosition;
 
-    private static final double BASE_POWER = 0.275;
-    private static final double INCREMENTAL_POWER = 0.005;
+    public static double BASE_POWER = 0.35;
+    public static double INCREMENTAL_POWER = 0;
 
     /**
      * Constructs a new IntakeTrackingAction
@@ -40,12 +41,13 @@ public class IntakeTrackingAction extends CommandBase {
     public void initialize() {
         intake.setDirectControl(true);
         robotState.setIntakeTracking(true);
+        robotState.setCoarseCameraMode(false);
     }
 
     @Override
     public void execute() {
         double power;
-        if (robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED) {
+        if (robotState.isBlockDetected()) {
             if (frameCount == 0) {
                 detectedSlidePosition = intake.getCurrentSlidePositionInches();
             }
@@ -55,14 +57,15 @@ public class IntakeTrackingAction extends CommandBase {
             frameCount = 0;
             power = BASE_POWER + INCREMENTAL_POWER * intake.getCurrentSlidePositionInches();
         }
-//        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
-//        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        RobotLog.dd("IntakeTrackingAction", "Setting motor power: %f", power);
+        RobotLog.dd("IntakeTrackingAction", "Current Slide Extension: %f", intake.getCurrentSlidePositionInches());
+        RobotLog.dd("IntakeTrackingAction", "Frame Count: %f", frameCount);
         intake.setMotorPower(power);
     }
 
     @Override
     public boolean isFinished() {
-        return robotState.getFineBlockDetectionState() == BlockDetectionState.DETECTED && frameCount > 2;
+        return robotState.isBlockDetected() && frameCount > 2;
     }
 
     @Override
@@ -70,10 +73,6 @@ public class IntakeTrackingAction extends CommandBase {
         intake.setMotorPower(0);
         intake.setDirectControl(false);
         robotState.setIntakeTracking(false);
-        if (!interrupted) {
-            intake.moveSlidesAbsolute(detectedSlidePosition - 0.5);
-        } else {
-            intake.moveSlidesRelative(0);
-        }
+        intake.moveSlidesRelative(0);
     }
 }

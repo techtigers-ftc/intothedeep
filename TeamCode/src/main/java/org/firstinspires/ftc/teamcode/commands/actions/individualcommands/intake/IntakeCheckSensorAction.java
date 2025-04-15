@@ -10,21 +10,42 @@ import org.firstinspires.ftc.teamcode.utils.enums.RobotBlockPosition;
 public class IntakeCheckSensorAction extends CommandBase {
     private final RobotState robotState;
     private final CommandBase command;
+    private double runCounter;
+    private boolean blockDetected;
 
+    /**
+     * Constructor for IntakeCheckSensorAction
+     * @param robotState the robot state
+     * @param command the command to cancel if there is no block
+     */
     public IntakeCheckSensorAction(RobotState robotState, CommandBase command) {
         this.robotState = robotState;
         this.command = command;
+        runCounter = 0;
+        blockDetected = false;
     }
 
     @Override
     public void initialize() {
-        if (!robotState.isAuto() && robotState.getBlockPosition() == RobotBlockPosition.NONE && robotState.isBreakBeamEnabled()) {
+        runCounter = 0;
+        blockDetected = false;
+    }
+
+    @Override
+    public void execute() {
+        if (robotState.getBlockPosition() == RobotBlockPosition.NONE && robotState.isBreakBeamEnabled()) {
+            runCounter++;
+        } else {
+            blockDetected = true;
+        }
+
+        if (runCounter > 3) {
             command.cancel();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return blockDetected;
     }
 }

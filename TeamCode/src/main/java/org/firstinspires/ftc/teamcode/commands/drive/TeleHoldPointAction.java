@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.localizers.RobotStateLocalizer;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.utils.PoseTranslator;
@@ -63,6 +61,35 @@ public class TeleHoldPointAction extends TimeoutCommand {
     }
 
     /**
+     * Creates a new HoldPointAction and allows you to specify a timeout
+     *
+     * @param drive           the drive subsystem
+     * @param robotState      the robot state
+     * @param xSupplier       a supplier which gives x values for the target position
+     * @param ySupplier       a supplier which gives x values for the target position
+     * @param headingSupplier a supplier which gives heading values for the target position
+     * @param tolerance       the tolerance for the distance to the target
+     * @param angleTolerance  the tolerance for the angle to the target
+     * @param timeout         the timeout for the hold point
+     */
+    public TeleHoldPointAction(DriveSubsystem drive, RobotState robotState,
+                               DoubleSupplier xSupplier,
+                               DoubleSupplier ySupplier, DoubleSupplier headingSupplier,
+                               double tolerance, double angleTolerance, double timeout) {
+        super(timeout);
+        this.drive = drive;
+        this.robotState = robotState;
+        this.xSupplier = xSupplier;
+        this.ySupplier = ySupplier;
+        this.headingSupplier = headingSupplier;
+        this.tolerance = tolerance;
+        this.angleTolerance = angleTolerance;
+        follower = new Follower(new RobotStateLocalizer(robotState));
+        end = false;
+//        addRequirements(drive);
+    }
+
+    /**
      * Creates a new TeleHoldPointAction (overload constructor)
      *
      * @param drive          the drive subsystem
@@ -106,11 +133,14 @@ public class TeleHoldPointAction extends TimeoutCommand {
     public void initialize() {
         super.initialize();
         // Set the PIDF coefficients
-        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.35, 0, 0.01, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
         follower.disableSecondaryPIDS();
+        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.45, 0, 0.03, 0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
 
-//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, 0));
+//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.55, 0, 0.01, 0));
+//        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+
+//        follower.setTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.aTranslationalP, 0, TuningConstants.bTranslationalD, TuningConstants.aaTranslationalF));
 //        follower.setDrivePIDF(new CustomFilteredPIDFCoefficients(TuningConstants.cDriveP, 0, TuningConstants.dDriveD, 0.6, 0));
 //        follower.setHeadingPIDF(new CustomPIDFCoefficients(TuningConstants.eHeadingP, 0, TuningConstants.fHeadingD, 0));
 //        follower.setSecondaryTranslationalPIDF(new CustomPIDFCoefficients(TuningConstants.gSecondaryTranslationalP, 0, TuningConstants.hSecondaryTranslationalD, 0));

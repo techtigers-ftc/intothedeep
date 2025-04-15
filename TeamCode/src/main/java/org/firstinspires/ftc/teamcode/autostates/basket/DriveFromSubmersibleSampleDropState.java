@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.autostates.basket;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.autostates.DriveStateBase;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.SequentialReadyToTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.TransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperHighBasketNoTransferAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakePrepareToPickupAction;
@@ -24,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
 public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
     private static final String LOG_TAG =
             DriveFromSubmersibleSampleDropState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 6;
+    private static final double TIME_TO_INTAKE = 4;
     private boolean isOpenFinished;
 
     /**
@@ -36,17 +38,18 @@ public class DriveFromSubmersibleSampleDropState extends DriveStateBase {
      * @param robotState The robot state
      */
     public DriveFromSubmersibleSampleDropState(String name, DriveSubsystem drive, DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
-        super(name, drive, robotState);
+        super(name, drive, robotState, 3);
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new ReadyToTransferAction(intake, dropper, robotState),
+                        new SequentialReadyToTransferAction(intake, dropper, robotState),
+//                        new WaitCommand(100),
                         new TransferAction(dropper, intake, robotState),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new DropperHighBasketNoTransferAction(dropper, robotState),
-                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 13),
-                                        new DropperOpenAction(dropper, 50),
+                                        new WaitUntilCommand(() -> robotState.getRobotCurrentPose().getY() < 14 || robotState.getAutoRemainingTime() < 0.1),
+                                        new DropperOpenAction(dropper, 0),
                                         new InstantCommand(() -> isOpenFinished = true)
                                 ),
                                 new IntakePrepareToPickupAction(intake, robotState)

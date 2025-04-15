@@ -1,10 +1,21 @@
 package org.firstinspires.ftc.teamcode.pedropathing.localization.localizers;
 
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.forwardTicksToInches;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.leftEncoderDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.leftEncoder_HardwareMapName;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.leftY;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.rightEncoderDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.rightEncoder_HardwareMapName;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.rightY;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.strafeEncoderDirection;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.strafeEncoder_HardwareMapName;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.strafeTicksToInches;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.strafeX;
+import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.turnTicksToInches;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import static org.firstinspires.ftc.teamcode.pedropathing.localization.constants.ThreeWheelConstants.*;
 
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Encoder;
 import org.firstinspires.ftc.teamcode.pedropathing.localization.Localizer;

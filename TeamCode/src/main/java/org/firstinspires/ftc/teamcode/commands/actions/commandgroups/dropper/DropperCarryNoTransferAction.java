@@ -13,24 +13,24 @@ import org.firstinspires.ftc.teamcode.utils.enums.DropperState;
  * A command group that moves the dropper to the forward high chamber drop position, with the
  * specimen upside down, ready to be clipped downwards onto the high chamber.
  */
-public class DropperForwardCarryNoTransferAction extends ParallelCommandGroup {
-    private static final String LOG_TAG = DropperForwardCarryNoTransferAction.class.getSimpleName();
+public class DropperCarryNoTransferAction extends ParallelCommandGroup {
+    private static final String LOG_TAG = DropperCarryNoTransferAction.class.getSimpleName();
     private final RobotState robotState;
 
     /**
-     * Creates a new DropperForwardCarryNoTransferAction
+     * Creates a new DropperCarryNoTransferAction
      *
      * @param dropper    the dropper subsystem
      * @param robotState the robot state
      */
-    public DropperForwardCarryNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
+    public DropperCarryNoTransferAction(DropperSubsystem dropper, RobotState robotState) {
         this.robotState = robotState;
         addRequirements(dropper);
         addCommands(
                 new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_CHAMBER_POSITION, 0.5),
-                new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 300),
+                new DropperPitchAction(dropper, DropperSubsystem.PITCH_CHAMBER_POSITION, 200),
                 new DropperRotationAction(dropper,
-                        DropperSubsystem.ROTATION_SLAP_POSITION, 300)
+                        DropperSubsystem.ROTATION_SLAP_POSITION, 200)
         );
     }
 

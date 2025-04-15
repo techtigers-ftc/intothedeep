@@ -15,7 +15,7 @@ public class ReadyToTransferAction extends CommandBase {
     private final SequentialCommandGroup sequentialReadyToTransfer;
     private CommandBase currentCommand;
     private final IntakeSubsystem intakeSubsystem;
-    private static final double INTAKE_SAFETY_LIMIT = 12;
+    private static final double INTAKE_SAFETY_LIMIT = 15;
 
     /**
      * Constructor for ReadyToTransferAction

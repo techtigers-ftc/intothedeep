@@ -34,7 +34,7 @@ public class AutoSpecimenCycleTestOpMode extends BaseOpMode {
         GoBodometrySubsystem odometry = new GoBodometrySubsystem(hardwareMap, robotState, new Waypoint(113,13, Math.toRadians(90)));
         registerSubsystems(drive, dropper, intake, sensor, odometry);
 
-        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, robotState);
+        AutoSpecimenCycleAction autoSpecimenCycle = new AutoSpecimenCycleAction(drive, dropper, odometry, robotState);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(autoSpecimenCycle);
 
         DropperWallIntakeNoTransferAction dropperWallIntakeAction = new DropperWallIntakeNoTransferAction(dropper, robotState);

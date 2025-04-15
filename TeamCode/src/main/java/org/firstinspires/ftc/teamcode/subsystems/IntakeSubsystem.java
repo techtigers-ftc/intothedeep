@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.DifferentialController;
@@ -28,28 +30,30 @@ import team.techtigers.base.CloseableSubsystem;
  */
 @Config
 public class  IntakeSubsystem extends CloseableSubsystem {
-    public static double CLAW_ROTATION_BUFFER = 40;
-    // Zero position: Wrist Pitch: 165, Wrist Rotation: 172, Claw Rotation: 90,
+    public static double CLAW_ROTATION_BUFFER = 50;
+    // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
+    public static double WRIST_PITCH_ZERO = 165;
+    public static double WRIST_ROTATION_ZERO = 165;
 
-    public static final double SLIDES_MAX = 18.75;
-    public static final double WRIST_PITCH_TUCK_POSITION = 50;
-    public static final double WRIST_ROTATION_TUCK_POSITION = 172;
-    public static final double CLAW_ROTATION_TUCK_POSITION = 90;
+    public static double SLIDES_MAX = 18.75;
+    public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 135;
+    public static double WRIST_ROTATION_TUCK_POSITION = WRIST_ROTATION_ZERO;
+    public static double CLAW_ROTATION_TUCK_POSITION = 90;
 
-    public static final double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = 100;
-    public static final double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = 172;
+    public static double WRIST_PITCH_PREPARE_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 55;
+    public static double WRIST_ROTATION_PREPARE_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
 
-    public static final double CLAW_ROTATION_PICKUP_POSITION = 90;
-    public static final double WRIST_PITCH_READY_TO_PICKUP_POSITION = 132;
-    public static final double WRIST_ROTATION_READY_TO_PICKUP_POSITION = 172;
+    public static double WRIST_PITCH_READY_TO_PICKUP_POSITION = WRIST_PITCH_ZERO - 47;
+    public static double WRIST_ROTATION_READY_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
+    public static double CLAW_ROTATION_PICKUP_POSITION = 90;
 
-    public static final double WRIST_PITCH_PECK_POSITION = 159;
+    public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
 
-    public static final double WRIST_PITCH_TRANSFER_POSITION = 107;
-    public static final double WRIST_ROTATION_TRANSFER_POSITION = 5;
-    public static final double CLAW_ROTATION_TRANSFER_POSITION = 90;
+    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 51;
+    public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 170;
+    public static double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
 
@@ -61,15 +65,15 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    public static double CLAW_OPEN_POSITION = 0.68;
+    public static double CLAW_OPEN_POSITION = 0.7;
     public static double CLAW_LOOSE_POSITION = 0.97;
     public static double CLAW_CLOSED_POSITION = 1;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
-    public static double PRIMARY_KP = 0.007;
+    public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0002;
     public static double PRIMARY_KF = 0.001;
-    public static double SECONDARY_KP = 0.011;
+    public static double SECONDARY_KP = 0.008;
     public static double SECONDARY_KI = 0;
     public static double SECONDARY_KD = 0;
     public static double SECONDARY_KF = 0;
@@ -401,6 +405,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
      * @return whether or not the block is in the intake
      */
     public boolean isBlockInIntake() {
+//        RobotLog.dd(tag, "Result: %b, Break beam closed: %b, Claw state: %b", !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED,
+//                breakBeamSensor.getState(), robotState.getIntakeClawState() == ClawState.CLOSED);
         return !breakBeamSensor.getState() && robotState.getIntakeClawState() == ClawState.CLOSED;
     }
 
@@ -466,7 +472,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
         robotState.setIntakeCurrent(rightSlideCurrentAverage.getAverage() + leftSlideCurrentAverage.getAverage());
 
-        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP) {
+        if(robotState.getIntakeState() == IntakeState.READY_TO_PICKUP || robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER) {
             updateBlockPosition();
         }
     }

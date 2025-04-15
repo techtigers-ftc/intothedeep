@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode.autostates.basket;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeCoarseAlignAction;
-import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickUpAction;
+import org.firstinspires.ftc.teamcode.commands.TimeoutWaitUntilCommand;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeFinePickupAction;
+import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeTrackingAction;
+import org.firstinspires.ftc.teamcode.commands.actions.individualcommands.LimelightBlockDetectionResetAction;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.utils.RobotState;
 import org.firstinspires.ftc.teamcode.utils.enums.AutoState;
 import org.firstinspires.ftc.teamcode.utils.enums.IntakeState;
@@ -18,10 +23,12 @@ import team.techtigers.base.statemachine.SequentialCommandGroupState;
  */
 public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoState> {
     private static final String LOG_TAG = SubmersibleIntakeState.class.getSimpleName();
-    private static final double TIME_TO_INTAKE = 2;
-    private static final double TIME_TO_DROP = 2.5;
+    private static final double TIME_TO_INTAKE = 1.5;
+    private static final double TIME_TO_DROP = 1.5;
     private final RobotState robotState;
+    private final IntakeSubsystem intake;
     private boolean blockDetected;
+    private int frameCount;
 
     /**
      * Creates a new SubmersibleIntakeState
@@ -31,15 +38,20 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, RobotState robotState) {
+    public SubmersibleIntakeState(String name, DriveSubsystem drive, IntakeSubsystem intake, LimelightSubsystem limelight, RobotState robotState) {
         super(name, 3);
         this.robotState = robotState;
+        this.intake = intake;
         blockDetected = true;
+        frameCount = 0;
         addCommands(
-                new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeCoarseAlignAction(drive, intake, robotState),
-                new WaitUntilCommand(robotState::isBlockDetected),
-                new IntakeFinePickUpAction(drive, intake, robotState)
+                new WaitUntilCommand(() -> robotState.getRobotVelocity().getPoint().magnitude() < 15),
+                new LimelightBlockDetectionResetAction(limelight),
+                new IntakeTrackingAction(intake, robotState),
+                new TimeoutWaitUntilCommand(robotState::isBlockDetected, 0.2),
+                new InstantCommand(() -> blockDetected = robotState.isBlockDetected()),
+//                new WaitCommand(100),
+                new IntakeFinePickupAction(drive, intake, null, robotState)
         );
     }
 
@@ -47,12 +59,14 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
     public void initialize() {
         super.initialize();
         blockDetected = true;
+        frameCount = 0;
     }
 
     @Override
     public AutoState getCurrentCondition() {
-        boolean blockNotDetected = !blockDetected && !robotState.isVisionAligning() && !robotState.isIntakeTracking();
-        if (blockNotDetected || super.isTimeoutReached()) {
+        boolean trackingTimeout = IntakeSubsystem.SLIDES_MAX - intake.getCurrentSlidePositionInches() < 2
+                && robotState.isIntakeTracking();
+        if (super.isTimeoutReached() || trackingTimeout || !blockDetected) {
             return AutoState.TIMEOUT;
         } else {
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
@@ -65,6 +79,10 @@ public class SubmersibleIntakeState extends SequentialCommandGroupState<AutoStat
                         return AutoState.SAMPLE_INTAKE_COMPLETE;
                     }
                 } else {
+                    if (frameCount < 5) {
+                        frameCount++;
+                        return AutoState.RUNNING;
+                    }
                     return AutoState.SAMPLE_INTAKE_FAILED;
                 }
             } else {

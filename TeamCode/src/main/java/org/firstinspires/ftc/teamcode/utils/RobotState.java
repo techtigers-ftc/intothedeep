@@ -68,10 +68,11 @@ public class RobotState extends GlobalState {
     private double intakeSlidePosition;
     private boolean hasBlockBeenRecentlyDetected;
 
-
     private boolean runDistanceSensor;
     private boolean headingLockEnabled;
     private double distanceSensorValue;
+    private double robotPitch;
+    private boolean isLowBasketMode;
 
     /**
      * Initializes a new RobotState
@@ -128,6 +129,8 @@ public class RobotState extends GlobalState {
         intakeSlidePosition = 0;
         absoluteBlockPosition = new Waypoint(0, 0, 0);
         hasBlockBeenRecentlyDetected = false;
+        robotPitch = 0;
+        isLowBasketMode = false;
     }
 
     /**
@@ -213,7 +216,7 @@ public class RobotState extends GlobalState {
     /**
      * @return true if the robot is ascending, false otherwise
      */
-    public boolean getIsAscending() {
+    public boolean isAscending() {
         return isAscending;
     }
 
@@ -222,7 +225,7 @@ public class RobotState extends GlobalState {
      *
      * @param isAscending is the robot ascending
      */
-    public void setIsAscending(boolean isAscending) {
+    public void setAscending(boolean isAscending) {
         this.isAscending = isAscending;
     }
 
@@ -939,5 +942,36 @@ public class RobotState extends GlobalState {
      */
     public void setIntakeSlidePosition(double intakeSlidePosition) {
         this.intakeSlidePosition = intakeSlidePosition;
+    }
+
+    /**
+     * @return The pitch angle of the robot in degrees
+     */
+    public double getRobotPitch() {
+        return robotPitch;
+    }
+
+    /**
+     * Sets the pitch angle of the robot
+     * @param robotPitch the pitch angle of the robot in degrees
+     */
+    public void setRobotPitch(double robotPitch) {
+        this.robotPitch = robotPitch;
+    }
+
+    /**
+     * Returns whether the manipulator is in low basket mode
+     * @return whether the manipulator is in low basket mode
+     */
+    public boolean getIsLowBasketMode(){
+        return isLowBasketMode;
+    }
+
+    /**
+     * Sets whether the manipulator is in low basket mode
+     * @param isLowBasketMode whether the manipulator is in low basket mode
+     */
+    public void setIsLowBasketMode(boolean isLowBasketMode){
+        this.isLowBasketMode = isLowBasketMode;
     }
 }

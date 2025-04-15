@@ -11,32 +11,27 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 
 /**
  * A command group that transfers the sample from the intake to the dropper and
- * moves the dropper to the backward high chamber drop position, with the specimen
- * upside down, ready to be clipped upwards onto the high chamber
+ * moves the dropper to the forward high chamber drop position, with the specimen
+ * upside down, ready to be clipped downwards onto the high chamber
  */
-public class DropperBackwardCarryAction extends SequentialCommandGroup {
-    private static final String LOG_TAG = DropperBackwardCarryAction.class.getSimpleName();
+public class DropperCarryAction extends SequentialCommandGroup {
+    private static final String LOG_TAG = DropperCarryAction.class.getSimpleName();
 
     /**
-     * Creates a new DropperBackwardCarryAction
+     * Creates a new DropperCarryAction
      *
      * @param dropper    the dropper subsystem
      * @param intake     the intake subsystem
      * @param robotState the robot state
      */
-    public DropperBackwardCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
+    public DropperCarryAction(DropperSubsystem dropper, IntakeSubsystem intake, RobotState robotState) {
         addRequirements(dropper, intake);
         addCommands(
                 new TransferAction(dropper, intake, robotState),
                 new ParallelCommandGroup(
                         new IntakeTuckAfterTransferAction(dropper, intake, robotState),
-                        new DropperBackwardCarryNoTransferAction(dropper, robotState)
+                        new DropperCarryNoTransferAction(dropper, robotState)
                 )
         );
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
     }
 }

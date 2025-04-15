@@ -22,7 +22,7 @@ import team.techtigers.base.CloseableSubsystem;
  * A subsystem that controls the drivebase.
  */
 public class DriveSubsystem extends CloseableSubsystem {
-    private static final double GEAR_MULTIPLIER = 0.5;
+    private static final double GEAR_MULTIPLIER = 0.9;
     private static final double TURN_MULTIPLIER = 0.6;
     private static final double TURN_GEAR_MULTIPLIER = 0.5;
     public final DcMotor frontLeft, frontRight;
@@ -131,9 +131,9 @@ public class DriveSubsystem extends CloseableSubsystem {
         double turnSpeed = Range.clip(rotation, -1, 1) * TURN_MULTIPLIER;
 
         if (robotstate.getCurrentGear() == DriveGears.ENGAGED) {
-//            strafeSpeed *= GEAR_MULTIPLIER;
-//            forwardSpeed *= GEAR_MULTIPLIER;
-            turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
+            strafeSpeed *= GEAR_MULTIPLIER;
+            forwardSpeed *= GEAR_MULTIPLIER;
+//            turnSpeed *= TURN_GEAR_MULTIPLIER; // This is intended to be on top of the other multiplier
         }
 
 

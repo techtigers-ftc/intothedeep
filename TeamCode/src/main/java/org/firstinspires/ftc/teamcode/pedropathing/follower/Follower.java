@@ -32,6 +32,9 @@ import android.util.Log;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import org.firstinspires.ftc.teamcode.pedropathing.util.Constants;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
+import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -50,8 +53,6 @@ import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathCallback;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.PathChain;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Point;
 import org.firstinspires.ftc.teamcode.pedropathing.pathgen.Vector;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomFilteredPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.pedropathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedropathing.util.Drawing;
 import org.firstinspires.ftc.teamcode.pedropathing.util.DriveVectors;
@@ -61,6 +62,7 @@ import org.firstinspires.ftc.teamcode.pedropathing.util.PIDFController;
 import org.firstinspires.ftc.teamcode.utils.TuningConstants;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,7 +98,7 @@ public class Follower {
 
     private boolean followingPathChain;
     private boolean holdingPosition;
-    private boolean isBusy;
+    private boolean isBusy, isTurning;
     private boolean reachedParametricPathEnd;
     private boolean holdPositionAtEnd;
     private boolean teleopDrive;
@@ -153,6 +155,7 @@ public class Follower {
     private double[] driveErrors;
     private double rawDriveError;
     private double previousRawDriveError;
+    private double turnHeadingErrorThreshold;
 
     public static boolean drawOnDashboard = true;
     public static boolean useTranslational = true;
@@ -547,6 +550,10 @@ public class Follower {
 //                            }
 //                        }
 //                    }
+                    if(headingError < turnHeadingErrorThreshold && isTurning) {
+                        isTurning = false;
+                        isBusy = false;
+                    }
                 } else {
                     if (isBusy) {
                         closestPose = currentPath.getClosestPoint(poseUpdater.getPose(), BEZIER_CURVE_SEARCH_LIMIT);
@@ -1169,7 +1176,7 @@ public class Follower {
      * @return true if the robot is stuck and false otherwise
      */
     public boolean isRobotStuck() {
-        return zeroVelocityDetectedTimer != null && zeroVelocityDetectedTimer.milliseconds() > 500.0;
+        return zeroVelocityDetectedTimer != null;
     }
 
     /**
@@ -1223,6 +1230,8 @@ public class Follower {
     public void turn(double radians, boolean isLeft) {
         Pose temp = new Pose(getPose().getX(), getPose().getY(), getPose().getHeading() + (isLeft ? radians : -radians));
         holdPoint(temp);
+        isTurning = true;
+        isBusy = true;
     }
 
     /** Turns to a specific heading
@@ -1230,6 +1239,8 @@ public class Follower {
      */
     public void turnTo(double radians) {
         holdPoint(new Pose(getPose().getX(), getPose().getY(), Math.toRadians(radians)));
+        isTurning = true;
+        isBusy = true;
     }
 
     /** Turns to a specific heading in degrees
@@ -1245,5 +1256,43 @@ public class Follower {
      */
     public void turnDegrees(double degrees, boolean isLeft) {
         turn(Math.toRadians(degrees), isLeft);
+    }
+
+    public boolean isTurning() {
+        return isTurning;
+    }
+    /**
+     * Checks if the robot is at a certain point within certain tolerances
+     * @param point Point to compare with the current point
+     * @param xTolerance Tolerance for the x position
+     * @param yTolerance Tolerance for the y position
+     */
+    public boolean atPoint(Point point, double xTolerance, double yTolerance) {
+        return Math.abs(point.getX() - getPose().getX()) < xTolerance && Math.abs(point.getY() - getPose().getY()) < yTolerance;
+    }
+
+    /**
+     * Checks if the robot is at a certain pose within certain tolerances
+     * @param pose Pose to compare with the current pose
+     * @param xTolerance Tolerance for the x position
+     * @param yTolerance Tolerance for the y position
+     * @param headingTolerance Tolerance for the heading
+     */
+    public boolean atPose(Pose pose, double xTolerance, double yTolerance, double headingTolerance) {
+        return Math.abs(pose.getX() - getPose().getX()) < xTolerance && Math.abs(pose.getY() - getPose().getY()) < yTolerance && Math.abs(pose.getHeading() - getPose().getHeading()) < headingTolerance;
+    }
+
+    /**
+     * Checks if the robot is at a certain pose within certain tolerances
+     * @param pose Pose to compare with the current pose
+     * @param xTolerance Tolerance for the x position
+     * @param yTolerance Tolerance for the y position
+     */
+    public boolean atPose(Pose pose, double xTolerance, double yTolerance) {
+        return Math.abs(pose.getX() - getPose().getX()) < xTolerance && Math.abs(pose.getY() - getPose().getY()) < yTolerance;
+    }
+
+    public double getHeadingError() {
+        return headingError;
     }
 }

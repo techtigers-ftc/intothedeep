@@ -30,20 +30,21 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double SLIDES_LOW_BASKET_POSITION = 11;
     public static final double SLIDES_PRE_TRANSFER_POSITION = 6;
     public static final double SLIDES_TRANSFER_POSITION = 0;
-    public static final double SLIDES_CHAMBER_POSITION = 5.25;
+    public static final double SLIDES_CHAMBER_POSITION = 6.25;
     public static final double SLIDES_WALL_INTAKE_POSITION = 0;
 
     // PITCH POSITIONS
     public static final double PITCH_INIT_POSITION = 90;
-    public static final double PITCH_TRANSFER_POSITION = 38;
-    public static final double PITCH_BASKET_POSITION = 225;
+    public static final double PITCH_TRANSFER_POSITION = 45;
+    public static final double PITCH_BASKET_POSITION = 230;
     public static final double PITCH_CHAMBER_POSITION = 145; // 180
     public static final double PITCH_SLAP_POSITION = 80;
     public static final double PITCH_WALL_INTAKE_POSITION = 310;
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 205;
-    public static final double ROTATION_BASKET_POSITION = 205;
+    public static final double ROTATION_BASKET_DIAGONAL_POSITION = 175;
+    public static final double ROTATION_BASKET_HORIZONTAL_POSITION = 105;
     public static final double ROTATION_SLAP_POSITION = 205;
     public static final double ROTATION_WALL_INTAKE_POSITION = 5;
 
@@ -57,10 +58,10 @@ public class DropperSubsystem extends CloseableSubsystem {
     private static final double SERVO_GEAR_RATIO = 40.0 / 26.0;
     // Old values for an axon micro: closed 0.6, open 0.24
     // New values for an injora: closed 0.6, open 0.26
-    // New claw positions for gobilda claw servo: closed 0.39, open 0.23
+    // claw open/close positions are swapped for the gobilda servo
     public static double CLAW_OPENED_POSITION = 0.23;
-    public static double CLAW_CLOSED_POSITION = 0.39;
-    public static double PRIMARY_KP = 0.011;
+    public static double CLAW_CLOSED_POSITION = 0.40;
+    public static double PRIMARY_KP = 0.009;
     public static double PRIMARY_KI = 0;
     public static double PRIMARY_KD = 0.0001;
     public static double PRIMARY_KF = 0;
@@ -179,6 +180,17 @@ public class DropperSubsystem extends CloseableSubsystem {
             openClaw();
         } else {
             closeClaw();
+        }
+    }
+
+    /**
+     * Toggles the claw between vertical and horizontal drops
+     */
+    public void toggleRotation() {
+        if (Math.abs(getRotation() - ROTATION_BASKET_HORIZONTAL_POSITION) < 1) {
+            setWristAbsolute(getPitch(), ROTATION_BASKET_DIAGONAL_POSITION);
+        } else {
+            setWristAbsolute(getPitch(), ROTATION_BASKET_HORIZONTAL_POSITION);
         }
     }
 
@@ -343,7 +355,7 @@ public class DropperSubsystem extends CloseableSubsystem {
 
     @Override
     public void periodic() {
-        if (!robotState.getIsAscending()) {
+        if (!robotState.isAscending()) {
             if (getCurrentSlidePositionInches() > 23 && inPrimarySlideMode) {
                 slideController.setPIDFCoefficients(SECONDARY_COEFFICIENTS);
                 inPrimarySlideMode = false;

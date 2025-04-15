@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 /**
- * An autonomous opmode on the specimen side of the blue alliance, clipping 5 specimens and parking
+ * An autonomous opmode on the specimen side of the red alliance, clipping 5 specimens and parking
  */
 @Autonomous(name = "Blue Specimen 5+0", group = "Specimen Auto")
 public class BlueSpecimenParkAutoOpMode extends SpecimenAutoOpMode {
@@ -12,8 +12,7 @@ public class BlueSpecimenParkAutoOpMode extends SpecimenAutoOpMode {
         return true;
     }
 
-    @Override
-    protected boolean doSample() {
+    protected boolean doSample(){
         return false;
     }
 }

@@ -32,7 +32,7 @@ public class DropperTransferAction extends ParallelCommandGroup {
                         300),
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                 new DropperSlidesAbsoluteAction(dropper, DropperSubsystem.SLIDES_TRANSFER_POSITION,
-                        0.5),
+                        0.75),
                 new DropperOpenAction(dropper)
         );
     }

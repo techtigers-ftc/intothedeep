@@ -12,8 +12,7 @@ public class RedSpecimenParkAutoOpMode extends SpecimenAutoOpMode {
         return false;
     }
 
-    @Override
-    protected boolean doSample() {
+    protected boolean doSample(){
         return false;
     }
 }

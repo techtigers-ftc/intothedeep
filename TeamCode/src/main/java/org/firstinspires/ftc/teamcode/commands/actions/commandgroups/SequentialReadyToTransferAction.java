@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.actions.commandgroups;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperTransferAction;
@@ -38,11 +37,13 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
         addRequirements(intake);
         addCommands(
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new IntakeClawRotationAction(intake, () -> 60, 0),
-                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
-                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0)
-                        ),
+//                        new SequentialCommandGroup(
+//                                new IntakeClawRotationAction(intake, () -> 60, 0),
+//                                new WaitUntilCommand(() -> intake.getWristRotation() < 30),
+//                                new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0)
+//                        ),
+                        new IntakeClawRotationAction(intake,
+                                () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 0),
                         new IntakeWristRotationAction(intake,
                                 IntakeSubsystem.WRIST_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,
@@ -52,9 +53,8 @@ public class SequentialReadyToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeLoosenAction(intake, 100),
                         new IntakeSlidesAbsoluteAction(intake,
-                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 0.5)
-                ),
-                new WaitCommand(100)
+                                () -> IntakeSubsystem.SLIDES_TRANSFER_POSITION, 1)
+                )
         );
     }
 
