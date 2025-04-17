@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.utils.RobotState;
 /**
  * An action which drives the robot forward/backward at a specific power until distance
  */
-public class RawPowerToDistanceDriveAction extends CommandBase {
+public class RawPowerToDistanceDriveAction extends TimeoutCommand {
     private DriveSubsystem drive;
     private double power;
     private RobotState robotState;
@@ -22,7 +22,10 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
      * @param power the power to drive the robot at (-1 to 1)
      * @param distance how close the robot should be from the wall in inches
      */
-    public RawPowerToDistanceDriveAction(DriveSubsystem drive, RobotState robotState, double power, double distance) {
+    public RawPowerToDistanceDriveAction(DriveSubsystem drive,
+                                         RobotState robotState, double power,
+                                         double distance, double timeout) {
+        super(timeout);
         this.drive = drive;
         this.power = power;
         this.robotState = robotState;
@@ -31,6 +34,7 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
 
     @Override
     public void initialize() {
+        super.initialize();
         robotState.setRunDistanceSensor(true);
         robotState.setDistanceSensorValue(100);
     }
@@ -42,7 +46,7 @@ public class RawPowerToDistanceDriveAction extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return robotState.getDistanceSensorValue() < distance;
+        return isTimeoutReached() || robotState.getDistanceSensorValue() < distance;
     }
 
     @Override

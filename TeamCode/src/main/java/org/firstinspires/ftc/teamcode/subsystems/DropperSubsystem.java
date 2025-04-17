@@ -39,7 +39,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static final double PITCH_BASKET_POSITION = 230;
     public static final double PITCH_CHAMBER_POSITION = 145; // 180
     public static final double PITCH_SLAP_POSITION = 80;
-    public static final double PITCH_WALL_INTAKE_POSITION = 310;
+    public static final double PITCH_WALL_INTAKE_POSITION = 315;
 
     // ROTATION POSITIONS
     public static final double ROTATION_TRANSFER_POSITION = 205;
@@ -63,7 +63,7 @@ public class DropperSubsystem extends CloseableSubsystem {
     public static double CLAW_CLOSED_POSITION = 0.40;
     public static double PRIMARY_KP = 0.009;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0.0001;
+    public static double PRIMARY_KD = 0;
     public static double PRIMARY_KF = 0;
     public static double SECONDARY_KP = 0.01;
     public static double SECONDARY_KI = 0;

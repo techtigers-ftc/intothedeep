@@ -25,7 +25,7 @@ public class DistanceSensorTestOpMode extends BaseOpMode {
         registerSubsystems(sensorSubsystem);
         robotState.setRunDistanceSensor(true);
 
-        RawPowerToDistanceDriveAction distanceDriveAction = new RawPowerToDistanceDriveAction(drive, robotState, -0.5, 1.5);
+        RawPowerToDistanceDriveAction distanceDriveAction = new RawPowerToDistanceDriveAction(drive, robotState, -0.5, 1.5, 50);
         driverGamepad.getGamepadButton(GamepadKeys.Button.A).whenPressed(distanceDriveAction);
     }
 
