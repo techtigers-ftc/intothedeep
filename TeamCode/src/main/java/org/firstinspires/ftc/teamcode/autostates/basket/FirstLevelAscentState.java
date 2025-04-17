@@ -37,7 +37,7 @@ public class FirstLevelAscentState extends ParallelCommandGroupState<AutoState> 
                 new DropperRotationAction(dropper, DropperSubsystem.ROTATION_TRANSFER_POSITION, 300),
                 new IntakeTuckAction(intake, robotState),
                 new DropperSlidesAbsoluteAction(dropper, 17, 1),
-                new RawPowerDriveAction(drive, 1, 10)
+                new RawPowerDriveAction(drive, 1, 1)
         );
     }
 
