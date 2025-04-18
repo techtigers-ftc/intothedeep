@@ -305,7 +305,8 @@ def runPipeline(frame, llrobot):
 
             frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
-
+                if cv2.contourArea(sep_contour) < small_contour_area:
+                    continue
                 if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
                     continue
                 mask = np.zeros(gray.shape, dtype=np.uint8)
