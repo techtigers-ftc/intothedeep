@@ -34,8 +34,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
-    public static double WRIST_PITCH_ZERO = 165;
-    public static double WRIST_ROTATION_ZERO = 165;
+    public static double WRIST_PITCH_ZERO = 154;
+    public static double WRIST_ROTATION_ZERO = 177;
 
     public static double SLIDES_MAX = 18.75;
     public static double WRIST_PITCH_TUCK_POSITION = WRIST_PITCH_ZERO - 135;
@@ -51,8 +51,8 @@ public class  IntakeSubsystem extends CloseableSubsystem {
 
     public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
 
-    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 51;
-    public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 170;
+    public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 55;
+    public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 165;
     public static double CLAW_ROTATION_TRANSFER_POSITION = 90;
 
     public static final double SLIDES_TRANSFER_POSITION = 0;
@@ -65,13 +65,13 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double MOTOR_TICKS_PER_INCH = (1.0 / DIST_PER_MOTOR_TICK) * ERROR_FACTOR;
     private static final double SERVO_GEAR_RATIO = 64.0 / 48.0; // Driver / Follower
     private static final double DIFFERENTIAL_GEAR_RATIO = 0.9; //Driver / Follower
-    public static double CLAW_OPEN_POSITION = 0.7;
-    public static double CLAW_LOOSE_POSITION = 0.97;
-    public static double CLAW_CLOSED_POSITION = 1;
+    public static double CLAW_CLOSED_POSITION = 0.83;
+    public static double CLAW_LOOSE_POSITION = 0.8;
+    public static double CLAW_OPEN_POSITION = 0.5;
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0.0002;
+    public static double PRIMARY_KD = 0.0003;
     public static double PRIMARY_KF = 0.001;
     public static double SECONDARY_KP = 0.008;
     public static double SECONDARY_KI = 0;

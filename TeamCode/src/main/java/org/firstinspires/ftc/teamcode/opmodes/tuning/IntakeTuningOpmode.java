@@ -53,8 +53,8 @@ public class IntakeTuningOpmode extends BaseOpMode {
 
         // Presets for the differential
         driverGamepad.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
-            intakeSubsystem.setWristAbsolute(165,
-                    IntakeSubsystem.WRIST_ROTATION_TUCK_POSITION);
+            intakeSubsystem.setWristAbsolute(IntakeSubsystem.WRIST_PITCH_ZERO,
+                    IntakeSubsystem.WRIST_ROTATION_ZERO);
         });
 
         // Claw Rotation

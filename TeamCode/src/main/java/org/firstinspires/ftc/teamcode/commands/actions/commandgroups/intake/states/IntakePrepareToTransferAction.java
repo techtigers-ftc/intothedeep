@@ -33,7 +33,7 @@ public class IntakePrepareToTransferAction extends SequentialCommandGroup {
                 new ParallelCommandGroup(
 //                        new IntakeClawRotationAction(intake, () -> IntakeSubsystem.CLAW_ROTATION_TRANSFER_POSITION, 100),
                         new IntakeWristPitchAction(intake,
-                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 10, 75)
+                                IntakeSubsystem.WRIST_PITCH_TRANSFER_POSITION - 10, 125)
                 )
         );
     }
