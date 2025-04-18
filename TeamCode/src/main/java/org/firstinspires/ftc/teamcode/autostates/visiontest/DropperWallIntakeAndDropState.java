@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.autostates.visiontest;
 
 
+import com.arcrobotics.ftclib.command.WaitCommand;
+
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.dropper.DropperWallIntakeAction;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -29,6 +31,7 @@ public class DropperWallIntakeAndDropState extends SequentialCommandGroupState<A
         this.robotState = robotState;
 
         addCommands(
+                new WaitCommand(200),
                 new DropperWallIntakeAction(dropper, intake, robotState)
         );
     }

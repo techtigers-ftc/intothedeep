@@ -34,7 +34,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     // Zero position: Wrist Pitch: 170, Wrist Rotation: 165, Claw Rotation: 90,
     // Claw closed
     // If zeroed correctly, going to a pitch of 50 should make the limelight perpendicular to the floor
-    public static double WRIST_PITCH_ZERO = 154;
+    public static double WRIST_PITCH_ZERO = 158;
     public static double WRIST_ROTATION_ZERO = 177;
 
     public static double SLIDES_MAX = 18.75;
@@ -49,7 +49,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     public static double WRIST_ROTATION_READY_TO_PICKUP_POSITION = WRIST_ROTATION_ZERO;
     public static double CLAW_ROTATION_PICKUP_POSITION = 90;
 
-    public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO;
+    public static double WRIST_PITCH_PECK_POSITION = WRIST_PITCH_ZERO - 15;
 
     public static double WRIST_PITCH_TRANSFER_POSITION = WRIST_PITCH_ZERO - 55;
     public static double WRIST_ROTATION_TRANSFER_POSITION = WRIST_ROTATION_ZERO - 165;
@@ -71,7 +71,7 @@ public class  IntakeSubsystem extends CloseableSubsystem {
     private static final double INTAKE_CLAW_ROTATION_RANGE = 270;
     public static double PRIMARY_KP = 0.006;
     public static double PRIMARY_KI = 0;
-    public static double PRIMARY_KD = 0.0003;
+    public static double PRIMARY_KD = 0.00025;
     public static double PRIMARY_KF = 0.001;
     public static double SECONDARY_KP = 0.008;
     public static double SECONDARY_KI = 0;
