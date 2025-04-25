@@ -33,7 +33,7 @@ public class DriveFromBasketToSpecimenPark extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(250),
+                        new WaitCommand(450),
                         new DropperPreTransferAction(dropper, robotState)
                 ),
                 new SequentialCommandGroup(

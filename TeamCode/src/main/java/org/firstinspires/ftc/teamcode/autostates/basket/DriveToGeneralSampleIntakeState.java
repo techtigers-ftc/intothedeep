@@ -38,7 +38,7 @@ public class DriveToGeneralSampleIntakeState extends DriveStateBase {
                 new InstantCommand(() -> robotState.setIntakeState(IntakeState.READY_TO_PICKUP)),
                 new IntakeReadyToPickupAction(intake, robotState, () -> targetSlidePos),
                 new SequentialCommandGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(300),
                         new DropperPreTransferAction(dropper, robotState)
                 )
         );

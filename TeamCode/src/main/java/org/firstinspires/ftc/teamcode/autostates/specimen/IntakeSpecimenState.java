@@ -32,13 +32,14 @@ public class IntakeSpecimenState extends SequentialCommandGroupState<AutoState> 
      * @param robotState The robot state
      */
     public IntakeSpecimenState(String name, DriveSubsystem drive, DropperSubsystem dropper, RobotState robotState) {
-        super(name, 1);
+        super(name, 5);
         this.robotState = robotState;
         this.dropper = dropper;
         runCounter = 0;
         addCommands(
 //                new WaitCommand(500000),
-                new RawPowerToDistanceDriveAction(drive, robotState, -0.3, 2),
+                new RawPowerToDistanceDriveAction(drive, robotState, -0.3, 2,
+                        1),
                 new DropperCloseAction(dropper, 0),
                 new DropperPitchAction(dropper, 240, 20),
 //                new WaitCommand(10),

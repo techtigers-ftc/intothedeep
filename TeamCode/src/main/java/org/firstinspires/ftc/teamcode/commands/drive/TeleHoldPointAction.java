@@ -135,7 +135,7 @@ public class TeleHoldPointAction extends TimeoutCommand {
         // Set the PIDF coefficients
         follower.disableSecondaryPIDS();
         follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.45, 0, 0.03, 0));
-        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));
+        follower.setHeadingPIDF(new CustomPIDFCoefficients(3.5, 0, 0.06, 0));
 
 //        follower.setTranslationalPIDF(new CustomPIDFCoefficients(0.55, 0, 0.01, 0));
 //        follower.setHeadingPIDF(new CustomPIDFCoefficients(3, 0, 0.06, 0));

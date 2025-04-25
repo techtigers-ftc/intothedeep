@@ -1,11 +1,11 @@
 ### CONFIG
 
 # For blue
-# Exposure = 3300
-# Black Level Offset = 3
-# Sensor Gain = 15.7
+# Exposure = 983
+# Black Level Offset = 2
+# Sensor Gain = 12.9
 # Red Balance = 1184
-# Blue Balance = 1251
+# Blue Balance = 1232
 
 
 import cv2
@@ -305,7 +305,8 @@ def runPipeline(frame, llrobot):
 
             frame = explore_touching_contours(frame, contour)
             for sep_contour in separate_touching_contours(contour):
-
+                if cv2.contourArea(sep_contour) < small_contour_area:
+                    continue
                 if cv2.contourArea(sep_contour) > LARGE_CONTOUR_AREA_FINE:
                     continue
                 mask = np.zeros(gray.shape, dtype=np.uint8)

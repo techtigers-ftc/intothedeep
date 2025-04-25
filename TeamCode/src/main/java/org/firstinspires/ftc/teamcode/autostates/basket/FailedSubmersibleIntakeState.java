@@ -58,7 +58,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
                         new TeleHoldPointAction(
                                 drive, robotState,
                                 () -> robotState.getRobotCurrentPose().getX(),
-                                () -> robotState.getRobotCurrentPose().getY() + 4,
+                                () -> robotState.getRobotCurrentPose().getY() - 2,
                                 () -> robotState.getRobotCurrentPose().getHeading(), 1, Math.toRadians(5)
                         )
                 ),
@@ -95,7 +95,7 @@ public class FailedSubmersibleIntakeState extends SequentialCommandGroupState<Au
             if (robotState.getAutoRemainingTime() < TIME_TO_INTAKE && robotState.isIntakeTracking()) {
                 return AutoState.PARK;
             } else if (robotState.getIntakeState() == IntakeState.PREPARE_TO_TRANSFER && getRunningTime() > 1) {
-                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 2) {
+                if (robotState.getBlockPosition() == RobotBlockPosition.INTAKE || runCounter > 1) {
                     runCounter = 0;
                     if (robotState.getAutoRemainingTime() < TIME_TO_DROP) {
                         return AutoState.PARK;

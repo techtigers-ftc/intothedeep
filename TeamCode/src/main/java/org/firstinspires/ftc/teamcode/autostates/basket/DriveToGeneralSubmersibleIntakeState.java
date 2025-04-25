@@ -36,7 +36,7 @@ public class DriveToGeneralSubmersibleIntakeState extends DriveStateBase {
         addCommands(
                 autoDriveCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(300),
                         new DropperPreTransferAction(dropper, robotState)
                 ),
                 new SequentialCommandGroup(
