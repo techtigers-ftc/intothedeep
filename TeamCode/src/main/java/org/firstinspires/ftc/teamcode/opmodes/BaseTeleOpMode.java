@@ -2,20 +2,21 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.bylazar.ftcontrol.panels.Panels;
+import com.bylazar.ftcontrol.panels.configurables.annotations.Configurable;
+import com.bylazar.ftcontrol.panels.integration.TelemetryManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.commands.LevelThreeAscentCommandGroup;
-import org.firstinspires.ftc.teamcode.commands.MoveAscentSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
+import org.firstinspires.ftc.teamcode.commands.LevelThreeAscentCommandGroup;
 import org.firstinspires.ftc.teamcode.commands.ManualAscentCommand;
-import org.firstinspires.ftc.teamcode.commands.StartAscentCommandGroup;
+import org.firstinspires.ftc.teamcode.commands.MoveAscentSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeDropperSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.UnsafeIntakeSlidesCommand;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.AutoSpecimenCycleAction;
@@ -37,12 +38,10 @@ import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.Inta
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.IntakeToObservationZoneAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeReadyToPickupAction;
 import org.firstinspires.ftc.teamcode.commands.actions.commandgroups.intake.states.IntakeTuckAction;
-import org.firstinspires.ftc.teamcode.commands.drive.CancelDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.HeadingLockCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.ManualDriveCommand;
 import org.firstinspires.ftc.teamcode.display.view.TeleView;
 import org.firstinspires.ftc.teamcode.subsystems.AscentSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ControllerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DropperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.GoBodometrySubsystem;
@@ -63,17 +62,26 @@ import team.techtigers.base.visualdisplay.VisualDisplaySubsystem;
 import team.techtigers.core.paths.Waypoint;
 import team.techtigers.core.utils.RobotSaveState;
 
+@Configurable
 @SuppressWarnings("unused")
 public abstract class BaseTeleOpMode extends BaseOpMode {
+    TelemetryManager panelsTelemetry = Panels.getTelemetry();
     private RobotState robotState;
     private IntakeSubsystem intake;
     private DropperSubsystem dropper;
 
     protected abstract boolean isBlue();
 
+    public static double autoScore = 61;
+    public static double teleScore = 299;
+    public static double endgameScore = 75;
+    public static String inspire1stPlace = "Tech Tigers";
+
     @Override
     public void initialize() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
+
+
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         GamepadEx driverGamepad = new GamepadEx(gamepad1);
         GamepadEx manipulatorGamepad = new GamepadEx(gamepad2);
@@ -98,7 +106,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         }
 
         registerSubsystems(intake, drive, dropper, limelight,
-                odometry, ascent, sensor,  visualDisplaySubsystem);
+                odometry, ascent, sensor, visualDisplaySubsystem);
 
         gamepad1.setLedColor(0, 255, 0, Gamepad.LED_DURATION_CONTINUOUS);
 
@@ -417,41 +425,33 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
 
     @Override
     public void update() {
-        telemetry.addData("Intake State", robotState.getIntakeState());
-        telemetry.addData("Dropper State", robotState.getDropperState());
-        telemetry.addData("Robot Block Position", robotState.getBlockPosition());
-//        telemetry.addData("Intake Slide POS",
-//                intake.getCurrentSlidePositionInches());
-        telemetry.addData("Dropper Slide POS",
-                dropper.getCurrentSlidePositionInches());
-//        telemetry.addData("Manual Intake?", robotState.isManualIntakeSelected());
-        telemetry.addData("Fine Block Detection State", robotState.getFineBlockDetectionState());
-        telemetry.addData("Coarse Block Detection State", robotState.getCoarseBlockDetectionState());
-        telemetry.addData("Coarse Camera Mode: ", robotState.isCoarseCameraMode());
-//        telemetry.addData("Current Block Preference", robotState.getBlockColorPreference());
-////        telemetry.addData("Robot pose", robotState.getRobotCurrentPose());
-////        telemetry.addData("vision intake heading", Math.toDegrees(robotState.getVisionIntakeHeading()));
-////        telemetry.addLine();
-//        telemetry.addData("Velocity: ", robotState.getRobotVelocity().getPoint().magnitude());
-//        telemetry.addData("Heading Velocity: ", Math.toDegrees(robotState.getRobotVelocity().getHeading()));
-//        telemetry.addLine();
-////        telemetry.addData("Runtime: ", robotState.getRunTime());
-////        telemetry.addData("Voltage: ", robotState.getVoltage());
-////        telemetry.addData("Block Color: ", robotState.getIntakeBlockColor());
-////        telemetry.addLine();
-        telemetry.addData("Robot X: ", robotState.getRobotCurrentPose().getX());
-        telemetry.addData("Robot Y: ", robotState.getRobotCurrentPose().getY());
-        telemetry.addData("Robot Orientation", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
-        telemetry.addLine();
-        telemetry.addData("Lateral Distance from Block", robotState.getBlockLateralFine());
-        telemetry.addData("Forward Distance from Block", robotState.getBlockForwardFine());
-        telemetry.addLine();
-        telemetry.addData("Absolute Block Orientation", robotState.getAbsoluteBlockPosition().getHeading());
-        telemetry.addData("Block Orientation", robotState.getBlockOrientation());
-//        telemetry.addData("Intake Claw Distance from Block", robotState.getBlockForwardCoarse());
-//        telemetry.addLine();
-        telemetry.addData("Break Beam Sensor", robotState.getBlockPosition());
-        telemetry.addData("Robot Pitch", robotState.getRobotPitch());
+//        panelsTelemetry.debug("Intake State: ", robotState.getIntakeState());
+//        panelsTelemetry.debug("Dropper State: ", robotState.getDropperState());
+//        panelsTelemetry.debug("Robot Block Position: ", robotState.getBlockPosition());
+//        panelsTelemetry.debug("Dropper Slide POS: ", dropper.getCurrentSlidePositionInches());
+//        panelsTelemetry.debug("Fine Block Detection State: ", robotState.getFineBlockDetectionState());
+//        panelsTelemetry.debug("Coarse Block Detection State: ", robotState.getCoarseBlockDetectionState());
+//        panelsTelemetry.debug("Coarse Camera Mode: ", robotState.isCoarseCameraMode());
+//        panelsTelemetry.debug("Robot X: ", robotState.getRobotCurrentPose().getX());
+//        panelsTelemetry.debug("Robot Y: ", robotState.getRobotCurrentPose().getY());
+//        panelsTelemetry.debug("Robot Orientation: ", Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+//        panelsTelemetry.debug("Lateral Distance from Block: ", robotState.getBlockLateralFine());
+//        panelsTelemetry.debug("Forward Distance from Block: ", robotState.getBlockForwardFine());
+//        panelsTelemetry.debug("Absolute Block Orientation: ", robotState.getAbsoluteBlockPosition().getHeading());
+//        panelsTelemetry.debug("Block Orientation: ", robotState.getBlockOrientation());
+//        panelsTelemetry.debug("Break Beam Sensor: ", robotState.getBlockPosition());
+//        panelsTelemetry.debug("Robot Pitch: ", robotState.getRobotPitch());
+        panelsTelemetry.debug("This is a test");
+        panelsTelemetry.debug("Robot X: ", robotState.getRobotCurrentPose().getX());
+        panelsTelemetry.debug("Robot Y: " + robotState.getRobotCurrentPose().getX());
+        panelsTelemetry.debug("Robot Orientation: " + Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+        panelsTelemetry.debug(
+                "hi",
+                "sid",
+                "is",
+                "cool"
+        );
+        panelsTelemetry.update();
     }
 
     @Override
