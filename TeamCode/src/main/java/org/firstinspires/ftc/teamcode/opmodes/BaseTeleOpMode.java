@@ -11,6 +11,7 @@ import com.bylazar.ftcontrol.panels.Panels;
 import com.bylazar.ftcontrol.panels.configurables.annotations.Configurable;
 import com.bylazar.ftcontrol.panels.integration.TelemetryManager;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.ChangeBlockColorPreferenceCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeManualRotationCommand;
@@ -76,6 +77,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
     public static double teleScore = 299;
     public static double endgameScore = 75;
     public static String inspire1stPlace = "Tech Tigers";
+    private final ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void initialize() {
@@ -94,6 +96,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         LimelightSubsystem limelight = new LimelightSubsystem(hardwareMap, robotState);
         SensorSubsystem sensor = new SensorSubsystem(hardwareMap, robotState);
         GoBodometrySubsystem odometry;
+
+        timer.reset();
+
 
         AdafruitNeoPixel displayDriver = hardwareMap.get(AdafruitNeoPixel.class, "visual_display");
         displayDriver.initialize(224, 3);
@@ -445,6 +450,7 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
         panelsTelemetry.debug("Robot X: ", robotState.getRobotCurrentPose().getX());
         panelsTelemetry.debug("Robot Y: " + robotState.getRobotCurrentPose().getX());
         panelsTelemetry.debug("Robot Orientation: " + Math.toDegrees(robotState.getRobotCurrentPose().getHeading()));
+        panelsTelemetry.debug("Auto Score: " + autoScore);
         panelsTelemetry.debug(
                 "hi",
                 "sid",
@@ -452,6 +458,9 @@ public abstract class BaseTeleOpMode extends BaseOpMode {
                 "cool"
         );
         panelsTelemetry.update();
+
+        panelsTelemetry.graph("sid's debt", timer.seconds());
+        panelsTelemetry.graph("robot x", robotState.getRobotCurrentPose().getX());
     }
 
     @Override
